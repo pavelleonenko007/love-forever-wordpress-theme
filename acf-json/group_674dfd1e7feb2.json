@@ -1,0 +1,116 @@
+{
+    "key": "group_674dfd1e7feb2",
+    "title": "Примерки",
+    "fields": [
+        {
+            "key": "field_674dfd1e729ae",
+            "label": "Время записи на примерку",
+            "name": "fitting_time",
+            "aria-label": "",
+            "type": "date_time_picker",
+            "instructions": "Укажите дату и время записи на примерку.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "d.m.Y H:i:s",
+            "return_format": "d.m.Y H:i:s",
+            "first_day": 1,
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_674dfdd1729af",
+            "label": "Тип примерки",
+            "name": "fitting_type",
+            "aria-label": "",
+            "type": "checkbox",
+            "instructions": "Выберите тип примерки.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "wedding": "Свадебное",
+                "evening": "Вечернее",
+                "prom": "Выпускное"
+            },
+            "default_value": [
+                "wedding"
+            ],
+            "return_format": "value",
+            "allow_custom": 0,
+            "allow_in_bindings": 0,
+            "layout": "horizontal",
+            "toggle": 0,
+            "save_custom": 0,
+            "custom_choice_button_text": "Добавить новый выбор"
+        },
+        {
+            "key": "field_674dfe8f729b0",
+            "label": "Телефон",
+            "name": "phone",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_674dfe9e729b1",
+            "label": "IP Адрес",
+            "name": "ip_address",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "IP-адрес заполняется автоматически при отправке заявки.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "fitting"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1733164794
+}
