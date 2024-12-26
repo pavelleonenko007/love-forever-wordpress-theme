@@ -47,3 +47,9 @@ function loveforever_is_valid_fitting_datetime( $datetime, $fitting_type ) {
 
 	return true;
 }
+
+function loveforever_get_head_code() {
+	if ( function_exists( 'get_field' ) ) {
+		echo get_field( 'body_code', 'option' );
+	}
+}
