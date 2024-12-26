@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE yml_catalog SYSTEM "shops.dtd">
+<yml_catalog date="2024-12-25 03:00">
+  <shop>
+    <name>Salon Love Forever</name>
+    <company>Salon Love Forever</company>
+    <url>https://salon-love.ru</url>
+    <platform>Bitrix Site Manager</platform>
+    <version>15.0</version>
+    <currencies>
+      <currency id="RUR" rate="1"/>
+    </currencies>
+    <categories>
+      <category id="95">Платья на выпускной</category>
+    </categories>
+    <offers>
+      <offer id="778832" available="true">
+        <name>Платье на выпускной Айза</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/evening/ayza_paulain/</url>
+        <price>22950</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/60b/q1gssn1xadke248yhluclhdxsubfztzz/Ai_za-_Iza_-maksi-krasnyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/d66/y6f6v0y9frfyqq2h4ndbgq5f4fd3i1eg/Ai_za-_Iza_-maksi-pesochnyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/1b1/tnq19tq60uf90djn2dwfkmzid96xb9oh/Ai_za-_Iza_-maksi-rozovyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/74b/u69818hirb6dw1p1qf22ys3ok7zj4wb9/Ai_za-_Iza_-maksi-krasnyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/032/ab5kulzqvkdl7fk5oxaq9bn95gch4c36/Ai_za-_Iza_-maksi-rozovyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/9e1/7vv215325wqt0d28h48m73gqfsewv0a3/Ai_za-_Iza_-maksi-rozovyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/66e/p0fgfzseodopjik6dib8oh1xqmxrv3nk/Ai_za-_Iza_-maksi-pesochnyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/ced/mz0f702rxhcokohqsiulisshste38rda/Ai_za-_Iza_-maksi-pesochnyi_-metallik.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/afa/lbj3k2u2josjs4a6onhjk2zjz8r5th5l/Ai_za-_Iza_-maksi-pesochnyi_-metallik.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780937" available="true">
+        <name>Платье на выпускной Лейкен</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/leyken/</url>
+        <price>27000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/474/lgyuraalqxit8wxsvt1jmu1rybrxcdkk/Leiken-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/62e/7u8c3jy7yfzkwaucmw1susu4lzsufs58/Leiken.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/58f/33w7g2ruarxdood1nz5h0b00co5qt67t/Leiken-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781486" available="true">
+        <name>Платье на выпускной Далена</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/dalena/</url>
+        <price>36250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/86d/1qk6ztbxecicbxhfntbv2m7lt6t8egdl/Dalena-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/272/f7irkni4x0lqin6u2lmou4a0k5882dmb/Dalena-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/981/sxtcrfw7tktg48f1pequii8g8w1kyvw1/Dalena.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780935" available="true">
+        <name>Платье на выпускной Бонси</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/bonsi/</url>
+        <price>48250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/c00/u9c68b9o0wbrswnjbnrs4y5pyq30n425/Bonsy-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/81e/3kp7kxd5z9nzhy3nhtzhbicdvvx5b4as/Bonsy-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/649/5xij18ui4wyj501c4pv9n5hwm1wa9f6p/Bonsy.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/99f/nnbq18lghcj71wg25vcdyih3c8fu0qzi/Bonsy-.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780933" available="true">
+        <name>Платье на выпускной Дасмин</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/dasmin/</url>
+        <price>36250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/060/ikbum51u02ygv0qlqxn8a9ofzw39lk0b/Dasmin-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/094/1pkre9uewzxtfq755xgni0d8avjsu1jl/Dasmin-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/1f1/pqjchafhngqi6ufn2hpm0owm9sruuv1a/Dasmin.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/5cc/pmefhbl246hq99a7zhpfzxs9vr53247j/Dasmin-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780922" available="true">
+        <name>Платье на выпускной Файра</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/fayra/</url>
+        <price>35000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/7d8/qro03670upq50lphdvv0qw1isqs0kztn/Faira-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/737/y9bxneclunh2vs30616fx8cgkhjes7s3/Faira-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/eb9/7rham3qwugsihikorep1fd39j26ugxlm/Faira.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780853" available="true">
+        <name>Платье на выпускной Элла</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/ella/</url>
+        <price>29750</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/ed7/0ply5jzj0dxhi1hf7mcb7q7qfufg7dzz/Ella-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/2dd/6igtbn9gozt1hb1gazxwvrezedn3vl7w/Ella-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/6d2/r6boh0d8mh0veg62cllndcsurjk7301n/Ella.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="779802" available="true">
+        <name>Платье на выпускной Азор Мини</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/azor_mini/</url>
+        <price>37950</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/fa0/b6xu6a3m9khcp306h35ilvm72yakpfnk/Azor-_Azor_-mini-chernyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/2a2/9fd0kgfyidol04hsz5mucqiz32fpxwnh/Azor-_Azor_-mini-chernyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/025/bpalgr5egryqx5ild265708im2v3qg0v/Azor-_Azor_-mini-chernyi_.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="779045" available="true">
+        <name>Платье на выпускной Пикколо</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/pikkolo/</url>
+        <price>39950</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/97e/cx9wl3evd0ta3827fmwhpn3w7sc3i8t0/Pikkolo-_Piccolo_-mini-persik-zhemchuzhnyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/c76/j55lvd2lx57822k98lguayj0l2lji6z9/Pikkolo-_Piccolo_-mini-persik-zhemchuzhnyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/af6/m8yrxi5pb0m10f013z2pl374hvm95ipo/Pikkolo-_Piccolo_-mini-persik-zhemchuzhnyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/7fb/bvx3uibm2qb9t3i5unhqjj8pvv9dff5a/Pikkolo-_Piccolo_-mini-persik-zhemchuzhnyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/3ec/2d6zk5ku9fijbnvf3vuq4vfi3rom2l62/Pikkolo-_Piccolo_-mini-persik-zhemchuzhnyi_-chernyi_.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="740880" available="true">
+        <name>Платье на выпускной Иман Миди </name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/iman_midi_/</url>
+        <price>32950</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/63e/p0zkwpi71c6z3h20b77s5brdhjvqhfyb/fbf_iman_midi_11_700x1050_product_thumb.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/822/i0xaslg3n6bi21ea0tc5o0pselstolof/Iman-_Iman_-midi-irlandskii_-zelenyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/6f0/rlhlzcoipmjq4q42dmw8ewmt5158pnu3/fbf_iman_midi_01_700x1050_product_thumb.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/de8/6vqqnmilzt4ukyd1jw7vph9d9yhjaizf/Iman-_Iman_-midi-chertopolokh.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="679870" available="true">
+        <name>Платье на выпускной Анжелика</name>
+        <collectionId>wedding</collectionId>
+        <url>https://salon-love.ru/wedding/angelica/</url>
+        <price>32450</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/fa3/b7frym6imw95gasen07yo2peztrvw9ux/pau_tl_angelica_02_700x1050_product_additional.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/c30/cl0hlyw0gzdqpjde4um8pg9lflawxobh/pau_tl_angelica_06_700x1050_product_additional.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/e62/ovartbuzzkmcw0phx7ia8lvt4jn8ki2d/pau_tl_angelica_04_700x1050_product_additional.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/2d2/nixmofnokcyyg2typ2emci6an4wjv3nh/pau_tl_angelica_01_700x1050_product_thumb.jpg</picture>
+        <store>true</store>
+        <description>Платье в длине миди - 35950 руб.&#13;
+ .</description>
+      </offer>
+      <offer id="782078" available="true">
+        <name>Платье на выпускной Хилс</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/khils_kookla/</url>
+        <price>39000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/417/vbamxwlbf0rgz2sj3202g7h41l1oa5gh/Hils-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/9bb/n3ikpjoe7lxk3za7tt5yh9i07naz6r21/Hils-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/021/q62e9o4sfj4niyduv7k21ksxhuz1wynr/Hils.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="782077" available="true">
+        <name>Платье на выпускной Митта</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/mitta/</url>
+        <price>37250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/ca5/4w3jo46a3mxt6u2qaeu3hrulqx7dgn4a/Mitta-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/140/q1zn6houscf0g6047vyvh0tgvrud2k2e/Mitta-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/ec6/37qfn4ch13cz3ewp4rcrq4vhgpfdegwr/Mitta.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/f3a/s32df4avdid6qz2v31g9skf4c6osym4j/Mitta-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/2a8/f6ghfg20ibjom7ppbx2fqzmbu11gh1c3/Mitta-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781489" available="true">
+        <name>Платье на выпускной Освара</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/osvara/</url>
+        <price>48750</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/bd6/qxtw6h5kxy320fsjaljqgelw35mjh2md/Osvara-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/8c5/1iflt7da96noczt34a7grawcne4wzxb7/Osvara.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/cdd/7egoiefegps5hwyj0n1jhwhb4nlw1qe9/Osvara-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781488" available="true">
+        <name>Платье на выпускной Антэза</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/anteza/</url>
+        <price>37250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/423/yskr88618lezqxosb86h3zlb72ubtsxk/Anteza-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/386/ququ0zncb0bvjiwn9zhfaqi2sjdjnus4/Anteza-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/976/jaxh83xqrhil3jgk32kp5vfs59lmpxld/Anteza.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781487" available="true">
+        <name>Платье на выпускной Эмера</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/emera/</url>
+        <price>50750</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/1c9/64jqmexng2lu7rulf5lxhsy68n03sso4/Emera-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/d22/9nasfnbq77slb2rc1kwm9teg8js2t31m/Emera-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/92f/jj3j7nybr7nlzy910v07y4drbqjbx4xw/Emera.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781485" available="true">
+        <name>Платье на выпускной Ливита</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/livita/</url>
+        <price>50750</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/7e9/jbltk2u2f3lwge3ondx8rzqmthmndlzc/Livita-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/f1d/d9wbe39llw3635t4dofg43n8rayfgz0q/Livita-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/a93/4akk8qkmsfzcaw417224ypyzkqyd2c2e/Livita.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781332" available="true">
+        <name>Платье на выпускной EV10402</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/ev10402/</url>
+        <price>39600</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/f3c/u4gpr6hovimi3lk2v2wk1ukr4jglxavg/2_c99dfe1364d8a58976edfba6689d5c74.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/396/wbha564726ilsmjbgcci0why928kfj15/photo_2024_12_03-16.05.28.jpeg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781330" available="true">
+        <name>Платье на выпускной Делен Макси</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/delen_maksi/</url>
+        <price>31950</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/0eb/o61gsvkji7tuvp6bmw8ip0725dsj7263/Delen-_Delen_-maksi-kapuchino.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/bc0/rsf4urz7sm3ivak6058h5ox6gxr4bcy4/Delen-_Delen_-maksi-kapuchino.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/c6d/dpern0ce9p9i28pjq46kdydauthxkkox/Delen-_Delen_-maksi-kapuchino.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/fb2/dybfqk62y7liy7112sxq17c4l9knq1ms/Delen-_Delen_-maksi-kapuchino.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/840/c1vdzvylar80dv1amnwtmamszbo90lcy/Delen-_Delen_-maksi-kapuchino.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781329" available="true">
+        <name>Платье на выпускной Аврия</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/avriya/</url>
+        <price>48000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/61e/2vq6ubzm2d6jc5a0w51cvx3vv6q63jb8/Avria-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/fd1/v9sa2ml3h0ba63aqe5k0s41j8nm3rnl4/Avria-_1_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/d7d/zf9whx08idf5yhmp5i8f3eteej2navuy/Avria.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/5cf/c5ymuu2oj4rcen0cbvv8vcdlzfigxpmr/Avria-.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781326" available="true">
+        <name>Платье на выпускной Алма</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/alma/</url>
+        <price>33350</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/00d/8v6c9c77xh5acrj87g0sq35n22dj2ts4/photo_2024_12_03-15.27.48.jpeg</picture>
+        <picture>https://salon-love.ru/upload/iblock/466/84j087wzk4p08plyxc7b983to80q5prq/photo_2024_12_03-15.27.51.jpeg</picture>
+        <picture>https://salon-love.ru/upload/iblock/f3c/j8mn3lbhdwghwgxufbzzi7478p6f240g/photo_2024_12_03-15.27.56.jpeg</picture>
+        <picture>https://salon-love.ru/upload/iblock/5ed/eu08og35xgj2cyfguwdmbewpuwu06uv8/photo_2024_12_03-15.27.52.jpeg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781325" available="true">
+        <name>Платье на выпускной Эверетта</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/everetta/</url>
+        <price>41250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/bed/t2e21zyhbu6mtwjl0j6gyzln4cg1f7p2/Everetta-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/ca0/2gn51vf47llol1660rsicb7ol0jndexc/Everetta-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/209/p33b47sjgflqfklu2ndun1o3kbs4cc9y/Everetta.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/55e/nwpvzkwlxuymwk3ulas87gsk247jx6yo/Everetta-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781324" available="true">
+        <name>Платье на выпускной Морана</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/morana_kookla/</url>
+        <price>52000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/3cc/yo0q3js7lo0twamp61ng5qjjd2jc90mp/Morana-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/21b/y6hgtk637sk6tz4hlr5p3by54iticw3u/Morana.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/997/41uuzpivk0sgq1wrzt6bc5weczrmu7zi/Morana-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781323" available="true">
+        <name>Платье на выпускной Тароза</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/taroza/</url>
+        <price>49500</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/977/ixc118l1vncuq1eovg2uwfvfia03x2ck/Taroza-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/2df/mmremq2susuz4kzm9zxpmofpqqzvc24c/Taroza-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/833/9xt2u7hkp2jftipqkrsjn0ib1kpxr25i/Taroza.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/9b2/4wnytlgtzab2xus63oklfz6ve1oqxzav/Taroza-.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="781319" available="true">
+        <name>Платье на выпускной Тинэр</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/tiner/</url>
+        <price>38500</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/2c1/vfeg2hk2iw61fga3uekh4d7rkksylklq/Tiner-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/4f9/wxu77dzp5ms5ankmou873z8j0kblvucg/Tiner-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/39c/t2k59ezo12w2zyh1fijnjxhao96gp216/Tiner.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/165/v9zboui43durkuc030ib8dx2irmedxip/Tiner-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780931" available="true">
+        <name>Платье на выпускной Эсфи</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/esfi/</url>
+        <price>45250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/d30/x9mc1763y0gjz87j20y5x7usejeojjyk/Esfi-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/dcf/07eunz21woq9xq6fwz08r9swbjjgyom1/Esfi-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/4f0/w6lxkfwxb1xc03yqc4x54zimpc3sm33f/Esfi-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/278/82xwd06yqk9l5jrpumm7fxvf3a9c9t8o/Esfi.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780930" available="true">
+        <name>Платье на выпускной Элмиз</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/elmiz/</url>
+        <price>32250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/9a2/43bpwpgnxgwa50tzunn2nputk7c4cl2y/Elmiz-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/e1f/g9epoy1wnrcm2vabm0xtxk4oaxb28fvg/Elmiz-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/fa5/1cj9cz0ffdx4eyv71yzbt68ursrloq26/Elmiz-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/55e/29ozdfpogt3w72ly9zie1kregedjr856/Elmiz.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780929" available="true">
+        <name>Платье на выпускной Алусэя</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/aluseya/</url>
+        <price>37250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/291/a3qa8w999ff3lw85smv0dpc0h9vzfmd1/Aluseya.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/2fd/7b915f6rvh441qmk85kxyr1jt27ghod9/Aluseya-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/fca/lgsx3bl5y0m426oa79dlyhjlv030d1nm/Aluseya-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/ea9/mb010zlnc5v9gi1rad747a9y1m4yc1vo/Aluseya-.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780928" available="true">
+        <name>Платье на выпускной Густава</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/gustava/</url>
+        <price>39500</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/eba/earer0vrbhtglv1r1e5uznad7gvc2ezn/Gustava-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/511/zyzoteoaty7b788icrkj183vzt3egdzl/Gustava-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/5f7/r747dsy98g6zn89v7n9szx7m3m906p1b/Gustava-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/a85/elxbmqsr30vvod7gyhxon04g0mz6dva5/Gustava.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780927" available="true">
+        <name>Платье на выпускной Лизэ</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/lize/</url>
+        <price>29750</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/f3a/hln7plhobvrv2lf49hyho32qf0skizlj/Lize-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/ff5/rkdtjhtnhgzy1n1ssy5qty2xe3qwy9a7/Lize-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/1e0/s4in2xnbdmjiyboohiqebmeoxej2l0wg/Lize.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/b66/rguupom0xyba4apg2fuwltaru7zlxw9m/Lize-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780926" available="true">
+        <name>Платье на выпускной Макона</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/makona/</url>
+        <price>42000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/c45/igvk005rq3c3jtpx30rzl7w6obpmc86q/Makona-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/709/x4kalcwid2wdfde3p3rg0wnvipjys7o8/Makona-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/ccd/o05f78a1omctoutdhf0ljjpl19jf276w/Makona.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/245/abakznf60oexyw3ewigtqbccp213prcm/Makona-.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780925" available="true">
+        <name>Платье на выпускной Гленн</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/glenn/</url>
+        <price>30750</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/3d8/pbqxzfhhsl9d5oty1p407323eoz7mu2z/Glenn-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/506/z4i3jypz7mw6yykbfdxgcys6z8x3nyth/Glenn-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/552/ql3hkfpxdjqw0t9bemh2rx06hl5qkf88/Glenn.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780924" available="true">
+        <name>Платье на выпускной Паола</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/paola/</url>
+        <price>38000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/14b/o3s1ahm9te4d73twtzn5enwyj7ry2qc3/Paola-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/d67/13vw6pr04xr2plquw2kppjp3uqt2orfk/Paola-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/f84/c1l16nu7xo14kp2j3k0ylx04uxjcpubf/Paola.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780923" available="true">
+        <name>Платье на выпускной Саванна</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/savanna/</url>
+        <price>42000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/0bc/htpxnqhdktcmr8bpx33r83dv09k6r64n/Savanna-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/323/ktmjmkz6wcme3ob4n2hy9cdrc3b60n73/Savanna-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/692/z84l8c3ngejysshkjsp7baejzx15rtff/Savanna.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780921" available="true">
+        <name>Платье на выпускной Нэйф</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/neyf/</url>
+        <price>37250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/9a6/8obzozba1wfcolletk8n64a873imp85g/Neif-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/c93/0d2633t6hh53jsnpvfg5toavarn8jyrh/Neif-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/900/9ku6tsdcmgiubdvj875oby54nzl391lf/Neif.JPG</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780920" available="true">
+        <name>Платье на выпускной Миана</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/miana/</url>
+        <price>39250</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/e3b/3sodzouawi6g619ylr1n9tcu1ao2ehlb/Miana-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/166/gpv3mry209foba35f3szke33yr7ynmbq/Miana-.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/15b/8glo665ycqe4i2ct9yqj9i8ubhnmdav9/Miana.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780919" available="true">
+        <name>Платье на выпускной Трейси</name>
+        <collectionId>evening</collectionId>
+        <url>https://salon-love.ru/evening/treysi_twiggy/</url>
+        <price>32000</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/885/kndgssjhsh66h807swvqpotwjt2imhro/9.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/791/mbbn7y1ur7le94xt94oagh1qjalux5bm/1.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/d33/of82oi3nhei2qpzky1kl27tgz3iset18/5.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/528/vsd507a3e3jxzzd90zajdpvpd2ccce08/7.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/ac0/9545hhjo4dyby5p6d0hjjn187s6e0d98/4.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/001/1kubekah33o6zre81mfvkamt87pv2vxm/8.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780918" available="true">
+        <name>Платье на выпускной Шайло</name>
+        <collectionId>prom</collectionId>
+        <url>https://salon-love.ru/prom/shaylo/</url>
+        <price>36950</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/0ac/kzgw8pp35b59vr2izh0br8tk9o69zup5/SHai_lo-_Shilo_-mini-azaliya.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/0c1/js3knwi3t1jsazmof2j3spdrw5fcp66t/SHai_lo-_Shilo_-mini-chernyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/9ac/o6x5y3t7kzny0pvowewdf61k2sblo5y4/SHai_lo-_Shilo_-mini-azaliya.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/f38/b3yl3q99kz6747rh6kw25nr8uof9hahn/SHai_lo-_Shilo_-mini-chernyi_.jpg</picture>
+        <picture>https://salon-love.ru/upload/iblock/970/5iu35pr3s8i35lm51zbc7fzr702e40sk/SHai_lo-_Shilo_-mini-azaliya.jpg</picture>
+        <store>true</store>
+      </offer>
+      <offer id="780917" available="true">
+        <name>Платье на выпускной Гардения</name>
+        <collectionId>wedding</collectionId>
+        <url>https://salon-love.ru/wedding/gardeniya_kookla/</url>
+        <price>53750</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>95</categoryId>
+        <picture>https://salon-love.ru/upload/iblock/01a/wd6bx0gqkz6swapk9i8ktkrswchjuoi8/Gardenia-.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/3dd/9beovjxklp1rbrw3po3xd3ilge7hr68i/Gardenia.JPG</picture>
+        <picture>https://salon-love.ru/upload/iblock/349/t2rz20p81vd3a0pb7mob7icn88rmms2e/Gardenia-.JPG</picture>
+        <store>true</store>
+      </offer>
+    </offers>
+    <collections>
+      <collection id="prom">
+        <url>https://salon-love.ru/prom</url>
+        <name>Платья на выпускной в магазине Love Forever</name>
+        <description>Позаботься о платье на ✨выпускной 2024✨ заранее. Выбирай по фото, записывайся на примерку. Будь самой красивой в классе на выпускном вечере!</description>
+        <picture>https://salon-love.ru/upload/iblock/60b/q1gssn1xadke248yhluclhdxsubfztzz/Ai_za-_Iza_-maksi-krasnyi_-metallik.jpg</picture>
+      </collection>
+    </collections>
+  </shop>
+</yml_catalog>
