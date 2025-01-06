@@ -80,15 +80,33 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	}
 
 	$fitting_post_data = array(
-		'post_title'    => 'Новая примерка для ' . $name,
-		'post_status'   => 'publish',
-		'post_type'     => 'fitting',
+		'post_title'  => 'Новая примерка для ' . $name,
+		'post_status' => 'publish',
+		'post_type'   => 'fitting',
 	);
 
 	$fitting_post_id = wp_insert_post(
 		$fitting_post_data
 	);
 
-	update_field('fitting_type', $fitting_type, $fitting_post_id);
-	update_field('fitting_time', $date . ' ' . $time, $fitting_post_id);
+	update_field( 'fitting_type', $fitting_type, $fitting_post_id );
+	update_field( 'fitting_time', $date . ' ' . $time, $fitting_post_id );
+}
+
+function loveforever_breadcrumbs_attribute_filter( $li_attributes, $type, $id ) {
+	$pattern               = '/class="([^"]*)"/';
+	$breadcrumb_item_class = 'breadcrumbs__item p-12-12 uper';
+
+	if ( preg_match( $pattern, $li_attributes, $matches ) ) {
+			$class_list   = array();
+			$class_list[] = $breadcrumb_item_class;
+			$class_list   = array_merge( $class_list, explode( ' ', $matches[1] ) );
+			$class_list   = array_unique( $class_list );
+
+			$new_class_string = implode( ' ', $class_list );
+
+			return preg_replace( $pattern, 'class="' . $new_class_string . '"', $li_attributes );
+	}
+
+	return $li_attributes;
 }

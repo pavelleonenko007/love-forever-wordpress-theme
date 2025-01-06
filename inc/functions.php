@@ -12,6 +12,19 @@ function loveforever_remove_image_dimensions_attributes( $image_html ) {
 	return $image_html;
 }
 
+function loveforever_format_phone_to_link( $phone ) {
+	$phone = preg_replace( '/[^0-9]/', '', $phone );
+	return 'tel:' . $phone;
+}
+
+function loveforever_format_email_to_link( $email, $subject = '' ) {
+	$email_url = 'mailto:' . $email;
+	if ( ! empty( $subject ) ) {
+		$email_url .= '?subject=' . rawurlencode( $subject );
+	}
+	return $email_url;
+}
+
 function loveforever_is_valid_phone( $phone ) {
 	// Удаляем все, кроме цифр
 	$phone = preg_replace( '/[^0-9]/', '', $phone );
