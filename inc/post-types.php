@@ -81,6 +81,42 @@ function loveforever_register_post_types() {
 		)
 	);
 
+	register_taxonomy(
+		'dress_tag',
+		null,
+		array(
+			'label'              => '',
+			'labels'             => array(
+				'name'              => 'Теги',
+				'singular_name'     => 'Тег',
+				'search_items'      => 'Поиск тегов',
+				'all_items'         => 'Все теги',
+				'view_item '        => 'Просмотр тега',
+				'parent_item'       => 'Родитель тега',
+				'parent_item_colon' => 'Родитель тега:',
+				'edit_item'         => 'Редактировать тег',
+				'update_item'       => 'Обновить тег',
+				'add_new_item'      => 'Добавить новый тег',
+				'new_item_name'     => 'Название нового тега',
+				'menu_name'         => 'Теги',
+				'back_to_items'     => '← Назад к тегам',
+			),
+			'description'        => '',
+			'public'             => true,
+			'show_ui'            => true,
+			'show_in_quick_edit' => true,
+			'hierarchical'       => false,
+
+			'rewrite'            => true,
+			// 'query_var'             => taxonomy, // название параметра запроса
+			'capabilities'       => array(),
+			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+			'show_in_rest'       => null, // добавить в REST API
+			'rest_base'          => null, // taxonomy
+		)
+	);
+
 	register_post_type(
 		'fitting',
 		array(
@@ -158,7 +194,76 @@ function loveforever_register_post_types() {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-			'taxonomies'          => array( 'dress_category', 'dress_brand' ),
+			'taxonomies'          => array( 'dress_category', 'dress_brand', 'dress_tag' ),
+		)
+	);
+
+	register_post_type(
+		'story',
+		array(
+			'label'         => null,
+			'labels'        => array(
+				'name'               => 'Истории',
+				'singular_name'      => 'История',
+				'add_new'            => 'Добавить новую',
+				'add_new_item'       => 'Добавить новую историю',
+				'edit_item'          => 'Редактировать историю',
+				'new_item'           => 'Новая история',
+				'view_item'          => 'Посмотреть историю',
+				'search_items'       => 'Найти историю',
+				'not_found'          => 'Не найдено',
+				'not_found_in_trash' => 'Не найдено в корзине',
+				'parent_item_colon'  => '',
+				'menu_name'          => 'Истории',
+			),
+			'description'   => '',
+			'public'        => false,
+			'show_ui'       => true,
+			'show_in_menu'  => null,
+			'show_in_rest'  => true,
+			'rest_base'     => null,
+			'menu_position' => null,
+			'hierarchical'  => false,
+			'supports'      => array( 'title', 'thumbnail' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+			'taxonomies'    => array(),
+			'has_archive'   => false,
+			'rewrite'       => true,
+			'query_var'     => true,
+		)
+	);
+
+	register_post_type(
+		'story',
+		array(
+			'label'         => null,
+			'labels'        => array(
+				'name'               => 'Отзывы',
+				'singular_name'      => 'Отзыв',
+				'add_new'            => 'Добавить новый',
+				'add_new_item'       => 'Добавить новый отзыв',
+				'edit_item'          => 'Редактировать отзыв',
+				'new_item'           => 'Новый отзыв',
+				'view_item'          => 'Посмотреть отзыв',
+				'search_items'       => 'Найти отзыв',
+				'not_found'          => 'Не найдено',
+				'not_found_in_trash' => 'Не найдено в корзине',
+				'parent_item_colon'  => '',
+				'menu_name'          => 'Отзывы',
+			),
+			'description'   => '',
+			'public'        => false,
+			'show_ui'       => true,
+			'show_in_menu'  => null,
+			'show_in_rest'  => true,
+			'rest_base'     => null,
+			'menu_position' => null,
+			'hierarchical'  => false,
+			'supports'      => array( 'title', 'thumbnail' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+			'taxonomies'    => array(),
+			'has_archive'   => false,
+			'rewrite'       => true,
+			'menu_icon'     => 'dashicons-testimonial',
+			'query_var'     => true,
 		)
 	);
 }
@@ -181,7 +286,7 @@ function custom_dress_post_link( $post_link, $post ) {
 	}
 	return $post_link;
 }
-add_filter( 'post_type_link', 'custom_dress_post_link', 10, 2 );
+// add_filter( 'post_type_link', 'custom_dress_post_link', 10, 2 );
 
 // Регистрация новой структуры URL для типа записи 'dress'
 function custom_dress_permalinks( $rules ) {
@@ -192,7 +297,7 @@ function custom_dress_permalinks( $rules ) {
 	);
 	return $new_rules + $rules;
 }
-add_filter( 'rewrite_rules_array', 'custom_dress_permalinks' );
+// add_filter( 'rewrite_rules_array', 'custom_dress_permalinks' );
 
 // Обновление структуры ссылок для типа записи 'dress'
 function custom_dress_permalink_structure() {
@@ -201,7 +306,7 @@ function custom_dress_permalink_structure() {
 	$wp_rewrite->add_rewrite_tag( '%dress_brand%', '([^/]+)', 'dress_brand=' );
 	$wp_rewrite->add_permastruct( 'dress', 'dress/%dress_category%/%dress_brand%/%dress%', false );
 }
-add_action( 'init', 'custom_dress_permalink_structure', 10, 0 );
+// add_action( 'init', 'custom_dress_permalink_structure', 10, 0 );
 
 // Обеспечение правильной загрузки категорий и брендов
 function custom_dress_query_vars( $query_vars ) {
@@ -209,7 +314,7 @@ function custom_dress_query_vars( $query_vars ) {
 	$query_vars[] = 'dress_brand';
 	return $query_vars;
 }
-add_filter( 'query_vars', 'custom_dress_query_vars' );
+// add_filter( 'query_vars', 'custom_dress_query_vars' );
 
 // Изменение запроса для правильной загрузки категорий и брендов
 function custom_dress_request( $query_vars ) {
@@ -241,7 +346,7 @@ function custom_dress_request( $query_vars ) {
 	}
 	return $query_vars;
 }
-add_filter( 'request', 'custom_dress_request' );
+// add_filter( 'request', 'custom_dress_request' );
 
 // Перенаправление старых URL на новые
 function custom_dress_redirect() {

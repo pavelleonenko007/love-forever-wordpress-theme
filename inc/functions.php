@@ -66,3 +66,28 @@ function loveforever_get_head_code() {
 		echo get_field( 'body_code', 'option' );
 	}
 }
+
+function loveforever_get_recently_viewed_products() {
+	if ( empty( $_COOKIE['recently_viewed'] ) ) {
+		return array();
+	}
+
+	return array_reverse( explode( ',', sanitize_text_field( wp_unslash( $_COOKIE['recently_viewed'] ) ) ) );
+}
+
+function loveforever_update_recently_viewed_products( $product_id ) {
+	if ( empty( $_COOKIE['recently_viewed'] ) ) {
+		setcookie( 'recently_viewed', $product_id, time() + 60 * 60 * 24 * 30, '/' );
+	} else {
+		$recently_viewed_ids = explode( ',', sanitize_text_field( wp_unslash( $_COOKIE['recently_viewed'] ) ) );
+		$recently_viewed_ids = array_filter(
+			$recently_viewed_ids,
+			function ( $id ) use ( $product_id ) {
+				return $id !== $product_id;
+			}
+		);
+
+		$recently_viewed_ids[] = $product_id;
+		setcookie( 'recently_viewed', implode( ',', $recently_viewed_ids ), time() + 60 * 60 * 24 * 30, '/' );
+	}
+}

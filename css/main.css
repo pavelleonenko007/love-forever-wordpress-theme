@@ -5060,6 +5060,55 @@ ul {
   display: flex;
 }
 
+.badge {
+  z-index: 9;
+  position: absolute;
+  top: -5rem;
+  left: -5rem;
+}
+
+.bagde__text {
+  background-color: var(--pink);
+  color: var(--white);
+  text-transform: uppercase;
+  padding: 9rem 10rem;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.blog-tags {
+  align-items: center;
+  display: flex;
+}
+
+.blog-tags__item {
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+@media screen and (min-width: 1920px) {
+  .img-indirim {
+    display: none;
+  }
+
+  .badge {
+    z-index: 9;
+    position: absolute;
+    inset: -5rem auto auto -5rem;
+  }
+
+  .bagde__text {
+    background-color: var(--pink);
+    color: var(--white);
+    text-align: left;
+    text-transform: uppercase;
+    padding: 9rem 10rem;
+    font-size: 12rem;
+    line-height: 1;
+  }
+}
+
 @media screen and (max-width: 991px) {
   .container.singlepage-container {
     margin-top: 0;

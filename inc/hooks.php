@@ -110,3 +110,11 @@ function loveforever_breadcrumbs_attribute_filter( $li_attributes, $type, $id ) 
 
 	return $li_attributes;
 }
+
+add_action( 'wp', 'loveforever_track_product_view' );
+function loveforever_track_product_view() {
+	if ( is_singular( 'dress' ) ) {
+		$product_id = get_the_ID();
+		loveforever_update_recently_viewed_products( $product_id );
+	}
+}

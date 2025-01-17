@@ -3,6 +3,27 @@
     "title": "Платья",
     "fields": [
         {
+            "key": "field_676bbe27c8d0e",
+            "label": "Наличие в магазине",
+            "name": "availability",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui_on_text": "В наличии",
+            "ui_off_text": "Нет в наличии",
+            "ui": 1
+        },
+        {
             "key": "field_676bbdb9c8d0d",
             "label": "Цена",
             "name": "price",
@@ -26,13 +47,13 @@
             "append": ""
         },
         {
-            "key": "field_676bbe27c8d0e",
-            "label": "Наличие в магазине",
-            "name": "availability",
+            "key": "field_677d00872534b",
+            "label": "Есть скидка",
+            "name": "has_discount",
             "aria-label": "",
             "type": "true_false",
             "instructions": "",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -40,11 +61,42 @@
                 "id": ""
             },
             "message": "",
-            "default_value": 1,
+            "default_value": 0,
             "allow_in_bindings": 0,
-            "ui_on_text": "В наличии",
-            "ui_off_text": "Нет в наличии",
+            "ui_on_text": "",
+            "ui_off_text": "",
             "ui": 1
+        },
+        {
+            "key": "field_677d00cd2534c",
+            "label": "Цена со скидкой",
+            "name": "price_with_discount",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_677d00872534b",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_676bbe93c8d0f",
@@ -96,6 +148,57 @@
                     "parent_repeater": "field_676bbe93c8d0f"
                 }
             ]
+        },
+        {
+            "key": "field_677d01111e630",
+            "label": "Слайдер в карточке платья",
+            "name": "slider_in_dress_card",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Добавьте изображения в карточку товара. Можно оставить пустым",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Добавить изображение",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_677d01411e631",
+                    "label": "Изображение",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium",
+                    "parent_repeater": "field_677d01111e630"
+                }
+            ]
         }
     ],
     "location": [
@@ -116,5 +219,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1735114465
+    "modified": 1736245635
 }

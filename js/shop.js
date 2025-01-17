@@ -504,6 +504,7 @@ function update_variation(cur_variation) {
 
     product_el.find('[data-content^=var_]').hide();
     product_el.find('[data-content=var_stocked]').hide();
+    product_el.find('[data-content=var_not_stocked]').show();
     form_el.find('[type=submit]').hide();
 
     if (cur_variation.attributes_complete) {

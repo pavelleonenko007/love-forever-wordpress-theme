@@ -51,3 +51,16 @@ function loveforever_download_and_add_image_to_library( $image_url ) {
 
 	return $attach_id;
 }
+
+/**
+ * Форматирует число в формат цены.
+ *
+ * @param float  $amount Сумма для форматирования.
+ * @param int    $decimals Количество десятичных знаков.
+ * @param string $decimal_separator Символ для разделения десятичных знаков.
+ * @param string $thousands_separator Символ для разделения тысяч.
+ * @return string Отформатированная цена.
+ */
+function loveforever_format_price( $amount, $decimals = 2, $decimal_separator = '.', $thousands_separator = ' ' ) {
+	return number_format( $amount, $decimals, $decimal_separator, $thousands_separator );
+}
