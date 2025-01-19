@@ -190,7 +190,7 @@ function loveforever_register_post_types() {
 			'menu_icon'           => 'dashicons-portfolio',
 			'capability_type'     => 'post',
 			'hierarchical'        => false,
-			'has_archive'         => true,
+			'has_archive'         => false,
 			'rewrite'             => true,
 			'query_var'           => true,
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
@@ -263,6 +263,41 @@ function loveforever_register_post_types() {
 			'has_archive'   => false,
 			'rewrite'       => true,
 			'menu_icon'     => 'dashicons-testimonial',
+			'query_var'     => true,
+		)
+	);
+
+	register_post_type(
+		'faq',
+		array(
+			'label'         => null,
+			'labels'        => array(
+				'name'               => 'FAQs',
+				'singular_name'      => 'FAQ',
+				'add_new'            => 'Добавить новый',
+				'add_new_item'       => 'Добавить новый FAQ',
+				'edit_item'          => 'Редактировать FAQ',
+				'new_item'           => 'Новый FAQ',
+				'view_item'          => 'Посмотреть FAQ',
+				'search_items'       => 'Найти FAQ',
+				'not_found'          => 'Не найдено',
+				'not_found_in_trash' => 'Не найдено в корзине',
+				'parent_item_colon'  => '',
+				'menu_name'          => 'FAQs',
+			),
+			'description'   => '',
+			'public'        => false,
+			'show_ui'       => true,
+			'show_in_menu'  => null,
+			'show_in_rest'  => true,
+			'rest_base'     => null,
+			'menu_position' => null,
+			'hierarchical'  => false,
+			'supports'      => array( 'title', 'editor' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+			'taxonomies'    => array(),
+			'has_archive'   => false,
+			'rewrite'       => true,
+			'menu_icon'     => 'dashicons-format-status',
 			'query_var'     => true,
 		)
 	);

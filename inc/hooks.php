@@ -93,6 +93,13 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	update_field( 'fitting_time', $date . ' ' . $time, $fitting_post_id );
 }
 
+add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
+function loveforever_modify_dress_category_query( $query ) {
+	if ( $query->is_tax( 'dress_category' ) ) {
+		$query->set( 'posts_per_page', 3 );
+	}
+}
+
 function loveforever_breadcrumbs_attribute_filter( $li_attributes, $type, $id ) {
 	$pattern               = '/class="([^"]*)"/';
 	$breadcrumb_item_class = 'breadcrumbs__item p-12-12 uper';
