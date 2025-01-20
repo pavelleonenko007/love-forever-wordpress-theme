@@ -30,6 +30,7 @@ function loveforever_add_site_scripts() {
 	wp_enqueue_script( 'splide', '//cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js', array( 'barba' ), time(), true );
 	wp_enqueue_script( 'thevogne', '//thevogne.ru/clients/gavril/loveforever/scripts.js', array( 'splide' ), time(), true );
 	wp_enqueue_script( 'custom', TEMPLATE_PATH . '/js/custom.js', array( 'thevogne' ), time(), true );
+	wp_enqueue_script( 'bundle', TEMPLATE_PATH . '/build/index.js', array( 'barba' ), time(), true );
 }
 
 add_filter( 'wp_default_scripts', 'loveforever_remove_jquery_migrate' );
