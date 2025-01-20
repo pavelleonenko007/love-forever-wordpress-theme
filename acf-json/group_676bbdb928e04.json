@@ -24,6 +24,27 @@
             "ui": 1
         },
         {
+            "key": "field_678d0fe7452ad",
+            "label": "Новый товар",
+            "name": "is_new",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Переведите переключатель в положение \"Да\", если товар является новинкой",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui_on_text": "Да",
+            "ui_off_text": "Нет",
+            "ui": 1
+        },
+        {
             "key": "field_676bbdb9c8d0d",
             "label": "Цена",
             "name": "price",
@@ -199,6 +220,39 @@
                     "parent_repeater": "field_677d01111e630"
                 }
             ]
+        },
+        {
+            "key": "field_678dfbde9c887",
+            "label": "Связанные товары",
+            "name": "related_products",
+            "aria-label": "",
+            "type": "relationship",
+            "instructions": "Добавьте другие товары к продукту. Они отображаться в секции \"Так же выбирают\"",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "dress"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search",
+                "taxonomy"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "elements": "",
+            "bidirectional": 0,
+            "bidirectional_target": []
         }
     ],
     "location": [
@@ -219,5 +273,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1736245635
+    "modified": 1737358419
 }
