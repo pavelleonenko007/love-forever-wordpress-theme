@@ -1,0 +1,40 @@
+name: 🚀 Deploy Code via SFTP
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  sftp-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.SFTP_SERVER_IP }}
+          username: ${{ secrets.SFTP_LOGIN }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          server-dir: /domains/thevogne.ru/public_html/loveforever/wp-content/themes/loveforever/
+          log-level: verbose
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/vendor/**
+            /.style.css
