@@ -5,6 +5,8 @@
  * @package 0.0.1
  */
 
+use SimplePie\Parse\Date;
+
 defined( 'ABSPATH' ) || exit;
 
 get_header(
@@ -24,6 +26,7 @@ $has_discount        = get_field( 'has_discount' );
 $price_with_discount = $has_discount ? get_field( 'price_with_discount' ) : null;
 $brand               = ! empty( get_the_terms( get_the_ID(), 'brand' ) ) && ! is_wp_error( get_the_terms( get_the_ID(), 'brand' ) ) ? get_the_terms( get_the_ID(), 'brand' )[0]->name : null;
 $tags                = get_the_terms( get_the_ID(), 'dress_tag' );
+$dress_category      = get_the_terms( get_the_ID(), 'dress_category' );
 $related_products    = get_field( 'related_products' );
 ?>
 			<section class="section">
@@ -124,9 +127,9 @@ $related_products    = get_field( 'related_products' );
 								<div class="p-16-20 odesc w-richtext"><?php the_content(); ?></div>
 								<div class="vert form-keepre">
 									<div class="p-12-12 uper m-12-12">Запись на примерку</div>
-									<a href="#" class="btn in-single-btn zapis w-inline-block">
+									<button class="btn in-single-btn zapis w-inline-block" data-js-dialog-open-button="fittingDialog">
 										<div>Выбрать дату и время</div>
-									</a>
+									</button>
 									<div class="form-block w-form">
 										<form id="email-form" name="email-form" data-name="Email Form" method="get" class="form" data-wf-page-id="67239bd83c4331a3450cc872" data-wf-element-id="919e8683-0ddb-4c9b-4c3b-9ef17e8ca1d0"><a href="#" class="select w-inline-block"></a>
 											<input class="w-input" maxlength="256" name="email-2" data-name="Email 2" placeholder type="email" id="email-2" required>
@@ -255,5 +258,156 @@ $related_products    = get_field( 'related_products' );
 			<?php get_template_part( 'template-parts/global/map-section' ); ?>
 			<?php get_template_part( 'components/footer' ); ?>
 			</div>
+		</div>
+		<div id="fittingDialog" role="dialog" class="dialog" data-js-dialog>
+			<div class="dialog__overlay" data-js-dialog-overlay>
+				<div class="dialog__content" data-js-dialog-content>
+					<div class="dialog-card">
+						<div class="dialog-card__header">
+							<h3 class="dialog-card__title" data-js-dialog-title>Запись на примерку</h3>
+							<p class="dialog-card__subtitle">м. Садовая, Вознесенский пр-кт, 18</p>
+							<a href="#" class="dialog-card__link menu-link active">Маршрут от метро</a>
+						</div>
+						<div class="dialog-card__body">
+							<form class="fitting-form" data-js-fitting-form>
+								<button type="button" class="fitting-form__back" data-js-fitting-form-back-button disabled>
+									<svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M0.707107 7.14201L0.00075584 7.84914L0.707862 8.55621L7.77817 15.6273L8.48528 14.9202L1.41421 7.84912L8.48528 0.778053L7.77818 0.070946L0.707107 7.14201Z" fill="black"/>
+									</svg>
+								</button>
+								<fieldset class="fitting-form__step" data-js-fitting-form-step>
+									<?php
+									$dress_categories = get_terms(
+										array(
+											'taxonomy'   => 'dress_category',
+											'hide_empty' => false,
+										)
+									);
+
+									if ( ! empty( $dress_categories ) && ! is_wp_error( $dress_categories ) ) :
+										?>
+										<fieldset class="fitting-form__group">
+											<div class="fitting-form__group-header">
+												<p class="fitting-form__group-heading">Какие платья желаете примерить?</p>
+											</div>
+											<div class="fitting-form__columns">
+												<?php
+												foreach ( $dress_categories as $dress_categories_item ) :
+													$dress_category_name = str_replace( ' платья', '', $dress_categories_item->name );
+													?>
+													<label class="radio">
+														<input 
+															class="radio__input" 
+															type="radio" 
+															name="<?php echo esc_attr( $dress_categories_item->taxonomy ); ?>" 
+															value="<?php echo esc_attr( $dress_categories_item->slug ); ?>"
+															<?php echo ( ! empty( $dress_category ) && ! is_wp_error( $dress_category ) && $dress_category[0]->slug === $dress_categories_item->slug ) ? 'checked' : ''; ?>
+														>
+														<span class="radio__label"><?php echo esc_html( $dress_category_name ); ?></span>
+													</label>
+												<?php endforeach; ?>
+											</div>
+										</fieldset>
+									<?php endif; ?>
+									<fieldset class="fitting-form__group">
+										<div class="fitting-form__group-header">
+											<p class="fitting-form__group-heading">Выберите день и время</p>
+											<div class="fitting-form__actions">
+												<button type="button" class="fitting-form__actions-button fitting-form__actions-button--prev" disabled data-js-fitting-form-prev-slots-button>
+													<svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path fill-rule="evenodd" clip-rule="evenodd" d="M5.24977 4.28598L0.74993 0L0 0.714289L4.49984 5.00027L0.000560648 9.28571L0.750491 10L6 4.99998L5.25007 4.28569L5.24977 4.28598Z" fill="black"/>
+													</svg>
+												</button>
+												<button type="button" class="fitting-form__actions-button fitting-form__actions-button--next" data-js-fitting-form-next-slots-button>
+													<svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path fill-rule="evenodd" clip-rule="evenodd" d="M5.24977 4.28598L0.74993 0L0 0.714289L4.49984 5.00027L0.000560648 9.28571L0.750491 10L6 4.99998L5.25007 4.28569L5.24977 4.28598Z" fill="black"/>
+													</svg>
+												</button>
+											</div>
+										</div>
+										<?php
+										$current_date = gmdate( 'd.m.Y', current_time( 'timestamp' ) );
+										$end_date     = gmdate( 'd.m.Y', strtotime( '+2 days', current_time( 'timestamp' ) ) );
+										$slots_range  = Fitting_Slots::get_slots_range( $current_date, $end_date );
+										?>
+										<div class="fitting-form__columns" data-js-fitting-form-slots-container>
+											<?php
+											/*
+											foreach ( $slots_range as $slots_range_date => $slots ) : ?>
+												<div class="fitting-form__day-column">
+													<div class="fitting-form__day-column-head">
+														<label class="fitting-form__day-input radio">
+															<!-- <input class="radio__input" type="radio" name="date" id="" value="01.02"> -->
+															<span class="radio__label"><?php echo esc_html( gmdate( 'd.m (D)', strtotime( $slots_range_date ) ) ); ?></span>
+														</label>
+													</div>
+													<ol class="fitting-form__day-column-list">
+														<?php foreach ( $slots as $time => $slot ) : ?>
+														<li class="fitting-form__day-column-list-item">
+															<label class="radio">
+																<input
+																	class="radio__input"
+																	type="radio"
+																	name="time"
+																	id=""
+																	value="<?php echo esc_attr( $time ); ?>"
+																	<?php echo 0 === $slot['available'] ? 'disabled' : ''; ?>
+																	data-js-fitting-form-date-value="<?php echo esc_attr( gmdate( 'Y-m-d', strtotime( $slots_range_date ) ) ); ?>"
+																>
+																<span class="radio__label"><?php echo esc_html( $time ); ?></span>
+															</label>
+														</li>
+														<?php endforeach; ?>
+													</ol>
+												</div>
+											<?php endforeach; */
+											?>
+										</div>
+										<input type="hidden" name="date" value="<?php echo esc_attr( gmdate( 'd.m' ) ); ?>" data-js-fitting-form-date-control>
+									</fieldset>
+								</fieldset>
+								<fieldset class="fitting-form__step" data-js-fitting-form-step hidden>
+									<fieldset class="fitting-form__group">
+										<div class="fitting-form__group-header">
+											<p class="fitting-form__group-heading">2 октября в среду в 14:00</p>
+										</div>
+										<div class="fitting-form__group-body">
+											<div class="field">
+												<input type="text" class="field__control" name="name" placeholder="Имя" id="fittingFormNameField">
+											</div>
+											<div class="field">
+												<input 
+													type="text" 
+													class="field__control" 
+													name="phone" 
+													placeholder="Телефон" 
+													id="fittingFormPhoneField" 
+													data-js-input-mask="+{7} (000) 000-00-00">
+											</div>
+											<button type="submit" class="button" data-js-fitting-form-submit-button>Записаться</button>
+										</div>
+										<div class="fitting-form__group-footer">
+											<p>Нажимая записаться вы соглашаетесь с <a href="#">политикой конфиденциальности</a></p>
+										</div>
+									</fieldset>
+								</fieldset>
+								<div class="fitting-form__errors" data-js-fitting-form-errors hidden></div>
+								<?php wp_nonce_field( 'submit_fitting_form', 'submit_fitting_form_nonce' ); ?>
+							</form>
+							<button type="dialog-card__body-button button" class="button" disabled hidden data-js-dialog-close-button>Хорошо</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button type="button" class="dialog__close" data-js-dialog-close-button>
+				<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<mask id="mask0_451_2489" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+						<rect width="18" height="18" fill="#D9D9D9"/>
+					</mask>
+					<g mask="url(#mask0_451_2489)">
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M8.84924 8.14201L1.77818 1.07095L1.07107 1.77805L8.14214 8.84912L1.07107 15.9202L1.77817 16.6273L8.84924 9.55623L15.9203 16.6273L16.6274 15.9202L9.55635 8.84912L16.6274 1.77805L15.9203 1.07095L8.84924 8.14201Z" fill="black"/>
+					</g>
+				</svg>
+			</button>
 		</div>
 		<?php get_footer(); ?>

@@ -12,5 +12,8 @@
 	"license": "ISC",
 	"devDependencies": {
 		"@wordpress/scripts": "^30.9.0"
+	},
+	"dependencies": {
+		"imask": "^7.6.1"
 	}
 }

@@ -1,0 +1,146 @@
+@use '../media' as *;
+
+.fitting-form {
+	display: grid;
+	row-gap: 20rem;
+
+	&__back {
+		padding: 10rem;
+		position: absolute;
+		top: 10rem;
+		left: 10rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: transparent;
+		transition: all 0.3s ease;
+
+		@include hover {
+			opacity: 0.6;
+		}
+
+		html:has(#wpadminbar) & {
+			top: calc(32px + 10rem);
+		}
+
+		&:disabled {
+			display: none;
+			pointer-events: none;
+		}
+	}
+
+	&__step {
+		display: grid;
+		row-gap: 40rem;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	&__group {
+		display: flex;
+		flex-direction: column;
+		row-gap: 20rem;
+
+		&-header {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		&-heading {
+			font-size: 16rem;
+			line-height: 1;
+			text-transform: uppercase;
+		}
+
+		&-body {
+			display: flex;
+			flex-direction: column;
+			row-gap: 10rem;
+		}
+
+		&-footer {
+			font-size: 12rem;
+			line-height: 16rem;
+			font-weight: 500;
+			text-transform: uppercase;
+			color: rgba(0, 0, 0, 0.3);
+			text-align: center;
+		}
+	}
+
+	&__columns {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(100rem, 1fr));
+		column-gap: 10rem;
+
+		&-error {
+			grid-column: 1 / -1;
+		}
+
+		&.is-loading {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		column-gap: 66rem;
+
+		&-button {
+			padding: 0;
+			width: 30rem;
+			height: 30rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: transparent;
+			transition: opacity 0.3s ease;
+
+			&--prev {
+				rotate: 180deg;
+			}
+
+			@include hover {
+				opacity: 0.4;
+			}
+
+			&:disabled {
+				opacity: 0.4;
+				pointer-events: none;
+			}
+		}
+	}
+
+	&__day-column {
+		display: flex;
+		flex-direction: column;
+		row-gap: 15rem;
+
+		&-list {
+			margin: 0;
+			padding: 0;
+			display: grid;
+			row-gap: 6rem;
+			list-style: none;
+		}
+	}
+
+	&__errors {
+		padding: 20rem;
+		font-size: 16rem;
+		line-height: 1.5;
+		background-color: rgba(255, 0, 0, 0.5);
+		color: #fff;
+	}
+
+	&[hidden] {
+		display: none;
+	}
+}

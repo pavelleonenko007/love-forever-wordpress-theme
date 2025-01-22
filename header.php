@@ -25,11 +25,12 @@ $barba_container_extra_classes = ! empty( $args['barba-container-extra-classes']
 		<?php wp_body_open(); ?>
 		<?php get_template_part( 'components/custom-css' ); ?>
 		<?php
-		echo '<pre>';
-		$current_time = current_time( 'timestamp' );
-		var_dump( gmdate( 'Y-m-d H:i:s', $current_time ) );
-		var_dump( Fitting_Slots::get_available_slots( gmdate( 'Y-m-d' ), $current_time ) );
-		echo '</pre>';
+		// echo '<pre>';
+		// $current_time = current_time( 'timestamp' );
+		// var_dump( gmdate( 'Y-m-d H:i:s', $current_time ) );
+		// var_dump( Fitting_Slots::get_available_slots( gmdate( 'Y-m-d' ), $current_time ) );
+		// var_dump( Fitting_Slots::get_available_slots( gmdate( 'Y-m-d', strtotime( '22.01.2025' ) ) ) );
+		// echo '</pre>';
 		?>
 	<div id="barba-wrapper" class="wrapper">
 		<?php $barba_container_classes = array_merge( array( 'barba-container' ), $barba_container_extra_classes ); ?>

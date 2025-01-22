@@ -1,0 +1,13 @@
+html {
+	&.is-locked {
+		overflow: hidden;
+	}
+}
+
+*:focus-visible {
+	outline: 2px dashed var(--pink);
+}
+
+.indirm-line {
+	z-index: 999;
+}

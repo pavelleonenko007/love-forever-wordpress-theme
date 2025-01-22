@@ -64,3 +64,21 @@ function loveforever_download_and_add_image_to_library( $image_url ) {
 function loveforever_format_price( $amount, $decimals = 2, $decimal_separator = '.', $thousands_separator = ' ' ) {
 	return number_format( $amount, $decimals, $decimal_separator, $thousands_separator );
 }
+
+function loveforever_get_client_ip_address() {
+	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+			$ip = current( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
+	} elseif ( ! empty( $_SERVER['HTTP_X_REAL_IP'] ) ) {
+			$ip = $_SERVER['HTTP_X_REAL_IP'];
+	} else {
+			$ip = $_SERVER['REMOTE_ADDR'];
+	}
+
+	if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+			return $ip;
+	}
+
+	return '';
+}

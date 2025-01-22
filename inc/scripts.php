@@ -20,7 +20,8 @@ function loveforever_add_site_scripts() {
 	wp_enqueue_script( 'jquery' );
 
 	wp_enqueue_style( 'main', TEMPLATE_PATH . '/css/main.css', array(), time() );
-	wp_enqueue_style( 'custom', TEMPLATE_PATH . '/css/custom.css', array( 'main' ), time() );
+	wp_enqueue_style( 'bundle', TEMPLATE_PATH . '/build/index.css', array( 'main' ), time() );
+	wp_enqueue_style( 'custom', TEMPLATE_PATH . '/css/custom.css', array( 'bundle' ), time() );
 
 	wp_enqueue_script( 'jquery-ui-core' );
 	wp_enqueue_script( 'jquery-ui-slider' );
@@ -31,6 +32,14 @@ function loveforever_add_site_scripts() {
 	wp_enqueue_script( 'thevogne', '//thevogne.ru/clients/gavril/loveforever/scripts.js', array( 'splide' ), time(), true );
 	wp_enqueue_script( 'custom', TEMPLATE_PATH . '/js/custom.js', array( 'thevogne' ), time(), true );
 	wp_enqueue_script( 'bundle', TEMPLATE_PATH . '/build/index.js', array( 'barba' ), time(), true );
+	wp_localize_script(
+		'bundle',
+		'LOVE_FOREVER',
+		array(
+			'AJAX_URL' => admin_url( 'admin-ajax.php' ),
+			'NONCE'    => wp_create_nonce( 'loveforever_nonce' ),
+		)
+	);
 }
 
 add_filter( 'wp_default_scripts', 'loveforever_remove_jquery_migrate' );

@@ -8,6 +8,57 @@
 defined( 'ABSPATH' ) || exit;
 
 class Fitting_Slots {
+	public static function get_slots_range( $start_date, $end_date ) {
+		$slots        = array();
+		$current_date = new DateTime( $start_date );
+		$end          = new DateTime( $end_date );
+		$current_time = current_time( 'timestamp' );
+
+		while ( $current_date <= $end ) {
+				$date           = $current_date->format( 'Y-m-d' );
+				$slots[ $date ] = self::get_day_slots( $date, $current_time );
+				$current_date->modify( '+1 day' );
+		}
+
+		return $slots;
+	}
+
+	public static function get_day_slots( $date, $current_time = null ) {
+		$available_slots = self::get_available_slots( $date );
+		$all_slots       = self::generate_all_slots( $date );
+
+		foreach ( $all_slots as $time => &$slot ) {
+			if ( $current_time && strtotime( $date . ' ' . $time ) <= $current_time ) {
+				$slot['available'] = 0;
+				$slot['is_booked'] = true;
+			} else {
+				$slot['available'] = isset( $available_slots[ $time ] ) ? $available_slots[ $time ] : 0;
+				$slot['is_booked'] = $slot['available'] < $slot['max_fittings'];
+			}
+		}
+
+		return $all_slots;
+	}
+
+	public static function generate_all_slots( $date ) {
+		$slots      = array();
+		$start_time = strtotime( '10:00' );
+		$end_time   = strtotime( '21:00' );
+		$interval   = 30 * 60; // 30 minutes
+
+		while ( $start_time < $end_time ) {
+				$time           = gmdate( 'H:i', $start_time );
+				$slots[ $time ] = array(
+					'max_fittings' => self::get_max_fittings_for_slot( $date, $time ),
+					'available'    => 0,
+					'is_booked'    => false,
+				);
+				$start_time    += $interval;
+		}
+
+		return $slots;
+	}
+
 	public static function get_available_slots( $date, $current_time = null ) {
 		$slots    = self::generate_slots( $date, $current_time );
 		$bookings = self::get_bookings( $date );
@@ -52,19 +103,23 @@ class Fitting_Slots {
 	}
 
 	private static function get_bookings( $date ) {
+		$start_of_day = $date . ' 00:00:00';
+		$end_of_day   = $date . ' 23:59:59';
+
 		$args = array(
 			'post_type'      => 'fitting',
 			'posts_per_page' => -1,
 			'meta_query'     => array(
 				array(
 					'key'     => 'fitting_time',
-					'value'   => $date,
-					'compare' => 'LIKE',
+					'value'   => array( $start_of_day, $end_of_day ),
+					'compare' => 'BETWEEN',
+					'type'    => 'DATETIME',
 				),
 			),
 		);
 
-		$query    = new WP_Query( $args );
+		$query = new WP_Query( $args );
 		$bookings = array();
 
 		if ( $query->have_posts() ) {
@@ -108,12 +163,11 @@ class Fitting_Slots {
 	}
 
 	private static function get_fitting_duration( $fitting_type ) {
-		if ( in_array( 'wedding', $fitting_type ) ) {
-			return 90; // 1.5 часа для свадебных платьев
-		} elseif ( in_array( 'evening', $fitting_type ) || in_array( 'prom', $fitting_type ) ) {
-			return 60; // 1 час для вечерних и выпускных платьев
-		} else {
-			return 60; // По умолчанию 1 час
+		switch ( $fitting_type ) {
+			case 'wedding':
+				return 90;
+			default:
+				return 60;
 		}
 	}
 

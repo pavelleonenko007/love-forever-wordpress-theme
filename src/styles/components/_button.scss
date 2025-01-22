@@ -1,0 +1,33 @@
+@use '../media' as *;
+
+.button {
+	height: 50rem;
+	padding-inline: 30rem;
+	border: 1rem solid var(--purple);
+	border-radius: 100rem;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	row-gap: 15rem;
+	text-transform: uppercase;
+	font-size: 12rem;
+	font-weight: 500;
+	line-height: 1;
+	color: #fff;
+	background-color: var(--purple);
+	transition: all 0.3s ease;
+
+	@include hover {
+		background-color: #fff;
+		color: var(--purple);
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+
+	&[hidden] {
+		display: none;
+	}
+}

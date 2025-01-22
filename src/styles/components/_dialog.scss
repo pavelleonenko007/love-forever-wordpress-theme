@@ -1,0 +1,47 @@
+.dialog {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100dvh;
+	z-index: 1000;
+
+	&__close {
+		--top: 20rem;
+		--right: 20rem;
+
+		position: absolute;
+		top: var(--top);
+		right: var(--right);
+		width: 20rem;
+		height: 20rem;
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+		color: #646970;
+		z-index: 1000;
+		cursor: pointer;
+		transition:
+			color 0.1s ease-in-out,
+			background 0.1s ease-in-out;
+
+		html:has(#wpadminbar) & {
+			--top: calc(32px + 20rem);
+		}
+	}
+
+	&__overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.6);
+	}
+
+	&.is-open {
+		display: block;
+	}
+}
