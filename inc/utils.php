@@ -82,3 +82,8 @@ function loveforever_get_client_ip_address() {
 
 	return '';
 }
+
+function loveforever_has_product_in_favorites( $id ) {
+	$favorites = ! empty( $_COOKIE['favorites'] ) ? explode( ',', $_COOKIE['favorites'] ) : array();
+	return in_array( $id, $favorites );
+}

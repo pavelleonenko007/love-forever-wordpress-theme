@@ -175,6 +175,55 @@ function loveforever_get_date_time_slots_via_ajax() {
 	);
 }
 
+add_action( 'wp_ajax_toggle_product_favorite', 'loveforever_toggle_product_to_favorite_via_ajax' );
+add_action( 'wp_ajax_nopriv_toggle_product_favorite', 'loveforever_toggle_product_to_favorite_via_ajax' );
+function loveforever_toggle_product_to_favorite_via_ajax() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка запроса!',
+			),
+			400
+		);
+	}
+
+	if ( empty( $_POST['product_id'] ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Не указан id товара',
+			),
+			400
+		);
+	}
+
+	$product_id = sanitize_text_field( wp_unslash( $_POST['product_id'] ) );
+	$favorites  = ! empty( $_COOKIE['favorites'] ) ? explode( ',', $_COOKIE['favorites'] ) : array();
+	$status     = '';
+
+	if ( in_array( $_POST['product_id'], $favorites ) ) {
+		$favorites = array_filter(
+			$favorites,
+			function ( $id ) use ( $product_id ) {
+				return $id !== $product_id;
+			}
+		);
+		$status    = 'inactive';
+	} else {
+		$favorites[] = $product_id;
+		$status      = 'active';
+	}
+
+	setcookie( 'favorites', implode( ',', $favorites ) );
+
+	wp_send_json_success(
+		array(
+			'message' => 'active' === $status ? 'Товар добавлен в избранное!' : 'Товар удален из избранного!',
+			'status'  => $status,
+		),
+		200
+	);
+}
+
 add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
 function loveforever_modify_dress_category_query( $query ) {
 	if ( $query->is_tax( 'dress_category' ) ) {

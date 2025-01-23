@@ -146,7 +146,8 @@ $related_products    = get_field( 'related_products' );
 								<p class="p-16-20 odescr">Примерить и купить платье можно в нашем салоне:г. Санкт-Петербург, Вознесенский проспект 18 (м. Садовая) ежедневно с 10 до 22:00 по предварительной записи<br>‍</p>
 								<div class="p-16-20 n-top single-p">Для доставки в регионы <a href="#" class="btn-call-reqest">закажите обратный звонок</a></div>
 								<div class="horiz m-vert">
-									<a href="#" class="btn in-single-btn line w-inline-block">
+									<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
+									<button type="button"class="btn in-single-btn line w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
 										<div class="svg-share lik w-embed">
 											<svg width="100%" height="100%" viewbox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28448 7.26555C-0.428161 8.95359 -0.428161 11.6904 1.28448 13.3784L8.00251 20L14.2045 13.8871L14.2022 13.8849L14.716 13.3784C16.4287 11.6904 16.4287 8.95359 14.716 7.26555C13.0034 5.5775 10.2267 5.5775 8.51402 7.26555L8.00026 7.77193L7.4865 7.26555C5.77386 5.5775 2.99713 5.5775 1.28448 7.26555Z" fill="white"></path>
@@ -154,8 +155,8 @@ $related_products    = get_field( 'related_products' );
 												<path fill-rule="evenodd" clip-rule="evenodd" d="M17.5218 3.49713C16.8261 4.16029 16.8261 5.23546 17.5218 5.89862L20.251 8.49994L22.7706 6.09844L22.7697 6.09757L22.9784 5.89862C23.6742 5.23546 23.6742 4.16029 22.9784 3.49713C22.2826 2.83397 21.1546 2.83397 20.4588 3.49713L20.2501 3.69606L20.0414 3.49713C19.3456 2.83397 18.2176 2.83397 17.5218 3.49713Z" fill="white"></path>
 											</svg>
 										</div>
-										<div>Добавить в избранное</div>
-									</a>
+										<div data-js-add-to-favorite-button-text><?php echo $is_in_favorites ? 'Удалить из избранного' : 'Добавить в избранное'; ?></div>
+									</button>
 									<a href="#" class="btn in-single-btn _2 w-inline-block">
 										<div class="svg-share lik w-embed">
 											<svg width="24" height="16" viewbox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
