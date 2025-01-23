@@ -175,50 +175,84 @@ function loveforever_get_date_time_slots_via_ajax() {
 	);
 }
 
-add_action( 'wp_ajax_toggle_product_favorite', 'loveforever_toggle_product_to_favorite_via_ajax' );
-add_action( 'wp_ajax_nopriv_toggle_product_favorite', 'loveforever_toggle_product_to_favorite_via_ajax' );
-function loveforever_toggle_product_to_favorite_via_ajax() {
-	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
+add_action( 'wp_ajax_get_filtered_products', 'loveforever_get_filtered_products_via_ajax' );
+add_action( 'wp_ajax_get_filtered_products', 'loveforever_get_filtered_products_via_ajax' );
+function loveforever_get_filtered_products_via_ajax() {
+	if ( ! isset( $_POST['submit_filter_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['submit_filter_form_nonce'] ) ), 'submit_filter_form' ) ) {
 		wp_send_json_error(
-			array(
-				'message' => 'Ошибка запроса!',
-			),
+			array( 'message' => 'Ошибка в запросе' ),
 			400
 		);
 	}
 
-	if ( empty( $_POST['product_id'] ) ) {
-		wp_send_json_error(
+	$min_price = ! empty( $_POST['min-price'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['min-price'] ) ) : 0;
+	$max_price = ! empty( $_POST['max-price'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['max-price'] ) ) : 1000000000;
+	$page      = ! empty( $_POST['page'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['page'] ) ) : 1;
+
+	$products_query_args = array(
+		'post_type'      => 'dress',
+		'posts_per_page' => 6,
+		'paged'          => $page,
+		'meta_query'     => array(
 			array(
-				'message' => 'Не указан id товара',
+				'key'     => 'price',
+				'value'   => array( $min_price, $max_price ),
+				'compare' => 'BETWEEN',
+				'type'    => 'NUMERIC',
 			),
-			400
+		),
+	);
+
+	if ( ! empty( $_POST['taxonomy'] ) && ! empty( $_POST[ $_POST['taxonomy'] ] ) ) {
+		$taxonomy = sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) );
+		$term_id  = sanitize_text_field( wp_unslash( $_POST[ $taxonomy ] ) );
+
+		$products_query_args['tax_query'][] = array(
+			'taxonomy' => $taxonomy,
+			'field'    => 'term_id',
+			'terms'    => array( $term_id ),
 		);
 	}
 
-	$product_id = sanitize_text_field( wp_unslash( $_POST['product_id'] ) );
-	$favorites  = ! empty( $_COOKIE['favorites'] ) ? explode( ',', $_COOKIE['favorites'] ) : array();
-	$status     = '';
-
-	if ( in_array( $_POST['product_id'], $favorites ) ) {
-		$favorites = array_filter(
-			$favorites,
-			function ( $id ) use ( $product_id ) {
-				return $id !== $product_id;
-			}
+	if ( ! empty( $_POST['silhouette'] ) ) {
+		$products_query_args['tax_query'][] = array(
+			'taxonomy' => 'silhouette',
+			'field'    => 'term_id',
+			'terms'    => array( (int) sanitize_text_field( wp_unslash( $_POST['silhouette'] ) ) ),
 		);
-		$status    = 'inactive';
-	} else {
-		$favorites[] = $product_id;
-		$status      = 'active';
 	}
 
-	setcookie( 'favorites', implode( ',', $favorites ) );
+	$products_query = new WP_Query( $products_query_args );
+
+	if ( ! $products_query->have_posts() ) {
+		wp_send_json_success(
+			array(
+				'html' => '<p>Товары с заданными параметрами не найдены</p>',
+			),
+			200
+		);
+	}
+
+	$html = '';
+
+	ob_start();
+
+	while ( $products_query->have_posts() ) :
+		$products_query->the_post();
+		?>
+			<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
+				<?php get_template_part( 'components/dress-card' ); ?>
+			</div>
+		<?php
+	endwhile;
+	wp_reset_postdata();
+
+	$html = ob_get_clean();
 
 	wp_send_json_success(
 		array(
-			'message' => 'active' === $status ? 'Товар добавлен в избранное!' : 'Товар удален из избранного!',
-			'status'  => $status,
+			'message' => 'Товары получены успешно!',
+			'html'    => $html,
 		),
 		200
 	);
@@ -227,7 +261,7 @@ function loveforever_toggle_product_to_favorite_via_ajax() {
 add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
 function loveforever_modify_dress_category_query( $query ) {
 	if ( $query->is_tax( 'dress_category' ) ) {
-		$query->set( 'posts_per_page', 3 );
+		$query->set( 'posts_per_page', 6 );
 	}
 }
 

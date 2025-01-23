@@ -117,6 +117,76 @@ function loveforever_register_post_types() {
 		)
 	);
 
+	register_taxonomy(
+		'silhouette',
+		null,
+		array(
+			'label'              => '',
+			'labels'             => array(
+				'name'              => 'Силуэты',
+				'singular_name'     => 'Силуэт',
+				'search_items'      => 'Поиск силуэтов',
+				'all_items'         => 'Все силуэты',
+				'view_item '        => 'Просмотр силуэта',
+				'parent_item'       => 'Родитель силуэта',
+				'parent_item_colon' => 'Родитель силуэта:',
+				'edit_item'         => 'Редактировать силуэт',
+				'update_item'       => 'Обновить силуэт',
+				'add_new_item'      => 'Добавить новый силуэт',
+				'new_item_name'     => 'Название нового силуэта',
+				'menu_name'         => 'Силуэты',
+				'back_to_items'     => '← Назад к силуэтам',
+			),
+			'description'        => '',
+			'public'             => true,
+			'show_ui'            => true,
+			'show_in_quick_edit' => true,
+			'hierarchical'       => false,
+			'rewrite'            => true,
+			// 'query_var'             => taxonomy, // название параметра запроса
+			'capabilities'       => array(),
+			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+			'show_in_rest'       => true, // добавить в REST API
+			'rest_base'          => null, // taxonomy
+		)
+	);
+
+	register_taxonomy(
+		'style',
+		null,
+		array(
+			'label'              => '',
+			'labels'             => array(
+				'name'              => 'Стили',
+				'singular_name'     => 'Стиль',
+				'search_items'      => 'Поиск силуэтов',
+				'all_items'         => 'Все стили',
+				'view_item '        => 'Просмотр стиля',
+				'parent_item'       => 'Родитель стиля',
+				'parent_item_colon' => 'Родитель стиля:',
+				'edit_item'         => 'Редактировать стиль',
+				'update_item'       => 'Обновить стиль',
+				'add_new_item'      => 'Добавить новый стиль',
+				'new_item_name'     => 'Название нового стиля',
+				'menu_name'         => 'Стили',
+				'back_to_items'     => '← Назад к стилям',
+			),
+			'description'        => '',
+			'public'             => true,
+			'show_ui'            => true,
+			'show_in_quick_edit' => true,
+			'hierarchical'       => false,
+			'rewrite'            => true,
+			// 'query_var'             => taxonomy, // название параметра запроса
+			'capabilities'       => array(),
+			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+			'show_in_rest'       => true, // добавить в REST API
+			'rest_base'          => null, // taxonomy
+		)
+	);
+
 	register_post_type(
 		'fitting',
 		array(
@@ -194,7 +264,7 @@ function loveforever_register_post_types() {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-			'taxonomies'          => array( 'dress_category', 'dress_brand', 'dress_tag' ),
+			'taxonomies'          => array( 'dress_category', 'dress_brand', 'dress_tag', 'silhouette', 'style' ),
 		)
 	);
 

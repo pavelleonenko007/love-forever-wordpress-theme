@@ -249,3 +249,38 @@ function loveforever_paginate_links_data( array $args ): array {
 
 	return $pages;
 }
+
+function loveforever_get_product_price_range() {
+	global $wpdb;
+
+	$query = $wpdb->prepare(
+		"SELECT 
+				MIN(CASE
+						WHEN sale_price.meta_value > 0 AND sale_price.meta_value < regular_price.meta_value
+						THEN sale_price.meta_value
+						ELSE regular_price.meta_value
+				END) as min_price,
+				MAX(regular_price.meta_value) as max_price
+		 FROM {$wpdb->posts} p
+		 JOIN {$wpdb->postmeta} regular_price ON p.ID = regular_price.post_id
+		 LEFT JOIN {$wpdb->postmeta} sale_price ON p.ID = sale_price.post_id 
+				AND sale_price.meta_key = 'price_with_discount'
+		 WHERE p.post_type = %s
+		 AND p.post_status = 'publish'
+		 AND regular_price.meta_key = 'price'
+		 AND regular_price.meta_value > 0",
+		'dress'
+	);
+
+	// Выполнение запроса
+	$result = $wpdb->get_row( $query );
+
+	if ( $result && null !== $result->min_price && null !== $result->max_price ) {
+			return array(
+				'min_price' => (float) $result->min_price,
+				'max_price' => (float) $result->max_price,
+			);
+	}
+
+	return false;
+}

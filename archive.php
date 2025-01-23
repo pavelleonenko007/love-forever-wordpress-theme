@@ -29,7 +29,7 @@ $queried_object = get_queried_object();
 							</div>
 							<div class="slider-bottom-content inner-pages">
 								<?php get_template_part( 'components/breadcrumb' ); ?>
-								<h1 class="p-86-96"><?php the_archive_title(); ?></h1>
+								<h1 class="p-86-96"><?php echo esc_html( $queried_object->name ); ?></h1>
 								<p class="p-16-20 mmax695">Свадебный салон LoveForever это больше чем просто свадебные платья, это целый комплекс услуг по созданию гармоничного образа невесты.</p>
 							</div>
 						</div>
@@ -41,38 +41,73 @@ $queried_object = get_queried_object();
 						<?php
 						if ( have_posts() ) :
 							?>
-							<form class="filters-form">
+							<form class="filters-form" data-js-filter-form>
 								<div class="vert vert-fw">
 									<div class="spleet m-vert">
-										<div class="horiz categeory-list">
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" checked value="type_koshemir"><span for="type_koshemir">Все</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">А-Силуэт</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">греческий стиль</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">пышные</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">комбинизон/костюм</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">прямые</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">со шлейфом</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">трансформеры</span></label>
-											<label class="label">
-											<input type="radio" id="type_koshemir" name="radio" data-name="radio" class="input" value="type_koshemir"><span for="type_koshemir">рыбка/годе</span></label>
-										</div>
-										<div class="code-embed-7 w-embed">
-											<div id="min2">11 000 ₽</div>
-											<div id="slider"></div>
-											<div id="slider-range">
-												<input type="text" id="min" value="1000"> 
-												<input type="text" id="max" value="9000">
+										<?php
+										$silhouettes = get_terms(
+											array(
+												'taxonomy' => 'silhouette',
+												'hide_empty' => false, // TODO: make true or remove
+											)
+										);
+
+										if ( ! empty( $silhouettes ) ) :
+											?>
+											<div class="horiz categeory-list">
+												<label class="label">
+													<input 
+														type="radio" 
+														id="silhouette-0" 
+														name="silhouette" 
+														class="input" 
+														checked 
+														value=""
+													>
+													<span for="type_koshemir">Все</span>
+												</label>
+												<?php foreach ( $silhouettes as $silhouettes_index => $silhouette ) : ?>
+													<label class="label">
+														<input 
+															type="radio" 
+															id="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>" 
+															name="silhouette" 
+															class="input" 
+															value="<?php echo esc_attr( $silhouette->term_id ); ?>"
+														>
+														<span for="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"><?php echo esc_html( $silhouette->name ); ?></span>
+													</label>
+												<?php endforeach; ?>
 											</div>
-											<div id="max2">91 000 ₽</div>
-										</div>
+										<?php endif; ?>
+										<?php
+										$price_range = loveforever_get_product_price_range();
+										if ( ! empty( $price_range ) ) :
+											?>
+											<div class="code-embed-7 w-embed">
+												<div id="min2"><?php echo esc_html( loveforever_format_price( $price_range['min_price'] ) ); ?></div>
+												<div id="slider"></div>
+												<div id="slider-range">
+													<input 
+														type="number" 
+														id="min" 
+														name="min-price" 
+														value="<?php echo esc_attr( $price_range['min_price'] ); ?>"
+														min="<?php echo esc_attr( $price_range['min_price'] ); ?>"
+														max="<?php echo esc_attr( $price_range['max_price'] ); ?>"
+													> 
+													<input 
+														type="number" 
+														id="max" 
+														name="max-price" 
+														value="<?php echo esc_attr( $price_range['max_price'] ); ?>"
+														min="<?php echo esc_attr( $price_range['min_price'] ); ?>"
+														max="<?php echo esc_attr( $price_range['max_price'] ); ?>"
+													>
+												</div>
+												<div id="max2"><?php echo esc_html( loveforever_format_price( $price_range['max_price'] ) ); ?></div>
+											</div>
+										<?php endif; ?>
 									</div>
 									<div class="_1px-line"></div>
 									<div class="spleet botm-filter">
@@ -94,7 +129,12 @@ $queried_object = get_queried_object();
 														</svg>
 													</div>
 												</div>
-												<div class="custom-drop-content"><a href="#" class="cdrop-a selected">по популярности</a><a href="#" class="cdrop-a">по новизне</a><a href="#" class="cdrop-a">по убыванию цены</a><a href="#" class="cdrop-a">по возрастанию цены</a></div>
+												<div class="custom-drop-content">
+													<a href="#" class="cdrop-a selected">по популярности</a>
+													<a href="#" class="cdrop-a">по новизне</a>
+													<a href="#" class="cdrop-a">по убыванию цены</a>
+													<a href="#" class="cdrop-a">по возрастанию цены</a>
+												</div>
 											</div>
 										</div>
 										<a href="#" class="filters-btn w-inline-block">
@@ -268,15 +308,19 @@ $queried_object = get_queried_object();
 										</a>
 									</div>
 								</div>
+								<input type="hidden" name="taxonomy" value="<?php echo esc_attr( $queried_object->taxonomy ); ?>">
+								<input type="hidden" name="<?php echo esc_attr( $queried_object->taxonomy ); ?>" value="<?php echo esc_attr( $queried_object->term_id ); ?>">
+								<input type="hidden" name="action" value="get_filtered_products">
+								<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce' ); ?>
 							</form>
-							<div class="catalog-grid catalog-page-grid">
+							<div class="catalog-grid catalog-page-grid" data-js-filter-form-content-element>
 								<?php
 								while ( have_posts() ) :
 									the_post();
 									?>
-								<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
-									<?php get_template_part( 'components/dress-card' ); ?>
-								</div>
+									<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
+										<?php get_template_part( 'components/dress-card' ); ?>
+									</div>
 									<?php
 								endwhile;
 								wp_reset_postdata();
@@ -722,6 +766,7 @@ $queried_object = get_queried_object();
 							</div>
 							<div class="paginate">
 								<?php
+								// TODO: add pagination to filter logic!
 								global $wp_query;
 								$total_pages  = $wp_query->max_num_pages;
 								$current_page = max( 1, $wp_query->get( 'paged' ) );
