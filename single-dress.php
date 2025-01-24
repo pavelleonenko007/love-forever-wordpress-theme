@@ -5,8 +5,6 @@
  * @package 0.0.1
  */
 
-use SimplePie\Parse\Date;
-
 defined( 'ABSPATH' ) || exit;
 
 get_header(
@@ -14,6 +12,8 @@ get_header(
 	array(
 		'data-wf-page'                  => '67239bd83c4331a3450cc872',
 		'barba-container-extra-classes' => array( 'white-top' ),
+		'barba-namespace'               => 'single-dress',
+		'product-id'                    => get_the_ID(),
 	)
 );
 

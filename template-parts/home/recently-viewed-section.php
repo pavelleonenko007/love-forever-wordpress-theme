@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$recently_viewed = loveforever_get_recently_viewed_products();
+$recently_viewed = loveforever_get_viewed_products();
 
 if ( ! empty( $recently_viewed ) ) :
 	$query_args = array(

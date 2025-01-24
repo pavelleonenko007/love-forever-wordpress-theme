@@ -87,3 +87,19 @@ function loveforever_has_product_in_favorites( $id ) {
 	$favorites = ! empty( $_COOKIE['favorites'] ) ? explode( ',', $_COOKIE['favorites'] ) : array();
 	return in_array( $id, $favorites );
 }
+
+function loveforever_prepare_barba_container_data_attributes( $attributes ) {
+	if ( ! is_array( $attributes ) || empty( $attributes ) ) {
+		return '';
+	}
+
+	$data_attributes = array_map(
+		function ( $key, $value ) {
+			return sprintf( 'data-%s="%s"', esc_attr( $key ), esc_attr( $value ) );
+		},
+		array_keys( $attributes ),
+		$attributes
+	);
+
+	return implode( ' ', $data_attributes );
+}

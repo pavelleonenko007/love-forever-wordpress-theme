@@ -67,28 +67,36 @@ function loveforever_get_head_code() {
 	}
 }
 
-function loveforever_get_recently_viewed_products() {
-	if ( empty( $_COOKIE['recently_viewed'] ) ) {
+function loveforever_get_viewed_products() {
+	if ( empty( $_COOKIE['viewed_products'] ) ) {
 		return array();
 	}
 
-	return array_reverse( explode( ',', sanitize_text_field( wp_unslash( $_COOKIE['recently_viewed'] ) ) ) );
+	return array_reverse( explode( ',', sanitize_text_field( wp_unslash( $_COOKIE['viewed_products'] ) ) ) );
 }
 
-function loveforever_update_recently_viewed_products( $product_id ) {
-	if ( empty( $_COOKIE['recently_viewed'] ) ) {
-		setcookie( 'recently_viewed', $product_id, time() + 60 * 60 * 24 * 30, '/' );
+function loveforever_update_viewed_products( $product_id ) {
+	$views           = (int) get_post_meta( $product_id, 'product_views_count', true );
+	$viewed_products = ! empty( $_COOKIE['viewed_products'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_COOKIE['viewed_products'] ) ) ) : array();
+
+	if ( empty( $viewed_products ) ) {
+		$viewed_products[] = $product_id;
+		setcookie( 'viewed_products', implode( ',', $viewed_products ), time() + DAY_IN_SECONDS * 30, '/' );
+		update_post_meta( $product_id, 'product_views_count', $views + 1 );
 	} else {
-		$recently_viewed_ids = explode( ',', sanitize_text_field( wp_unslash( $_COOKIE['recently_viewed'] ) ) );
-		$recently_viewed_ids = array_filter(
-			$recently_viewed_ids,
+		if ( ! in_array( $product_id, $viewed_products ) ) {
+			update_post_meta( $product_id, 'product_views_count', $views + 1 );
+		}
+
+		$viewed_products = array_filter(
+			$viewed_products,
 			function ( $id ) use ( $product_id ) {
-				return $id !== $product_id;
+					return (int) $id !== $product_id;
 			}
 		);
 
-		$recently_viewed_ids[] = $product_id;
-		setcookie( 'recently_viewed', implode( ',', $recently_viewed_ids ), time() + 60 * 60 * 24 * 30, '/' );
+		$viewed_products[] = $product_id;
+		setcookie( 'viewed_products', implode( ',', $viewed_products ), time() + DAY_IN_SECONDS * 30, '/' );
 	}
 }
 

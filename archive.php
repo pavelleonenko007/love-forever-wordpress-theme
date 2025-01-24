@@ -14,6 +14,7 @@ get_header(
 		'barba-container-extra-classes' => array(
 			'catalog-page',
 		),
+		'barba-namespace'               => 'archive-page',
 	)
 );
 
@@ -112,13 +113,15 @@ $queried_object = get_queried_object();
 									<div class="_1px-line"></div>
 									<div class="spleet botm-filter">
 										<div class="custom-filter-drop">
-											<div class="custom-select w-embed">
-												<select size="3" name="hero[]">
-													<option value="по популярности">Чебурашка</option>
-													<option value="Крокодил Гена">Крокодил Гена</option>
-													<option value="Шапокляк">Шапокляк</option>
-													<option value="Крыса Лариса">Крыса Лариса</option>
-												</select>
+											<div class="loveforever-select"></div>
+											<select id="orderby" name="orderby">
+												<option value="views">По популярности</option>
+												<option value="date">По новизне</option>
+												<option value="min-price">Шапокляк</option>
+												<option value="max-price">Крыса Лариса</option>
+											</select>
+											<!-- <div class="custom-select w-embed">
+												
 											</div>
 											<div class="custom-select-drop">
 												<div class="custom-select-drop-a">
@@ -135,7 +138,7 @@ $queried_object = get_queried_object();
 													<a href="#" class="cdrop-a">по убыванию цены</a>
 													<a href="#" class="cdrop-a">по возрастанию цены</a>
 												</div>
-											</div>
+											</div> -->
 										</div>
 										<a href="#" class="filters-btn w-inline-block">
 											<div class="w-embed">

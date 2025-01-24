@@ -258,6 +258,34 @@ function loveforever_get_filtered_products_via_ajax() {
 	);
 }
 
+add_action( 'wp_ajax_track_product_view', 'loveforever_track_product_view_via_ajax' );
+add_action( 'wp_ajax_nopriv_track_product_view', 'loveforever_track_product_view_via_ajax' );
+function loveforever_track_product_view_via_ajax() {
+	// if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
+	// 	wp_send_json_error(
+	// 		array(
+	// 			'message' => 'Ошибка запроса!',
+	// 		),
+	// 		400
+	// 	);
+	// }
+
+	if ( empty( $_POST['product_id'] ) ) {
+		wp_send_json_error( array( 'message' => 'Id товара не передан!' ) );
+	}
+
+	$product_id = (int) sanitize_text_field( wp_unslash( $_POST['product_id'] ) );
+
+	loveforever_update_viewed_products( $product_id );
+
+	wp_send_json_success(
+		array(
+			'message' => "Товар с ID $product_id успешно добавлен в просмотренные",
+		),
+		201
+	);
+}
+
 add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
 function loveforever_modify_dress_category_query( $query ) {
 	if ( $query->is_tax( 'dress_category' ) ) {
@@ -285,8 +313,19 @@ function loveforever_breadcrumbs_attribute_filter( $li_attributes, $type, $id ) 
 
 add_action( 'wp', 'loveforever_track_product_view' );
 function loveforever_track_product_view() {
-	if ( is_singular( 'dress' ) ) {
+	if ( is_singular( 'dress' ) && empty( $_SERVER['HTTP_X_BARBA'] ) ) {
 		$product_id = get_the_ID();
-		loveforever_update_recently_viewed_products( $product_id );
+		loveforever_update_viewed_products( $product_id );
+	}
+}
+
+add_action( 'wp_insert_post', 'loveforever_set_initial_product_views', 10, 2 );
+function loveforever_set_initial_product_views( $post_id, $post ) {
+	if ( 'dress' === $post->post_type ) {
+		$views = get_post_meta( $post_id, 'product_views_count', true );
+
+		if ( empty( $views ) ) {
+			update_post_meta( $post_id, 'product_views_count', 0 );
+		}
 	}
 }
