@@ -41,7 +41,7 @@ $related_products    = get_field( 'related_products' );
 					<div class="spleet m-h-vert">
 						<div class="code-embed-2 w-embed">
 							<nav aria-label="Breadcrumb" class="breadcrumb">
-								<?php get_template_part( 'components/breadcrumb' ); ?>
+								<?php get_template_part( 'components/breadcrumb', null, array( 'extra_classes' => array( 'breadcrumbs--single-dress' ) ) ); ?>
 							</nav>
 						</div>
 						<?php if ( ! empty( $images ) ) : ?>
