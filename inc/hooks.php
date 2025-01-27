@@ -64,16 +64,18 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	$name           = sanitize_text_field( wp_unslash( $_POST['name'] ) );
-	$phone          = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
-	$dress_category = is_array( $_POST['dress_category'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['dress_category'] ) ) : sanitize_text_field( wp_unslash( $_POST['dress_category'] ) );
-	$date           = sanitize_text_field( wp_unslash( $_POST['date'] ) );
-	$time           = sanitize_text_field( wp_unslash( $_POST['time'] ) );
-	$ip_address     = loveforever_get_client_ip_address();
+	$name                    = sanitize_text_field( wp_unslash( $_POST['name'] ) );
+	$phone                   = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
+	$dress_category          = is_array( $_POST['dress_category'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['dress_category'] ) ) : sanitize_text_field( wp_unslash( $_POST['dress_category'] ) );
+	$date                    = sanitize_text_field( wp_unslash( $_POST['date'] ) );
+	$time                    = sanitize_text_field( wp_unslash( $_POST['time'] ) );
+	$ip_address              = loveforever_get_client_ip_address();
+	$target_dress            = ! empty( $_POST['target_dress'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['target_dress'] ) ) : 0;
+	$client_favorite_dresses = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
 
 	$is_valid_fitting_time = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $dress_category );
 
-	if ( $is_valid_fitting_time !== true ) {
+	if ( true !== $is_valid_fitting_time ) {
 		wp_send_json_error(
 			array( 'message' => $is_valid_fitting_time ),
 			400
@@ -104,6 +106,14 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	update_field( 'phone', $phone, $fitting_post_id );
 	update_field( 'name', $name, $fitting_post_id );
 	update_field( 'ip_address', $ip_address, $fitting_post_id );
+
+	if ( ! empty( $target_dress ) ) {
+		update_field( 'target_dress', $target_dress, $fitting_post_id );
+	}
+
+	if ( ! empty( $client_favorite_dresses ) ) {
+		update_field( 'client_favorite_dresses', $client_favorite_dresses, $fitting_post_id );
+	}
 
 	wp_send_json_success(
 		array(

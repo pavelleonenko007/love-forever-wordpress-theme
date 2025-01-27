@@ -385,6 +385,10 @@ $related_products    = get_field( 'related_products' );
 													id="fittingFormPhoneField" 
 													data-js-input-mask="+{7} (000) 000-00-00">
 											</div>
+											<input type="hidden" name="target_dress" value="<?php echo esc_attr( get_the_ID() ); ?>">
+											<?php if ( ! empty( $_COOKIE['favorites'] ) ) : ?>
+												<input type="hidden" name="client_favorite_dresses" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_COOKIE['favorites'] ) ) ); ?>">
+											<?php endif; ?>
 											<button type="submit" class="button" data-js-fitting-form-submit-button>Записаться</button>
 										</div>
 										<div class="fitting-form__group-footer">
