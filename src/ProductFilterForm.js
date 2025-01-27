@@ -166,6 +166,16 @@ class ProductFilterForm {
 			this.filterForm.classList.remove(this.stateSelectors.isLoading);
 			this.contentElement.classList.remove(this.stateSelectors.isLoading);
 			this.updateQueryParams(formData);
+
+			const catalogElement = document.getElementById('catalog');
+
+			if (catalogElement) {
+				const catalogRect = catalogElement.getBoundingClientRect();
+				
+				if (catalogRect.top < 0) {
+					catalogElement.scrollIntoView({ behavior: 'smooth' });
+				}
+			}
 		}
 	}
 

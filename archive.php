@@ -67,7 +67,7 @@ $queried_object = get_queried_object();
 
 				$other_filters = array_filter( $other_filters );
 				?>
-				<section class="section z">
+				<section id="catalog" class="section z">
 					<div class="container n-top">
 							<form class="filters-form" data-js-product-filter-form>
 								<div class="vert vert-fw">
@@ -441,7 +441,7 @@ $queried_object = get_queried_object();
 								<?php
 								$products_query_args = array(
 									'post_type'      => 'dress',
-									'posts_per_page' => 3,
+									'posts_per_page' => get_field( 'products_per_page', 'option' ),
 									'paged'          => $current_page,
 									'tax_query'      => array(
 										array(

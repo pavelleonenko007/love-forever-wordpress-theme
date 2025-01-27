@@ -192,7 +192,7 @@ function loveforever_get_filtered_products_via_ajax() {
 
 	$products_query_args = array(
 		'post_type'      => 'dress',
-		'posts_per_page' => 6,
+		'posts_per_page' => get_field( 'products_per_page', 'option' ),
 		'paged'          => $page,
 		'meta_query'     => array(
 			array(
@@ -320,7 +320,7 @@ function loveforever_track_product_view_via_ajax() {
 add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
 function loveforever_modify_dress_category_query( $query ) {
 	if ( $query->is_tax( 'dress_category' ) ) {
-		$query->set( 'posts_per_page', 3 );
+		// $query->set( 'posts_per_page', 3 );
 	}
 }
 
