@@ -361,3 +361,56 @@ function loveforever_get_product_price_range() {
 
 	return false;
 }
+
+function loveforever_get_dress_tags_by_category( $category_term_id ) {
+	global $wpdb;
+
+	// Ensure term_id is integer
+	$category_term_id = absint( $category_term_id );
+
+	if ( ! $category_term_id ) {
+			return array();
+	}
+
+	$query = $wpdb->prepare(
+		"SELECT DISTINCT terms.term_id, terms.name, terms.slug
+			FROM {$wpdb->terms} AS terms
+			INNER JOIN {$wpdb->term_taxonomy} AS term_taxonomy 
+					ON terms.term_id = term_taxonomy.term_id
+			INNER JOIN {$wpdb->term_relationships} AS term_relationships 
+					ON term_taxonomy.term_taxonomy_id = term_relationships.term_taxonomy_id
+			INNER JOIN {$wpdb->posts} AS posts 
+					ON term_relationships.object_id = posts.ID
+			INNER JOIN {$wpdb->term_relationships} AS category_relationships 
+					ON posts.ID = category_relationships.object_id
+			INNER JOIN {$wpdb->term_taxonomy} AS category_taxonomy 
+					ON category_relationships.term_taxonomy_id = category_taxonomy.term_taxonomy_id
+			WHERE term_taxonomy.taxonomy = 'dress_tag'
+			AND category_taxonomy.taxonomy = 'dress_category'
+			AND category_taxonomy.term_id = %d
+			AND posts.post_type = 'dress'
+			AND posts.post_status = 'publish'
+			ORDER BY terms.name ASC",
+		$category_term_id
+	);
+
+	$results = $wpdb->get_results( $query );
+
+	if ( empty( $results ) ) {
+			return array();
+	}
+
+	return array_map(
+		function ( $result ) {
+			return new WP_Term(
+				(object) array(
+					'term_id'  => $result->term_id,
+					'name'     => $result->name,
+					'slug'     => $result->slug,
+					'taxonomy' => 'dress_tag',
+				)
+			);
+		},
+		$results
+	);
+}

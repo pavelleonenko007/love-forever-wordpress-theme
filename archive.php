@@ -28,12 +28,19 @@ $queried_object = get_queried_object();
 						<?php get_template_part( 'components/header' ); ?>
 						<div class="slider_home-slider_slide-in">
 							<div class="mom-abs">
-								<img src="<?php echo get_template_directory_uri(); ?>/images/6720cba51d20b92a6113dd64_90072882eeba72644a041d3491499eda-min.avif" loading="eager" alt class="img-cover">
+								<?php
+								$thumbnail = get_field( 'thumbnail', $queried_object );
+								if ( ! empty( $thumbnail ) ) :
+									?>
+									<img src="<?php echo esc_url( wp_get_attachment_image_url( $thumbnail, 'full' ) ); ?>" loading="eager" alt="<?php echo esc_attr( get_post_meta( $thumbnail, '_wp_attachment_image_alt', true ) ); ?>" class="img-cover">
+								<?php endif; ?>
 							</div>
 							<div class="slider-bottom-content inner-pages">
 								<?php get_template_part( 'components/breadcrumb' ); ?>
 								<h1 class="p-86-96"><?php echo esc_html( $queried_object->name ); ?></h1>
-								<p class="p-16-20 mmax695">Свадебный салон LoveForever это больше чем просто свадебные платья, это целый комплекс услуг по созданию гармоничного образа невесты.</p>
+								<?php if ( ! empty( $queried_object->description ) ) : ?>
+									<p class="p-16-20 mmax695"><?php echo wp_kses_post( $queried_object->description ); ?></p>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -175,7 +182,7 @@ $queried_object = get_queried_object();
 										<?php
 										if ( ! empty( $other_filters ) ) :
 											?>
-											<button type="button" class="filters-btn w-inline-block" data-js-dialog-open-button="filterDialog">
+											<button type="button" class="filters-btn button button--filter w-inline-block" data-js-dialog-open-button="filterDialog">
 												<div class="w-embed">
 													<svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewbox="0 0 7 7" fill="none">
 														<line x1="3.5" y1="2.18552e-08" x2="3.5" y2="7" stroke="black"></line>
@@ -947,30 +954,22 @@ $queried_object = get_queried_object();
 						</div>
 					</div>
 				</section>
-				<section class="section">
-					<div class="container">
-						<div class="cats-line">
-							<a href="#" class="btn grey-border_btn w-inline-block">
-								<div class="p-12-12 uper m-12-12">#атлас</div>
-							</a>
-							<a href="#" class="btn grey-border_btn w-inline-block">
-								<div class="p-12-12 uper m-12-12">#вечерний</div>
-							</a>
-							<a href="#" class="btn grey-border_btn w-inline-block">
-								<div class="p-12-12 uper m-12-12">#классическое</div>
-							</a>
-							<a href="#" class="btn grey-border_btn w-inline-block">
-								<div class="p-12-12 uper m-12-12">#с длинным рукавом белый</div>
-							</a>
-							<a href="#" class="btn grey-border_btn w-inline-block">
-								<div class="p-12-12 uper m-12-12">#винтажный</div>
-							</a>
-							<a href="#" class="btn grey-border_btn w-inline-block">
-								<div class="p-12-12 uper m-12-12">#на роспись в загз</div>
-							</a>
+				<?php
+				$dress_tags = loveforever_get_dress_tags_by_category( $queried_object->term_id );
+				if ( ! empty( $dress_tags ) ) :
+					?>
+					<section class="section">
+						<div class="container">
+							<div class="cats-line">
+								<?php foreach ( $dress_tags as $dress_tag ) : ?>
+									<a class="btn grey-border_btn w-inline-block">
+										<div class="p-12-12 uper m-12-12"><?php echo esc_html( '#' . $dress_tag->name ); ?></div>
+									</a>
+								<?php endforeach; ?>
+							</div>
 						</div>
-					</div>
-				</section>
+					</section>
+				<?php endif; ?>
 				<?php get_template_part( 'template-parts/global/personal-choice-section' ); ?>
 				<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
@@ -978,4 +977,4 @@ $queried_object = get_queried_object();
 				<?php get_template_part( 'components/footer' ); ?>
 			</div>
 		</div>
-<?php get_footer(); ?>
+		<?php get_footer(); ?>

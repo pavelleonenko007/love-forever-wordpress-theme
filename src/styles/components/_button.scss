@@ -28,6 +28,15 @@
 		color: #000000;
 	}
 
+	&--filter {
+		padding: 0;
+		height: 30rem;
+		border-radius: 0;
+		background-color: transparent;
+		border-color: transparent;
+		color: #000000;
+	}
+
 	&:disabled {
 		opacity: 0.6;
 		pointer-events: none;
