@@ -13,11 +13,9 @@
 
 	&__title {
 		margin: 0;
-		font-family: 'Tt Norms Pro Serif', serif;
 		font-size: 26rem;
 		line-height: 1;
 		font-weight: 300;
-		font-style: italic;
 	}
 
 	&__subtitle {
@@ -34,7 +32,13 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		justify-content: space-between;
 		row-gap: 20rem;
+	}
+
+	&__footer {
+		display: flex;
+		flex-direction: column;
 	}
 
 	html:has(#wpadminbar) & {

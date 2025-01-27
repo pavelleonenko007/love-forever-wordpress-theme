@@ -1,0 +1,50 @@
+@use '../media' as *;
+
+.pagination {
+	color: #000;
+
+	&__list {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		list-style: none;
+		column-gap: 10rem;
+	}
+
+	&__item {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__link {
+		width: 40rem;
+		height: 60rem;
+		border-radius: 100rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-decoration: none;
+		color: inherit;
+		transition: all 0.3s ease;
+
+		&--prev,
+		&--next {
+			border: 1rem solid rgb(229 229 229);
+		}
+
+		@include hover {
+			background-color: rgb(229 229 229);
+		}
+
+		&--active {
+			background-color: var(--pink);
+			color: #fff;
+			pointer-events: none;
+
+			@include hover {
+				background-color: var(--pink);
+			}
+		}
+	}
+}

@@ -258,6 +258,75 @@ function loveforever_paginate_links_data( array $args ): array {
 	return $pages;
 }
 
+function loveforever_get_pagination_html( WP_Query $query, string $base_url = '' ): string {
+	$total_pages  = $query->max_num_pages;
+	$current_page = max( 1, $query->get( 'paged' ) );
+	$url_base     = ! empty( $base_url )
+		? $base_url . '?paged={pagenum}'
+		: get_pagenum_link( 1 ) . '?paged={pagenum}';
+	$args         = array(
+		'total'        => $total_pages,
+		'current'      => $current_page,
+		'url_base'     => $url_base,
+		'mid_size'     => 2,
+		'is_prev_next' => true,
+		'prev_text'    => '<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" clip-rule="evenodd" d="M0.750232 4.28598L5.25007 0L6 0.714289L1.50016 5.00027L5.99944 9.28571L5.24951 10L0 4.99998L0.74993 4.28569L0.750232 4.28598Z" fill="black"></path>
+		</svg>',
+		'next_text'    => '<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" clip-rule="evenodd" d="M5.24977 4.28598L0.74993 0L0 0.714289L4.49984 5.00027L0.000560648 9.28571L0.750491 10L6 4.99998L5.25007 4.28569L5.24977 4.28598Z" fill="black"></path>
+		</svg>',
+	);
+	$pages        = loveforever_paginate_links_data( $args );
+
+	if ( empty( $pages ) ) {
+		return '';
+	}
+
+	$output  = '<nav class="pagination" role="navigation" aria-label="Постраничная навигация">';
+	$output .= '<ul class="pagination__list">';
+
+	foreach ( $pages as $page ) {
+		$classes      = array( 'pagination__item' );
+		$link_classes = array( 'pagination__link', 'no-barba' );
+
+		if ( $page->is_current ) {
+			$classes[]      = 'pagination__item--active';
+			$link_classes[] = 'pagination__link--active';
+		}
+
+		if ( $page->is_dots ) {
+			$classes[] = 'pagination__item--dots';
+			$output   .= sprintf(
+				'<li class="%s"><span class="pagination__dots">%s</span></li>',
+				implode( ' ', $classes ),
+				$page->link_text
+			);
+			continue;
+		}
+
+		if ( $page->is_prev_next ) {
+			$classes[]      = 'pagination__item--' . ( $page->link_text === $args['prev_text'] ? 'prev' : 'next' );
+			$link_classes[] = 'pagination__link--' . ( $page->link_text === $args['prev_text'] ? 'prev' : 'next' );
+		}
+
+		$output .= sprintf(
+			'<li class="%s"><a href="%s" class="%s" data-js-product-filter-form-paginate-link="%d" aria-label="Go to page %d"%s>%s</a></li>',
+			implode( ' ', $classes ),
+			esc_url( $page->url ),
+			implode( ' ', $link_classes ),
+			$page->page_num,
+			$page->page_num,
+			$page->is_current ? ' aria-current="page"' : '',
+			$page->link_text
+		);
+	}
+
+	$output .= '</ul></nav>';
+
+	return $output;
+}
+
 function loveforever_get_product_price_range() {
 	global $wpdb;
 

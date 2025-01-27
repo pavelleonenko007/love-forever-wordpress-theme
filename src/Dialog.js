@@ -97,8 +97,6 @@ class Dialog {
 				event.target.matches(this.selectors.closeButton) ||
 				!event.target.closest(this.selectors.dialogContent)
 			) {
-				event.preventDefault();
-
 				this.close();
 				return;
 			}

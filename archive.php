@@ -5,6 +5,8 @@
  * @package 0.0.1
  */
 
+use function PHPSTORM_META\map;
+
 defined( 'ABSPATH' ) || exit;
 
 get_header(
@@ -37,12 +39,30 @@ $queried_object = get_queried_object();
 					</div>
 				</section>
 				<?php get_template_part( 'template-parts/home/stories-section' ); ?>
+				<?php
+				$price_range         = loveforever_get_product_price_range();
+				$min_price           = ! empty( $_GET['min-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['min-price'] ) ) : $price_range['min_price'];
+				$max_price           = ! empty( $_GET['max-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['max-price'] ) ) : $price_range['max_price'];
+				$current_page        = ! empty( $_GET['page'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['page'] ) ) : get_query_var( 'paged' );
+				$selected_silhouette = ! empty( $_GET['silhouette'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['silhouette'] ) ) : null;
+				$orderby             = ! empty( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'views';
+				$other_filter_names  = array( 'dress_brand', 'style' );
+				$other_filters       = array();
+
+				foreach ( $other_filter_names as $other_filter_name ) {
+					$other_filters[ $other_filter_name ] = get_terms(
+						array(
+							'taxonomy'   => $other_filter_name,
+							'hide_empty' => false,
+						)
+					);
+				}
+
+				$other_filters = array_filter( $other_filters );
+				?>
 				<section class="section z">
 					<div class="container n-top">
-						<?php
-						if ( have_posts() ) :
-							?>
-							<form class="filters-form" data-js-filter-form>
+							<form class="filters-form" data-js-product-filter-form>
 								<div class="vert vert-fw">
 									<div class="spleet m-vert">
 										<?php
@@ -62,10 +82,10 @@ $queried_object = get_queried_object();
 														id="silhouette-0" 
 														name="silhouette" 
 														class="input" 
-														checked 
 														value=""
+														<?php echo empty( $selected_silhouette ) ? 'checked' : ''; ?>
 													>
-													<span for="type_koshemir">Все</span>
+													<span for="silhouette-0">Все</span>
 												</label>
 												<?php foreach ( $silhouettes as $silhouettes_index => $silhouette ) : ?>
 													<label class="label">
@@ -75,6 +95,7 @@ $queried_object = get_queried_object();
 															name="silhouette" 
 															class="input" 
 															value="<?php echo esc_attr( $silhouette->term_id ); ?>"
+															<?php echo ! empty( $selected_silhouette ) && $silhouette->term_id === $selected_silhouette ? 'checked' : ''; ?>
 														>
 														<span for="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"><?php echo esc_html( $silhouette->name ); ?></span>
 													</label>
@@ -82,7 +103,7 @@ $queried_object = get_queried_object();
 											</div>
 										<?php endif; ?>
 										<?php
-										$price_range = loveforever_get_product_price_range();
+
 										if ( ! empty( $price_range ) ) :
 											?>
 											<div class="code-embed-7 w-embed">
@@ -93,7 +114,7 @@ $queried_object = get_queried_object();
 														type="number" 
 														id="min" 
 														name="min-price" 
-														value="<?php echo esc_attr( $price_range['min_price'] ); ?>"
+														value="<?php echo esc_attr( $min_price ); ?>"
 														min="<?php echo esc_attr( $price_range['min_price'] ); ?>"
 														max="<?php echo esc_attr( $price_range['max_price'] ); ?>"
 													> 
@@ -101,7 +122,7 @@ $queried_object = get_queried_object();
 														type="number" 
 														id="max" 
 														name="max-price" 
-														value="<?php echo esc_attr( $price_range['max_price'] ); ?>"
+														value="<?php echo esc_attr( $max_price ); ?>"
 														min="<?php echo esc_attr( $price_range['min_price'] ); ?>"
 														max="<?php echo esc_attr( $price_range['max_price'] ); ?>"
 													>
@@ -115,10 +136,21 @@ $queried_object = get_queried_object();
 										<div class="custom-filter-drop">
 											<div class="loveforever-select"></div>
 											<select id="orderby" name="orderby">
-												<option value="views">По популярности</option>
-												<option value="date">По новизне</option>
-												<option value="min-price">Шапокляк</option>
-												<option value="max-price">Крыса Лариса</option>
+												<?php
+												$orderby_options = array(
+													'views' => 'По популярности',
+													'date' => 'По новизне',
+													'min-price' => 'По возрастанию цены',
+													'max-price' => 'По убыванию цены',
+												);
+
+												foreach ( $orderby_options as $orderby_option_value => $orderby_option_name ) :
+													?>
+													<option 
+														value="<?php echo esc_attr( $orderby_option_value ); ?>"
+														<?php echo $orderby === $orderby_option_value ? 'selected' : ''; ?>
+													><?php echo esc_html( $orderby_option_name ); ?></option>
+												<?php endforeach; ?>
 											</select>
 											<!-- <div class="custom-select w-embed">
 												
@@ -140,18 +172,22 @@ $queried_object = get_queried_object();
 												</div>
 											</div> -->
 										</div>
-										<a href="#" class="filters-btn w-inline-block">
-											<div class="w-embed">
-												<svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewbox="0 0 7 7" fill="none">
-													<line x1="3.5" y1="2.18552e-08" x2="3.5" y2="7" stroke="black"></line>
-													<line y1="3.5" x2="7" y2="3.5" stroke="black"></line>
-												</svg>
-											</div>
-											<div>фильтры</div>
-										</a>
+										<?php
+										if ( ! empty( $other_filters ) ) :
+											?>
+											<button type="button" class="filters-btn w-inline-block" data-js-dialog-open-button="filterDialog">
+												<div class="w-embed">
+													<svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewbox="0 0 7 7" fill="none">
+														<line x1="3.5" y1="2.18552e-08" x2="3.5" y2="7" stroke="black"></line>
+														<line y1="3.5" x2="7" y2="3.5" stroke="black"></line>
+													</svg>
+												</div>
+												<div>Фильтры</div>
+											</button>
+										<?php endif; ?>
 									</div>
 								</div>
-								<div class="filters-pop">
+								<!-- <div class="filters-pop">
 									<a href="#" class="close-filter-pop w-inline-block"></a>
 									<div class="filter-mom">
 										<div class="flex-filter">
@@ -168,11 +204,11 @@ $queried_object = get_queried_object();
 												</div>
 											</a>
 										</div>
-										<div class="p-21-21 in-filters">фильтры</div>
+										<div class="p-21-21 in-filters">Фильтры</div>
 										<div class="div-block-9">
 											<div class="filter-cont">
 												<div class="filter-a">
-													<div class="p-12-12 uper m-12-12">бренды</div>
+													<div class="p-12-12 uper m-12-12">Бренды</div>
 													<div class="code-embed-9 w-embed">
 														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewbox="0 0 16 9" fill="none">
 															<path fill-rule="evenodd" clip-rule="evenodd" d="M7.07414 7.84953L7.78127 8.55588L8.48833 7.84878L15.5594 0.778468L14.8523 0.0713615L7.78125 7.14243L0.710182 0.0713586L0.00307487 0.778465L7.07414 7.84953Z" fill="black"></path>
@@ -310,24 +346,159 @@ $queried_object = get_queried_object();
 											<div>очистить</div>
 										</a>
 									</div>
-								</div>
+								</div> -->
+								<input type="hidden" name="page" value="1">
 								<input type="hidden" name="taxonomy" value="<?php echo esc_attr( $queried_object->taxonomy ); ?>">
 								<input type="hidden" name="<?php echo esc_attr( $queried_object->taxonomy ); ?>" value="<?php echo esc_attr( $queried_object->term_id ); ?>">
 								<input type="hidden" name="action" value="get_filtered_products">
-								<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce' ); ?>
-							</form>
-							<div class="catalog-grid catalog-page-grid" data-js-filter-form-content-element>
-								<?php
-								while ( have_posts() ) :
-									the_post();
-									?>
-									<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
-										<?php get_template_part( 'components/dress-card' ); ?>
+								<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce', false ); ?>
+								<?php if ( ! empty( $other_filters ) ) : ?>
+									<div id="filterDialog" role="dialog" class="dialog" data-js-dialog>
+										<div class="dialog__overlay" data-js-dialog-overlay>
+											<div class="dialog__content" data-js-dialog-content>
+												<div class="dialog-card">
+													<div class="dialog-card__header">
+														<h3 class="dialog-card__title noitalic uppercase ff-tt-chocolates" data-js-dialog-title>Фильтры</h3>
+													</div>
+													<div class="dialog-card__body">
+														<div class="accordion">
+															<?php foreach ( $other_filters as $other_filter_name => $other_filter_fields ) : ?>
+																<div class="accordion__item">
+																	<h3 class="accordion__header">
+																		<button 
+																			class="accordion__trigger" 
+																			aria-expanded="false"
+																			aria-controls="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name ); ?>"
+																			data-js-accordion-trigger
+																			type="button"
+																		>
+																			<span class="accordion__title"><?php echo esc_html( get_taxonomy( $other_filter_name )->labels->singular_name ); ?></span>
+																			<span class="accordion__icon" aria-hidden="true">
+																				<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+																					<path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+																				</svg>
+																			</span>
+																		</button>
+																	</h3>
+																	<div 
+																		class="accordion__panel" 
+																		id="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name ); ?>" 
+																		role="region" 
+																		aria-labelledby="accordion-trigger-1"
+																		hidden
+																	>
+																		<div class="accordion__content">
+																			<?php
+																			foreach ( $other_filter_fields as $other_filter_field ) :
+																				?>
+																				<label class="loveforever-checkbox">
+																					<input
+																						id="<?php echo esc_attr( $other_filter_name . '-' . $other_filter_field->term_id ); ?>"
+																						type="checkbox"
+																						name="<?php echo esc_attr( $other_filter_name . '[]' ); ?>"
+																						class="loveforever-checkbox__control"
+																						value="<?php echo esc_attr( $other_filter_field->term_id ); ?>"
+																					>
+																					<span class="loveforever-checkbox__label"><?php echo esc_html( $other_filter_field->name ); ?></span>
+																				</label>
+																				<?php
+																			endforeach;
+																			?>
+																		</div>
+																	</div>
+																</div>
+															<?php endforeach; ?>
+														</div>
+													</div>
+													<div class="dialog-card__footer">
+														<button class="button" data-js-dialog-close-button>Показать результат</button>
+														<button type="reset" class="button button--link" data-js-dialog-close-button>Очистить</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<button type="button" class="dialog__close" data-js-dialog-close-button>
+											<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<mask id="mask0_451_2489" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+													<rect width="18" height="18" fill="#D9D9D9"/>
+												</mask>
+												<g mask="url(#mask0_451_2489)">
+													<path fill-rule="evenodd" clip-rule="evenodd" d="M8.84924 8.14201L1.77818 1.07095L1.07107 1.77805L8.14214 8.84912L1.07107 15.9202L1.77817 16.6273L8.84924 9.55623L15.9203 16.6273L16.6274 15.9202L9.55635 8.84912L16.6274 1.77805L15.9203 1.07095L8.84924 8.14201Z" fill="black"/>
+												</g>
+											</svg>
+										</button>
 									</div>
-									<?php
-								endwhile;
-								wp_reset_postdata();
-								?>
+								<?php endif; ?>
+							</form>
+							<div class="catalog-grid catalog-page-grid" data-js-product-filter-form-content-element>
+								<?php
+								$products_query_args = array(
+									'post_type'      => 'dress',
+									'posts_per_page' => 3,
+									'paged'          => $current_page,
+									'tax_query'      => array(
+										array(
+											'taxonomy' => $queried_object->taxonomy,
+											'field'    => 'term_id',
+											'terms'    => array( $queried_object->term_id ),
+										),
+									),
+									'meta_query'     => array(
+										array(
+											'key'     => 'price',
+											'value'   => array( $min_price, $max_price + 1 ),
+											'compare' => 'BETWEEN',
+											'type'    => 'NUMERIC',
+										),
+									),
+								);
+
+								switch ( $orderby ) {
+									case 'date':
+										$products_query_args['orderby'] = 'date';
+										$products_query_args['order']   = 'DESC';
+										break;
+									case 'min-price':
+										$products_query_args['meta_key'] = 'price';
+										$products_query_args['orderby']  = 'meta_value_num';
+										$products_query_args['order']    = 'ASC';
+										break;
+									case 'max-price':
+										$products_query_args['meta_key'] = 'price';
+										$products_query_args['orderby']  = 'meta_value_num';
+										$products_query_args['order']    = 'DESC';
+										break;
+									default:
+										$products_query_args['meta_key'] = 'product_views_count';
+										$products_query_args['orderby']  = 'meta_value_num';
+										$products_query_args['order']    = 'DESC';
+										break;
+								}
+
+								if ( ! empty( $selected_silhouette ) ) {
+									$products_query_args['tax_query'][] = array(
+										'taxonomy' => 'silhouette',
+										'field'    => 'term_id',
+										'terms'    => array( $selected_silhouette ),
+									);
+								}
+
+								$products_query = new WP_Query( $products_query_args );
+
+								if ( $products_query->have_posts() ) :
+									while ( $products_query->have_posts() ) :
+										$products_query->the_post();
+										?>
+										<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
+											<?php get_template_part( 'components/dress-card' ); ?>
+										</div>
+										<?php
+									endwhile;
+									wp_reset_postdata();
+								else :
+									?>
+								<p>Товары с заданными параметрами не найдены</p>
+							<?php endif; ?>
 								<!-- <div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
 									<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3021-d315ac0c" class="prod-item-tizer">
 										<div class="prod-item_top">
@@ -767,49 +938,13 @@ $queried_object = get_queried_object();
 									</div>
 								</div> -->
 							</div>
-							<div class="paginate">
-								<?php
-								// TODO: add pagination to filter logic!
-								global $wp_query;
-								$total_pages  = $wp_query->max_num_pages;
-								$current_page = max( 1, $wp_query->get( 'paged' ) );
-								echo paginate_links(
-									array(
-										'type'      => 'list',
-										'format'    => '?paged=%#%',
-										'total'     => $wp_query->max_num_pages,
-										'current'   => $current_page,
-										'end_size'  => 1,
-										'mid_size'  => 2,
-										'prev_next' => true,
-										'prev_text' => '<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M0.750232 4.28598L5.25007 0L6 0.714289L1.50016 5.00027L5.99944 9.28571L5.24951 10L0 4.99998L0.74993 4.28569L0.750232 4.28598Z" fill="black"></path>
-									</svg>',
-										'next_text' => '<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M5.24977 4.28598L0.74993 0L0 0.714289L4.49984 5.00027L0.000560648 9.28571L0.750491 10L6 4.99998L5.25007 4.28569L5.24977 4.28598Z" fill="black"></path>
-									</svg>',
-									)
-								)
-								?>
-							</div>
-							<div class="paginate">
-								<a href="#" class="pag-btn disable w-inline-block">
-									<div class="pag-svg w-embed">
-										<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path fill-rule="evenodd" clip-rule="evenodd" d="M0.750232 4.28598L5.25007 0L6 0.714289L1.50016 5.00027L5.99944 9.28571L5.24951 10L0 4.99998L0.74993 4.28569L0.750232 4.28598Z" fill="black"></path>
-										</svg>
-									</div>
-								</a>
-								<div class="pag-line"><a href="#" class="pag-item active">1</a><a href="#" class="pag-item">2</a><a href="#" class="pag-item">3</a></div>
-								<a href="#" class="pag-btn w-inline-block">
-									<div class="pag-svg w-embed">
-										<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path fill-rule="evenodd" clip-rule="evenodd" d="M5.24977 4.28598L0.74993 0L0 0.714289L4.49984 5.00027L0.000560648 9.28571L0.750491 10L6 4.99998L5.25007 4.28569L5.24977 4.28598Z" fill="black"></path>
-										</svg>
-									</div>
-								</a>
-							</div>
-						<?php endif; ?>
+						<div data-js-product-filter-form-pagination class="paginate">
+							<?php
+							if ( $products_query->have_posts() ) :
+								echo loveforever_get_pagination_html( $products_query );
+							endif;
+							?>
+						</div>
 					</div>
 				</section>
 				<section class="section">

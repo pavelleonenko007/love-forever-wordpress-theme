@@ -188,6 +188,7 @@ function loveforever_get_filtered_products_via_ajax() {
 	$min_price = ! empty( $_POST['min-price'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['min-price'] ) ) : 0;
 	$max_price = ! empty( $_POST['max-price'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['max-price'] ) ) : 1000000000;
 	$page      = ! empty( $_POST['page'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['page'] ) ) : 1;
+	$orderby   = ! empty( $_POST['orderby'] ) ? sanitize_text_field( wp_unslash( $_POST['orderby'] ) ) : 'views';
 
 	$products_query_args = array(
 		'post_type'      => 'dress',
@@ -196,12 +197,34 @@ function loveforever_get_filtered_products_via_ajax() {
 		'meta_query'     => array(
 			array(
 				'key'     => 'price',
-				'value'   => array( $min_price, $max_price ),
+				'value'   => array( $min_price, $max_price + 1 ),
 				'compare' => 'BETWEEN',
 				'type'    => 'NUMERIC',
 			),
 		),
 	);
+
+	switch ( $orderby ) {
+		case 'date':
+			$products_query_args['orderby'] = 'date';
+			$products_query_args['order']   = 'DESC';
+			break;
+		case 'min-price':
+			$products_query_args['meta_key'] = 'price';
+			$products_query_args['orderby']  = 'meta_value_num';
+			$products_query_args['order']    = 'ASC';
+			break;
+		case 'max-price':
+			$products_query_args['meta_key'] = 'price';
+			$products_query_args['orderby']  = 'meta_value_num';
+			$products_query_args['order']    = 'DESC';
+			break;
+		default:
+			$products_query_args['meta_key'] = 'product_views_count';
+			$products_query_args['orderby']  = 'meta_value_num';
+			$products_query_args['order']    = 'DESC';
+			break;
+	}
 
 	if ( ! empty( $_POST['taxonomy'] ) && ! empty( $_POST[ $_POST['taxonomy'] ] ) ) {
 		$taxonomy = sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) );
@@ -227,13 +250,12 @@ function loveforever_get_filtered_products_via_ajax() {
 	if ( ! $products_query->have_posts() ) {
 		wp_send_json_success(
 			array(
-				'html' => '<p>Товары с заданными параметрами не найдены</p>',
+				'feed'       => '<p>Товары с заданными параметрами не найдены</p>',
+				'pagination' => '',
 			),
 			200
 		);
 	}
-
-	$html = '';
 
 	ob_start();
 
@@ -247,12 +269,21 @@ function loveforever_get_filtered_products_via_ajax() {
 	endwhile;
 	wp_reset_postdata();
 
-	$html = ob_get_clean();
+	$feed = ob_get_clean();
+
+	$base_url = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
+
+	ob_start();
+
+	echo loveforever_get_pagination_html( $products_query, $base_url );
+
+	$pagination = ob_get_clean();
 
 	wp_send_json_success(
 		array(
-			'message' => 'Товары получены успешно!',
-			'html'    => $html,
+			'message'    => 'Товары получены успешно!',
+			'feed'       => $feed,
+			'pagination' => $pagination,
 		),
 		200
 	);
@@ -262,12 +293,12 @@ add_action( 'wp_ajax_track_product_view', 'loveforever_track_product_view_via_aj
 add_action( 'wp_ajax_nopriv_track_product_view', 'loveforever_track_product_view_via_ajax' );
 function loveforever_track_product_view_via_ajax() {
 	// if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
-	// 	wp_send_json_error(
-	// 		array(
-	// 			'message' => 'Ошибка запроса!',
-	// 		),
-	// 		400
-	// 	);
+	// wp_send_json_error(
+	// array(
+	// 'message' => 'Ошибка запроса!',
+	// ),
+	// 400
+	// );
 	// }
 
 	if ( empty( $_POST['product_id'] ) ) {
@@ -289,7 +320,7 @@ function loveforever_track_product_view_via_ajax() {
 add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
 function loveforever_modify_dress_category_query( $query ) {
 	if ( $query->is_tax( 'dress_category' ) ) {
-		$query->set( 'posts_per_page', 6 );
+		$query->set( 'posts_per_page', 3 );
 	}
 }
 

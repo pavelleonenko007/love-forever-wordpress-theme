@@ -265,7 +265,7 @@ $related_products    = get_field( 'related_products' );
 				<div class="dialog__content" data-js-dialog-content>
 					<div class="dialog-card">
 						<div class="dialog-card__header">
-							<h3 class="dialog-card__title" data-js-dialog-title>Запись на примерку</h3>
+							<h3 class="dialog-card__title italic ff-tt-norms-pro" data-js-dialog-title>Запись на примерку</h3>
 							<p class="dialog-card__subtitle">м. Садовая, Вознесенский пр-кт, 18</p>
 							<a href="#" class="dialog-card__link menu-link active">Маршрут от метро</a>
 						</div>
