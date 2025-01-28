@@ -260,7 +260,7 @@ function loveforever_get_filtered_products_via_ajax() {
 	if ( ! $products_query->have_posts() ) {
 		wp_send_json_success(
 			array(
-				'feed'       => '<p>Товары с заданными параметрами не найдены</p>',
+				'feed'       => '<div class="empty-content"><p>Товары с заданными параметрами не найдены</p></div>',
 				'pagination' => '',
 			),
 			200

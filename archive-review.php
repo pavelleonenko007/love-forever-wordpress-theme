@@ -63,7 +63,9 @@ $reviews_hero_section = get_field( 'reviews_hero_section', 'option' );
 								?>
 							</div>
 						<?php else : ?>
-							<div class="empty-content"></div>
+							<div class="empty-content">
+								<p>Отзывы еще не добавлены</p>
+							</div>
 						<?php endif; ?>
 					</div>
 				</section>

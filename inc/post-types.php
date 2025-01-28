@@ -187,6 +187,41 @@ function loveforever_register_post_types() {
 		)
 	);
 
+	register_taxonomy(
+		'faq_category',
+		null,
+		array(
+			'label'              => '',
+			'labels'             => array(
+				'name'              => 'Категории вопросов',
+				'singular_name'     => 'Категория вопросов',
+				'search_items'      => 'Поиск категории',
+				'all_items'         => 'Все категории',
+				'view_item '        => 'Просмотр категории',
+				'parent_item'       => 'Родитель категории',
+				'parent_item_colon' => 'Родитель категории:',
+				'edit_item'         => 'Редактировать категорию',
+				'update_item'       => 'Обновить категорию',
+				'add_new_item'      => 'Добавить новую категорию',
+				'new_item_name'     => 'Название новой категории',
+				'menu_name'         => 'Категории',
+				'back_to_items'     => '← Назад к категориям',
+			),
+			'description'        => '',
+			'public'             => false,
+			'show_ui'            => true,
+			'show_in_quick_edit' => true,
+			'hierarchical'       => false,
+			'rewrite'            => true,
+			// 'query_var'             => taxonomy, // название параметра запроса
+			'capabilities'       => array(),
+			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+			'show_in_rest'       => true, // добавить в REST API
+			'rest_base'          => null, // taxonomy
+		)
+	);
+
 	register_post_type(
 		'fitting',
 		array(
@@ -358,7 +393,7 @@ function loveforever_register_post_types() {
 				'menu_name'          => 'FAQs',
 			),
 			'description'   => '',
-			'public'        => false,
+			'public'        => true,
 			'show_ui'       => true,
 			'show_in_menu'  => null,
 			'show_in_rest'  => true,
@@ -366,9 +401,11 @@ function loveforever_register_post_types() {
 			'menu_position' => null,
 			'hierarchical'  => false,
 			'supports'      => array( 'title', 'editor' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
-			'taxonomies'    => array(),
-			'has_archive'   => false,
-			'rewrite'       => true,
+			'taxonomies'    => array( 'faq_category' ),
+			'has_archive'   => true,
+			'rewrite'       => array(
+				'slug' => 'faqs',
+			),
 			'menu_icon'     => 'dashicons-format-status',
 			'query_var'     => true,
 		)

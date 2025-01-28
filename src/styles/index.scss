@@ -2,6 +2,7 @@
 @use 'utils' as *;
 @use 'globals' as *;
 
+@use 'components/empty-content' as *;
 @use 'components/breadcrumbs' as *;
 @use 'components/menu-link' as *;
 @use 'components/dialog' as *;

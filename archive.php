@@ -504,8 +504,10 @@ $queried_object = get_queried_object();
 									wp_reset_postdata();
 								else :
 									?>
-								<p>Товары с заданными параметрами не найдены</p>
-							<?php endif; ?>
+									<div class="empty-content">
+										<p>Товары с заданными параметрами не найдены</p>
+									</div>
+								<?php endif; ?>
 								<!-- <div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
 									<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3021-d315ac0c" class="prod-item-tizer">
 										<div class="prod-item_top">
