@@ -1,0 +1,11 @@
+@use '../media' as *;
+
+.reviews-form {
+	display: flex;
+	flex-direction: column;
+	row-gap: 10rem;
+
+	&[hidden] {
+		display: none;
+	}
+}

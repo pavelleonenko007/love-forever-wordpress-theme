@@ -12,8 +12,27 @@
 		border-radius: 100rem;
 		text-transform: uppercase;
 
-		&::placeholder {
-			color: rgba(0, 0, 0, 0.3)
+		&:is(textarea) {
+			padding-block: 20rem;
+			height: auto;
+			border-radius: 20rem;
 		}
+
+		&::placeholder {
+			color: rgba(0, 0, 0, 0.3);
+		}
+
+		&[aria-invalid='true'] {
+			border-color: red;
+		}
+	}
+
+	&__errors {
+		margin-top: 5rem;
+		padding-inline: 20rem;
+		display: flex;
+		flex-direction: column;
+		row-gap: 5rem;
+		color: red;
 	}
 }

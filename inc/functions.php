@@ -258,11 +258,11 @@ function loveforever_paginate_links_data( array $args ): array {
 	return $pages;
 }
 
-function loveforever_get_pagination_html( WP_Query $query, string $base_url = '' ): string {
+function loveforever_get_pagination_html( WP_Query $query, array $pagination_args = array() ): string {
 	$total_pages  = $query->max_num_pages;
 	$current_page = max( 1, $query->get( 'paged' ) );
-	$url_base     = ! empty( $base_url )
-		? $base_url . '?paged={pagenum}'
+	$url_base     = ! empty( $pagination_args['base_url'] )
+		? $pagination_args['base_url'] . '?paged={pagenum}'
 		: get_pagenum_link( 1 ) . '?paged={pagenum}';
 	$args         = array(
 		'total'        => $total_pages,
@@ -310,16 +310,28 @@ function loveforever_get_pagination_html( WP_Query $query, string $base_url = ''
 			$link_classes[] = 'pagination__link--' . ( $page->link_text === $args['prev_text'] ? 'prev' : 'next' );
 		}
 
-		$output .= sprintf(
-			'<li class="%s"><a href="%s" class="%s" data-js-product-filter-form-paginate-link="%d" aria-label="Go to page %d"%s>%s</a></li>',
-			implode( ' ', $classes ),
-			esc_url( $page->url ),
-			implode( ' ', $link_classes ),
-			$page->page_num,
-			$page->page_num,
-			$page->is_current ? ' aria-current="page"' : '',
-			$page->link_text
-		);
+		if ( isset( $pagination_args['is_catalog_page'] ) && $pagination_args['is_catalog_page'] ) {
+			$output .= sprintf(
+				'<li class="%s"><a href="%s" class="%s" data-js-product-filter-form-paginate-link="%d" aria-label="Go to page %d"%s>%s</a></li>',
+				implode( ' ', $classes ),
+				esc_url( $page->url ),
+				implode( ' ', $link_classes ),
+				$page->page_num,
+				$page->page_num,
+				$page->is_current ? ' aria-current="page"' : '',
+				$page->link_text
+			);
+		} else {
+			$output .= sprintf(
+				'<li class="%s"><a href="%s" class="%s" aria-label="Go to page %d"%s>%s</a></li>',
+				implode( ' ', $classes ),
+				esc_url( $page->url ),
+				implode( ' ', $link_classes ),
+				$page->page_num,
+				$page->is_current ? ' aria-current="page"' : '',
+				$page->link_text
+			);
+		}
 	}
 
 	$output .= '</ul></nav>';

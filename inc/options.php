@@ -39,3 +39,17 @@ if ( function_exists( 'acf_add_options_page' ) && current_user_can( 'manage_opti
 		)
 	);
 }
+
+if ( function_exists( 'acf_add_options_page' ) && current_user_can( 'manage_options' ) ) {
+	acf_add_options_page(
+		array(
+			'page_title'      => 'Страница отзывов',
+			'menu_title'      => 'Страница отзывов',
+			'menu_slug'       => 'reviews-options-page',
+			'parent_slug'     => 'edit.php?post_type=review',
+			'update_button'   => 'Обновить',
+			'updated_message' => 'Изменения сохранены',
+			'autoload'        => true,
+		)
+	);
+}

@@ -285,7 +285,13 @@ function loveforever_get_filtered_products_via_ajax() {
 
 	ob_start();
 
-	echo loveforever_get_pagination_html( $products_query, $base_url );
+	echo loveforever_get_pagination_html(
+		$products_query,
+		array(
+			'base_url'        => $base_url,
+			'is_catalog_page' => true,
+		)
+	);
 
 	$pagination = ob_get_clean();
 
@@ -327,10 +333,138 @@ function loveforever_track_product_view_via_ajax() {
 	);
 }
 
+add_action( 'wp_ajax_add_review', 'loveforever_add_review_via_ajax' );
+add_action( 'wp_ajax_nopriv_add_review', 'loveforever_add_review_via_ajax' );
+function loveforever_add_review_via_ajax() {
+	if ( ! isset( $_POST['_submit_review_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_submit_review_form_nonce'] ) ), 'submit_review_form' ) ) {
+		wp_send_json_error(
+			array( 'message' => 'Ошибка в запросе' ),
+			400
+		);
+	}
+
+	$errors = array();
+
+	$name        = ! empty( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+	$date        = ! empty( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
+	$review_text = ! empty( $_POST['review_text'] ) ? sanitize_textarea_field( wp_unslash( $_POST['review_text'] ) ) : '';
+
+	if ( empty( $name ) ) {
+		$errors['name'] = 'Пожалуйста, укажите ваше имя';
+	}
+
+	if ( empty( $date ) ) {
+		$errors['date'] = 'Пожалуйста, укажите дату';
+	}
+
+	if ( empty( $review_text ) ) {
+		$errors['review_text'] = 'Поле отзыва не может быть пустым';
+	}
+
+	if ( ! empty( $errors ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Заполните необходимые поля',
+				'errors'  => $errors,
+			),
+			400
+		);
+	}
+
+	$review_post_id = wp_insert_post(
+		array(
+			'post_type'    => 'review',
+			'post_title'   => "Отзыв от $date от $name",
+			'post_content' => '<p></p>',
+			'post_status'  => 'pending',
+		)
+	);
+
+	update_field( 'author', $name, $review_post_id );
+	update_field( 'review_text', $review_text, $review_post_id );
+
+	if ( ! empty( $_FILES ) && isset( $_FILES['file'] ) && ! empty( $_FILES['file'] ) ) {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+
+		if ( is_array( $_FILES['file']['name'] ) ) {
+			$image_array = array();
+
+			$file = array(
+				'name'     => $_FILES['file']['name'][0],
+				'type'     => $_FILES['file']['type'][0],
+				'tmp_name' => $_FILES['file']['tmp_name'][0],
+				'error'    => $_FILES['file']['error'][0],
+				'size'     => $_FILES['file']['size'][0],
+			);
+
+			$_FILES['single_attachment'] = $file;
+			$featured_image_id           = media_handle_upload( 'single_attachment', 0 );
+
+			// wp_send_json_success( $featured_image_id );
+
+			if ( $featured_image_id && ! is_wp_error( $featured_image_id ) ) {
+				set_post_thumbnail( $review_post_id, $featured_image_id );
+				$image_array[] = array( 'image' => $featured_image_id );
+			}
+
+			// Handle additional images for carousel
+			if ( count( $_FILES['file']['name'] ) > 1 ) {
+				for ( $i = 1; $i < count( $_FILES['file']['name'] ); $i++ ) {
+					$file = array(
+						'name'     => $_FILES['file']['name'][ $i ],
+						'type'     => $_FILES['file']['type'][ $i ],
+						'tmp_name' => $_FILES['file']['tmp_name'][ $i ],
+						'error'    => $_FILES['file']['error'][ $i ],
+						'size'     => $_FILES['file']['size'][ $i ],
+					);
+
+					$_FILES['single_attachment'] = $file;
+
+					$image_id = media_handle_upload( 'single_attachment', 0 );
+					if ( $image_id && ! is_wp_error( $image_id ) ) {
+						$image_array[] = array( 'image' => $image_id );
+					}
+				}
+
+				if ( ! empty( $image_array ) ) {
+					update_field( 'image_carousel', $image_array, $review_post_id );
+				}
+			}
+		} else {
+			$file = array(
+				'name'     => $_FILES['file']['name'][0],
+				'type'     => $_FILES['file']['type'][0],
+				'tmp_name' => $_FILES['file']['tmp_name'][0],
+				'error'    => $_FILES['file']['error'][0],
+				'size'     => $_FILES['file']['size'][0],
+			);
+
+			$_FILES['single_attachment'] = $file;
+			$featured_image_id           = media_handle_upload( 'single_attachment', 0 );
+			if ( $featured_image_id && ! is_wp_error( $featured_image_id ) ) {
+				set_post_thumbnail( $review_post_id, $featured_image_id );
+			}
+		}
+	}
+
+	wp_send_json_success(
+		array(
+			'message' => 'Отзыв успешно добавлен! В ближайшее время он будет опубликован',
+		),
+		201
+	);
+}
+
 add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
 function loveforever_modify_dress_category_query( $query ) {
 	if ( $query->is_tax( 'dress_category' ) ) {
 		// $query->set( 'posts_per_page', 3 );
+	}
+
+	if ( $query->is_post_type_archive( 'review' ) && ! is_admin() ) {
+		$query->set( 'posts_per_page', 3 );
 	}
 }
 
@@ -339,14 +473,14 @@ function loveforever_breadcrumbs_attribute_filter( $li_attributes, $type, $id ) 
 	$breadcrumb_item_class = 'breadcrumbs__item p-12-12 uper';
 
 	if ( preg_match( $pattern, $li_attributes, $matches ) ) {
-			$class_list   = array();
-			$class_list[] = $breadcrumb_item_class;
-			$class_list   = array_merge( $class_list, explode( ' ', $matches[1] ) );
-			$class_list   = array_unique( $class_list );
+		$class_list   = array();
+		$class_list[] = $breadcrumb_item_class;
+		$class_list   = array_merge( $class_list, explode( ' ', $matches[1] ) );
+		$class_list   = array_unique( $class_list );
 
-			$new_class_string = implode( ' ', $class_list );
+		$new_class_string = implode( ' ', $class_list );
 
-			return preg_replace( $pattern, 'class="' . $new_class_string . '"', $li_attributes );
+		return preg_replace( $pattern, 'class="' . $new_class_string . '"', $li_attributes );
 	}
 
 	return $li_attributes;

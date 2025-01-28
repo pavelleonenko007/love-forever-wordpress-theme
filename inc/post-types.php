@@ -303,7 +303,7 @@ function loveforever_register_post_types() {
 	);
 
 	register_post_type(
-		'story',
+		'review',
 		array(
 			'label'         => null,
 			'labels'        => array(
@@ -321,7 +321,7 @@ function loveforever_register_post_types() {
 				'menu_name'          => 'Отзывы',
 			),
 			'description'   => '',
-			'public'        => false,
+			'public'        => true,
 			'show_ui'       => true,
 			'show_in_menu'  => null,
 			'show_in_rest'  => true,
@@ -330,8 +330,10 @@ function loveforever_register_post_types() {
 			'hierarchical'  => false,
 			'supports'      => array( 'title', 'thumbnail' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
 			'taxonomies'    => array(),
-			'has_archive'   => false,
-			'rewrite'       => true,
+			'has_archive'   => true,
+			'rewrite'       => array(
+				'slug' => 'reviews',
+			),
 			'menu_icon'     => 'dashicons-testimonial',
 			'query_var'     => true,
 		)

@@ -948,7 +948,12 @@ $queried_object = get_queried_object();
 						<div data-js-product-filter-form-pagination class="paginate">
 							<?php
 							if ( $products_query->have_posts() ) :
-								echo loveforever_get_pagination_html( $products_query );
+								echo loveforever_get_pagination_html(
+									$products_query,
+									array(
+										'is_catalog_page' => true,
+									)
+								);
 							endif;
 							?>
 						</div>
