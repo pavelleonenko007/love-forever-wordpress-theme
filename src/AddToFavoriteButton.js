@@ -87,14 +87,29 @@ class AddToFavoriteButton extends BaseComponent {
 	bindEvents() {
 		this.rootElement.addEventListener('click', this.addToFavorites);
 	}
+
+	destroy() {
+		this.rootElement.removeEventListener('click', this.addToFavorites);
+	}
 }
 
 class AddToFavoriteButtonCollection {
+	/**
+	 * @type {Map<string, AddToFavoriteButton>}
+	 */
+	static addToFavoriteButtons = new Map();
+
+	static destroyAll() {
+		this.addToFavoriteButtons.forEach((addToFavoriteButton, id) => {
+			addToFavoriteButton.destroy();
+			this.addToFavoriteButtons.delete(id);
+		});
+	}
+
 	static init() {
 		document.querySelectorAll(ROOT_SELECTOR).forEach((element) => {
-			console.log(element);
-
-			new AddToFavoriteButton(element);
+			const addToFavoriteButtonInstance = new AddToFavoriteButton(element);
+			this.addToFavoriteButtons.set(element.id, addToFavoriteButtonInstance);
 		});
 	}
 }

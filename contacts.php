@@ -222,7 +222,7 @@ $metro_stations   = get_field( 'metro_stations', 'option' );
 						</div>
 					</section>
 				<?php endif; ?>
-				<?php get_template_part( 'components/footer' ); ?>
 			</div>
 		</div>
+		<?php get_template_part( 'components/footer' ); ?>
 <?php get_footer(); ?>

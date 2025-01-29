@@ -171,7 +171,7 @@ class ProductFilterForm {
 
 			if (catalogElement) {
 				const catalogRect = catalogElement.getBoundingClientRect();
-				
+
 				if (catalogRect.top < 0) {
 					catalogElement.scrollIntoView({ behavior: 'smooth' });
 				}
@@ -185,12 +185,32 @@ class ProductFilterForm {
 		this.filterForm.addEventListener('submit', this.onSubmit);
 		document.addEventListener('click', this.changePaginationLink);
 	}
+
+	destroy() {
+		this.filterForm.removeEventListener('change', this.debouncedOnChange);
+		this.filterForm.removeEventListener('reset', this.resetForm);
+		this.filterForm.removeEventListener('submit', this.onSubmit);
+		document.removeEventListener('click', this.changePaginationLink);
+	}
 }
 
 class ProductFilterFormCollection {
+	/**
+	 * @type {Map<string, ProductFilterForm>}
+	 */
+	static filterProductsForms = new Map();
+
+	static destroyAll() {
+		this.filterProductsForms.forEach((filterForm, id) => {
+			filterForm.destroy();
+			this.filterProductsForms.delete(id);
+		});
+	}
+
 	static init() {
 		document.querySelectorAll(ROOT_SELECTOR).forEach((form) => {
-			new ProductFilterForm(form);
+			const productFilterFormInstance = new ProductFilterForm(form);
+			this.filterProductsForms.set(form.id, productFilterFormInstance);
 		});
 	}
 }

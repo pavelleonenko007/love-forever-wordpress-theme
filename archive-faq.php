@@ -102,7 +102,7 @@ get_header(
 						<?php endif; ?>
 					</div>
 				</section>
-				<?php get_template_part( 'components/footer' ); ?>
 			</div>
 		</div>
+		<?php get_template_part( 'components/footer' ); ?>
 <?php get_footer(); ?>

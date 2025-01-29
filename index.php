@@ -14,6 +14,7 @@ get_header(
 		'barba-container-extra-classes' => array(
 			'home-page',
 		),
+		'namespace'                     => 'home',
 	)
 );
 ?>
@@ -97,9 +98,9 @@ get_header(
 				<?php endif; ?>
 				<?php get_template_part( 'template-parts/global/personal-choice-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
-				<?php get_template_part( 'components/footer' ); ?>
 			</div>
 		</div>
+		<?php get_template_part( 'components/footer' ); ?>
 		<?php wp_footer(); ?>
 	</body>
 </html>

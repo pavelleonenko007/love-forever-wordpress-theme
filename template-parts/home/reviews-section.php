@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $reviews_query_args = array(
-	'post_type'      => 'reviews',
+	'post_type'      => 'review',
 	'posts_per_page' => 3,
 );
 
@@ -20,7 +20,7 @@ if ( $reviews_query->have_posts() ) :
 	<div class="container">
 		<div class="spleet">
 			<h2 class="h-36-36">Отзывы</h2>
-			<a id="w-node-_42e31bf8-b85c-a9ca-923c-af59232d595e-7ea1ac8d" href="<?php echo esc_url( get_post_type_archive_link( 'reviews' ) ); ?>" class="btn btn-with-arrow w-inline-block">
+			<a id="w-node-_42e31bf8-b85c-a9ca-923c-af59232d595e-7ea1ac8d" href="<?php echo esc_url( get_post_type_archive_link( 'review' ) ); ?>" class="btn btn-with-arrow w-inline-block">
 				<div>Смотреть все</div>
 				<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/6720d17cfb5622b535a21354_Arrow20Down.svg' ); ?>" loading="eager" alt class="img-arrow">
 			</a>

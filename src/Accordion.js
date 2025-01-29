@@ -1,28 +1,18 @@
 const ROOT_SELECTOR = '.accordion';
 
 class Accordion {
+	selectors = {
+		root: ROOT_SELECTOR,
+		trigger: '[data-js-accordion-trigger]',
+	};
+
 	constructor(element) {
 		this.accordion = element;
-		this.triggers = [
-			...this.accordion.querySelectorAll('[data-js-accordion-trigger]'),
-		];
+		this.triggers = this.accordion.querySelectorAll(this.selectors.trigger);
 
-		this.init();
-	}
+		this.onClick = this.onClick.bind(this);
 
-	init() {
-		this.triggers.forEach((trigger) => {
-			// Set unique IDs for ARIA attributes
-			const panel = trigger.parentElement.nextElementSibling;
-			const panelId = panel.id;
-			trigger.setAttribute('aria-controls', panelId);
-			trigger.id = `${panelId}-trigger`;
-			panel.setAttribute('aria-labelledby', trigger.id);
-
-			// Add event listeners
-			trigger.addEventListener('click', () => this.togglePanel(trigger));
-			// trigger.addEventListener('keydown', (e) => this.handleKeydown(e));
-		});
+		this.bindEvents();
 	}
 
 	togglePanel(trigger) {
@@ -58,13 +48,52 @@ class Accordion {
 				break;
 		}
 	}
-}
 
-export class AccordionCollection {
-	static init() {
-		document.querySelectorAll(ROOT_SELECTOR).forEach((accordion) => {
-			new Accordion(accordion);
+	/**
+	 *
+	 * @param {PointerEvent} event
+	 */
+	onClick(event) {
+		event.preventDefault();
+
+		const trigger = event.target.closest('[data-js-accordion-trigger]');
+		if (!trigger) {
+			return;
+		}
+
+		this.togglePanel(trigger);
+	}
+
+	bindEvents() {
+		[...this.triggers].forEach((trigger) => {
+			trigger.addEventListener('click', this.onClick);
+		});
+	}
+
+	destroy() {
+		[...this.triggers].forEach((trigger) => {
+			trigger.removeEventListener('click', this.onClick);
 		});
 	}
 }
-// Initialize all accordions on the page
+
+export class AccordionCollection {
+	/**
+	 * @type {Map<string, Accordion>}
+	 */
+	static accordions = new Map();
+
+	static destroyAll() {
+		this.accordions.forEach((accordion, id) => {
+			accordion.destroy();
+			this.accordions.delete(id);
+		});
+	}
+
+	static init() {
+		document.querySelectorAll(ROOT_SELECTOR).forEach((accordion) => {
+			const accordionInstance = new Accordion(accordion);
+			this.accordions.set(accordion.id, accordionInstance);
+		});
+	}
+}

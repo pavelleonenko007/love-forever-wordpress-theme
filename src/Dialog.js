@@ -28,6 +28,9 @@ class Dialog {
 
 		this.closeCallback = null;
 
+		this.onClick = this.onClick.bind(this);
+		this.onKeyDown = this.onKeyDown.bind(this);
+
 		this.bindEvents();
 	}
 
@@ -80,39 +83,50 @@ class Dialog {
 		}
 	}
 
-	bindEvents() {
-		document.body.addEventListener('click', (event) => {
-			const openButton = event.target.closest(this.selectors.openButton);
+	onClick(event) {
+		const openButton = event.target.closest(this.selectors.openButton);
 
-			if (openButton) {
-				event.preventDefault();
+		if (openButton) {
+			event.preventDefault();
 
-				if (openButton.dataset.jsDialogOpenButton === this.dialog.id) {
-					this.open();
-					return;
-				}
-			}
-
-			if (
-				event.target.matches(this.selectors.closeButton) ||
-				!event.target.closest(this.selectors.dialogContent)
-			) {
-				this.close();
+			if (openButton.dataset.jsDialogOpenButton === this.dialog.id) {
+				this.open();
 				return;
 			}
-		});
+		}
 
-		this.dialog.addEventListener('keydown', (event) => {
-			if (event.key === 'Escape') {
-				event.preventDefault();
+		if (
+			event.target.matches(this.selectors.closeButton) ||
+			!event.target.closest(this.selectors.dialogContent)
+		) {
+			this.close();
+			return;
+		}
+	}
 
-				this.close();
-			}
-		});
+	onKeyDown(event) {
+		if (event.key === 'Escape') {
+			event.preventDefault();
+
+			this.close();
+		}
+	}
+
+	bindEvents() {
+		document.body.addEventListener('click', this.onClick);
+		this.dialog.addEventListener('keydown', this.onKeyDown);
+	}
+
+	destroy() {
+		document.body.removeEventListener('click', this.onClick);
+		this.dialog.removeEventListener('keydown', this.onKeyDown);
 	}
 }
 
 class DialogCollection {
+	/**
+	 * @type {Map<string, Dialog>}
+	 */
 	static dialogs = new Map();
 
 	static getDialogsById(id) {
@@ -141,6 +155,13 @@ class DialogCollection {
 		});
 
 		return Promise.resolve();
+	}
+
+	static destroyAll() {
+		this.dialogs.forEach((dialog, id) => {
+			dialog.destroy();
+			this.dialogs.delete(id);
+		});
 	}
 
 	static init() {

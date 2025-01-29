@@ -20,6 +20,8 @@ class FittingForm {
 	};
 
 	constructor(fittingForm, initialState = {}) {
+		console.log('FittingForm');
+
 		this.fittingForm = fittingForm;
 		this.steps = this.fittingForm.querySelectorAll(this.selectors.step);
 		this.backButton = this.fittingForm.querySelector(this.selectors.backButton);
@@ -44,8 +46,6 @@ class FittingForm {
 			this.selectors.dialogTitle
 		);
 
-		//TODO: обновлять слоты после отправки формы
-		//TODO: добавить переключение на слотов для следующих дат
 		this.state = this._getProxyState({
 			dateIncrementRatio: 0,
 			dialogMessage: 'Запись на примерку',
@@ -68,6 +68,9 @@ class FittingForm {
 		this.submitFormHandler = this.submitFormHandler.bind(this);
 		this.closeDialogHandler = this.closeDialogHandler.bind(this);
 		this.openDialogHandler = this.openDialogHandler.bind(this);
+		this.prevStep = this.prevStep.bind(this);
+		this.prevDates = this.prevDates.bind(this);
+		this.nextDates = this.nextDates.bind(this);
 
 		this.bindEvents();
 	}
@@ -300,18 +303,45 @@ class FittingForm {
 	bindEvents() {
 		this.fittingForm.addEventListener('change', this.changeFormHandler);
 		this.fittingForm.addEventListener('submit', this.submitFormHandler);
-		this.backButton.addEventListener('click', this.prevStep.bind(this));
-		this.prevSlotsButton.addEventListener('click', this.prevDates.bind(this));
-		this.nextSlotsButton.addEventListener('click', this.nextDates.bind(this));
+		this.backButton.addEventListener('click', this.prevStep);
+		this.prevSlotsButton.addEventListener('click', this.prevDates);
+		this.nextSlotsButton.addEventListener('click', this.nextDates);
 		document.addEventListener('dialogClose', this.closeDialogHandler);
 		document.addEventListener('dialogOpen', this.openDialogHandler);
+	}
+
+	destroy() {
+		this.fittingForm.removeEventListener('change', this.changeFormHandler);
+		this.fittingForm.removeEventListener('submit', this.submitFormHandler);
+		this.backButton.removeEventListener('click', this.prevStep);
+		this.prevSlotsButton.removeEventListener('click', this.prevDates);
+		this.nextSlotsButton.removeEventListener('click', this.nextDates);
+		document.removeEventListener('dialogClose', this.closeDialogHandler);
+		document.removeEventListener('dialogOpen', this.openDialogHandler);
 	}
 }
 
 class FittingFormCollection {
+	/**
+	 * @type {Map<string, FittingForm>}
+	 */
+	static fittingForms = new Map();
+
+	static getFittingFormById(id) {
+		return this.fittingForms.get(id);
+	}
+
+	static destroyAll() {
+		this.fittingForms.forEach((fittingForm, id) => {
+			fittingForm.destroy();
+			this.fittingForms.delete(id);
+		});
+	}
+
 	static init() {
 		document.querySelectorAll(ROOT_SELECTOR).forEach((fittingForm) => {
-			new FittingForm(fittingForm);
+			const formInstance = new FittingForm(fittingForm);
+			this.fittingForms.set(fittingForm.id, formInstance);
 		});
 	}
 }
