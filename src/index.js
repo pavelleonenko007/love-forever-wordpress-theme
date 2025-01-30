@@ -2,6 +2,7 @@ import Splide from '@splidejs/splide';
 import Barba from 'barba.js';
 import { AccordionCollection } from './Accordion';
 import AddToFavoriteButtonCollection from './AddToFavoriteButton';
+import CopyToClipboardButtonCollection from './CopyToClipboardButton';
 import DialogCollection from './Dialog';
 import FileInputCollection from './FileInput';
 import { FittingFormCollection } from './FittingForm';
@@ -88,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	};
 
 	Barba.Dispatcher.on('initStateChange', (currentStatus) => {
+		CopyToClipboardButtonCollection.destroyAll();
 		AddToFavoriteButtonCollection.destroyAll();
 		InputMaskCollection.destroyAll();
 		DialogCollection.destroyAll();
@@ -135,6 +137,7 @@ function initPage() {
 	InputMaskCollection.init();
 	DialogCollection.init();
 	AccordionCollection.init();
+	CopyToClipboardButtonCollection.init();
 }
 
 function initCatalogPage() {
@@ -157,6 +160,8 @@ function initReviewsPage() {
 }
 
 window.addEventListener('load', () => {
+	console.log('load');
+	
 	initPage();
 
 	switch (Barba.HistoryManager.currentStatus().namespace) {

@@ -1,0 +1,34 @@
+@use '../media' as *;
+
+.favorites-contact-form {
+	gap: 20rem;
+
+	@include mobile {
+		gap: 10rem;
+	}
+
+	&__field {
+		position: relative;
+		color: #fff;
+
+		& .field__control {
+			border-color: #ffffff30;
+			background-color: transparent;
+
+			&::placeholder {
+				color: #ffffff80;
+			}
+
+			&[aria-invalid='true'] {
+				border-color: red;
+			}
+		}
+
+		& .field__errors {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			color: #fff;
+		}
+	}
+}

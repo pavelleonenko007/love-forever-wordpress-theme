@@ -77,3 +77,29 @@ export function debounce(func, ms) {
 		timeout = setTimeout(() => func.apply(this, arguments), ms);
 	};
 }
+
+export const copyTextToClipboard = (text) => {
+	// Modern browsers
+	if (navigator.clipboard && window.isSecureContext) {
+		return navigator.clipboard.writeText(text);
+	}
+
+	// Fallback for older browsers
+	const textArea = document.createElement('textarea');
+	textArea.value = text;
+	textArea.style.position = 'fixed';
+	textArea.style.left = '-999999px';
+	textArea.style.top = '-999999px';
+	document.body.appendChild(textArea);
+	textArea.focus();
+	textArea.select();
+
+	try {
+		document.execCommand('copy');
+		textArea.remove();
+		return Promise.resolve();
+	} catch (error) {
+		textArea.remove();
+		return Promise.reject(error);
+	}
+};

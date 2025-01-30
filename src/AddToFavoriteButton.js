@@ -53,7 +53,7 @@ class AddToFavoriteButton extends BaseComponent {
 		}
 
 		const favoritesCookie = getCookie('favorites') ?? '';
-		const favorites = favoritesCookie.split(',');
+		const favorites = favoritesCookie.split(',').filter((id) => id);
 
 		if (favorites.includes(productId)) {
 			favorites.splice(favorites.indexOf(productId), 1);
