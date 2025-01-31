@@ -63,16 +63,17 @@ $slider_in_dress_card = get_field( 'slider_in_dress_card' );
 				<div class="none w-slider-nav w-round w-num"></div>
 			</div>
 		<?php endif; ?>
-		<a href="#" class="btn-like w-inline-block">
+		<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
+		<button type="button" class="btn-like like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
 			<div class="svg w-embed">
 				<svg width="30" height="35" viewbox="0 0 30 35" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<rect y="5" width="30" height="30" fill="#F22EA9"></rect>
 					<path d="M30 5L25 0V5H30Z" fill="#F22EA9"></path>
 					<path d="M30 5L25 0V5H30Z" fill="black" fill-opacity="0.2"></path>
-					<path d="M20.4894 20.8851L20.4917 20.8874L15.0022 26.298L8.63543 20.0226C7.12152 18.5304 7.12152 16.1143 8.63543 14.6221C10.1534 13.126 12.6173 13.126 14.1353 14.6221L14.649 15.1285L15 15.4744L15.351 15.1285L15.8647 14.6221C17.3827 13.126 19.8466 13.126 21.3646 14.6221C22.8785 16.1143 22.8785 18.5304 21.3646 20.0226L20.8508 20.529L20.4894 20.8851Z" stroke="white"></path>
+					<path class="like-button__heart" d="M20.4894 20.8851L20.4917 20.8874L15.0022 26.298L8.63543 20.0226C7.12152 18.5304 7.12152 16.1143 8.63543 14.6221C10.1534 13.126 12.6173 13.126 14.1353 14.6221L14.649 15.1285L15 15.4744L15.351 15.1285L15.8647 14.6221C17.3827 13.126 19.8466 13.126 21.3646 14.6221C22.8785 16.1143 22.8785 18.5304 21.3646 20.0226L20.8508 20.529L20.4894 20.8851Z" stroke="white"></path>
 				</svg>
 			</div>
-		</a>
+		</button>
 		<?php if ( $has_discount ) : ?>
 			<div class="badge">
 				<div class="bagde__text">Скидка</div>

@@ -23,13 +23,13 @@ $favorites     = loveforever_get_favorites();
 				<div class="l-spacer"></div>
 				<div class="menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5">
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
 							<div class="code-embed-3 lik w-embed">
 								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 								</svg>
 							</div>
-							<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
+							<div data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 						</a>
 						<div class="menu-link-keeper">
 							<a href="#" class="serach-btn w-inline-block">
@@ -1321,13 +1321,13 @@ $favorites     = loveforever_get_favorites();
 								<div id="w-node-_144563be-6001-1af8-6446-1240953daacd-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
 							<div class="code-embed-3 lik w-embed">
 								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 								</svg>
 							</div>
-							<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
+							<div data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 						</a>
 					</div>
 				</div>
@@ -2012,26 +2012,26 @@ $favorites     = loveforever_get_favorites();
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b954-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
 							<div class="code-embed-3 lik w-embed">
 								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 								</svg>
 							</div>
-							<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
+							<div data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 						</a>
 					</div>
 				</div>
 			</div>
 			<div class="spleet pc-none">
 				<div class="menu-line p-12-12 white uper n-voreder">
-					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
+					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
 						<div class="code-embed-3 lik w-embed">
 							<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 							</svg>
 						</div>
-						<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
+						<div data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 					</a>
 				</div>
 				<div class="l-spacer">

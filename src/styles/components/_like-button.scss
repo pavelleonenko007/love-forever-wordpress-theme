@@ -1,0 +1,12 @@
+.like-button {
+	$root: &;
+
+	padding: 0;
+	background-color: transparent;
+
+	&.is-active {
+		#{$root}__heart {
+			fill: #fff;
+		}
+	}
+}

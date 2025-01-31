@@ -66,6 +66,15 @@ class AddToFavoriteButton extends BaseComponent {
 		setCookie('favorites', favorites.join(','));
 
 		this.state.isLoading = false;
+
+		document.dispatchEvent(
+			new CustomEvent('favoritesUpdated', {
+				bubbles: true,
+				detail: {
+					favoritesCount: favorites.length,
+				},
+			})
+		);
 	}
 
 	updateUI() {

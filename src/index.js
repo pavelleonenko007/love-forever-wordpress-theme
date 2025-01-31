@@ -4,6 +4,7 @@ import { AccordionCollection } from './Accordion';
 import AddToFavoriteButtonCollection from './AddToFavoriteButton';
 import CopyToClipboardButtonCollection from './CopyToClipboardButton';
 import DialogCollection from './Dialog';
+import FavoritesButtonWithCounterCollection from './FavoritesButtonWithCounter';
 import FileInputCollection from './FileInput';
 import { FittingFormCollection } from './FittingForm';
 import FormsValidator from './FormValidator';
@@ -164,6 +165,7 @@ function initReviewsPage() {
 
 window.addEventListener('load', () => {
 	console.log('load');
+	FavoritesButtonWithCounterCollection.init();
 
 	initPage();
 
