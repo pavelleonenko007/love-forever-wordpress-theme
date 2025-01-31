@@ -6,22 +6,30 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+$phone         = get_field( 'phone', 'option' );
+$address       = get_field( 'address', 'option' );
+$working_hours = get_field( 'working_hours', 'option' );
+$favorites     = loveforever_get_favorites();
 ?>
 <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar w-nav">
 	<header class="header menuline">
 		<div class="vert-menu">
 			<div class="spleet pc-none">
-				<div class="menu-line p-12-12 white uper n-voreder"><a href="tel:88125667575" class="n-menu w-nav-link">8 812 566 75 75</a></div>
+				<?php if ( ! empty( $phone ) ) : ?>
+				<div class="menu-line p-12-12 white uper n-voreder">
+					<a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" class="n-menu w-nav-link"><?php echo esc_html( $phone ); ?></a>
+				</div>
+				<?php endif; ?>
 				<div class="l-spacer"></div>
 				<div class="menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5">
-						<a href="/favorites" class="link-block-2 w-inline-block">
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
 							<div class="code-embed-3 lik w-embed">
 								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 								</svg>
 							</div>
-							<div>2</div>
+							<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 						</a>
 						<div class="menu-link-keeper">
 							<a href="#" class="serach-btn w-inline-block">
@@ -40,11 +48,20 @@ defined( 'ABSPATH' ) || exit;
 							<div class="hovered-menue search-m">
 								<div id="w-node-_29763d6b-4a4a-4ba9-96d9-354223034cf4-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form action="/search" class="search w-form">
-											<input class="search-input w-input" maxlength="256" name="query" placeholder="напишите, что вы ищите..." type="search" id="search" required>
-											<input type="submit" class="search-button w-button" value="Search"><a href="#" class="clear-search">очистить</a>
+										<form action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+											<input
+												type="search" 
+												name="s" 
+												maxlength="256" 
+												placeholder="Напишите, что вы ищите..." 
+												id="s" 
+												class="search-input w-input" 
+												required
+											>
+											<input type="submit" class="search-button w-button" value="Search">
+											<button type="reset" class="clear-search">Очистить</button>
 										</form>
-										<div class="search-ajaxed">
+										<div class="search-ajaxed" data-js-search-form-results>
 											<div class="search-ajaxed_item">
 												<a href="#" class="search-ajaxed_item_a w-inline-block">
 													<div>свадебное платье налки</div>
@@ -1304,13 +1321,13 @@ defined( 'ABSPATH' ) || exit;
 								<div id="w-node-_144563be-6001-1af8-6446-1240953daacd-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
-						<a href="/favorites" class="link-block-2 w-inline-block">
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
 							<div class="code-embed-3 lik w-embed">
 								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 								</svg>
 							</div>
-							<div>2</div>
+							<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 						</a>
 					</div>
 				</div>
@@ -1995,26 +2012,26 @@ defined( 'ABSPATH' ) || exit;
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b954-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
-						<a href="/favorites" class="link-block-2 w-inline-block">
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
 							<div class="code-embed-3 lik w-embed">
 								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 								</svg>
 							</div>
-							<div>2</div>
+							<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 						</a>
 					</div>
 				</div>
 			</div>
 			<div class="spleet pc-none">
 				<div class="menu-line p-12-12 white uper n-voreder">
-					<a href="/favorites" class="link-block-2 w-inline-block">
+					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block">
 						<div class="code-embed-3 lik w-embed">
 							<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
 							</svg>
 						</div>
-						<div>2</div>
+						<div><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 					</a>
 				</div>
 				<div class="l-spacer">

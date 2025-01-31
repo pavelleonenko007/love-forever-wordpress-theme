@@ -21,7 +21,7 @@ get_header(
 				<section class="section section_100vh homepagesection">
 					<div class="container container-fw n-top">
 						<?php get_template_part( 'components/marquee' ); ?>
-						<?php get_template_part( 'components/header' ); ?>
+						<?php get_template_part( 'components/navbar' ); ?>
 						<?php
 						$hero_slider = get_field( 'hero_slider' );
 						if ( ! empty( $hero_slider ) ) :
@@ -42,7 +42,7 @@ get_header(
 													<?php
 													if ( ! empty( $image ) ) :
 														?>
-														<img src="<?php echo esc_url( $image['url'] ); ?>" loading="eager" alt class="img-cover">
+														<img src="<?php echo esc_url( wp_get_attachment_image_url( $image, 'full' ) ); ?>" loading="eager" alt class="img-cover">
 													<?php endif; ?>
 												</div>
 												<div class="slider-bottom-content">
@@ -61,7 +61,7 @@ get_header(
 													if ( ! empty( $button ) ) :
 														$url    = $button['url'];
 														$target = ! empty( $button['target'] ) ? $button['target'] : 'self';
-														$text   = $button['label'];
+														$text   = $button['title'];
 														?>
 														<a href="<?php echo esc_url( $url ); ?>" class="btn in-slider-btn w-inline-block" target="<?php echo esc_attr( $target ); ?>">
 															<div><?php echo esc_html( $text ); ?></div>

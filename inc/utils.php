@@ -108,3 +108,8 @@ function loveforever_pink_text_shortcode( $atts, $content = null ) {
 	return '<span class="text-pink">' . wp_kses_post( $content ) . '</span>';
 }
 add_shortcode( 'pink', 'loveforever_pink_text_shortcode' );
+
+function loveforever_get_favorites() {
+	$favorites = ! empty( $_COOKIE['favorites'] ) ? explode( ',', $_COOKIE['favorites'] ) : array();
+	return $favorites;
+}
