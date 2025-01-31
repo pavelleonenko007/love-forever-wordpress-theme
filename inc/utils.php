@@ -105,6 +105,6 @@ function loveforever_prepare_barba_container_data_attributes( $attributes ) {
 }
 
 function loveforever_pink_text_shortcode( $atts, $content = null ) {
-	return '<span class="text-pink">' . esc_html( $content ) . '</span>';
+	return '<span class="text-pink">' . wp_kses_post( $content ) . '</span>';
 }
 add_shortcode( 'pink', 'loveforever_pink_text_shortcode' );

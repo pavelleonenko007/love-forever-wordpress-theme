@@ -75,7 +75,7 @@ get_header(
 				<section class="section">
 					<div class="container">
 						<?php if ( ! empty( $video_section['heading'] ) ) : ?>
-							<h2 class="p-64-64 center"><?php echo wp_kses_post( $video_section['heading'] ); ?></h2>
+							<h2 class="p-64-64 center"><?php echo $video_section['heading']; ?></h2>
 						<?php endif; ?>
 						<?php
 						$video_player = $video_section['video_player'];
