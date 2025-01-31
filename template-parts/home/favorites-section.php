@@ -24,7 +24,7 @@ if ( ! empty( $_COOKIE['favorites'] ) ) :
 					<?php
 					// TODO: Добавить кнопку "Смотреть все"!
 					?>
-					<a id="w-node-_0ae708a4-2631-fce5-071c-c19af11d248f-7ea1ac8d" href="#" class="btn btn-with-arrow w-inline-block">
+					<a id="w-node-_0ae708a4-2631-fce5-071c-c19af11d248f-7ea1ac8d" href="<?php echo esc_url( home_url( '/' ) . 'favorites/' ); ?>" class="btn btn-with-arrow w-inline-block">
 						<div>Смотреть все</div>
 						<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/6720d17cfb5622b535a21354_Arrow20Down.svg' ); ?>" loading="eager" alt class="img-arrow">
 					</a>
