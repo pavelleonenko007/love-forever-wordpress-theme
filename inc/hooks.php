@@ -504,3 +504,6 @@ function loveforever_set_initial_product_views( $post_id, $post ) {
 		}
 	}
 }
+
+add_filter( 'acf/format_value/type=text', 'do_shortcode' );
+add_filter( 'acf/format_value/type=textarea', 'do_shortcode' );

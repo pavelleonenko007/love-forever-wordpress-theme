@@ -12,6 +12,7 @@ import ProductFilterFormCollection from './ProductFilterForm';
 import RangeSliderCollection from './RangeSlider';
 import ReviewFormCollection from './ReviewForm';
 import './styles/index.scss';
+import VideoPlayerCollection from './VideoPlayer';
 
 new FormsValidator();
 
@@ -99,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		RangeSliderCollection.destroyAll();
 		ReviewFormCollection.destroyAll();
 		FileInputCollection.destroyAll();
+		VideoPlayerCollection.destroyAll();
 	});
 
 	Barba.Dispatcher.on(
@@ -138,6 +140,7 @@ function initPage() {
 	DialogCollection.init();
 	AccordionCollection.init();
 	CopyToClipboardButtonCollection.init();
+	VideoPlayerCollection.init();
 }
 
 function initCatalogPage() {
@@ -161,7 +164,7 @@ function initReviewsPage() {
 
 window.addEventListener('load', () => {
 	console.log('load');
-	
+
 	initPage();
 
 	switch (Barba.HistoryManager.currentStatus().namespace) {
@@ -199,17 +202,17 @@ function FFFafterLoad() {
 }
 
 function AllPages() {
-	$('.playvideobtn').on('click', function () {
-		if ($(this).hasClass('videoplaing')) {
-			$(this).removeClass('videoplaing');
-			$(this).prev('video').get(0).pause();
-			//$(this).prev('video').get(0).removeAttr('controls');
-		} else {
-			$(this).addClass('videoplaing');
-			$(this).prev('video').get(0).play();
-			//$(this).prev('video').get(0).attr('controls');
-		}
-	});
+	// $('.playvideobtn').on('click', function () {
+	// 	if ($(this).hasClass('videoplaing')) {
+	// 		$(this).removeClass('videoplaing');
+	// 		$(this).prev('video').get(0).pause();
+	// 		//$(this).prev('video').get(0).removeAttr('controls');
+	// 	} else {
+	// 		$(this).addClass('videoplaing');
+	// 		$(this).prev('video').get(0).play();
+	// 		//$(this).prev('video').get(0).attr('controls');
+	// 	}
+	// });
 
 	const splideGalleries = document.querySelectorAll('.splide');
 

@@ -1,0 +1,15 @@
+.video-player {
+	$root: &;
+
+	&.is-playing {
+		#{$root}__video {
+			z-index: auto;
+		}
+	}
+
+	&.is-playing {
+		#{$root}__button {
+			display: none;
+		}
+	}
+}

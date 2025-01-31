@@ -103,3 +103,8 @@ function loveforever_prepare_barba_container_data_attributes( $attributes ) {
 
 	return implode( ' ', $data_attributes );
 }
+
+function loveforever_pink_text_shortcode( $atts, $content = null ) {
+	return '<span class="text-pink">' . esc_html( $content ) . '</span>';
+}
+add_shortcode( 'pink', 'loveforever_pink_text_shortcode' );

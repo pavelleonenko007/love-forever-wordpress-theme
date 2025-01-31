@@ -2,6 +2,10 @@
 	text-transform: uppercase;
 }
 
+.lovercase {
+	text-transform: lowercase !important;
+}
+
 .italic {
 	font-style: italic;
 }
@@ -16,4 +20,8 @@
 
 .ff-tt-norms-pro {
 	font-family: 'Tt Norms Pro Serif', serif;
+}
+
+.text-pink {
+	color: var(--pink);
 }
