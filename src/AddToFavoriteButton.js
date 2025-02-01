@@ -1,126 +1,109 @@
-import BaseComponent from './BaseComponent';
-import { getCookie, setCookie } from './utils';
+import Barba from 'barba.js';
 
-const ROOT_SELECTOR = '[data-js-add-to-favorite-button]';
-
-class AddToFavoriteButton extends BaseComponent {
+export default class AddToFavoriteButtonCollection {
 	selectors = {
-		root: ROOT_SELECTOR,
-		textElement: '[data-js-add-to-favorite-button-text]',
+		root: '[data-js-add-to-favorite-button]',
+		text: '[data-js-add-to-favorite-button-text]',
 	};
 
-	stateValues = {
-		inactive: 'Добавить в избранное',
-		active: 'Удалить из избранного',
-	};
-
-	stateSelector = {
+	stateSelectors = {
 		isActive: 'is-active',
 		isLoading: 'is-loading',
 	};
 
-	stateAttributes = {
-		ariaLabel: 'aria-label',
+	stateTexts = {
+		add: 'Добавить в избранное',
+		remove: 'Удалить из избранного',
 	};
 
-	constructor(element) {
-		super();
-		this.rootElement = element;
-		this.textElement = this.rootElement.querySelector(
-			this.selectors.textElement
-		);
-
-		this.state = this._getProxyState({
-			isLoading: false,
-			status: this.rootElement.classList.contains(this.stateSelector.isActive)
-				? 'active'
-				: 'inactive',
-		});
-
-		this.addToFavorites = this.addToFavorites.bind(this);
-
+	constructor() {
+		this.onClick = this.onClick.bind(this);
 		this.bindEvents();
 	}
 
-	addToFavorites() {
-		this.state.isLoading = true;
-
-		const productId = this.rootElement.dataset.jsAddToFavoriteButton;
+	/**
+	 *
+	 * @param {HTMLButtonElement} button
+	 */
+	async onAddToFavoritesButtonClick(button) {
+		const productId = button.dataset.jsAddToFavoriteButton;
 
 		if (!productId) {
-			this.state.isLoading = false;
 			return;
 		}
 
-		const favoritesCookie = getCookie('favorites') ?? '';
-		const favorites = favoritesCookie.split(',').filter((id) => id);
+		button.disabled = true;
+		button.classList.add(this.stateSelectors.isLoading);
 
-		if (favorites.includes(productId)) {
-			favorites.splice(favorites.indexOf(productId), 1);
-			this.state.status = 'inactive';
-		} else {
-			favorites.push(productId);
-			this.state.status = 'active';
+		try {
+			const formData = new FormData();
+
+			formData.append('action', 'add_product_to_favorites');
+			formData.append('nonce', LOVE_FOREVER.NONCE);
+			formData.append('product-id', productId);
+
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
+			});
+
+			const body = await response.json();
+
+			if (!body.success) {
+				console.error(body.data.debug);
+				throw new Error(body.data.message);
+			}
+
+			Barba.BaseCache.reset();
+
+			const textElement = button.querySelector(this.selectors.text);
+
+			if (button.classList.contains(this.stateSelectors.isActive)) {
+				button.classList.remove(this.stateSelectors.isActive);
+
+				if (textElement) {
+					textElement.textContent = this.stateTexts.add;
+				}
+			} else {
+				button.classList.add(this.stateSelectors.isActive);
+
+				if (textElement) {
+					textElement.textContent = this.stateTexts.remove;
+				}
+			}
+
+			button.dispatchEvent(
+				new CustomEvent('favoritesUpdated', {
+					bubbles: true,
+					detail: {
+						countFavorites: body.data.countFavorites,
+					},
+				})
+			);
+		} catch (error) {
+			console.error(error.message);
+			window.alert(error.message);
+		} finally {
+			button.disabled = false;
+			button.classList.remove(this.stateSelectors.isLoading);
 		}
-
-		setCookie('favorites', favorites.join(','));
-
-		this.state.isLoading = false;
-
-		document.dispatchEvent(
-			new CustomEvent('favoritesUpdated', {
-				bubbles: true,
-				detail: {
-					favoritesCount: favorites.length,
-				},
-			})
-		);
 	}
 
-	updateUI() {
-		this.rootElement.disabled = this.state.isLoading;
-		this.rootElement.classList.toggle(
-			this.stateSelector.isLoading,
-			this.state.isLoading
-		);
-		this.rootElement.classList.toggle(
-			this.stateSelector.isActive,
-			this.state.status === 'active'
-		);
+	/**
+	 *
+	 * @param {PointerEvent} event
+	 */
+	onClick(event) {
+		const addToFavoritesButton = event.target.closest(this.selectors.root);
 
-		if (this.textElement) {
-			this.textElement.textContent = this.stateValues[this.state.status];
+		if (addToFavoritesButton) {
+			event.preventDefault();
+
+			this.onAddToFavoritesButtonClick(addToFavoritesButton);
 		}
 	}
 
 	bindEvents() {
-		this.rootElement.addEventListener('click', this.addToFavorites);
-	}
-
-	destroy() {
-		this.rootElement.removeEventListener('click', this.addToFavorites);
+		document.addEventListener('click', this.onClick);
 	}
 }
-
-class AddToFavoriteButtonCollection {
-	/**
-	 * @type {Map<string, AddToFavoriteButton>}
-	 */
-	static addToFavoriteButtons = new Map();
-
-	static destroyAll() {
-		this.addToFavoriteButtons.forEach((addToFavoriteButton, id) => {
-			addToFavoriteButton.destroy();
-			this.addToFavoriteButtons.delete(id);
-		});
-	}
-
-	static init() {
-		document.querySelectorAll(ROOT_SELECTOR).forEach((element) => {
-			const addToFavoriteButtonInstance = new AddToFavoriteButton(element);
-			this.addToFavoriteButtons.set(element.id, addToFavoriteButtonInstance);
-		});
-	}
-}
-
-export default AddToFavoriteButtonCollection;

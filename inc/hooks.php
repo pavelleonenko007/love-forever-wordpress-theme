@@ -457,6 +457,62 @@ function loveforever_add_review_via_ajax() {
 	);
 }
 
+add_action( 'wp_ajax_add_product_to_favorites', 'loveforever_add_product_to_favorites_via_ajax' );
+add_action( 'wp_ajax_nopriv_add_product_to_favorites', 'loveforever_add_product_to_favorites_via_ajax' );
+function loveforever_add_product_to_favorites_via_ajax() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка добавления товара в избранное! Попробуйте перезагрузить страницу',
+				'debug'   => 'Неверный nonce',
+			),
+			400
+		);
+	}
+
+	if ( empty( $_POST['product-id'] ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка добавления товара в избранное! Попробуйте перезагрузить страницу',
+				'debug'   => 'Id товара не передан!',
+			),
+			400
+		);
+	}
+
+	$product_id           = (int) sanitize_text_field( wp_unslash( $_POST['product-id'] ) );
+	$favorite_product_ids = array_map( 'intval', loveforever_get_favorites() );
+	$message              = '';
+
+	if ( in_array( $product_id, $favorite_product_ids, true ) ) {
+		$favorite_product_ids = array_filter(
+			$favorite_product_ids,
+			function ( $id ) use ( $product_id ) {
+				return $id !== $product_id;
+			}
+		);
+		$message              = 'Товар успешно удален из избранного';
+	} else {
+		array_unshift( $favorite_product_ids, $product_id );
+		$message = 'Товар успешно добавлен в избранное';
+	}
+
+	setcookie(
+		'favorites',
+		implode( ',', $favorite_product_ids ),
+		time() + DAY_IN_SECONDS * 30,
+		'/',
+	);
+
+	wp_send_json_success(
+		array(
+			'message'        => $message,
+			'countFavorites' => count( $favorite_product_ids ),
+			'favorites'      => $favorite_product_ids,
+		),
+		200
+	);
+}
 add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
 function loveforever_modify_dress_category_query( $query ) {
 	if ( $query->is_tax( 'dress_category' ) ) {

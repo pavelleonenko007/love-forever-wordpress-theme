@@ -42,7 +42,7 @@ class FavoritesButtonWithCounter {
 	 * @param {CustomEvent} event
 	 */
 	onUpdated(event) {
-		const count = this._normalizeCount(event.detail.favoritesCount);
+		const count = this._normalizeCount(event.detail.countFavorites);
 
 		this.update(count);
 	}
@@ -63,12 +63,45 @@ class FavoritesButtonWithCounter {
 	bindEvents() {
 		document.addEventListener('favoritesUpdated', this.onUpdated);
 	}
+
+	destroy() {
+		document.removeEventListener('favoritesUpdated', this.onUpdated);
+		this.favoritesButton = null;
+		this.counter = null;
+	}
 }
 
 export default class FavoritesButtonWithCounterCollection {
+	/**
+	 * @type {Map<HTMLElement, FavoritesButtonWithCounter>}
+	 */
+	static favoriteButtonsWithCounters = new Map();
 	static init() {
-		document.querySelectorAll(ROOT_SELECTOR).forEach((button) => {
-			new FavoritesButtonWithCounter(button);
+		const buttonsWithCounter = document.querySelectorAll(ROOT_SELECTOR);
+
+		buttonsWithCounter.forEach((button) => {
+			const favoriteButtonsWithCounterInstance = new FavoritesButtonWithCounter(
+				button
+			);
+			FavoritesButtonWithCounterCollection.favoriteButtonsWithCounters.set(
+				button,
+				favoriteButtonsWithCounterInstance
+			);
 		});
+	}
+
+	static destroyAll() {
+		FavoritesButtonWithCounterCollection.favoriteButtonsWithCounters.forEach(
+			(buttonComponent, element) => {
+				buttonComponent.destroy();
+				FavoritesButtonWithCounterCollection.favoriteButtonsWithCounters.delete(
+					element
+				);
+			}
+		);
+		console.log(
+			'Remaining buttons:',
+			FavoritesButtonWithCounterCollection.favoriteButtonsWithCounters.size
+		);
 	}
 }

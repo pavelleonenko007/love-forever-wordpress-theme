@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	var FadeTransition = Barba.BaseTransition.extend({
 		start: function () {
+			console.log('transition start');
+
 			this.newContainerLoading
 				.then(this.startTracking.bind(this))
 				.then(this.fadeOut.bind(this))
@@ -78,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			var _this = this;
 			_this.done();
 
+			console.log('done');
+
 			FFFafterEnter();
 			FFFafterLoad();
 
@@ -91,8 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	};
 
 	Barba.Dispatcher.on('initStateChange', (currentStatus) => {
+		console.log('initStateChange');
+
+		FavoritesButtonWithCounterCollection.destroyAll();
 		CopyToClipboardButtonCollection.destroyAll();
-		AddToFavoriteButtonCollection.destroyAll();
 		InputMaskCollection.destroyAll();
 		DialogCollection.destroyAll();
 		AccordionCollection.destroyAll();
@@ -114,8 +120,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	);
 
 	Barba.Dispatcher.on(
-		'newPageReady',
-		function (currentStatus, oldStatus, container) {
+		'transitionCompleted',
+		function (currentStatus, prevStatus) {
 			initPage();
 
 			switch (currentStatus.namespace) {
@@ -136,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function initPage() {
 	console.log('init page');
 
-	AddToFavoriteButtonCollection.init();
+	FavoritesButtonWithCounterCollection.init();
 	InputMaskCollection.init();
 	DialogCollection.init();
 	AccordionCollection.init();
@@ -165,7 +171,8 @@ function initReviewsPage() {
 
 window.addEventListener('load', () => {
 	console.log('load');
-	FavoritesButtonWithCounterCollection.init();
+
+	new AddToFavoriteButtonCollection();
 
 	initPage();
 
