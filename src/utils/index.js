@@ -103,3 +103,31 @@ export const copyTextToClipboard = (text) => {
 		return Promise.reject(error);
 	}
 };
+
+export const wait = (ms) => new Promise((res) => setTimeout(() => res(), ms));
+
+export function formatDateToRussian(dateString) {
+	const date = new Date(
+		dateString.replace(
+			/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/,
+			'$1/$2/$3 $4:$5'
+		)
+	);
+
+	const weekday = new Intl.DateTimeFormat('ru-RU', { weekday: 'long' }).format(
+		date
+	);
+	const dateFormatter = new Intl.DateTimeFormat('ru-RU', {
+		day: 'numeric',
+		month: 'long',
+	});
+	const timeFormatter = new Intl.DateTimeFormat('ru-RU', {
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+
+	const formattedDate = dateFormatter.format(date);
+	const formattedTime = timeFormatter.format(date);
+
+	return `${formattedDate}, ${weekday}, в ${formattedTime}`;
+}

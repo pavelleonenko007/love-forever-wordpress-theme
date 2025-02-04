@@ -24,42 +24,60 @@ add_action( 'wp_ajax_nopriv_create_new_fitting_record', 'loveforever_create_new_
 function loveforever_create_new_fitting_record_via_ajax() {
 	if ( ! isset( $_POST['submit_fitting_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['submit_fitting_form_nonce'] ) ), 'submit_fitting_form' ) ) {
 		wp_send_json_error(
-			array( 'message' => 'Ошибка в запросе' ),
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Невалидный nonce',
+			),
 			400
 		);
 	}
 
 	if ( ! isset( $_POST['name'] ) || empty( $_POST['name'] ) ) {
 		wp_send_json_error(
-			array( 'message' => 'Пожалуйста, введите ваше имя' ),
+			array(
+				'message' => 'Пожалуйста, введите ваше имя',
+				'debug'   => 'Поле имя не заполнено',
+			),
 			400
 		);
 	}
 
 	if ( ! isset( $_POST['phone'] ) || empty( $_POST['name'] ) || ! loveforever_is_valid_phone( $_POST['phone'] ) ) {
 		wp_send_json_error(
-			array( 'message' => 'Пожалуйста, введите корректный номер телефона' ),
+			array(
+				'message' => 'Пожалуйста, введите корректный номер телефона',
+				'debug'   => 'Некорректный номер телефона',
+			),
 			400
 		);
 	}
 
 	if ( ! isset( $_POST['dress_category'] ) || empty( $_POST['dress_category'] ) ) {
 		wp_send_json_error(
-			array( 'message' => 'Пожалуйста, укажите тип платья' ),
+			array(
+				'message' => 'Пожалуйста, укажите тип платья',
+				'debug'   => 'Не указана категория платья',
+			),
 			400
 		);
 	}
 
 	if ( ! isset( $_POST['date'] ) || empty( $_POST['date'] ) ) {
 		wp_send_json_error(
-			array( 'message' => 'Пожалуйста, укажите дату' ),
+			array(
+				'message' => 'Пожалуйста, укажите желаемую дату примерки',
+				'debug'   => 'Не указана желаемая дата примерки',
+			),
 			400
 		);
 	}
 
 	if ( ! isset( $_POST['time'] ) || empty( $_POST['time'] ) ) {
 		wp_send_json_error(
-			array( 'message' => 'Пожалуйста, укажите время' ),
+			array(
+				'message' => 'Пожалуйста, укажите время',
+				'debug'   => 'Не указано желаемое время примерки',
+			),
 			400
 		);
 	}
@@ -77,7 +95,10 @@ function loveforever_create_new_fitting_record_via_ajax() {
 
 	if ( true !== $is_valid_fitting_time ) {
 		wp_send_json_error(
-			array( 'message' => $is_valid_fitting_time ),
+			array(
+				'message' => $is_valid_fitting_time,
+				'debug'   => 'Невалидное время примерки',
+			),
 			400
 		);
 	}
@@ -96,6 +117,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		wp_send_json_error(
 			array(
 				'message' => 'Ошибка при создании заявки. Обновите страницу и попробуйте еще раз',
+				'debug'   => $fitting_post_id,
 			),
 			400
 		);
@@ -182,6 +204,40 @@ function loveforever_get_date_time_slots_via_ajax() {
 			'html'    => $html,
 		),
 		200
+	);
+}
+
+add_action( 'wp_ajax_get_fitting_time_slots', 'loveforever_get_date_fitting_time_slots_via_ajax' );
+add_action( 'wp_ajax_nopriv_get_fitting_time_slots', 'loveforever_get_date_fitting_time_slots_via_ajax' );
+function loveforever_get_date_fitting_time_slots_via_ajax() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка запроса!',
+				'debug'   => 'Некорректный nonce',
+			),
+			400
+		);
+	}
+
+	if ( empty( $_POST['date'] ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Укажите желаемую дату примерки',
+				'debug'   => 'Не указана дата примерки',
+			),
+			400
+		);
+	}
+
+	$date                   = sanitize_text_field( wp_unslash( $_POST['date'] ) );
+	$fitting_slots_for_date = Fitting_Slots::get_day_slots( $date, current_time( 'timestamp' ) );
+
+	wp_send_json_success(
+		array(
+			'slots'   => $fitting_slots_for_date,
+			'message' => "Слоты для $date успешно загружены",
+		)
 	);
 }
 

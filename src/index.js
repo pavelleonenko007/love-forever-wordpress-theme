@@ -3,6 +3,7 @@ import Barba from 'barba.js';
 import { AccordionCollection } from './Accordion';
 import AddToFavoriteButtonCollection from './AddToFavoriteButton';
 import CopyToClipboardButtonCollection from './CopyToClipboardButton';
+import CustomSelectCollection from './CustomSelect';
 import DialogCollection from './Dialog';
 import FavoritesButtonWithCounterCollection from './FavoritesButtonWithCounter';
 import FileInputCollection from './FileInput';
@@ -108,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		ReviewFormCollection.destroyAll();
 		FileInputCollection.destroyAll();
 		VideoPlayerCollection.destroyAll();
+		CustomSelectCollection.destroyAll();
 	});
 
 	Barba.Dispatcher.on(
@@ -148,6 +150,7 @@ function initPage() {
 	AccordionCollection.init();
 	CopyToClipboardButtonCollection.init();
 	VideoPlayerCollection.init();
+	CustomSelectCollection.init();
 }
 
 function initCatalogPage() {
@@ -169,7 +172,7 @@ function initReviewsPage() {
 	FileInputCollection.init();
 }
 
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
 	console.log('load');
 
 	new AddToFavoriteButtonCollection();

@@ -35,6 +35,10 @@ class Dialog {
 	}
 
 	open() {
+		if (this.dialog.classList.contains(this.stateSelectors.isOpen)) {
+			return;
+		}
+		
 		this.dialog.classList.add(this.stateSelectors.isOpen);
 		document.documentElement.classList.add(this.stateSelectors.isLocked);
 
@@ -51,6 +55,10 @@ class Dialog {
 	}
 
 	close() {
+		if (!this.dialog.classList.contains(this.stateSelectors.isOpen)) {
+			return;
+		}
+
 		this.dialog.classList.remove(this.stateSelectors.isOpen);
 		document.documentElement.classList.remove(this.stateSelectors.isLocked);
 

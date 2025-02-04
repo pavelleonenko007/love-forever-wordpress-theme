@@ -28,6 +28,8 @@ $brand               = ! empty( get_the_terms( get_the_ID(), 'brand' ) ) && ! is
 $tags                = get_the_terms( get_the_ID(), 'dress_tag' );
 $dress_category      = get_the_terms( get_the_ID(), 'dress_category' );
 $related_products    = get_field( 'related_products' );
+
+$date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date();
 ?>
 				<section class="section">
 					<div class="container container-fw n-top">
@@ -126,22 +128,73 @@ $related_products    = get_field( 'related_products' );
 									</div>
 									<div class="p-16-20 odesc w-richtext"><?php the_content(); ?></div>
 									<div class="vert form-keepre">
-										<div class="p-12-12 uper m-12-12">Запись на примерку</div>
-										<button class="btn in-single-btn zapis w-inline-block" data-js-dialog-open-button="fittingDialog">
-											<div>Выбрать дату и время</div>
-										</button>
-										<div class="form-block w-form">
-											<form id="email-form" name="email-form" data-name="Email Form" method="get" class="form" data-wf-page-id="67239bd83c4331a3450cc872" data-wf-element-id="919e8683-0ddb-4c9b-4c3b-9ef17e8ca1d0"><a href="#" class="select w-inline-block"></a>
-												<input class="w-input" maxlength="256" name="email-2" data-name="Email 2" placeholder type="email" id="email-2" required>
-												<input type="submit" data-wait="Please wait..." class="w-button" value="Submit">
-											</form>
-											<div class="w-form-done">
-												<div>Thank you! Your submission has been received!</div>
-											</div>
-											<div class="w-form-fail">
-												<div>Oops! Something went wrong while submitting the form.</div>
-											</div>
-										</div>
+										<form id="singleDressForm" class="single-dress-form" data-js-fitting-form>
+											<fieldset class="single-dress-form__fieldset">
+												<legend class="single-dress-form__legend">Запись на примерку</legend>
+												<div class="single-dress-form__inner">
+													<div class="field">
+														<input 
+															type="date" 
+															name="date" 
+															value="<?php echo esc_attr( $date_with_nearest_available_slots ); ?>"
+															min="<?php echo esc_attr( $date_with_nearest_available_slots ); ?>"
+															id="singleDressFormDateField" 
+															class="field__control"
+														>
+													</div>
+												<?php
+												/*
+												$dates      = array();
+												$first_date = new DateTime( $date_with_nearest_available_slots );
+
+												for ( $i = 0; $i < 6; $i++ ) {
+														$date = clone $first_date;
+														$date->modify( "+$i days" );
+														$dates[ $date->format( 'Y-m-d' ) ] = $date->format( 'd M' );
+												}
+												?>
+													<select name="date" id="singleDressFormDateField" data-js-custom-select>
+														<?php
+														$dates_counter = 0;
+														foreach ( $dates as $date_value => $date_name ) :
+															?>
+															<option value="<?php echo esc_attr( $date_value ); ?>"><?php echo esc_html( $date_name ); ?></option>
+															<?php
+															++$dates_counter;
+														endforeach;
+														?>
+													</select>
+													<?php
+													*/
+													$slots = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
+												?>
+													<div class="single-dress-form__field-wrapper">
+														<select name="time" id="singleDressFormTimeField" data-js-custom-select>
+															<?php foreach ( $slots as $time => $slot_data ) : ?>
+																<option 
+																	value="<?php echo esc_attr( $time ); ?>" 
+																	<?php echo 0 === $slot_data['available'] ? 'disabled' : ''; ?>
+																>
+																	<?php echo esc_html( $time ); ?>
+																</option>
+															<?php endforeach; ?>
+														</select>
+													</div>
+													<button 
+														type="button" 
+														class="fitting-form__button button" data-js-fitting-form-dialog-button data-js-dialog-open-button="singleProductFittingDialog"
+													>
+														Записаться
+													</button>
+												</div>
+												<?php
+												$dress_category = get_the_terms( get_the_ID(), 'dress_category' );
+												if ( ! empty( $dress_category ) ) :
+													?>
+													<input type="hidden" name="dress_category" value="<?php echo esc_attr( $dress_category[0]->term_id ); ?>">		
+												<?php endif; ?>							
+											</fieldset>
+										</form>
 									</div>
 									<p class="p-16-20 odescr">Примерить и купить платье можно в нашем салоне:г. Санкт-Петербург, Вознесенский проспект 18 (м. Садовая) ежедневно с 10 до 22:00 по предварительной записи<br>‍</p>
 									<div class="p-16-20 n-top single-p">Для доставки в регионы <a href="#" class="btn-call-reqest">закажите обратный звонок</a></div>
@@ -257,17 +310,104 @@ $related_products    = get_field( 'related_products' );
 				<?php endif; ?>
 				<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
-				<div id="fittingDialog" role="dialog" class="dialog" data-js-dialog>
+				<div id="singleProductFittingDialog" role="dialog" class="dialog" data-js-dialog>
 					<div class="dialog__overlay" data-js-dialog-overlay>
 						<div class="dialog__content" data-js-dialog-content>
 							<div class="dialog-card">
 								<div class="dialog-card__header">
 									<h3 class="dialog-card__title italic ff-tt-norms-pro" data-js-dialog-title>Запись на примерку</h3>
-									<p class="dialog-card__subtitle">м. Садовая, Вознесенский пр-кт, 18</p>
-									<a href="#" class="dialog-card__link menu-link active">Маршрут от метро</a>
+									<?php if ( ! empty( ADDRESS ) ) : ?>
+										<p class="dialog-card__subtitle"><?php echo esc_html( ADDRESS ); ?></p>
+									<?php endif; ?>
+									<?php if ( ! empty( MAP_LINK ) ) : ?>
+										<a href="<?php echo esc_url( MAP_LINK['url'] ); ?>" class="dialog-card__link menu-link active">Маршрут от метро</a>
+									<?php endif; ?>
 								</div>
 								<div class="dialog-card__body">
-									<form id="singleDressFittingForm" class="fitting-form" data-js-fitting-form>
+									<div class="fitting-form" data-js-fitting-form-wrapper="singleDressForm">
+										<fieldset class="fitting-form__step" form="singleDressForm">
+											<fieldset class="fitting-form__group" form="singleDressForm">
+												<div class="fitting-form__group-header">
+													<p class="fitting-form__group-heading" data-js-fitting-form-selected-date></p>
+												</div>
+												<div class="fitting-form__group-body">
+													<div class="field">
+														<input 
+															type="text" 
+															class="field__control" 
+															name="name" 
+															placeholder="Имя" 
+															id="singleDressFormNameField"
+															form="singleDressForm"
+														>
+													</div>
+													<div class="field">
+														<input 
+															id="singleDressFittingFormPhoneField"
+															type="text" 
+															class="field__control" 
+															name="phone" 
+															placeholder="Телефон" 
+															id="singleDressFormPhoneField" 
+															data-js-input-mask="+{7} (000) 000-00-00"
+															form="singleDressForm"
+														>
+													</div>
+													<input 
+														type="hidden" 
+														name="target_dress" 
+														value="<?php echo esc_attr( get_the_ID() ); ?>"
+														form="singleDressForm"
+													>
+													<?php if ( ! empty( $_COOKIE['favorites'] ) ) : ?>
+														<input 
+															type="hidden" 
+															name="client_favorite_dresses" 
+															value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_COOKIE['favorites'] ) ) ); ?>"
+															form="singleDressForm"
+														>
+													<?php endif; ?>
+													<button type="submit" form="singleDressForm" class="button" data-js-fitting-form-submit-button>Записаться</button>
+												</div>
+												<div class="fitting-form__group-footer">
+													<p>Нажимая записаться вы соглашаетесь с <a class="menu-link" href="<?php echo esc_url( PRIVACY_POLICY_LINK ); ?>">политикой конфиденциальности</a></p>
+												</div>
+											</fieldset>
+										</fieldset>
+										<div class="fitting-form__errors" data-js-fitting-form-errors hidden></div>
+										<input type="hidden" name="submit_fitting_form_nonce" value="<?php echo esc_attr( wp_create_nonce( 'submit_fitting_form' ) ); ?>" form="singleDressForm">
+									</div>
+									<button type="dialog-card__body-button button" class="button" disabled hidden data-js-dialog-close-button>Хорошо</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<button type="button" class="dialog__close" data-js-dialog-close-button>
+						<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<mask id="mask0_451_2489" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+								<rect width="18" height="18" fill="#D9D9D9"/>
+							</mask>
+							<g mask="url(#mask0_451_2489)">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M8.84924 8.14201L1.77818 1.07095L1.07107 1.77805L8.14214 8.84912L1.07107 15.9202L1.77817 16.6273L8.84924 9.55623L15.9203 16.6273L16.6274 15.9202L9.55635 8.84912L16.6274 1.77805L15.9203 1.07095L8.84924 8.14201Z" fill="black"/>
+							</g>
+						</svg>
+					</button>
+				</div>
+				<div id="globalFittingDialog" role="dialog" class="dialog" data-js-dialog>
+					<div class="dialog__overlay" data-js-dialog-overlay>
+						<div class="dialog__content" data-js-dialog-content>
+							<div class="dialog-card">
+								<div class="dialog-card__header">
+									<h3 class="dialog-card__title italic ff-tt-norms-pro" data-js-dialog-title>Запись на примерку</h3>
+									<?php if ( ! empty( ADDRESS ) ) : ?>
+										<p class="dialog-card__subtitle"><?php echo esc_html( ADDRESS ); ?></p>
+									<?php endif; ?>
+									<?php if ( ! empty( MAP_LINK ) ) : ?>
+										<a href="<?php echo esc_url( MAP_LINK['url'] ); ?>" class="dialog-card__link menu-link active">Маршрут от метро</a>
+									<?php endif; ?>
+								</div>
+								<div class="dialog-card__body">
+									<form id="globalDressFittingForm" class="fitting-form" data-js-fitting-form>
 										<button type="button" class="fitting-form__back" data-js-fitting-form-back-button disabled>
 											<svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<path fill-rule="evenodd" clip-rule="evenodd" d="M0.707107 7.14201L0.00075584 7.84914L0.707862 8.55621L7.77817 15.6273L8.48528 14.9202L1.41421 7.84912L8.48528 0.778053L7.77818 0.070946L0.707107 7.14201Z" fill="black"/>
@@ -330,8 +470,8 @@ $related_products    = get_field( 'related_products' );
 												?>
 												<div class="fitting-form__columns" data-js-fitting-form-slots-container>
 													<?php
-													/*
-													foreach ( $slots_range as $slots_range_date => $slots ) : ?>
+													foreach ( $slots_range as $slots_range_date => $slots ) :
+														?>
 														<div class="fitting-form__day-column">
 															<div class="fitting-form__day-column-head">
 																<label class="fitting-form__day-input radio">
@@ -358,7 +498,8 @@ $related_products    = get_field( 'related_products' );
 																<?php endforeach; ?>
 															</ol>
 														</div>
-													<?php endforeach; */
+														<?php
+													endforeach;
 													?>
 												</div>
 												<input type="hidden" name="date" value="<?php echo esc_attr( gmdate( 'd.m' ) ); ?>" data-js-fitting-form-date-control>
@@ -367,20 +508,25 @@ $related_products    = get_field( 'related_products' );
 										<fieldset class="fitting-form__step" data-js-fitting-form-step hidden>
 											<fieldset class="fitting-form__group">
 												<div class="fitting-form__group-header">
-													<p class="fitting-form__group-heading">2 октября в среду в 14:00</p>
+													<p class="fitting-form__group-heading" data-js-fitting-form-selected-date></p>
 												</div>
 												<div class="fitting-form__group-body">
 													<div class="field">
-														<input type="text" class="field__control" name="name" placeholder="Имя" id="fittingFormNameField">
+														<input 
+															type="text" 
+															class="field__control" 
+															name="name" 
+															placeholder="Имя" 
+															id="globalDressFittingFormNameField"
+														>
 													</div>
 													<div class="field">
 														<input 
-															id="singleDressFittingFormPhoneField"
+															id="globalDressFittingFormPhoneField"
 															type="text" 
 															class="field__control" 
 															name="phone" 
 															placeholder="Телефон" 
-															id="fittingFormPhoneField" 
 															data-js-input-mask="+{7} (000) 000-00-00">
 													</div>
 													<input type="hidden" name="target_dress" value="<?php echo esc_attr( get_the_ID() ); ?>">
@@ -390,7 +536,7 @@ $related_products    = get_field( 'related_products' );
 													<button type="submit" class="button" data-js-fitting-form-submit-button>Записаться</button>
 												</div>
 												<div class="fitting-form__group-footer">
-													<p>Нажимая записаться вы соглашаетесь с <a href="#">политикой конфиденциальности</a></p>
+													<p>Нажимая записаться вы соглашаетесь с <a class="menu-link" href="#">политикой конфиденциальности</a></p>
 												</div>
 											</fieldset>
 										</fieldset>

@@ -1,0 +1,17 @@
+.single-dress-form {
+	width: 100%;
+
+	&__inner {
+		display: grid;
+		gap: 10rem;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	&__legend {
+		margin-bottom: 20rem;
+		font-size: 12rem;
+		line-height: 1;
+		font-weight: 500;
+		text-transform: uppercase;
+	}
+}

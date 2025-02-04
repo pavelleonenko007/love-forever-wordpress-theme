@@ -23,6 +23,37 @@ class Fitting_Slots {
 		return $slots;
 	}
 
+	public static function get_nearest_available_date( $max_days_ahead = 60 ) {
+		$current_time = current_time( 'timestamp' );
+		$start_date   = date( 'Y-m-d', $current_time );
+		$current_date = new DateTime( $start_date );
+		$end_date     = ( new DateTime( $start_date ) )->modify( "+{$max_days_ahead} days" );
+
+		while ( $current_date <= $end_date ) {
+			$date      = $current_date->format( 'Y-m-d' );
+			$day_slots = self::get_day_slots( $date, $current_time );
+
+			// Check if there are any available slots for this day
+			foreach ( $day_slots as $time => $slot ) {
+				if ( $slot['available'] > 0 && ! $slot['is_booked'] ) {
+					// Check if the slot is not in the past for today
+					if ( $date === $start_date ) {
+						$slot_time = strtotime( $date . ' ' . $time );
+						if ( $slot_time > $current_time ) {
+							return $date;
+						}
+					} else {
+						return $date;
+					}
+				}
+			}
+
+			$current_date->modify( '+1 day' );
+		}
+
+		return null;
+	}
+
 	public static function get_day_slots( $date, $current_time = null ) {
 		$available_slots = self::get_available_slots( $date );
 		$all_slots       = self::generate_all_slots( $date );
@@ -119,7 +150,7 @@ class Fitting_Slots {
 			),
 		);
 
-		$query = new WP_Query( $args );
+		$query    = new WP_Query( $args );
 		$bookings = array();
 
 		if ( $query->have_posts() ) {

@@ -1,4 +1,7 @@
 .field {
+	--text-color: #000;
+	--bg-color: transparent;
+
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -12,6 +15,7 @@
 		border: 1rem solid rgba(0, 0, 0, 0.1);
 		border-radius: 100rem;
 		text-transform: uppercase;
+		background-color: var(--bg-color);
 
 		&:is(textarea) {
 			padding-block: 20rem;

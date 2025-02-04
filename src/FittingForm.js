@@ -1,6 +1,68 @@
+import BaseComponent from './BaseComponent';
+import { formatDateToRussian } from './utils';
+
 const ROOT_SELECTOR = '[data-js-fitting-form]';
 
-class FittingForm {
+class BaseFittingForm extends BaseComponent {
+	/**
+	 *
+	 * @param {HTMLFormElement} form
+	 */
+	constructor(form) {
+		super();
+		this.form = form;
+		this.state = this._getProxyState({
+			success: false,
+			error: null,
+			isSubmitting: false,
+			name: this.form.elements.name.value,
+			phone: this.form.elements.phone.value,
+			date: this.form.elements.date.value,
+			time: this.form.elements.time.value,
+		});
+	}
+
+	// Shared methods
+	/**
+	 *
+	 * @param {SubmitEvent} event
+	 */
+	async submitForm(event) {
+		event.preventDefault();
+
+		if (this.state.isSubmitting) return;
+
+		this.state.isSubmitting = true;
+		this.state.error = null;
+
+		try {
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: new FormData(this.form),
+			});
+			const body = await response.json();
+
+			// console.log(body);
+
+			if (!data.success) {
+				throw new Error(data.message);
+			}
+
+			this.state.success = true;
+			this.state.dialogMessage = data.message;
+		} catch (error) {
+			this.state.error = error.message;
+		} finally {
+			this.state.isSubmitting = false;
+		}
+	}
+
+	destroy() {
+		this.form.removeEventListener('submit', this.submitForm);
+	}
+}
+
+class GlobalFittingForm extends BaseFittingForm {
 	selectors = {
 		step: '[data-js-fitting-form-step]',
 		dateInput: '[data-js-fitting-form-date-control]',
@@ -13,85 +75,63 @@ class FittingForm {
 		slotsContainer: '[data-js-fitting-form-slots-container]',
 		nextSlotsButton: '[data-js-fitting-form-next-slots-button]',
 		prevSlotsButton: '[data-js-fitting-form-prev-slots-button]',
+		dialogSelectedTime: '[data-js-fitting-form-selected-date]',
 	};
 
 	stateSelectors = {
 		isLoading: 'is-loading',
 	};
 
-	constructor(fittingForm, initialState = {}) {
-		console.log('FittingForm');
+	constructor(form) {
+		super(form);
 
-		this.fittingForm = fittingForm;
-		this.steps = this.fittingForm.querySelectorAll(this.selectors.step);
-		this.backButton = this.fittingForm.querySelector(this.selectors.backButton);
-		this.nextButton = this.fittingForm.querySelector(this.selectors.nextButton);
-		this.slotsContainer = this.fittingForm.querySelector(
+		this.steps = this.form.querySelectorAll(this.selectors.step);
+		this.backButton = this.form.querySelector(this.selectors.backButton);
+		this.nextButton = this.form.querySelector(this.selectors.nextButton);
+		this.slotsContainer = this.form.querySelector(
 			this.selectors.slotsContainer
 		);
-		this.prevSlotsButton = this.fittingForm.querySelector(
+		this.prevSlotsButton = this.form.querySelector(
 			this.selectors.prevSlotsButton
 		);
-		this.nextSlotsButton = this.fittingForm.querySelector(
+		this.nextSlotsButton = this.form.querySelector(
 			this.selectors.nextSlotsButton
 		);
-		this.submitButton = this.fittingForm.querySelector(
-			this.selectors.submitButton
-		);
-		this.errorsElement = this.fittingForm.querySelector(
-			this.selectors.errorsElement
-		);
-		this.closestDialog = this.fittingForm.closest(this.selectors.closestDialog);
+		this.submitButton = this.form.querySelector(this.selectors.submitButton);
+		this.errorsElement = this.form.querySelector(this.selectors.errorsElement);
+		this.closestDialog = this.form.closest(this.selectors.closestDialog);
 		this.dialogTitle = this.closestDialog?.querySelector(
 			this.selectors.dialogTitle
 		);
+		this.dialogSelectedTime = this.closestDialog.querySelector(
+			this.selectors.dialogSelectedTime
+		);
 
 		this.state = this._getProxyState({
+			...this.state,
 			dateIncrementRatio: 0,
 			dialogMessage: 'Запись на примерку',
-			success: false,
-			error: null,
 			step: 0,
 			dress_category: null,
-			date: null,
-			time: null,
-			name: '',
-			phone: '',
 			isUpdatingSlots: false,
 			isSubmitting: false,
-			...initialState,
 		});
 
 		this.prevState = { ...this.state };
 
 		this.changeFormHandler = this.changeFormHandler.bind(this);
-		this.submitFormHandler = this.submitFormHandler.bind(this);
+		this.submitForm = this.submitForm.bind(this);
 		this.closeDialogHandler = this.closeDialogHandler.bind(this);
 		this.openDialogHandler = this.openDialogHandler.bind(this);
 		this.prevStep = this.prevStep.bind(this);
 		this.prevDates = this.prevDates.bind(this);
 		this.nextDates = this.nextDates.bind(this);
 
+		this.dialogSelectedTime.textContent = formatDateToRussian(
+			`${this.state.date} ${this.state.time}`
+		);
+
 		this.bindEvents();
-	}
-
-	_getProxyState(initialState) {
-		return new Proxy(initialState, {
-			get: (target, prop) => {
-				return target[prop];
-			},
-			set: (target, prop, newValue) => {
-				const currentValue = target[prop];
-
-				target[prop] = newValue;
-
-				if (currentValue !== newValue) {
-					this.updateUI();
-				}
-
-				return true;
-			},
-		});
 	}
 
 	_normalizeStep(stepNumber) {
@@ -114,17 +154,21 @@ class FittingForm {
 		return number;
 	}
 
+	/**
+	 *
+	 * @param {ChangeEvent} event
+	 */
 	changeFormHandler(event) {
 		this.state.error = null;
 
 		const { target } = event;
 
 		if (target.dataset?.jsFittingFormDateValue) {
-			this.fittingForm.querySelector(this.selectors.dateInput).value =
+			this.form.querySelector(this.selectors.dateInput).value =
 				target.dataset.jsFittingFormDateValue;
 		}
 
-		const formState = Object.fromEntries(new FormData(this.fittingForm));
+		const formState = Object.fromEntries(new FormData(this.form));
 
 		for (const key in formState) {
 			if (Object.prototype.hasOwnProperty.call(formState, key)) {
@@ -134,7 +178,7 @@ class FittingForm {
 		}
 	}
 
-	getDateTimeSlots(dateIncrementRatio) {
+	getDateTimeSlots() {
 		if (this.state.isUpdatingSlots) {
 			return;
 		}
@@ -145,7 +189,7 @@ class FittingForm {
 
 		formData.append('action', 'get_date_time_slots');
 		formData.append('nonce', LOVE_FOREVER.NONCE);
-		formData.append('date-increment-ratio', dateIncrementRatio);
+		formData.append('date-increment-ratio', this.state.dateIncrementRatio);
 
 		fetch(LOVE_FOREVER.AJAX_URL, {
 			method: 'POST',
@@ -178,7 +222,7 @@ class FittingForm {
 		);
 	}
 
-	submitFormHandler(event) {
+	async submitForm(event) {
 		event.preventDefault();
 
 		if (this.state.isSubmitting) {
@@ -188,31 +232,34 @@ class FittingForm {
 		this.state.isSubmitting = true;
 		this.state.error = null;
 
-		const formData = new FormData(this.fittingForm);
+		try {
+			const formData = new FormData(this.form);
+			formData.append('action', 'create_new_fitting_record');
 
-		formData.append('action', 'create_new_fitting_record');
-
-		fetch(LOVE_FOREVER.AJAX_URL, {
-			method: 'POST',
-			body: formData,
-		})
-			.then((response) => response.json())
-			.then(({ success, data }) => {
-				this.state.success = success;
-
-				if (!success) {
-					throw new Error(data.message);
-				}
-
-				this.state.dialogMessage = data.message;
-				this.state.dateIncrementRatio = 1;
-			})
-			.catch((error) => {
-				this.state.error = error.message;
-			})
-			.finally(() => {
-				this.state.isSubmitting = false;
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
 			});
+
+			const body = await response.json();
+
+			// console.log(body);
+
+			this.state.success = body.success;
+
+			if (!body.success) {
+				console.error(body.data.debug);
+				throw new Error(body.data.message);
+			}
+
+			this.state.dialogMessage = body.data.message;
+			this.state.dateIncrementRatio = 1;
+		} catch (error) {
+			console.error(error);
+			this.state.error = error.message;
+		} finally {
+			this.state.isSubmitting = false;
+		}
 	}
 
 	closeDialogHandler(event) {
@@ -223,17 +270,17 @@ class FittingForm {
 
 	openDialogHandler(event) {
 		if (event.detail.dialogId === this.closestDialog?.id) {
-			this.getDateTimeSlots(this.state.dateIncrementRatio);
+			this.getDateTimeSlots();
 		}
 	}
 
 	reset() {
-		this.fittingForm.reset();
-		this.fittingForm.dispatchEvent(new Event('change'));
+		this.form.reset();
 		this.state.success = false;
 		this.state.dialogMessage = 'Запись на примерку';
 		this.state.step = 0;
 		this.state.dateIncrementRatio = 0;
+		this.form.dispatchEvent(new Event('change'));
 	}
 
 	openStep(stepNumber) {
@@ -278,7 +325,15 @@ class FittingForm {
 		}
 
 		if (this.prevState.dateIncrementRatio !== this.state.dateIncrementRatio) {
-			this.getDateTimeSlots(this.state.dateIncrementRatio);
+			this.getDateTimeSlots();
+		}
+
+		if (this.state.date && this.state.time) {
+			this.dialogSelectedTime.textContent = formatDateToRussian(
+				`${this.state.date} ${this.state.time}`
+			);
+		} else {
+			this.dialogSelectedTime.textContent = '';
 		}
 
 		this.errorsElement.innerHTML = `<p>${this.state.error}</p>`;
@@ -290,19 +345,19 @@ class FittingForm {
 			this.dialogTitle.textContent = this.state.dialogMessage;
 		}
 
-		this.fittingForm.hidden = this.state.success;
+		this.form.hidden = this.state.success;
 
 		if (this.closestDialog) {
-			this.fittingForm.nextElementSibling.hidden = !this.state.success;
-			this.fittingForm.nextElementSibling.disabled = !this.state.success;
+			this.form.nextElementSibling.hidden = !this.state.success;
+			this.form.nextElementSibling.disabled = !this.state.success;
 		}
 
 		this.prevState = { ...this.state };
 	}
 
 	bindEvents() {
-		this.fittingForm.addEventListener('change', this.changeFormHandler);
-		this.fittingForm.addEventListener('submit', this.submitFormHandler);
+		this.form.addEventListener('change', this.changeFormHandler);
+		this.form.addEventListener('submit', this.submitForm);
 		this.backButton.addEventListener('click', this.prevStep);
 		this.prevSlotsButton.addEventListener('click', this.prevDates);
 		this.nextSlotsButton.addEventListener('click', this.nextDates);
@@ -311,8 +366,8 @@ class FittingForm {
 	}
 
 	destroy() {
-		this.fittingForm.removeEventListener('change', this.changeFormHandler);
-		this.fittingForm.removeEventListener('submit', this.submitFormHandler);
+		this.form.removeEventListener('change', this.changeFormHandler);
+		this.form.removeEventListener('submit', this.submitForm);
 		this.backButton.removeEventListener('click', this.prevStep);
 		this.prevSlotsButton.removeEventListener('click', this.prevDates);
 		this.nextSlotsButton.removeEventListener('click', this.nextDates);
@@ -321,29 +376,290 @@ class FittingForm {
 	}
 }
 
+class SingleFittingForm extends BaseFittingForm {
+	selectors = {
+		openDialogButton: '[data-js-fitting-form-dialog-button]',
+		errorsElement: '[data-js-fitting-form-errors]',
+		closestDialog: '[data-js-dialog]',
+		dialogTitle: '[data-js-dialog-title]',
+		dialogFormWrapper: '[data-js-fitting-form-wrapper]',
+		dialogSelectedTime: '[data-js-fitting-form-selected-date]',
+	};
+
+	stateSelectors = {
+		isLoading: 'is-loading',
+	};
+
+	constructor(form) {
+		super(form);
+		this.timeControlWrapper = this.form.elements.time.parentElement;
+		this.openDialogButton = this.form.querySelector(
+			this.selectors.openDialogButton
+		);
+		this.dialog = document.getElementById(
+			this.openDialogButton.dataset.jsDialogOpenButton
+		);
+		this.dialogTitle = this.dialog.querySelector(this.selectors.dialogTitle);
+		this.errorsElement = this.dialog.querySelector(
+			this.selectors.errorsElement
+		);
+		this.dialogSelectedTime = this.dialog.querySelector(
+			this.selectors.dialogSelectedTime
+		);
+		this.submitButton = this.dialog.querySelector(
+			`button[type="submit"][form="${this.form.id}"]`
+		);
+		this.dialogFormWrapper = this.dialog.querySelector(
+			this.selectors.dialogFormWrapper
+		);
+		this.successCloseDialogButton = this.dialogFormWrapper.nextElementSibling;
+		this.state = this._getProxyState({
+			...this.state,
+			target_dress: this.form.elements.target_dress.value,
+			client_favorite_dresses: this.form.elements.client_favorite_dresses.value,
+			submit_fitting_form_nonce:
+				this.form.elements.submit_fitting_form_nonce.value,
+			dialogMessage: 'Запись на примерку',
+			isUpdatingSlots: false,
+		});
+
+		this.prevState = { ...this.state };
+
+		this.dialogSelectedTime.textContent = formatDateToRussian(
+			`${this.state.date} ${this.state.time}`
+		);
+
+		this.bindEvents();
+	}
+
+	reset() {
+		this.form.reset();
+		this.state.success = false;
+		this.state.dialogMessage = 'Запись на примерку';
+		this.state.step = 0;
+		this.state.dateIncrementRatio = 0;
+		this.form.dispatchEvent(new Event('change'));
+	}
+
+	/**
+	 *
+	 * @param {ChangeEvent} event
+	 */
+	onChange = (event) => {
+		this.state.error = null;
+
+		const formData = Object.fromEntries(new FormData(this.form));
+
+		for (const name in formData) {
+			if (Object.prototype.hasOwnProperty.call(formData, name)) {
+				const value = formData[name];
+				this.state[name] = value;
+			}
+		}
+	};
+
+	/**
+	 *
+	 * @param {SubmitEvent} event
+	 */
+	submitForm = async (event) => {
+		event.preventDefault();
+
+		if (this.state.isSubmitting) {
+			return;
+		}
+
+		this.state.isSubmitting = true;
+		this.state.error = null;
+
+		try {
+			const formData = new FormData(this.form);
+			formData.append('action', 'create_new_fitting_record');
+
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
+			});
+
+			const body = await response.json();
+
+			// console.log(body);
+
+			this.state.success = body.success;
+
+			if (!body.success) {
+				console.error(body.data.debug);
+				throw new Error(body.data.message);
+			}
+
+			this.state.dialogMessage = body.data.message;
+			this.state.dateIncrementRatio = 1;
+		} catch (error) {
+			console.error(error);
+			this.state.error = error.message;
+		} finally {
+			this.state.isSubmitting = false;
+		}
+	};
+
+	/**
+	 *
+	 * @param {CustomEvent} event
+	 */
+	onCloseDialog = (event) => {
+		if (event.detail.dialogId === this.dialog.id) {
+			this.reset();
+		}
+	};
+
+	async loadTimeSlots() {
+		const selectedDate = this.form.elements.date.value;
+
+		if (!selectedDate) return;
+
+		this.state.isUpdatingSlots = true;
+
+		try {
+			const formData = new FormData();
+			formData.append('action', 'get_fitting_time_slots');
+			formData.append('nonce', LOVE_FOREVER.NONCE);
+			formData.append('date', selectedDate);
+
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
+			});
+
+			const body = await response.json();
+
+			// console.log(body);
+
+			if (!body.success) {
+				console.error(body.data.debug);
+				throw new Error(body.data.message);
+			}
+
+			const timeSelectControl = this.form.elements.time;
+			let timeOptions = '';
+
+			for (const time in body.data.slots) {
+				if (Object.prototype.hasOwnProperty.call(body.data.slots, time)) {
+					const slot = body.data.slots[time];
+
+					timeOptions += `<option value="${time}" ${
+						slot.available === 0 ? 'disabled' : ''
+					}>${time}</option>`;
+				}
+			}
+
+			timeSelectControl.innerHTML = timeOptions;
+		} catch (error) {
+			console.error(error);
+			alert(error.message);
+		} finally {
+			this.state.isUpdatingSlots = false;
+		}
+	}
+
+	updateUI() {
+		this.timeControlWrapper.classList.toggle(
+			this.stateSelectors.isLoading,
+			this.state.isUpdatingSlots
+		);
+
+		if (this.state.isUpdatingSlots) {
+			$(this.form.elements.time).selectmenu('disable');
+		}
+
+		if (
+			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
+			!this.state.isUpdatingSlots
+		) {
+			$(this.form.elements.time).selectmenu('refresh');
+			$(this.form.elements.time).selectmenu('enable');
+			this.form.elements.time.dispatchEvent(
+				new Event('change', {
+					bubbles: true,
+					cancelable: true,
+				})
+			);
+		}
+
+		if (
+			this.state.date !== this.prevState.date &&
+			!this.state.isUpdatingSlots
+		) {
+			this.state.isUpdatingSlots = true;
+			this.loadTimeSlots();
+		}
+
+		if (this.state.date && this.state.time) {
+			this.dialogSelectedTime.textContent = formatDateToRussian(
+				`${this.state.date} ${this.state.time}`
+			);
+		} else {
+			this.dialogSelectedTime.textContent = '';
+		}
+
+		this.errorsElement.innerHTML = `<p>${this.state.error}</p>`;
+		this.errorsElement.hidden = !Boolean(this.state.error);
+
+		this.submitButton.disabled = this.state.isSubmitting;
+
+		if (this.dialogTitle) {
+			this.dialogTitle.textContent = this.state.dialogMessage;
+		}
+
+		this.dialogFormWrapper.hidden = this.state.success;
+		this.successCloseDialogButton.hidden = !this.state.success;
+		this.successCloseDialogButton.disabled = !this.state.success;
+
+		this.prevState = { ...this.state };
+	}
+
+	bindEvents() {
+		this.form.addEventListener('change', this.onChange);
+		this.form.addEventListener('submit', this.submitForm);
+		document.addEventListener('dialogClose', this.onCloseDialog);
+	}
+
+	destroy() {
+		this.form.removeEventListener('change', this.onChange);
+		this.form.removeEventListener('submit', this.submitForm);
+		document.removeEventListener('dialogClose', this.onCloseDialog);
+	}
+}
+
 class FittingFormCollection {
 	/**
-	 * @type {Map<string, FittingForm>}
+	 * @type {Map<string, BaseFittingForm>}
 	 */
-	static fittingForms = new Map();
+	static forms = new Map();
 
 	static getFittingFormById(id) {
-		return this.fittingForms.get(id);
+		return this.forms.get(id);
 	}
 
 	static destroyAll() {
-		this.fittingForms.forEach((fittingForm, id) => {
+		this.forms.forEach((fittingForm, id) => {
 			fittingForm.destroy();
-			this.fittingForms.delete(id);
 		});
+		this.forms.clear();
 	}
 
 	static init() {
 		document.querySelectorAll(ROOT_SELECTOR).forEach((fittingForm) => {
-			const formInstance = new FittingForm(fittingForm);
-			this.fittingForms.set(fittingForm.id, formInstance);
+			let fittingFormInstance = null;
+
+			if (fittingForm.id === 'singleDressForm') {
+				fittingFormInstance = new SingleFittingForm(fittingForm);
+			} else {
+				fittingFormInstance = new GlobalFittingForm(fittingForm);
+			}
+
+			this.forms.set(fittingForm.id, fittingFormInstance);
 		});
 	}
 }
 
-export { FittingForm, FittingFormCollection };
+export { FittingFormCollection };
