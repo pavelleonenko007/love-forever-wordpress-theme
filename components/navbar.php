@@ -710,6 +710,7 @@ $favorites     = loveforever_get_favorites();
 				</div>
 			</div>
 			<div class="spleet m-none">
+				<!-- Desktop Left menu start -->
 				<div class="menu-line p-12-12 white uper n-voreder">
 					<div class="menu-link-keeper">
 						<a href="#" class="n-menu w-nav-link">Свадебные</a>
@@ -1059,11 +1060,19 @@ $favorites     = loveforever_get_favorites();
 							<div id="w-node-_144563be-6001-1af8-6446-1240953da9da-be61d3ef" class="hovered-menue_close-menu"></div>
 						</div>
 					</div>
-					<a href="#" class="n-menu w-nav-link">выпускные</a><a href="#" class="n-menu w-nav-link">аксессуары</a><a href="#" class="n-menu w-nav-link">распродажа</a>
+					<a href="#" class="n-menu w-nav-link">выпускные</a>
+					<a href="#" class="n-menu w-nav-link">аксессуары</a>
+					<a href="#" class="n-menu w-nav-link">распродажа</a>
 				</div>
+				<!-- Desktop Left menu end -->
 				<div class="l-spacer"></div>
+				<!-- Desktop rigth menu start -->
 				<div class="menu-line p-12-12 white uper rev n-voreder">
-					<a href="/atele" class="n-menu w-nav-link">Ателье</a><a href="/blog" class="n-menu w-nav-link">блог</a><a href="/faq" class="n-menu w-nav-link">вопрос-ответ</a><a href="/otzivs" class="n-menu w-nav-link">отзывы</a><a href="/contacts" aria-current="page" class="n-menu w-nav-link w--current">контакты</a>
+					<a href="/atele" class="n-menu w-nav-link">Ателье</a>
+					<a href="/blog" class="n-menu w-nav-link">блог</a>
+					<a href="/faq" class="n-menu w-nav-link">вопрос-ответ</a>
+					<a href="/otzivs" class="n-menu w-nav-link">отзывы</a>
+					<a href="/contacts" aria-current="page" class="n-menu w-nav-link w--current">контакты</a>
 					<div class="div-block-5">
 						<div class="menu-link-keeper">
 							<a href="#" class="serach-btn w-inline-block">
@@ -1331,6 +1340,7 @@ $favorites     = loveforever_get_favorites();
 						</a>
 					</div>
 				</div>
+				<!-- Desktop rigth menu end -->
 			</div>
 			<div class="spleet m-none">
 				<div class="menu-line p-12-12 white uper">
@@ -1339,10 +1349,12 @@ $favorites     = loveforever_get_favorites();
 				</div>
 				<div class="l-spacer"></div>
 				<div class="menu-line p-12-12 white uper rev">
-					<div class="horiz">
-						<div>8 812 425 22 75</div>
-						<a href="#" class="show-all-btn">показать</a>
-					</div>
+					<?php if ( ! empty( PHONE ) ) : ?>
+						<div class="horiz">
+							<div id="headerPhoneNumber" data-js-phone-number="<?php echo esc_attr( PHONE ); ?>"><?php echo esc_html( loveforever_mask_phone( PHONE ) ); ?></div>
+							<button type="button" data-js-phone-number-button="headerPhoneNumber" class="show-all-btn phone-button">Показать</button>
+						</div>
+					<?php endif; ?>
 					<div class="head-soc-menu">
 						<a href="#" class="head-soc-link w-inline-block">
 							<div class="head-soc-link_link w-embed">

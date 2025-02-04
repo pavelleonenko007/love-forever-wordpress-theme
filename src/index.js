@@ -10,6 +10,7 @@ import FileInputCollection from './FileInput';
 import { FittingFormCollection } from './FittingForm';
 import FormsValidator from './FormValidator';
 import InputMaskCollection from './InputMask';
+import MaskedPhoneButtonCollection from './MaskedPhoneButton';
 import ProductFilterFormCollection from './ProductFilterForm';
 import RangeSliderCollection from './RangeSlider';
 import ReviewFormCollection from './ReviewForm';
@@ -17,6 +18,7 @@ import './styles/index.scss';
 import VideoPlayerCollection from './VideoPlayer';
 
 new FormsValidator();
+new MaskedPhoneButtonCollection();
 
 document.addEventListener('DOMContentLoaded', function () {
 	Barba.Pjax.start();

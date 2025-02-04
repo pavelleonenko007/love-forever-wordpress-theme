@@ -2,6 +2,7 @@
 @use 'utils' as *;
 @use 'globals' as *;
 
+@use 'components/phone-button' as *;
 @use 'components/like-button' as *;
 @use 'components/_range-slider' as *;
 @use 'components/empty-content' as *;

@@ -1,0 +1,8 @@
+.phone-button {
+	color: inherit;
+	background-color: transparent;
+	
+	&.is-active {
+		display: none;
+	}
+}

@@ -53,3 +53,29 @@ if ( function_exists( 'acf_add_options_page' ) && current_user_can( 'manage_opti
 		)
 	);
 }
+
+if ( function_exists( 'acf_add_options_page' ) && current_user_can( 'manage_options' ) ) {
+	acf_add_options_page(
+		array(
+			'page_title'      => 'Шапка сайта',
+			'menu_title'      => 'Шапка сайта',
+			'menu_slug'       => 'website-header-options',
+			// 'parent_slug'     => 'edit.php?post_type=review',
+			'update_button'   => 'Обновить',
+			'updated_message' => 'Изменения сохранены',
+			'autoload'        => true,
+		)
+	);
+
+	acf_add_options_page(
+		array(
+			'page_title'      => 'Футер',
+			'menu_title'      => 'Футер сайта',
+			'menu_slug'       => 'website-footer-options',
+			// 'parent_slug'     => 'edit.php?post_type=review',
+			'update_button'   => 'Обновить',
+			'updated_message' => 'Изменения сохранены',
+			'autoload'        => true,
+		)
+	);
+}

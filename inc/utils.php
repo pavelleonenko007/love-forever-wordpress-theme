@@ -113,3 +113,8 @@ function loveforever_get_favorites() {
 	$favorites = ! empty( $_COOKIE['favorites'] ) ? explode( ',', $_COOKIE['favorites'] ) : array();
 	return $favorites;
 }
+
+function loveforever_mask_phone( $phone ) {
+	$masked_phone = substr( $phone, 0, 9 ) . '...';
+	return $masked_phone;
+}
