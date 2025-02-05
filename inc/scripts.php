@@ -9,8 +9,18 @@ defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_enqueue_scripts', 'loveforever_add_admin_scripts' );
 function loveforever_add_admin_scripts() {
+	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_register_script( 'admin_script', TEMPLATE_PATH . '/js/admin.js', array( 'jquery' ), false, true );
 	wp_enqueue_script( 'admin_script' );
+	wp_enqueue_script( 'loveforever-admin', TEMPLATE_PATH . '/build/js/admin.js', array( 'jquery' ), time(), true );
+	wp_localize_script(
+		'loveforever-admin',
+		'LOVE_FOREVER_ADMIN',
+		array(
+			'NONCE'    => wp_create_nonce( 'loveforever-admin-nonce' ),
+			'AJAX_URL' => admin_url( 'admin-ajax.php' ),
+		)
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'loveforever_add_site_scripts' );

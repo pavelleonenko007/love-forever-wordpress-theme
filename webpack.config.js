@@ -15,8 +15,12 @@ copyPlugin.patterns.push({
 module.exports = (env) => {
 	return {
 		...defaultConfig,
+		entry: {
+			bundle: path.resolve(__dirname, 'src', 'index.js'),
+			admin: path.resolve(__dirname, 'src', 'admin', 'index.js'),
+		},
 		output: {
-			filename: 'js/bundle.js',
+			filename: 'js/[name].js',
 			path: path.resolve(__dirname, 'build'),
 			clean: true,
 		},

@@ -196,166 +196,6 @@ $queried_object = get_queried_object();
 									<?php endif; ?>
 								</div>
 							</div>
-							<!-- <div class="filters-pop">
-								<a href="#" class="close-filter-pop w-inline-block"></a>
-								<div class="filter-mom">
-									<div class="flex-filter">
-										<a href="#" class="link-block-3 w-inline-block">
-											<div class="code-embed-8 w-embed">
-												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 18 18" fill="none">
-													<mask id="mask0_319_17597" style="mask-type:alpha" maskunits="userSpaceOnUse" x="0" y="0" width="18" height="18">
-														<rect width="18" height="18" fill="#D9D9D9"></rect>
-													</mask>
-													<g mask="url(#mask0_319_17597)">
-														<path fill-rule="evenodd" clip-rule="evenodd" d="M8.84924 8.14201L1.77818 1.07095L1.07107 1.77805L8.14214 8.84912L1.07107 15.9202L1.77817 16.6273L8.84924 9.55623L15.9203 16.6273L16.6274 15.9202L9.55635 8.84912L16.6274 1.77805L15.9203 1.07095L8.84924 8.14201Z" fill="black"></path>
-													</g>
-												</svg>
-											</div>
-										</a>
-									</div>
-									<div class="p-21-21 in-filters">Фильтры</div>
-									<div class="div-block-9">
-										<div class="filter-cont">
-											<div class="filter-a">
-												<div class="p-12-12 uper m-12-12">Бренды</div>
-												<div class="code-embed-9 w-embed">
-													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewbox="0 0 16 9" fill="none">
-														<path fill-rule="evenodd" clip-rule="evenodd" d="M7.07414 7.84953L7.78127 8.55588L8.48833 7.84878L15.5594 0.778468L14.8523 0.0713615L7.78125 7.14243L0.710182 0.0713586L0.00307487 0.778465L7.07414 7.84953Z" fill="black"></path>
-													</svg>
-												</div>
-											</div>
-											<div class="filter-contant">
-												<div class="filter-cont-in">
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">AVE</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">tatiana Kaplun</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">Rima Lav</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">Divino Rose</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">Kookla</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">S. markelova</span> 
-														</label>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="filter-cont">
-											<div class="filter-a">
-												<div class="p-12-12 uper m-12-12">стили</div>
-												<div class="code-embed-9 w-embed">
-													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewbox="0 0 16 9" fill="none">
-														<path fill-rule="evenodd" clip-rule="evenodd" d="M7.07414 7.84953L7.78127 8.55588L8.48833 7.84878L15.5594 0.778468L14.8523 0.0713615L7.78125 7.14243L0.710182 0.0713586L0.00307487 0.778465L7.07414 7.84953Z" fill="black"></path>
-													</svg>
-												</div>
-											</div>
-											<div class="filter-contant">
-												<div class="filter-cont-in">
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">AVE</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">tatiana Kaplun</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">Rima Lav</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">Divino Rose</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">Kookla</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">S. markelova</span> 
-														</label>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="filter-cont">
-											<div class="filter-a">
-												<div class="p-12-12 uper m-12-12">цвета</div>
-												<div class="code-embed-9 w-embed">
-													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewbox="0 0 16 9" fill="none">
-														<path fill-rule="evenodd" clip-rule="evenodd" d="M7.07414 7.84953L7.78127 8.55588L8.48833 7.84878L15.5594 0.778468L14.8523 0.0713615L7.78125 7.14243L0.710182 0.0713586L0.00307487 0.778465L7.07414 7.84953Z" fill="black"></path>
-													</svg>
-												</div>
-											</div>
-											<div class="filter-contant">
-												<div class="filter-cont-in">
-													<div class="code-embed-10 colors-chbx w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox clolr" style="background-color:red" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">красный</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 colors-chbx w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox clolr" style="background-color:#FFFFF0" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">бежевый</span> 
-														</label>
-													</div>
-													<div class="code-embed-10 colors-chbx w-embed">
-														<label class="w-checkbox checkbox-field">
-															<div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox clolr" style="background-color:white" for="policy"></div>
-															<input type="checkbox" name id="policy" data-name="Политика" required style="opacity:0;position:absolute;z-index:-1"> <span class="text-16 policy-label w-form-label" for="policy">белый</span> 
-														</label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<a href="#" class="btn in-single-btn show-filter w-inline-block">
-										<div>показать результат</div>
-									</a>
-									<a href="#" class="btn in-slider-btn clear-filters w-inline-block">
-										<div>очистить</div>
-									</a>
-								</div>
-							</div> -->
 							<input type="hidden" name="page" value="1">
 							<input type="hidden" name="taxonomy" value="<?php echo esc_attr( $queried_object->taxonomy ); ?>">
 							<input type="hidden" name="<?php echo esc_attr( $queried_object->taxonomy ); ?>" value="<?php echo esc_attr( $queried_object->term_id ); ?>">
@@ -480,8 +320,10 @@ $queried_object = get_queried_object();
 									break;
 								default:
 									$products_query_args['meta_key'] = 'product_views_count';
-									$products_query_args['orderby']  = 'meta_value_num';
-									$products_query_args['order']    = 'DESC';
+									$products_query_args['orderby']  = array(
+										'menu_order'     => 'ASC',
+										'meta_value_num' => 'DESC',
+									);
 									break;
 							}
 

@@ -56,7 +56,7 @@
             "wrapper": {
                 "width": "",
                 "class": "",
-                "id": ""
+                "id": "regularPriceField"
             },
             "default_value": "",
             "min": 0,
@@ -89,6 +89,37 @@
             "ui": 1
         },
         {
+            "key": "field_67a3374dd55f3",
+            "label": "Скидка в процентах",
+            "name": "discount_percent",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_677d00872534b",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": "salePercentField"
+            },
+            "default_value": 0,
+            "min": 1,
+            "max": 99,
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_677d00cd2534c",
             "label": "Цена со скидкой",
             "name": "price_with_discount",
@@ -108,7 +139,7 @@
             "wrapper": {
                 "width": "",
                 "class": "",
-                "id": ""
+                "id": "priceWithDiscountField"
             },
             "default_value": "",
             "min": "",
@@ -273,5 +304,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1737358419
+    "modified": 1738756007
 }

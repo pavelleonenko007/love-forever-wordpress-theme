@@ -287,8 +287,10 @@ function loveforever_get_filtered_products_via_ajax() {
 			break;
 		default:
 			$products_query_args['meta_key'] = 'product_views_count';
-			$products_query_args['orderby']  = 'meta_value_num';
-			$products_query_args['order']    = 'DESC';
+			$products_query_args['orderby']  = array(
+				'menu_order'     => 'ASC',
+				'meta_value_num' => 'DESC',
+			);
 			break;
 	}
 
@@ -619,3 +621,105 @@ function loveforever_set_initial_product_views( $post_id, $post ) {
 
 add_filter( 'acf/format_value/type=text', 'do_shortcode' );
 add_filter( 'acf/format_value/type=textarea', 'do_shortcode' );
+
+add_filter( 'manage_dress_posts_columns', 'loveforever_dress_add_sort_column' );
+function loveforever_dress_add_sort_column( $columns ) {
+	$columns['menu_order'] = 'Порядок';
+	$columns['discount']   = 'Скидка';
+	return $columns;
+}
+
+add_action( 'manage_dress_posts_custom_column', 'loveforever_dress_sort_column_content', 10, 2 );
+function loveforever_dress_sort_column_content( $column_name, $post_id ) {
+	if ( 'menu_order' === $column_name ) {
+			echo esc_html( get_post( $post_id )->menu_order );
+	}
+
+	if ( 'discount' === $column_name ) {
+		$discount     = get_field( 'discount_percent', $post_id );
+		$badge_styles = array(
+			'padding'          => '6px 10px',
+			'border-radius'    => '4px',
+			'display'          => 'inline-flex',
+			'background-color' => 'gray',
+			'color'            => '#fff',
+		);
+
+		if ( ! empty( $discount ) ) {
+			$badge_styles['background-color'] = 'green';
+		}
+
+		$style_attr = '';
+		array_walk(
+			$badge_styles,
+			function ( $value, $key ) use( &$style_attr ) {
+				$style_attr .= "$key: $value;";
+			}
+		);
+
+		$html = '<span style="' . $style_attr . '">';
+
+		$html .= ! empty( $discount ) ? esc_html( $discount ) . '%' : 'Без скидки';
+
+		$html .= '</span>';
+
+		echo $html;
+	}
+}
+
+add_action( 'bulk_edit_custom_box', 'loveforever_bulk_edit_dress_custom_box', 10, 2 );
+add_action( 'quick_edit_custom_box', 'loveforever_bulk_edit_dress_custom_box', 10, 2 );
+function loveforever_bulk_edit_dress_custom_box( $column_name, $post_type ) {
+	if ( 'discount' !== $column_name || 'dress' !== $post_type ) {
+		return;
+	}
+	?>
+	<fieldset class="inline-edit-col-right">
+			<div class="inline-edit-group wp-clearfix">
+					<label>
+							<span class="title">Скидка</span>
+							<span class="input-text-wrap">
+									<input 
+										type="number" 
+										name="quick_discount_percent" 
+										class="quick-discount-percent" 
+										min="0" 
+										max="99"
+									>
+							</span>
+					</label>
+			</div>
+	</fieldset>
+		<?php
+}
+
+add_action( 'save_post_dress', 'loveforever_save_dress' );
+function loveforever_save_dress( $post_id ) {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	if ( isset( $_REQUEST['quick_discount_percent'] ) ) {
+		$discount = intval( $_REQUEST['quick_discount_percent'] );
+
+		if ( $discount >= 0 && $discount <= 99 ) {
+			update_field( 'discount_percent', $discount, $post_id, );
+			update_field( 'has_discount', true, $post_id, );
+
+			$regular_price = get_field( 'price', $post_id );
+
+			if ( ! empty( $regular_price ) ) {
+				$sale_price = $regular_price - ( $regular_price * $discount / 100 );
+				update_field( 'price_with_discount', ceil( $sale_price ), $post_id, );
+			}
+		}
+
+		if ( $discount === 0 ) {
+			update_field( 'has_discount', false, $post_id, );
+			update_field( 'price_with_discount', '', $post_id, );
+		}
+	}
+}

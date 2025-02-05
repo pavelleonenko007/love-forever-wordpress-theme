@@ -68,17 +68,13 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 								<div class="m-prod-slider_nav w-slider-nav w-round"></div>
 							</div>
 							<?php endif; ?>
-							<div class="single-right-block">
-								<div class="p-12-12 single-right-highl m-12-12"><?php echo ! empty( $availability ) ? 'Есть в наличии' : 'Нет в наличии'; ?></div>
-								<?php if ( ! empty( $is_new ) ) : ?>
-									<div class="_2px_cube"></div>
-									<div class="p-12-12 uper m-12-12">Новинка</div>
-								<?php endif; ?>
-							</div>
 						</div>
 						<div class="single-prod-grid">
 							<?php if ( ! empty( $images ) ) : ?>
 							<div class="single-images">
+								<nav aria-label="Breadcrumb" class="breadcrumb">
+									<?php get_template_part( 'components/breadcrumb', null, array( 'extra_classes' => array( 'breadcrumbs--single-dress' ) ) ); ?>
+								</nav>
 								<?php foreach ( $images as $image_item ) : ?>
 									<div class="single-img-mom">
 										<img src="<?php echo esc_url( $image_item['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_item['image']['alt'] ); ?>" class="img-fw">
@@ -88,6 +84,13 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 							<?php endif; ?>
 							<div class="single-content">
 								<div class="single-styk">
+									<div class="single-right-block">
+										<div class="p-12-12 single-right-highl m-12-12"><?php echo ! empty( $availability ) ? 'Есть в наличии' : 'Нет в наличии'; ?></div>
+										<?php if ( ! empty( $is_new ) ) : ?>
+											<div class="_2px_cube"></div>
+											<div class="p-12-12 uper m-12-12">Новинка</div>
+										<?php endif; ?>
+									</div>
 									<?php if ( ! empty( $brand ) ) : ?>
 										<div class="p-12-12 uper m-12-12"><?php echo esc_html( $brand ); ?></div>
 									<?php endif; ?>
