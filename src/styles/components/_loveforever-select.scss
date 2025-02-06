@@ -44,17 +44,20 @@
 	}
 
 	&__menu {
+		border-radius: 20rem;
 		z-index: 99;
 		display: none;
 		font-size: 12rem;
 		line-height: 1;
 		color: #000;
+		background-color: var(--background-color, #fff);
 
 		&.is-active {
-			display: flex;
+			display: inline-block;
 		}
 
 		& .ui-menu.ui-widget {
+			margin: 0;
 			list-style: none;
 			padding: 0;
 			background-color: transparent;

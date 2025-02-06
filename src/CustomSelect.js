@@ -7,9 +7,16 @@ class CustomSelect {
 	};
 
 	constructor(element) {
-		this.selectOptions = element.dataset.jsCustomSelect
+		this.optionsAttr = element.dataset.jsCustomSelect
 			? JSON.parse(element.dataset.jsCustomSelect)
 			: {};
+
+		this.selectOptions = {
+			hasBorder: true,
+			...this.optionsAttr,
+		};
+		console.log({ element, selectOptions: this.selectOptions });
+
 		this.select = $(element).selectmenu({
 			classes: {
 				'ui-selectmenu-button': classNames('loveforever-select', {
