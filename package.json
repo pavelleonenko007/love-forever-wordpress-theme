@@ -16,6 +16,7 @@
 	"dependencies": {
 		"@splidejs/splide": "^4.1.4",
 		"barba.js": "^1.0.0",
+		"classnames": "^2.5.1",
 		"imask": "^7.6.1"
 	}
 }

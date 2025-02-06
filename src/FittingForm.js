@@ -446,6 +446,8 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {ChangeEvent} event
 	 */
 	onChange = (event) => {
+		console.log(event);
+		
 		this.state.error = null;
 
 		const formData = Object.fromEntries(new FormData(this.form));

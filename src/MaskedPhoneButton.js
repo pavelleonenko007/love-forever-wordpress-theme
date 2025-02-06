@@ -17,8 +17,6 @@ export default class MaskedPhoneButtonCollection {
 	 * @param {PointerEvent} event
 	 */
 	onClick = (event) => {
-		console.log(event);
-		
 		if (event.target.closest(this.selectors.button)) {
 			event.preventDefault();
 			event.stopPropagation();

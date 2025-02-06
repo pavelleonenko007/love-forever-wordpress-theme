@@ -114,6 +114,8 @@ class ProductFilterForm {
 	}
 
 	onChange(event) {
+		console.log(event);
+		
 		if (event.target.name && event.target.name !== 'page') {
 			this.resetPage();
 		}

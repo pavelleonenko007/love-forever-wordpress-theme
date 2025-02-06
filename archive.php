@@ -143,8 +143,7 @@ $queried_object = get_queried_object();
 								<div class="_1px-line"></div>
 								<div class="spleet botm-filter">
 									<div class="custom-filter-drop">
-										<div class="loveforever-select"></div>
-										<select id="orderby" name="orderby">
+										<select id="orderby" name="orderby" data-js-custom-select="<?php echo esc_attr( wp_json_encode( array( 'hasBorder' => false ) ) ); ?>">
 											<?php
 											$orderby_options = array(
 												'views' => 'По популярности',
@@ -161,25 +160,6 @@ $queried_object = get_queried_object();
 												><?php echo esc_html( $orderby_option_name ); ?></option>
 											<?php endforeach; ?>
 										</select>
-										<!-- <div class="custom-select w-embed">
-											
-										</div>
-										<div class="custom-select-drop">
-											<div class="custom-select-drop-a">
-												<div id="custom-drop-text">по популярности</div>
-												<div class="svg-c-drop w-embed">
-													<svg xmlns="http://www.w3.org/2000/svg" width="6" height="4" viewbox="0 0 6 4" fill="none">
-														<path fill-rule="evenodd" clip-rule="evenodd" d="M2.48716 3.41604L0 0.583958L0.512837 0L3 2.83208L5.48716 0L6 0.583958L3.51284 3.41604L3 4L2.48716 3.41604Z" fill="black"></path>
-													</svg>
-												</div>
-											</div>
-											<div class="custom-drop-content">
-												<a href="#" class="cdrop-a selected">по популярности</a>
-												<a href="#" class="cdrop-a">по новизне</a>
-												<a href="#" class="cdrop-a">по убыванию цены</a>
-												<a href="#" class="cdrop-a">по возрастанию цены</a>
-											</div>
-										</div> -->
 									</div>
 									<?php
 									if ( ! empty( $other_filters ) ) :

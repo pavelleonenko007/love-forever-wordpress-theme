@@ -11,12 +11,19 @@
 	flex-direction: row-reverse;
 	justify-content: space-between;
 	align-items: center;
+	column-gap: 5rem;
 	font-size: 12rem;
 	line-height: 1;
 	font-weight: 500;
 	text-transform: uppercase;
 	color: #000;
 	background-color: var(--background-color, #fff);
+
+	&--no-border {
+		border: none;
+		border-radius: 0;
+		padding: 0;
+	}
 
 	&.is-disabled {
 		opacity: 0.5;
@@ -37,6 +44,7 @@
 	}
 
 	&__menu {
+		z-index: 99;
 		display: none;
 		font-size: 12rem;
 		line-height: 1;
@@ -49,7 +57,7 @@
 		& .ui-menu.ui-widget {
 			list-style: none;
 			padding: 0;
-			background-color: var(--background-color, #fff);
+			background-color: transparent;
 		}
 
 		& .ui-menu-item {
@@ -81,6 +89,7 @@
 			font-size: 12rem;
 			font-weight: 500;
 			line-height: 1;
+			background-color: var(--background-color, #fff);
 			text-transform: uppercase;
 			cursor: pointer;
 

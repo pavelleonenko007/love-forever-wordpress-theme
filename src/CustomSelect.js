@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 const ROOT_SELECTOR = '[data-js-custom-select]';
 
 class CustomSelect {
@@ -6,9 +7,14 @@ class CustomSelect {
 	};
 
 	constructor(element) {
+		this.selectOptions = element.dataset.jsCustomSelect
+			? JSON.parse(element.dataset.jsCustomSelect)
+			: {};
 		this.select = $(element).selectmenu({
 			classes: {
-				'ui-selectmenu-button': 'loveforever-select',
+				'ui-selectmenu-button': classNames('loveforever-select', {
+					'loveforever-select--no-border': !this.selectOptions.hasBorder,
+				}),
 				'ui-selectmenu-button-open': 'is-active',
 				'ui-selectmenu-text': 'loveforever-select__value',
 				'ui-selectmenu-icon': 'loveforever-select__icon',
@@ -17,6 +23,12 @@ class CustomSelect {
 				'ui-selectmenu-disabled': 'is-disabled',
 			},
 			change: (event, ui) => {
+				console.log({ event, ui });
+				event.target.dispatchEvent(
+					new Event('change', {
+						bubbles: true,
+					})
+				);
 			},
 		});
 	}
