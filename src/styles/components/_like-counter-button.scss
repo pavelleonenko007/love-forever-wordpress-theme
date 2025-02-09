@@ -1,0 +1,39 @@
+@use '../media' as *;
+
+.like-counter-button {
+	--gap: 4rem;
+
+	display: inline-flex;
+	align-items: center;
+	column-gap: 10rem;
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		column-gap: var(--gap);
+	}
+
+	&__text {
+		display: inline-flex;
+		align-items: center;
+		column-gap: var(--gap);
+
+		@include tablet {
+			display: none;
+		}
+
+		&::after {
+			content: '';
+			width: 3rem;
+			height: 3rem;
+			display: flex;
+			rotate: 45deg;
+			background-color: #fff;
+
+			.htmldopmenuopened &,
+			.fixed-navbar & {
+				background-color: #000;
+			}
+		}
+	}
+}

@@ -1,3 +1,5 @@
+@use 'media' as *;
+
 html {
 	&.is-locked {
 		overflow: hidden;
@@ -11,4 +13,17 @@ html {
 
 .indirm-line {
 	z-index: 999;
+}
+
+.div-block-5 {
+	display: flex;
+	column-gap: 20rem;
+
+	@include tablet {
+		column-gap: 0rem;
+	}
+
+	&.wh-head {
+		column-gap: 0rem;
+	}
 }

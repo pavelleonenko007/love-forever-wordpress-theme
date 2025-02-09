@@ -19,6 +19,7 @@ define( 'YOUTUBE_LINK', get_field( 'youtube', 'option' ) );
 define( 'PHONE', get_field( 'phone', 'option' ) );
 define( 'EMAIL', get_field( 'email', 'option' ) );
 define( 'ADDRESS', get_field( 'address', 'option' ) );
+define( 'WORKING_HOURS', get_field( 'working_hours', 'option' ) );
 define( 'MAP_LINK', get_field( 'map_link', 'option' ) );
 
 define( 'PRIVACY_POLICY_LINK', ! empty( get_field( 'privacy_policy', 'option' ) ) ? get_field( 'privacy_policy', 'option' )['href'] : get_privacy_policy_url() );

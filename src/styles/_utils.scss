@@ -1,5 +1,5 @@
 .uppercase {
-	text-transform: uppercase;
+	text-transform: uppercase !important;
 }
 
 .lovercase {
@@ -7,11 +7,11 @@
 }
 
 .italic {
-	font-style: italic;
+	font-style: italic !important;
 }
 
 .noitalic {
-	font-style: normal;
+	font-style: normal !important;
 }
 
 .ff-tt-chocolates {
@@ -23,5 +23,5 @@
 }
 
 .text-pink {
-	color: var(--pink);
+	color: var(--pink) !important;
 }

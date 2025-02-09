@@ -33,8 +33,7 @@ function loveforever_register_post_types() {
 			'public'             => true,
 			'show_ui'            => true,
 			'show_in_quick_edit' => true,
-			'hierarchical'       => false,
-
+			'hierarchical'       => true,
 			'rewrite'            => true,
 			// 'query_var'             => taxonomy, // название параметра запроса
 			'capabilities'       => array(),
@@ -46,7 +45,7 @@ function loveforever_register_post_types() {
 	);
 
 	register_taxonomy(
-		'dress_brand',
+		'brand',
 		null,
 		array(
 			'label'              => '',
@@ -70,9 +69,7 @@ function loveforever_register_post_types() {
 			'show_ui'            => true,
 			'show_in_quick_edit' => true,
 			'hierarchical'       => false,
-
 			'rewrite'            => true,
-			// 'query_var'             => taxonomy, // название параметра запроса
 			'capabilities'       => array(),
 			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
 			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
@@ -174,6 +171,41 @@ function loveforever_register_post_types() {
 			),
 			'description'        => '',
 			'public'             => true,
+			'show_ui'            => true,
+			'show_in_quick_edit' => true,
+			'hierarchical'       => false,
+			'rewrite'            => true,
+			// 'query_var'             => taxonomy, // название параметра запроса
+			'capabilities'       => array(),
+			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+			'show_in_rest'       => true, // добавить в REST API
+			'rest_base'          => null, // taxonomy
+		)
+	);
+
+	register_taxonomy(
+		'fabric',
+		null,
+		array(
+			'label'              => '',
+			'labels'             => array(
+				'name'              => 'Ткани',
+				'singular_name'     => 'Ткань',
+				'search_items'      => 'Поиск тканей',
+				'all_items'         => 'Все ткани',
+				'view_item '        => 'Просмотр тканей',
+				'parent_item'       => 'Родитель ткани',
+				'parent_item_colon' => 'Родитель ткани:',
+				'edit_item'         => 'Редактировать ткань',
+				'update_item'       => 'Обновить ткань',
+				'add_new_item'      => 'Добавить новую ткань',
+				'new_item_name'     => 'Название новой ткани',
+				'menu_name'         => 'Ткани',
+				'back_to_items'     => '← Назад к тканям',
+			),
+			'description'        => '',
+			'public'             => false,
 			'show_ui'            => true,
 			'show_in_quick_edit' => true,
 			'hierarchical'       => false,
@@ -299,7 +331,7 @@ function loveforever_register_post_types() {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-			'taxonomies'          => array( 'dress_category', 'dress_brand', 'dress_tag', 'silhouette', 'style' ),
+			'taxonomies'          => array( 'dress_category', 'dress_tag', 'silhouette', 'style', 'brand', 'fabric' ),
 		)
 	);
 
@@ -416,7 +448,7 @@ function loveforever_register_post_types() {
 function custom_dress_post_link( $post_link, $post ) {
 	if ( is_object( $post ) && $post->post_type == 'dress' ) {
 		$terms  = wp_get_object_terms( $post->ID, 'dress_category' );
-		$brands = wp_get_object_terms( $post->ID, 'dress_brand' );
+		$brands = wp_get_object_terms( $post->ID, 'brand' );
 
 		if ( $terms ) {
 			// Выбираем первую категорию как основную
@@ -435,8 +467,8 @@ function custom_dress_post_link( $post_link, $post ) {
 // Регистрация новой структуры URL для типа записи 'dress'
 function custom_dress_permalinks( $rules ) {
 	$new_rules = array(
-		'dress/([^/]+)/([^/]+)/([^/]+)/?$' => 'index.php?dress=$matches[3]&dress_category=$matches[1]&dress_brand=$matches[2]',
-		'dress/([^/]+)/([^/]+)/?$'         => 'index.php?dress_category=$matches[1]&dress_brand=$matches[2]',
+		'dress/([^/]+)/([^/]+)/([^/]+)/?$' => 'index.php?dress=$matches[3]&dress_category=$matches[1]&brand=$matches[2]',
+		'dress/([^/]+)/([^/]+)/?$'         => 'index.php?dress_category=$matches[1]&brand=$matches[2]',
 		'dress/([^/]+)/?$'                 => 'index.php?dress_category=$matches[1]',
 	);
 	return $new_rules + $rules;
@@ -447,15 +479,15 @@ function custom_dress_permalinks( $rules ) {
 function custom_dress_permalink_structure() {
 	global $wp_rewrite;
 	$wp_rewrite->add_rewrite_tag( '%dress_category%', '([^/]+)', 'dress_category=' );
-	$wp_rewrite->add_rewrite_tag( '%dress_brand%', '([^/]+)', 'dress_brand=' );
-	$wp_rewrite->add_permastruct( 'dress', 'dress/%dress_category%/%dress_brand%/%dress%', false );
+	$wp_rewrite->add_rewrite_tag( '%brand%', '([^/]+)', 'brand=' );
+	$wp_rewrite->add_permastruct( 'dress', 'dress/%dress_category%/%brand%/%dress%', false );
 }
 // add_action( 'init', 'custom_dress_permalink_structure', 10, 0 );
 
 // Обеспечение правильной загрузки категорий и брендов
 function custom_dress_query_vars( $query_vars ) {
 	$query_vars[] = 'dress_category';
-	$query_vars[] = 'dress_brand';
+	$query_vars[] = 'brand';
 	return $query_vars;
 }
 // add_filter( 'query_vars', 'custom_dress_query_vars' );
@@ -463,7 +495,7 @@ function custom_dress_query_vars( $query_vars ) {
 // Изменение запроса для правильной загрузки категорий и брендов
 function custom_dress_request( $query_vars ) {
 	if ( isset( $query_vars['dress_category'] ) ) {
-		if ( isset( $query_vars['dress_brand'] ) ) {
+		if ( isset( $query_vars['brand'] ) ) {
 			$query_vars['tax_query'] = array(
 				'relation' => 'AND',
 				array(
@@ -472,9 +504,9 @@ function custom_dress_request( $query_vars ) {
 					'terms'    => $query_vars['dress_category'],
 				),
 				array(
-					'taxonomy' => 'dress_brand',
+					'taxonomy' => 'brand',
 					'field'    => 'slug',
-					'terms'    => $query_vars['dress_brand'],
+					'terms'    => $query_vars['brand'],
 				),
 			);
 		} else {
@@ -494,12 +526,12 @@ function custom_dress_request( $query_vars ) {
 
 // Перенаправление старых URL на новые
 function custom_dress_redirect() {
-	if ( is_tax( 'dress_category' ) || is_tax( 'dress_brand' ) ) {
+	if ( is_tax( 'dress_category' ) || is_tax( 'brand' ) ) {
 		$queried_object = get_queried_object();
 		if ( is_tax( 'dress_category' ) ) {
 			wp_redirect( home_url( "dress/{$queried_object->slug}" ), 301 );
 			exit;
-		} elseif ( is_tax( 'dress_brand' ) ) {
+		} elseif ( is_tax( 'brand' ) ) {
 			$category = get_term_by( 'slug', get_query_var( 'dress_category' ), 'dress_category' );
 			if ( $category ) {
 				wp_redirect( home_url( "dress/{$category->slug}/{$queried_object->slug}" ), 301 );
