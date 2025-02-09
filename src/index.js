@@ -126,6 +126,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	Barba.Dispatcher.on(
 		'transitionCompleted',
 		function (currentStatus, prevStatus) {
+			document.documentElement.classList.remove('htmldopmenuopened');
+
 			initPage();
 
 			switch (currentStatus.namespace) {
