@@ -99,9 +99,5 @@ export default class FavoritesButtonWithCounterCollection {
 				);
 			}
 		);
-		console.log(
-			'Remaining buttons:',
-			FavoritesButtonWithCounterCollection.favoriteButtonsWithCounters.size
-		);
 	}
 }

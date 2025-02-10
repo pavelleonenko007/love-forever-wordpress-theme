@@ -15,7 +15,6 @@ class CustomSelect {
 			hasBorder: true,
 			...this.optionsAttr,
 		};
-		console.log({ element, selectOptions: this.selectOptions });
 
 		this.select = $(element).selectmenu({
 			classes: {

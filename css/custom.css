@@ -82,15 +82,63 @@
 	background-color: rgb(255 255 255 / 30%);
 }
 
-.slider_home-slider_nav .w-slider-dot:after {
+.slider_home-slider_nav .w-slider-dot::after {
 	content: '';
 	width: 100%;
 	height: 100%;
 	background: white;
-	transition: none;
-	transform: scaleX(1);
+	transform: scaleX(0);
 	transform-origin: left;
+	transition: all 4s linear;
 	display: block;
+}
+
+.slider_home-slider_nav .w-slider-dot.w-active::after {
+	transform: scaleX(1);
+}
+
+.slider_home-slider_nav .w-slider-dot.w-active[data-no-scale-x]::after {
+	transform: scaleX(0);
+	transition: none;
+}
+
+.slider_home-slider_nav .w-slider-dot.w-active ~ .w-slider-dot::after {
+	transform: scaleX(0);
+	transition: none;
+}
+
+.slider_home-slider_nav
+	.w-slider-dot:not(.w-active):not(
+		.w-slider-dot.w-active ~ .w-slider-dot
+	)::after {
+	transform: scaleX(1);
+	transition: none;
+}
+
+.pagination-button {
+	transform: scaleX(0);
+	transition: transform 0.3s ease-in-out;
+}
+
+.pagination-button.active {
+	transform: scaleX(1);
+}
+
+.pagination-button.active ~ .pagination-button {
+	transform: scaleX(0);
+}
+
+/* Мгновенное изменение для предыдущих кнопок */
+.pagination-button:not(.active):not(
+		.pagination-button.active ~ .pagination-button
+	) {
+	transform: scaleX(1);
+	transition: none;
+}
+
+/* Восстановление анимации для активной кнопки */
+.pagination-button.active {
+	transition: transform 0.3s ease-in-out;
 }
 
 .slider_home-slider_nav.w-round > div {
@@ -102,7 +150,7 @@
 	box-shadow: 0 0 0 0px #fff;
 }
 
-.slider_home-slider_nav .w-slider-dot.w-active + .w-slider-dot:after,
+/* .slider_home-slider_nav .w-slider-dot.w-active + .w-slider-dot:after,
 .slider_home-slider_nav .w-slider-dot.w-active + * + .w-slider-dot:after,
 .slider_home-slider_nav .w-slider-dot.w-active + * + * + .w-slider-dot:after,
 .slider_home-slider_nav
@@ -147,12 +195,7 @@
 	+ .w-slider-dot:after {
 	transform: scaleX(0);
 	transition: none;
-}
-
-.slider_home-slider_nav .w-slider-dot.w-active:after {
-	transform: scaleX(1);
-	transition: all 4s linear;
-}
+} */
 
 #slider-range {
 	display: none;

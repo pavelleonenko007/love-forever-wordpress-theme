@@ -26,7 +26,7 @@ get_header(
 						$hero_slider = get_field( 'hero_slider' );
 						if ( ! empty( $hero_slider ) ) :
 							?>
-							<div data-delay="4000" data-animation="cross" class="slider_home-slider w-slider" data-target-element=".w-slider-mask" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-acf-repeater="hero_slider" data-nav-spacing="0" data-duration="500" data-infinite="true">
+							<div data-delay="4000" data-animation="cross" class="slider_home-slider w-slider" data-target-element=".w-slider-mask" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-acf-repeater="hero_slider" data-nav-spacing="0" data-duration="500" data-infinite="true">
 								<div class="w-slider-mask">
 									<?php
 									foreach ( $hero_slider as $slide ) :

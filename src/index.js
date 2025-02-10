@@ -17,6 +17,45 @@ import ReviewFormCollection from './ReviewForm';
 import './styles/index.scss';
 import VideoPlayerCollection from './VideoPlayer';
 
+const mutationObserver = new MutationObserver((mutationRecords) => {
+	for (let i = 0; i < mutationRecords.length; i++) {
+		const isSliderDot =
+			mutationRecords[i].target.classList.contains('w-slider-dot');
+
+		if (!isSliderDot) continue;
+
+		const sliderDot = mutationRecords[i].target;
+		const isActiveDot = sliderDot.classList.contains('w-active');
+
+		if (!isActiveDot) continue;
+
+		const slider = sliderDot.closest('.slider_home-slider');
+		const sliderDots = Array.from(slider.querySelectorAll('.w-slider-dot'));
+		const activeSlideIndex = sliderDots.indexOf(sliderDot);
+
+		if (activeSlideIndex === 0) {
+			sliderDot.setAttribute('data-no-scale-x', '');
+
+			setTimeout(() => {
+				sliderDot.removeAttribute('data-no-scale-x');
+			}, 20);
+		}
+	}
+});
+
+function initHeroPageSliderPagination() {
+	document
+		.querySelectorAll('.slider_home-slider.w-slider')
+		.forEach((slider) => {
+			mutationObserver.observe(slider, {
+				attributes: true,
+				attributeFilter: ['class'],
+				attributeOldValue: true,
+				subtree: true,
+			});
+		});
+}
+
 new FormsValidator();
 new MaskedPhoneButtonCollection();
 
@@ -148,6 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function initPage() {
 	console.log('init page');
 
+	initHeroPageSliderPagination();
 	FavoritesButtonWithCounterCollection.init();
 	InputMaskCollection.init();
 	DialogCollection.init();
