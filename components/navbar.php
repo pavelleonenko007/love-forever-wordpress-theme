@@ -83,7 +83,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 									<div class="m-nav-cats">
 										<?php
 										foreach ( $filter_taxonomies as $filter_taxonomy ) :
-											$tax_object = get_taxonomy( $dropdown_menu_column );
+											$tax_object = get_taxonomy( $filter_taxonomy );
 											if ( ! empty( $tax_object ) ) :
 												?>
 												<div class="m-nav-drops">
