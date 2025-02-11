@@ -20,9 +20,7 @@ $only_catalog_items = array_filter(
 		return 'dress-category' === $item['acf_fc_layout'];
 	}
 );
-// echo '<pre>';
-// var_dump( $left_menu, $right_menu );
-// echo '</pre>';
+$filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 ?>
 <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar w-nav">
 	<header class="header menuline">
@@ -64,139 +62,59 @@ $only_catalog_items = array_filter(
 							<div class="hovered-menue search-m">
 								<div id="w-node-_29763d6b-4a4a-4ba9-96d9-354223034cf4-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+										<form id="searchForm1" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
 											<input
 												type="search" 
 												name="s" 
 												maxlength="256" 
 												placeholder="Напишите, что вы ищите..." 
-												id="s" 
+												id="searchForm1SearchControl" 
 												class="search-input w-input" 
 												required
+												data-js-search-form-search-input
 											>
 											<input type="submit" class="search-button w-button" value="Search">
 											<button type="reset" class="clear-search">Очистить</button>
 										</form>
-										<div class="search-ajaxed" data-js-search-form-results>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-										</div>
+										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
 								</div>
 								<div class="serch-mob">
 									<div class="m-nav-cats">
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>силуэт</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>стиль</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>ткань</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>топ бренды</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
+										<?php
+										foreach ( $filter_taxonomies as $filter_taxonomy ) :
+											$tax_object = get_taxonomy( $dropdown_menu_column );
+											if ( ! empty( $tax_object ) ) :
+												?>
+												<div class="m-nav-drops">
+													<a href="#" class="m-nav-drop-btn w-inline-block">
+														<div><?php echo esc_html( $tax_object->labels->singular_name ); ?></div>
+														<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
+													</a>
+													<div class="m-nav-drop-contant">
+														<?php
+														$terms = get_terms(
+															array(
+																'taxonomy' => $filter_taxonomy,
+																'hide_empty' => false, // TODO: set to true!
+															)
+														);
+														if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) :
+															?>
+															<div class="div-block-11">
+																<?php
+																foreach ( $terms as $term ) :
+																	?>
+																	<a href="#" class="a-12-12 in-drop"><?php echo esc_html( $term->name ); ?></a>
+																<?php endforeach; ?>
+															</div>
+														<?php endif; ?>
+													</div>
+												</div>
+												<?php
+											endif;
+										endforeach;
+										?>
 										<div class="m-nav-drops">
 											<a href="#" class="m-nav-drop-btn w-inline-block">
 												<div>стоимость</div>
@@ -436,8 +354,12 @@ $only_catalog_items = array_filter(
 											</div>
 										</div>
 										<div class="mob-work-time m-12-12">
-											<div>ежедневно с 10 до 22:00</div>
-											<div>г. Санкт-Петербург, Вознесенский проспект, 18</div>
+											<?php if ( ! empty( WORKING_HOURS ) ) : ?>
+												<div><?php echo esc_html( WORKING_HOURS ); ?></div>
+											<?php endif; ?>
+											<?php if ( ! empty( ADDRESS ) ) : ?>
+												<div><?php echo esc_html( ADDRESS ); ?></div>
+											<?php endif; ?>
 										</div>
 									</div>
 									<?php if ( ! empty( $only_catalog_items ) ) : ?>
@@ -636,90 +558,21 @@ $only_catalog_items = array_filter(
 								<div class="hovered-menue search-m">
 									<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
 										<div class="div-block-7">
-											<form action="/search" class="search w-form">
-												<input class="search-input w-input" maxlength="256" name="query" placeholder="напишите, что вы ищите..." type="search" id="search" required>
-												<input type="submit" class="search-button w-button" value="Search"><a href="#" class="clear-search">очистить</a>
+											<form id="searchForm2" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+												<input 
+													class="search-input w-input" 
+													maxlength="256" 
+													name="s" 
+													placeholder="Напишите, что вы ищите..." 
+													type="search" 
+													id="searchForm2SearchControl" 
+													required
+													data-js-search-form-search-input
+												>
+												<input type="submit" class="search-button w-button" value="Search">
+												<button type="reset" class="clear-search">Очистить</button>
 											</form>
-											<div class="search-ajaxed">
-												<div class="search-ajaxed_item">
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div>свадебное платье налки</div>
-													</a>
-													<div class="search-ajaxed_item_0px">
-														<div class="div-block-8">
-															<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-														</div>
-													</div>
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div class="itelic">33 600 ₽</div>
-													</a>
-												</div>
-												<div class="search-ajaxed_item">
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div>свадебное платье налки</div>
-													</a>
-													<div class="search-ajaxed_item_0px">
-														<div class="div-block-8">
-															<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-														</div>
-													</div>
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div class="itelic">33 600 ₽</div>
-													</a>
-												</div>
-												<div class="search-ajaxed_item">
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div>свадебное платье налки</div>
-													</a>
-													<div class="search-ajaxed_item_0px">
-														<div class="div-block-8">
-															<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-														</div>
-													</div>
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div class="itelic">33 600 ₽</div>
-													</a>
-												</div>
-												<div class="search-ajaxed_item">
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div>свадебное платье налки</div>
-													</a>
-													<div class="search-ajaxed_item_0px">
-														<div class="div-block-8">
-															<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-														</div>
-													</div>
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div class="itelic">33 600 ₽</div>
-													</a>
-												</div>
-												<div class="search-ajaxed_item">
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div>свадебное платье налки</div>
-													</a>
-													<div class="search-ajaxed_item_0px">
-														<div class="div-block-8">
-															<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-														</div>
-													</div>
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div class="itelic">33 600 ₽</div>
-													</a>
-												</div>
-												<div class="search-ajaxed_item">
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div>свадебное платье налки</div>
-													</a>
-													<div class="search-ajaxed_item_0px">
-														<div class="div-block-8">
-															<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-														</div>
-													</div>
-													<a href="#" class="search-ajaxed_item_a w-inline-block">
-														<div class="itelic">33 600 ₽</div>
-													</a>
-												</div>
-											</div>
+											<div class="search-ajaxed" data-js-search-form-results></div>
 										</div>
 									</div>
 									<div id="w-node-_144563be-6001-1af8-6446-1240953daa3d-be61d3ef" class="m-h-vert">
@@ -1009,90 +862,21 @@ $only_catalog_items = array_filter(
 							<div class="hovered-menue search-m">
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b87a-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form action="/search" class="search w-form">
-											<input class="search-input w-input" maxlength="256" name="query" placeholder="напишите, что вы ищите..." type="search" id="search" required>
-											<input type="submit" class="search-button w-button" value="Search"><a href="#" class="clear-search">очистить</a>
+										<form id="searchForm3" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+											<input 
+												class="search-input w-input" 
+												maxlength="256" 
+												name="s" 
+												placeholder="Напишите, что вы ищите..." 
+												type="search" 
+												id="searchForm3SearchControl" 
+												required
+												data-js-search-form-search-input
+											>
+											<input type="submit" class="search-button w-button" value="Search">
+											<button type="reset" class="clear-search">Очистить</button>
 										</form>
-										<div class="search-ajaxed">
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-										</div>
+										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
 								</div>
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c4-be61d3ef" class="m-h-vert">
@@ -1300,90 +1084,21 @@ $only_catalog_items = array_filter(
 							<div class="hovered-menue search-m">
 								<div id="w-node-_7814220d-338f-0ab7-0d3b-7d1e447cc090-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form action="/search" class="search w-form">
-											<input class="search-input w-input" maxlength="256" name="query" placeholder="напишите, что вы ищите..." type="search" id="search" required>
-											<input type="submit" class="search-button w-button" value="Search"><a href="#" class="clear-search">очистить</a>
+										<form id="searchForm4" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+											<input 
+												class="search-input w-input" 
+												maxlength="256" 
+												name="s" 
+												placeholder="Напишите, что вы ищите..." 
+												type="search" 
+												id="searchForm4SearchControl" 
+												required
+												data-js-search-form-search-input
+											>
+											<input type="submit" class="search-button w-button" value="Search">
+											<button type="reset" class="clear-search">Очистить</button>
 										</form>
-										<div class="search-ajaxed">
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-											<div class="search-ajaxed_item">
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div>свадебное платье налки</div>
-												</a>
-												<div class="search-ajaxed_item_0px">
-													<div class="div-block-8">
-														<div class="mom-abs"><img src="<?php echo TEMPLATE_PATH; ?>/images/672b72c58a6f484dee2244e1_Group20578.jpg" loading="lazy" alt class="img-cover"></div>
-													</div>
-												</div>
-												<a href="#" class="search-ajaxed_item_a w-inline-block">
-													<div class="itelic">33 600 ₽</div>
-												</a>
-											</div>
-										</div>
+										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
 								</div>
 								<div class="serch-mob">

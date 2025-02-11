@@ -14,6 +14,7 @@ import MaskedPhoneButtonCollection from './MaskedPhoneButton';
 import ProductFilterFormCollection from './ProductFilterForm';
 import RangeSliderCollection from './RangeSlider';
 import ReviewFormCollection from './ReviewForm';
+import SearchFormCollection from './SearchForm';
 import './styles/index.scss';
 import VideoPlayerCollection from './VideoPlayer';
 
@@ -139,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	Barba.Dispatcher.on('initStateChange', (currentStatus) => {
 		console.log('initStateChange');
 
+		SearchFormCollection.destroyAll();
 		FavoritesButtonWithCounterCollection.destroyAll();
 		CopyToClipboardButtonCollection.destroyAll();
 		InputMaskCollection.destroyAll();
@@ -187,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function initPage() {
 	console.log('init page');
 
+	SearchFormCollection.init();
 	initHeroPageSliderPagination();
 	FavoritesButtonWithCounterCollection.init();
 	InputMaskCollection.init();

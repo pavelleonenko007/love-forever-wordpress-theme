@@ -723,3 +723,55 @@ function loveforever_save_dress( $post_id ) {
 		}
 	}
 }
+
+add_action( 'wp_ajax_query_products', 'loveforever_query_products_via_ajax' );
+add_action( 'wp_ajax_nopriv_query_products', 'loveforever_query_products_via_ajax' );
+function loveforever_query_products_via_ajax() {
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка запроса. Попробуйте перезагрузить страницу',
+				'debug'   => 'Неверный nonce',
+			),
+			400
+		);
+	}
+
+	if ( empty( $_POST['s'] ) ) {
+		wp_send_json_success(
+			array(
+				'message' => '',
+				'html'    => '',
+			),
+			400
+		);
+	}
+
+	$query_string = sanitize_text_field( wp_unslash( $_POST['s'] ) );
+	$query_args   = array(
+		'post_type'      => 'dress',
+		'posts_per_page' => 6,
+		's'              => $query_string,
+	);
+	$query        = new WP_Query( $query_args );
+
+	ob_start();
+
+	if ( $query->have_posts() ) {
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			get_template_part( 'components/search-result-item' );
+		}
+	} else {
+		echo wp_kses_post( "<p>По запросу <strong class=\"text-pink\">$query_string</strong> ничего не найдено</p>" );
+	}
+
+	$html = ob_get_clean();
+
+	wp_send_json_success(
+		array(
+			'message' => "Результаты поиска: $query_string",
+			'html'    => $html,
+		)
+	);
+}
