@@ -2,7 +2,7 @@
 
 html {
 	-webkit-font-smoothing: antialiased;
-	
+
 	&.is-locked {
 		overflow: hidden;
 	}
@@ -37,4 +37,14 @@ html {
 
 .clear-search {
 	background-color: transparent;
+}
+
+.single-styk {
+	top: 60rem;
+}
+
+.map-keeper {
+	@include tablet {
+		width: 100%;
+	}
 }

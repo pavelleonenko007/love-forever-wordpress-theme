@@ -1,0 +1,103 @@
+@use '../media' as *;
+
+.single-product {
+	&__columns {
+		margin: 0;
+
+		@include mobile-s {
+			margin-top: 20rem;
+		}
+	}
+
+	&__left {
+		display: flex;
+		flex-direction: column;
+		row-gap: 20rem;
+
+		@include mobile-s {
+			display: none;
+		}
+	}
+
+	&__images {
+		display: flex;
+		flex-direction: column;
+		gap: 10rem;
+	}
+
+	&__content {
+		row-gap: 40rem;
+
+		@include mobile {
+			row-gap: 30rem;
+		}
+
+		&-badges {
+			@include tablet {
+				justify-content: start;
+				font-size: 8rem;
+
+				& > * {
+					font-size: inherit;
+					line-height: 1;
+				}
+			}
+		}
+
+		&-heading.h-single {
+			margin: 0;
+		}
+
+		&-text {
+			margin: 0;
+		}
+
+		&-text,
+		&-fitting-text {
+			padding-right: 55rem;
+
+			@include mobile {
+				padding-right: 30rem;
+				font-size: 14rem;
+				line-height: 18rem;
+
+				& > * {
+					font-size: inherit;
+					line-height: inherit;
+				}
+			}
+		}
+
+		&-form.form-keepre {
+			margin: 0;
+		}
+
+		&-actions {
+			display: flex;
+			gap: 10rem;
+
+			@include mobile-s {
+				flex-direction: column;
+			}
+
+			& > .btn {
+				margin: 0 !important;
+			}
+		}
+
+		&-socials.shere-line {
+			margin: 0;
+		}
+
+		&-tags {
+			margin: 0;
+		}
+	}
+
+	&__info {
+		margin-top: -10rem;
+		display: flex;
+		flex-direction: column;
+		row-gap: 10rem;
+	}
+}

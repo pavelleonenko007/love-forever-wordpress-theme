@@ -36,12 +36,12 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 						<?php get_template_part( 'components/marquee' ); ?>
 						<?php get_template_part( 'components/navbar' ); ?>
 					</div>
-					<div class="container n-top">
+					<div class="container n-top single-product">
 						<div class="container container-fw n-top">
 							<div class="page-top single-p"></div>
 						</div>
 						<div class="spleet m-h-vert">
-							<div class="code-embed-2 w-embed">
+							<div class="code-embed-2 w-embed visible-mobile-s">
 								<nav aria-label="Breadcrumb" class="breadcrumb">
 									<?php get_template_part( 'components/breadcrumb', null, array( 'extra_classes' => array( 'breadcrumbs--single-dress' ) ) ); ?>
 								</nav>
@@ -69,34 +69,38 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 							</div>
 							<?php endif; ?>
 						</div>
-						<div class="single-prod-grid">
-							<?php if ( ! empty( $images ) ) : ?>
-							<div class="single-images">
+						<div class="single-prod-grid single-product__columns">
+							<div class="single-images single-product__left">
 								<nav aria-label="Breadcrumb" class="breadcrumb">
 									<?php get_template_part( 'components/breadcrumb', null, array( 'extra_classes' => array( 'breadcrumbs--single-dress' ) ) ); ?>
 								</nav>
-								<?php foreach ( $images as $image_item ) : ?>
-									<div class="single-img-mom">
-										<img src="<?php echo esc_url( $image_item['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_item['image']['alt'] ); ?>" class="img-fw">
+								<?php if ( ! empty( $images ) ) : ?>
+									<div class="single-product__images">
+										<?php foreach ( $images as $image_item ) : ?>
+											<div class="single-img-mom">
+												<img src="<?php echo esc_url( $image_item['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_item['image']['alt'] ); ?>" class="img-fw">
+											</div>
+										<?php endforeach; ?>
 									</div>
-								<?php endforeach; ?>
+								<?php endif; ?>
 							</div>
-							<?php endif; ?>
-							<div class="single-content">
-								<div class="single-styk">
-									<div class="single-right-block">
+							<div class="single-content single-product__right">
+								<div class="single-styk single-product__content">
+									<div class="single-right-block single-product__content-badges">
 										<div class="p-12-12 single-right-highl m-12-12"><?php echo ! empty( $availability ) ? 'Есть в наличии' : 'Нет в наличии'; ?></div>
 										<?php if ( ! empty( $is_new ) ) : ?>
 											<div class="_2px_cube"></div>
 											<div class="p-12-12 uper m-12-12">Новинка</div>
 										<?php endif; ?>
 									</div>
-									<?php if ( ! empty( $brand ) ) : ?>
-										<div class="p-12-12 uper m-12-12"><?php echo esc_html( $brand ); ?></div>
-									<?php endif; ?>
-									<h1 class="p-24-24 h-single"><?php the_title(); ?></h1>
+									<div class="single-product__info">
+										<?php if ( ! empty( $brand ) ) : ?>
+											<div class="p-12-12 uper m-12-12 single-product__content-brand"><?php echo esc_html( $brand ); ?></div>
+										<?php endif; ?>
+										<h1 class="p-24-24 h-single single-product__content-heading"><?php the_title(); ?></h1>
+									</div>
 									<?php if ( ! empty( $colors ) ) : ?>
-										<div class="horiz">
+										<div class="horiz single-product__content-colors">
 											<?php
 											foreach ( $colors as $color ) :
 												if ( ! empty( $color['hex'] ) && ! empty( $color['name'] ) ) :
@@ -115,12 +119,12 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											?>
 										</div>
 									<?php endif; ?>
-									<div class="horiz">
+									<div class="horiz single-product__content-prices">
 										<?php if ( ! empty( $price ) ) : ?>
-											<div class="p-24-24"><?php echo esc_html( loveforever_format_price( $price ) ); ?> ₽</div>
+											<div class="p-24-24"><?php echo esc_html( loveforever_format_price( $price_with_discount, 0 ) ); ?> ₽</div>
 										<?php endif; ?>
 										<?php if ( ! empty( $price_with_discount ) ) : ?>
-											<div class="p-24-24 indirim-p-24-24"><?php echo esc_html( loveforever_format_price( $price_with_discount ) ); ?> ₽</div>
+											<div class="p-24-24 indirim-p-24-24"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?> ₽</div>
 											<?php
 											$discount = round( ( $price / $price_with_discount * 100 ) - 100 );
 											?>
@@ -129,8 +133,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											</div>
 										<?php endif; ?>
 									</div>
-									<div class="p-16-20 odesc w-richtext"><?php the_content(); ?></div>
-									<div class="vert form-keepre">
+									<?php if ( ! empty( get_the_content() ) ) : ?>
+										<div class="p-16-20 odesc w-richtext single-product__content-text flow"><?php the_content(); ?></div>
+									<?php endif; ?>
+									<div class="vert form-keepre single-product__content-form">
 										<form id="singleDressForm" class="single-dress-form" data-js-fitting-form>
 											<fieldset class="single-dress-form__fieldset">
 												<legend class="single-dress-form__legend">Запись на примерку</legend>
@@ -146,34 +152,17 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														>
 													</div>
 												<?php
-												/*
-												$dates      = array();
-												$first_date = new DateTime( $date_with_nearest_available_slots );
-
-												for ( $i = 0; $i < 6; $i++ ) {
-														$date = clone $first_date;
-														$date->modify( "+$i days" );
-														$dates[ $date->format( 'Y-m-d' ) ] = $date->format( 'd M' );
-												}
-												?>
-													<select name="date" id="singleDressFormDateField" data-js-custom-select>
-														<?php
-														$dates_counter = 0;
-														foreach ( $dates as $date_value => $date_name ) :
-															?>
-															<option value="<?php echo esc_attr( $date_value ); ?>"><?php echo esc_html( $date_name ); ?></option>
-															<?php
-															++$dates_counter;
-														endforeach;
-														?>
-													</select>
-													<?php
-													*/
-													$slots = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
+												$slots           = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
+												$available_slots = array_filter(
+													$slots,
+													function ( $slot ) {
+														return $slot['available'] > 0;
+													}
+												);
 												?>
 													<div class="single-dress-form__field-wrapper">
 														<select name="time" id="singleDressFormTimeField" data-js-custom-select>
-															<?php foreach ( $slots as $time => $slot_data ) : ?>
+															<?php foreach ( $available_slots as $time => $slot_data ) : ?>
 																<option 
 																	value="<?php echo esc_attr( $time ); ?>" 
 																	<?php echo 0 === $slot_data['available'] ? 'disabled' : ''; ?>
@@ -185,7 +174,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 													</div>
 													<button 
 														type="button" 
-														class="fitting-form__button button" data-js-fitting-form-dialog-button data-js-dialog-open-button="singleProductFittingDialog"
+														class="single-dress-form__button button" data-js-fitting-form-dialog-button data-js-dialog-open-button="singleProductFittingDialog"
 													>
 														Записаться
 													</button>
@@ -199,9 +188,11 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											</fieldset>
 										</form>
 									</div>
-									<p class="p-16-20 odescr">Примерить и купить платье можно в нашем салоне:г. Санкт-Петербург, Вознесенский проспект 18 (м. Садовая) ежедневно с 10 до 22:00 по предварительной записи<br>‍</p>
-									<div class="p-16-20 n-top single-p">Для доставки в регионы <a href="#" class="btn-call-reqest">закажите обратный звонок</a></div>
-									<div class="horiz m-vert">
+									<div class="w-richtext single-product__content-fitting-text flow">
+										<p class="p-16-20">Примерить и купить платье можно в нашем салоне: г. Санкт-Петербург, Вознесенский проспект 18 (м. Садовая) ежедневно с 10 до 22:00 по предварительной записи</p>
+										<p class="p-16-20">Для доставки в регионы <a href="#" class="btn-call-reqest">закажите обратный звонок</a></p>
+									</div>
+									<div class="horiz m-vert single-product__content-actions">
 										<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
 										<button type="button" id="singleDressPageAddToFavoriteButton" class="btn in-single-btn line w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
 											<div class="svg-share lik w-embed">
@@ -222,7 +213,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											<div>сохранить в vk</div>
 										</a>
 									</div>
-									<div class="horiz shere-line">
+									<div class="horiz shere-line single-product__content-socials">
 										<div class="p-12-12 uper m-12-12">Поделиться</div>
 										<div class="share-block">
 											<a href="https://vk.com/share.php?url=<?php the_permalink(); ?>" class="share-btn no-barba w-inline-block" target="_blank">
@@ -249,7 +240,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 										</div>
 									</div>
 									<?php if ( ! empty( $tags ) ) : ?>
-										<div class="cats-horiz">
+										<div class="cats-horiz single-product__content-tags">
 											<?php foreach ( $tags as $tag ) : ?>
 												<a href="#" class="btn grey-border_btn in-single w-inline-block">
 													<div>#<?php echo esc_html( $tag->name ); ?></div>

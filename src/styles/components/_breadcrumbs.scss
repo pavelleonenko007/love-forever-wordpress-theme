@@ -14,14 +14,19 @@
 	color: var(--color);
 	list-style: none;
 
-	&__item {
+	& &__item {
 		display: flex;
+		flex-wrap: nowrap;
 		align-items: center;
 		column-gap: var(--column-gap, 10rem);
 		font-size: 12rem;
 		line-height: 1;
 		text-transform: uppercase;
 		color: inherit;
+
+		@include tablet {
+			font-size: 8rem;
+		}
 
 		& a {
 			text-decoration: none;

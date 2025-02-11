@@ -1,3 +1,15 @@
+@use 'media' as *;
+
+.flow {
+	& > :first-child {
+		margin: 0;
+	}
+
+	& > * + * {
+		margin-top: 20rem;
+	}
+}
+
 .uppercase {
 	text-transform: uppercase !important;
 }
@@ -24,4 +36,40 @@
 
 .text-pink {
 	color: var(--pink) !important;
+}
+
+.visible-tablet {
+	@include tablet-above {
+		display: none !important;
+	}
+}
+
+.hidden-tablet {
+	@include tablet {
+		display: none !important;
+	}
+}
+
+.visible-mobile {
+	@include mobile-above {
+		display: none !important;
+	}
+}
+
+.hidden-mobile {
+	@include mobile {
+		display: none !important;
+	}
+}
+
+.visible-mobile-s {
+	@include mobile-s-above {
+		display: none !important;
+	}
+}
+
+.hidden-mobile-s {
+	@include mobile-s {
+		display: none !important;
+	}
 }

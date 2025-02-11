@@ -1,3 +1,5 @@
+@use '../media' as *;
+
 .single-dress-form {
 	width: 100%;
 
@@ -5,6 +7,11 @@
 		display: grid;
 		gap: 10rem;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
+
+		@include tablet {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			row-gap: 20rem;
+		}
 	}
 
 	&__legend {
@@ -13,5 +20,11 @@
 		line-height: 1;
 		font-weight: 500;
 		text-transform: uppercase;
+	}
+
+	&__button {
+		@include tablet {
+			grid-column: -1 / 1;
+		}
 	}
 }
