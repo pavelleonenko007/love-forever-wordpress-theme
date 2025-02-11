@@ -119,10 +119,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											?>
 										</div>
 									<?php endif; ?>
+									<?php if ( ! empty( $price ) ) : ?>
 									<div class="horiz single-product__content-prices">
-										<?php if ( ! empty( $price ) ) : ?>
-											<div class="p-24-24"><?php echo esc_html( loveforever_format_price( $price_with_discount, 0 ) ); ?> ₽</div>
-										<?php endif; ?>
+										<?php $first_price = loveforever_format_price( ! empty( $price_with_discount ) ? $price_with_discount : $price, 0 ); ?>
+										<div class="p-24-24"><?php echo esc_html( $first_price . ' ₽' ); ?></div>
 										<?php if ( ! empty( $price_with_discount ) ) : ?>
 											<div class="p-24-24 indirim-p-24-24"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?> ₽</div>
 											<?php
@@ -133,6 +133,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											</div>
 										<?php endif; ?>
 									</div>
+									<?php endif; ?>
 									<?php if ( ! empty( get_the_content() ) ) : ?>
 										<div class="p-16-20 odesc w-richtext single-product__content-text flow"><?php the_content(); ?></div>
 									<?php endif; ?>

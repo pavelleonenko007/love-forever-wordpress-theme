@@ -82,13 +82,16 @@ $slider_in_dress_card = get_field( 'slider_in_dress_card' );
 	</div>
 	<a href="<?php the_permalink(); ?>" class="prod-item_bottom w-inline-block">
 		<div data-wp="post_title" class="p-12-12 uper m-12-12"><?php the_title(); ?></div>
-		<div class="horiz indirim-horiz">
-			<?php if ( ! empty( $price ) ) : ?>
-				<div class="p-12-12 italic letter-5"><span><?php echo esc_html( loveforever_format_price( $price ) ); ?></span> ₽</div>
-			<?php endif; ?>
-			<?php if ( ! empty( $price_with_discount ) ) : ?>
-				<div class="p-12-12 italic letter-5 oldprice"><span><?php echo esc_html( loveforever_format_price( $price_with_discount ) ); ?></span> ₽</div>
-			<?php endif; ?>
-		</div>
+		<?php
+		if ( ! empty( $price ) ) :
+			?>
+			<div class="horiz indirim-horiz">
+				<?php $first_price = loveforever_format_price( ! empty( $price_with_discount ) ? $price_with_discount : $price, 0 ); ?>
+				<div class="p-12-12 italic letter-5"><span><?php echo esc_html( $first_price ); ?></span> ₽</div>
+				<?php if ( ! empty( $price_with_discount ) ) : ?>
+					<div class="p-12-12 italic letter-5 oldprice"><span><?php echo esc_html( loveforever_format_price( $price ) ); ?></span> ₽</div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
 	</a>
 </div>

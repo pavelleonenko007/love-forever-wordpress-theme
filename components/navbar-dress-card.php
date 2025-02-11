@@ -9,7 +9,8 @@ defined( 'ABSPATH' ) || exit;
 
 global $post;
 
-$price = get_field( 'price' );
+$price               = get_field( 'price' );
+$price_with_discount = get_field( 'price_with_discount' );
 ?>
 <a href="<?php the_permalink(); ?>" class="choosed-item w-inline-block">
 	<div class="mom-abs">
@@ -27,7 +28,7 @@ $price = get_field( 'price' );
 		<?php
 		if ( ! empty( $price ) ) :
 			?>
-			<div class="text-block"><?php echo esc_html( loveforever_format_price( $price, 0 ) . ' ₽' ); ?></div>
+			<div class="text-block"><?php echo esc_html( loveforever_format_price( ! empty( $price_with_discount ) ? $price_with_discount : $price, 0 ) . ' ₽' ); ?></div>
 		<?php endif; ?>
 	</div>
 </a>
