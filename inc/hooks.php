@@ -19,6 +19,43 @@ function loveforever_remove_comments_admin_menu() {
 	remove_menu_page( 'edit-comments.php' );
 }
 
+add_action( 'init', 'loveforever_create_manager_role' );
+function loveforever_create_manager_role() {
+	remove_role( 'manager' );
+
+	add_role(
+		'manager',
+		'Менеджер',
+		array(
+			'read'         => true,
+			'edit_posts'   => false,
+			'upload_files' => false,
+		)
+	);
+}
+
+add_action( 'init', 'loveforever_register_fitting_capabilities' );
+function loveforever_register_fitting_capabilities() {
+	$roles = array( 'manager', 'administrator' );
+
+	foreach ( $roles as $role_name ) {
+		$role = get_role( $role_name );
+		if ( $role ) {
+			$role->add_cap( 'read' );
+			$role->add_cap( 'publish_fittings' );
+			$role->add_cap( 'edit_fittings' );
+			$role->add_cap( 'edit_others_fittings' );
+			$role->add_cap( 'edit_published_fittings' );
+			$role->add_cap( 'read_private_fittings' );
+			$role->add_cap( 'edit_private_fittings' );
+			$role->add_cap( 'delete_fittings' );
+			$role->add_cap( 'delete_published_fittings' );
+			$role->add_cap( 'delete_private_fittings' );
+			$role->add_cap( 'delete_others_fittings' );
+		}
+	}
+}
+
 add_action( 'wp_ajax_create_new_fitting_record', 'loveforever_create_new_fitting_record_via_ajax' );
 add_action( 'wp_ajax_nopriv_create_new_fitting_record', 'loveforever_create_new_fitting_record_via_ajax' );
 function loveforever_create_new_fitting_record_via_ajax() {
@@ -42,7 +79,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	if ( ! isset( $_POST['phone'] ) || empty( $_POST['name'] ) || ! loveforever_is_valid_phone( $_POST['phone'] ) ) {
+	if ( ! isset( $_POST['phone'] ) || empty( $_POST['phone'] ) || ! loveforever_is_valid_phone( sanitize_text_field( wp_unslash( $_POST['phone'] ) ) ) ) {
 		wp_send_json_error(
 			array(
 				'message' => 'Пожалуйста, введите корректный номер телефона',
@@ -52,7 +89,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	if ( ! isset( $_POST['dress_category'] ) || empty( $_POST['dress_category'] ) ) {
+	if ( ! isset( $_POST['fitting_type'] ) || empty( $_POST['fitting_type'] ) ) {
 		wp_send_json_error(
 			array(
 				'message' => 'Пожалуйста, укажите тип платья',
@@ -82,16 +119,18 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
+	$fitting_id              = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
 	$name                    = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 	$phone                   = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
-	$dress_category          = is_array( $_POST['dress_category'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['dress_category'] ) ) : sanitize_text_field( wp_unslash( $_POST['dress_category'] ) );
+	$fitting_type            = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
+	$fitting_step            = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : '';
 	$date                    = sanitize_text_field( wp_unslash( $_POST['date'] ) );
 	$time                    = sanitize_text_field( wp_unslash( $_POST['time'] ) );
-	$ip_address              = loveforever_get_client_ip_address();
+	$comment                 = ! empty( $_POST['comment'] ) ? sanitize_textarea_field( wp_unslash( $_POST['comment'] ) ) : '';
+	$ip_address              = ! empty( $_POST['ip-address'] ) ? sanitize_text_field( wp_unslash( $_POST['ip-address'] ) ) : '';
 	$target_dress            = ! empty( $_POST['target_dress'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['target_dress'] ) ) : 0;
 	$client_favorite_dresses = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
-
-	$is_valid_fitting_time = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $dress_category );
+	$is_valid_fitting_time   = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $fitting_type, $fitting_id );
 
 	if ( true !== $is_valid_fitting_time ) {
 		wp_send_json_error(
@@ -109,6 +148,10 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		'post_type'   => 'fitting',
 	);
 
+	if ( 0 !== $fitting_id ) {
+		$fitting_post_data['ID'] = $fitting_id;
+	}
+
 	$fitting_post_id = wp_insert_post(
 		$fitting_post_data
 	);
@@ -123,11 +166,25 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	update_field( 'fitting_type', $dress_category, $fitting_post_id );
 	update_field( 'fitting_time', $date . ' ' . $time, $fitting_post_id );
 	update_field( 'phone', $phone, $fitting_post_id );
 	update_field( 'name', $name, $fitting_post_id );
-	update_field( 'ip_address', $ip_address, $fitting_post_id );
+
+	if ( ! empty( $comment ) ) {
+		update_field( 'comment', $comment, $fitting_post_id );
+	}
+
+	if ( ! empty( $fitting_type ) ) {
+		update_field( 'fitting_type', $fitting_type, $fitting_post_id );
+	}
+
+	if ( ! empty( $fitting_step ) ) {
+		update_field( 'fitting_step', $fitting_step, $fitting_post_id );
+	}
+
+	if ( ! empty( $ip_address ) ) {
+		update_field( 'ip_address', $ip_address, $fitting_post_id );
+	}
 
 	if ( ! empty( $target_dress ) ) {
 		update_field( 'target_dress', $target_dress, $fitting_post_id );
@@ -139,9 +196,127 @@ function loveforever_create_new_fitting_record_via_ajax() {
 
 	wp_send_json_success(
 		array(
-			'message' => 'Вы успешно записались на примерку',
+			'fitting_type' => $fitting_type,
+			'message'      => 0 === $fitting_id ? 'Вы успешно записались на примерку' : 'Запись на примерку успешно обновлена',
 		),
 		201
+	);
+}
+
+add_action( 'wp_ajax_delete_fitting', 'loveforever_delete_fitting_via_ajax' );
+add_action( 'wp_ajax_nopriv_delete_fitting', 'loveforever_delete_fitting_via_ajax' );
+function loveforever_delete_fitting_via_ajax() {
+	if ( ! isset( $_POST['fitting_id'] ) || empty( $_POST['fitting_id'] ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Не указан ID записи',
+			),
+			400
+		);
+	}
+
+	$fitting_id = sanitize_text_field( wp_unslash( $_POST['fitting_id'] ) );
+
+	if ( ! isset( $_POST['delete_fitting_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['delete_fitting_nonce'] ) ), "delete_fitting_$fitting_id" ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Невалидный nonce',
+			),
+			400
+		);
+	}
+
+	$delete_result = wp_delete_post( $fitting_id );
+
+	if ( ! $delete_result ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка при удалении записи. Обновите страницу и попробуйте еще раз',
+				'debug'   => "Ошибка: $delete_result",
+			),
+		);
+	}
+
+	wp_send_json_success(
+		array(
+			'message' => 'Запись успешно удалена',
+		)
+	);
+}
+
+add_action( 'wp_ajax_filter_fittings', 'loveforever_filter_fittings_via_ajax' );
+add_action( 'wp_ajax_nopriv_filter_fittings', 'loveforever_filter_fittings_via_ajax' );
+function loveforever_filter_fittings_via_ajax() {
+	if ( ! isset( $_POST['_filter_fitting_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_filter_fitting_nonce'] ) ), 'filter_fittings' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Невалидный nonce',
+			),
+			400
+		);
+	}
+
+	$now           = gmdate( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+	$today         = gmdate( 'Y-m-d', current_time( 'timestamp' ) );
+	$selected_date = ! empty( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
+	$start_date    = ! empty( $selected_date ) && $selected_date > $today ? $selected_date : $now;
+	$next_date     = gmdate( 'Y-m-d', strtotime( $start_date . ' +1 day' ) );
+
+	$fittings_query_args = array(
+		'post_type'      => 'fitting',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+		'meta_key'       => 'fitting_time',
+		'orderby'        => 'meta_value',
+		'order'          => 'ASC',
+		'meta_query'     => array(
+			array(
+				'key'     => 'fitting_time',
+				'value'   => $start_date,
+				'compare' => '>=',
+				'type'    => 'DATETIME',
+			),
+			array(
+				'key'     => 'fitting_time',
+				'value'   => $next_date,
+				'compare' => '<=',
+				'type'    => 'DATETIME',
+			),
+		),
+	);
+
+	if ( ! empty( $_POST['s'] ) ) {
+		$fittings_query_args['s'] = sanitize_text_field( wp_unslash( $_POST['s'] ) );
+
+		unset( $fittings_query_args['meta_query'] );
+	}
+
+	$fittings_query = new WP_Query( $fittings_query_args );
+
+	ob_start();
+
+	if ( $fittings_query->have_posts() ) {
+		while ( $fittings_query->have_posts() ) {
+			$fittings_query->the_post();
+			get_template_part( 'components/fitting-table-row' );
+		}
+
+		wp_reset_postdata();
+	} else { ?>
+		<tr>
+			<td colspan="6">На выбранную дату нет записей</td>
+		</tr>
+		<?php
+	}
+
+	wp_send_json_success(
+		array(
+			'message' => "Примерки на $start_date успешно получены!",
+			'html'    => ob_get_clean(),
+		)
 	);
 }
 
@@ -162,32 +337,37 @@ function loveforever_get_date_time_slots_via_ajax() {
 	$start_date  = gmdate( 'd.m.Y', strtotime( '+' . 3 * $date_increment_ratio . 'days', current_time( 'timestamp' ) ) );
 	$end_date    = gmdate( 'd.m.Y', strtotime( '+' . 3 * $date_increment_ratio + 2 . 'days', current_time( 'timestamp' ) ) );
 	$slots_range = Fitting_Slots::get_slots_range( $start_date, $end_date );
+	$can_edit_fittings = current_user_can( 'edit_fittings' ) || current_user_can( 'manage_options' );
 
 	$html = '';
 
 	ob_start();
-	foreach ( $slots_range as $slots_range_date => $slots ) : ?>
+	foreach ( $slots_range as $slots_range_date => $slots ) :
+		?>
 		<div class="fitting-form__day-column">
 			<div class="fitting-form__day-column-head">
-				<label class="fitting-form__day-input radio">
+				<label class="fitting-form__day-input loveforever-radio">
 					<!-- <input class="radio__input" type="radio" name="date" id="" value="01.02"> -->
-					<span class="radio__label"><?php echo esc_html( gmdate( 'd.m (D)', strtotime( $slots_range_date ) ) ); ?></span>
+					<span class="radio__label"><?php echo esc_html( date_i18n( 'd.m (D)', strtotime( $slots_range_date ) ) ); ?></span>
 				</label>
 			</div>
 			<ol class="fitting-form__day-column-list">
 				<?php foreach ( $slots as $time => $slot ) : ?>
 				<li class="fitting-form__day-column-list-item">
-					<label class="radio">
+					<label class="loveforever-radio">
 						<input 
-							class="radio__input" 
+							class="loveforever-radio__control" 
 							type="radio" 
 							name="time" 
-							id="" 
+							id="<?php echo esc_attr( 'globalDressFittingTimeField' . $time ); ?>" 
 							value="<?php echo esc_attr( $time ); ?>"
 							<?php echo 0 === $slot['available'] ? 'disabled' : ''; ?>
 							data-js-fitting-form-date-value="<?php echo esc_attr( gmdate( 'Y-m-d', strtotime( $slots_range_date ) ) ); ?>"
 						>
-						<span class="radio__label"><?php echo esc_html( $time ); ?></span>
+						<span class="loveforever-radio__label">
+							<?php echo esc_html( $time ); ?>
+							<?php echo $can_edit_fittings ? '(' . $slot['available'] . ')' : ''; ?>
+						</span>
 					</label>
 				</li>
 				<?php endforeach; ?>
@@ -230,8 +410,9 @@ function loveforever_get_date_fitting_time_slots_via_ajax() {
 		);
 	}
 
+	$fitting_id             = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : null;
 	$date                   = sanitize_text_field( wp_unslash( $_POST['date'] ) );
-	$fitting_slots_for_date = Fitting_Slots::get_day_slots( $date, current_time( 'timestamp' ) );
+	$fitting_slots_for_date = Fitting_Slots::get_day_slots( $date, current_time( 'timestamp' ), $fitting_id );
 
 	wp_send_json_success(
 		array(
@@ -774,4 +955,53 @@ function loveforever_query_products_via_ajax() {
 			'html'    => $html,
 		)
 	);
+}
+
+add_action( 'init', 'loveforever_add_custom_fitting_rewrite_rule' );
+function loveforever_add_custom_fitting_rewrite_rule() {
+	add_rewrite_rule( 'fittings-admin-panel/([0-9]+)?$', 'index.php?fitting_id=$matches[1]', 'top' );
+}
+
+add_action( 'query_vars', 'loveforever_add_custom_fitting_query_var' );
+function loveforever_add_custom_fitting_query_var( $query_vars ) {
+	$query_vars[] = 'fitting_id';
+	return $query_vars;
+}
+
+add_action( 'template_include', 'loveforever_include_admin_fittings_template' );
+function loveforever_include_admin_fittings_template( $template ) {
+	if ( ! empty( get_query_var( 'fitting_id' ) ) ) {
+		return get_template_directory() . '/admin-fittings.php';
+	}
+
+	return $template;
+}
+
+add_filter( 'post_password_expires', 'loveforever_change_post_password_expires_time' );
+function loveforever_change_post_password_expires_time() {
+	return time() + DAY_IN_SECONDS;
+}
+
+add_filter( 'the_password_form', 'loveforever_change_password_form', 10, 2 );
+function loveforever_change_password_form( $form_html, $post ) {
+	$post      = get_post( $post );
+	$label     = 'pwbox-' . ( empty( $post->ID ) ? rand() : $post->ID );
+	$form_html = '<form action="' . esc_url( site_url( 'wp-login.php?action=postpass', 'login_post' ) ) . '" class="post-password-form" method="post">
+		<p>' . __( 'This content is password protected. To view it please enter your password below:' ) . '</p>
+		<p class="field">
+			<label for="' . $label . '" class="field__label">' . __( 'Password:' ) . ' </label>
+			<input 
+				name="post_password" 
+				id="' . $label . '" 
+				type="password" 
+				class="field__control" 
+				spellcheck="false" 
+				size="20" 
+			/>
+		</p>
+		<input type="submit" class="button" name="Submit" value="' . esc_attr_x( 'Enter', 'post password form' ) . '" />
+	</form>
+	';
+
+	return $form_html;
 }

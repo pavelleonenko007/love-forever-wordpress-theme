@@ -16,7 +16,15 @@ get_header(
 	)
 );
 
-$favorites      = ! empty( $_COOKIE['favorites'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['favorites'] ) ) : '';
+$is_from_link = ! empty( $_GET['favorites'] );
+$favorites    = '';
+
+if ( $is_from_link ) {
+	$favorites = sanitize_text_field( wp_unslash( $_GET['favorites'] ) );
+} else {
+	$favorites = ! empty( $_COOKIE['favorites'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['favorites'] ) ) : '';
+}
+
 $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 ?>
 				<section class="section">
@@ -26,7 +34,9 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 						<div class="page-top">
 							<?php get_template_part( 'components/breadcrumb' ); ?>
 							<h1 class="p-86-96"><?php the_title(); ?></h1>
-							<div class="p-16-20 mmax480"><?php the_content(); ?></div>
+							<?php if ( ! $is_from_link ) : ?>
+								<div class="p-16-20 mmax480"><?php the_content(); ?></div>
+							<?php endif; ?>
 							<?php if ( ! empty( $favorites ) ) : ?>
 								<button type="button" data-js-copy-button="<?php echo $favorites_link; ?>" class="btn pink-btn p-t-30 w-inline-block">
 									<div data-js-copy-button-text>Поделиться избранным</div>
@@ -65,7 +75,7 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 						</div>
 					</div>
 				</section>
-				<?php if ( ! empty( $favorites ) ) : ?>
+				<?php if ( ! $is_from_link && ! empty( $favorites ) ) : ?>
 					<section class="section">
 						<div class="container">
 							<div class="spleet">
@@ -125,11 +135,16 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 						</div>
 					</section>
 				<?php endif; ?>
-				<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
 				<?php
-				$faq_section = get_field( 'faq_section' );
-				if ( ! empty( $faq_section['faqs'] ) ) :
-					?>
+				if ( ! $is_from_link ) :
+					get_template_part( 'template-parts/home/recently-viewed-section' );
+				endif;
+				?>
+				<?php
+				if ( ! $is_from_link ) :
+					$faq_section = get_field( 'faq_section' );
+					if ( ! empty( $faq_section['faqs'] ) ) :
+						?>
 					<section class="section">
 						<div class="container">
 							<div class="spleet">
@@ -142,14 +157,17 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 									?>
 									<?php get_template_part( 'components/faq-item' ); ?>
 									<?php
-								endforeach;
+									endforeach;
 								wp_reset_postdata();
 								?>
 							</div>
 						</div>
 					</section>
-				<?php endif; ?>
-				<?php get_template_part( 'template-parts/global/map-section' ); ?>
+					<?php endif; ?>
+					<?php
+					get_template_part( 'template-parts/global/map-section' );
+				endif;
+				?>
 			</div>
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>

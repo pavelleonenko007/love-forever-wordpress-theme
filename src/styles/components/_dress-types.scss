@@ -1,0 +1,26 @@
+.dress-types {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4rem;
+}
+
+.dress-type-tag {
+	display: inline-flex;
+	border-radius: 2rem;
+	padding: 2rem 6rem;
+	background-color: #666;
+	color: #fff;
+
+	&--wedding {
+		background-color: wheat;
+		color: #000;
+	}
+
+	&--evening {
+		background-color: orange;
+	}
+
+	&--prom {
+		background-color: blue;
+	}
+}

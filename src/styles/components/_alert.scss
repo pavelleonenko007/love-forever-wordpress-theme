@@ -1,0 +1,21 @@
+.alert {
+  padding: 10rem 20rem;
+  border-radius: 20rem;
+	background: #E5E5E5;
+	border: 1rem solid #E5E5E5;
+	font-size: 16rem;
+	font-weight: 500;
+	line-height: 1.6;
+
+	&--success {
+		color: #007000;
+		background: #E5F5E5;
+		border-color: #007000;
+	}
+
+	&--error {
+		color: #700000;
+		background: #F5E5E5;
+		border-color: #700000;
+	}
+}

@@ -1,8 +1,30 @@
 .loveforever-checkbox {
 	margin: 0;
-	display: flex;
+	display: inline-flex;
+	align-items: center;
 	column-gap: 10rem;
 	font-size: 12rem;
 	line-height: 1;
 	text-transform: uppercase;
+
+	&__control {
+		appearance: none;
+		width: 20rem;
+		height: 20rem;
+		border-radius: 4rem;
+		border: var(--field-border);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&:checked {
+			background-image: url('../assets/images/check.svg');
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+	}
+
+	&__label {
+		font-weight: 500;
+	}
 }

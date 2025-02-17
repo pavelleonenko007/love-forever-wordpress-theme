@@ -33,7 +33,7 @@ function loveforever_is_valid_phone( $phone ) {
 	return ( preg_match( '/^[78]\d{10}$/', $phone ) === 1 );
 }
 
-function loveforever_is_valid_fitting_datetime( $datetime, $fitting_type ) {
+function loveforever_is_valid_fitting_datetime( $datetime, $fitting_type, $exclude_fitting_id = null ) {
 	$timestamp = strtotime( $datetime );
 	if ( $timestamp === false ) {
 			return 'Неверный формат даты и времени';
@@ -52,7 +52,7 @@ function loveforever_is_valid_fitting_datetime( $datetime, $fitting_type ) {
 	// Проверка доступности слота
 	$date              = gmdate( 'Y-m-d', $timestamp );
 	$time              = gmdate( 'H:i', $timestamp );
-	$slot_availability = Fitting_Slots::check_slot_availability( $date, $time, $fitting_type );
+	$slot_availability = Fitting_Slots::check_slot_availability( $date, $time, $fitting_type, $exclude_fitting_id );
 
 	if ( $slot_availability !== true ) {
 			return $slot_availability;

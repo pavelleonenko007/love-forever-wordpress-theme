@@ -94,6 +94,33 @@
             "append": ""
         },
         {
+            "key": "field_67af524781f69",
+            "label": "Этап примерки",
+            "name": "fitting_step",
+            "aria-label": "",
+            "type": "radio",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "delivery": "Выдача",
+                "fitting": "Подгонка",
+                "re-fitting": "Повтор"
+            },
+            "default_value": "",
+            "return_format": "value",
+            "allow_null": 0,
+            "other_choice": 0,
+            "allow_in_bindings": 0,
+            "layout": "vertical",
+            "save_other_choice": 0
+        },
+        {
             "key": "field_674dfe9e729b1",
             "label": "IP Адрес",
             "name": "ip_address",
@@ -217,5 +244,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1737970560
+    "modified": 1739543873
 }

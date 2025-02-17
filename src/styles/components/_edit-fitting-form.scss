@@ -1,0 +1,60 @@
+@use '../variables' as *;
+@use '../media' as *;
+
+.edit-fitting {
+	width: 100%;
+	padding-inline: 20rem;
+	margin-inline: auto;
+	max-width: 600rem;
+	display: flex;
+	flex-direction: column;
+	gap: 20rem;
+
+	&__button {
+		align-self: start;
+	}
+}
+
+.edit-fitting-form {
+	padding: 30rem;
+	border: var(--field-border);
+	border-radius: 20rem;
+
+	&__inner {
+		margin-inline: auto;
+		width: 100%;
+		max-width: min(100%, 500rem);
+		display: flex;
+		flex-direction: column;
+		row-gap: 20rem;
+	}
+
+	&__title {
+		margin: 0;
+	}
+
+	&__fieldset {
+		padding: 20rem;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 10rem;
+		border: var(--field-border);
+		border-radius: 20rem;
+
+		legend {
+			padding-inline: 4rem;
+			font-size: 12rem;
+			font-weight: 500;
+		}
+
+		[data-js-form-field-errors] {
+			grid-column: -1 / 1;
+		}
+	}
+
+	&__error {
+		&:empty {
+			display: none;
+		}
+	}
+}

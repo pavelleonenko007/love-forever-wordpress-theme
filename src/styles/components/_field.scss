@@ -9,6 +9,11 @@
 	font-weight: 500;
 	line-height: 1;
 
+	&__label {
+		margin-inline: 20rem;
+		font-weight: 500;
+	}
+
 	&__control {
 		padding-inline: 20rem;
 		height: 50rem;

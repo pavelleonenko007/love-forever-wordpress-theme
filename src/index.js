@@ -4,9 +4,11 @@ import { AccordionCollection } from './Accordion';
 import AddToFavoriteButtonCollection from './AddToFavoriteButton';
 import CopyToClipboardButtonCollection from './CopyToClipboardButton';
 import CustomSelectCollection from './CustomSelect';
+import DeleteFittingButton from './DeleteFittingButton';
 import DialogCollection from './Dialog';
 import FavoritesButtonWithCounterCollection from './FavoritesButtonWithCounter';
 import FileInputCollection from './FileInput';
+import FilterFittingFormCollection from './FilterFittingForm';
 import { FittingFormCollection } from './FittingForm';
 import FormsValidator from './FormValidator';
 import InputMaskCollection from './InputMask';
@@ -153,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		FileInputCollection.destroyAll();
 		VideoPlayerCollection.destroyAll();
 		CustomSelectCollection.destroyAll();
+		FilterFittingFormCollection.destroyAll();
 	});
 
 	Barba.Dispatcher.on(
@@ -198,6 +201,8 @@ function initPage() {
 	CopyToClipboardButtonCollection.init();
 	VideoPlayerCollection.init();
 	CustomSelectCollection.init();
+	FittingFormCollection.init();
+	FilterFittingFormCollection.init();
 }
 
 function initCatalogPage() {
@@ -209,8 +214,6 @@ function initCatalogPage() {
 
 function initSingleDressPage() {
 	console.log('init single dress page');
-
-	FittingFormCollection.init();
 }
 
 function initReviewsPage() {
@@ -223,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	console.log('load');
 
 	new AddToFavoriteButtonCollection();
+	new DeleteFittingButton();
 
 	initPage();
 

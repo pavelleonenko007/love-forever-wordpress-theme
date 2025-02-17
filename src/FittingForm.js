@@ -1,5 +1,5 @@
 import BaseComponent from './BaseComponent';
-import { formatDateToRussian } from './utils';
+import { formatDateToRussian, promiseWrapper, wait } from './utils';
 
 const ROOT_SELECTOR = '[data-js-fitting-form]';
 
@@ -159,8 +159,6 @@ class GlobalFittingForm extends BaseFittingForm {
 	 * @param {ChangeEvent} event
 	 */
 	changeFormHandler(event) {
-		this.state.error = null;
-
 		const { target } = event;
 
 		if (target.dataset?.jsFittingFormDateValue) {
@@ -230,7 +228,7 @@ class GlobalFittingForm extends BaseFittingForm {
 		}
 
 		this.state.isSubmitting = true;
-		this.state.error = null;
+		// this.state.error = null;
 
 		try {
 			const formData = new FormData(this.form);
@@ -254,6 +252,13 @@ class GlobalFittingForm extends BaseFittingForm {
 
 			this.state.dialogMessage = body.data.message;
 			this.state.dateIncrementRatio = 1;
+
+			document.dispatchEvent(
+				new Event('updateFittings', {
+					bubbles: true,
+					cancelable: true,
+				})
+			);
 		} catch (error) {
 			console.error(error);
 			this.state.error = error.message;
@@ -309,7 +314,10 @@ class GlobalFittingForm extends BaseFittingForm {
 			this.openStep(this.state.step);
 		}
 
-		if (this.prevState.time !== this.state.time) {
+		if (
+			this.prevState.time !== this.state.time ||
+			this.prevState.date !== this.state.date
+		) {
 			this.state.step = 1;
 		}
 
@@ -446,8 +454,6 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {ChangeEvent} event
 	 */
 	onChange = (event) => {
-		console.log(event);
-		
 		this.state.error = null;
 
 		const formData = Object.fromEntries(new FormData(this.form));
@@ -632,6 +638,223 @@ class SingleFittingForm extends BaseFittingForm {
 	}
 }
 
+class EditFittingForm extends BaseFittingForm {
+	selectors = {
+		root: ROOT_SELECTOR,
+		errorElement: '[data-js-fitting-form-error]',
+	};
+	/**
+	 *
+	 * @param {HTMLFormElement} form
+	 */
+	constructor(form) {
+		super(form);
+
+		this.submitButton = this.form.querySelector('[type="submit"]');
+		this.errorElement = this.form.querySelector(this.selectors.errorElement);
+
+		const state = { ...this.state };
+		const formData = Object.fromEntries(new FormData(this.form));
+
+		for (const name in formData) {
+			if (Object.prototype.hasOwnProperty.call(formData, name)) {
+				const value = formData[name];
+				state[name] = value;
+			}
+		}
+
+		this.state = this._getProxyState({
+			...state,
+			isUpdatingSlots: false,
+		});
+
+		this.prevState = { ...this.state };
+
+		this.bindEvents();
+	}
+
+	async updateFitting() {
+		try {
+			const formData = new FormData(this.form);
+
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
+			});
+
+			const body = await response.json();
+
+			// console.log(body);
+
+			if (!body.success) {
+				throw new Error(body.data.message);
+			}
+
+			return body.data;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getNewTimeSlots() {
+		try {
+			const formData = new FormData();
+
+			formData.append('action', 'get_fitting_time_slots');
+			formData.append('nonce', LOVE_FOREVER.NONCE);
+			formData.append('date', this.state.date);
+			formData.append('fitting-id', this.form.elements['fitting-id']);
+
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
+			});
+
+			const body = await response.json();
+
+			if (!body.success) {
+				throw new Error(body.data.message);
+			}
+
+			return body.data;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async updateTimeSlots() {
+		if (this.state.isUpdatingSlots) return;
+
+		this.state.isUpdatingSlots = true;
+
+		await wait(2000);
+
+		const { data, error } = await promiseWrapper(this.getNewTimeSlots());
+
+		if (error) {
+			this.state.success = false;
+			this.state.error = error.message;
+			this.state.isUpdatingSlots = false;
+			return;
+		}
+
+		const timeSelectControl = this.form.elements.time;
+		let timeOptions = '';
+
+		for (const time in data.slots) {
+			if (Object.prototype.hasOwnProperty.call(data.slots, time)) {
+				const slot = data.slots[time];
+
+				timeOptions += `<option value="${time}" ${
+					slot.available === 0 ? 'disabled' : ''
+				}>${time} (Доступно примерок: ${slot.available})</option>`;
+			}
+		}
+
+		timeSelectControl.innerHTML = timeOptions;
+		this.state.isUpdatingSlots = false;
+	}
+
+	updateState() {
+		const formData = Object.fromEntries(new FormData(this.form));
+
+		for (const name in formData) {
+			if (Object.prototype.hasOwnProperty.call(formData, name)) {
+				const value = formData[name];
+				this.state[name] = value;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param {Event} event
+	 */
+	onChange = (event) => {
+		this.state.error = null;
+
+		this.updateState();
+	};
+
+	/**
+	 *
+	 * @param {SubmitEvent} event
+	 */
+	submitForm = async (event) => {
+		event.preventDefault();
+
+		if (this.state.isSubmitting || event.target !== this.form) return;
+
+		this.state.isSubmitting = true;
+		this.state.error = null;
+
+		const { data, error } = await promiseWrapper(this.updateFitting());
+
+		console.log({ data, error });
+
+		this.state.isSubmitting = false;
+
+		if (error) {
+			this.state.success = false;
+			this.state.error = error.message;
+		} else {
+			this.state.success = true;
+			window.location.assign(
+				`${window.location.origin}${window.location.pathname}?updated=true`
+			);
+		}
+	};
+
+	updateUI() {
+		console.log({ ...this.state });
+
+		if (this.prevState.date !== this.state.date) {
+			this.updateTimeSlots();
+		}
+
+		if (this.state.isUpdatingSlots) {
+			$(this.form.elements.time).selectmenu('disable');
+		}
+
+		if (
+			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
+			!this.state.isUpdatingSlots
+		) {
+			$(this.form.elements.time).selectmenu('refresh');
+			$(this.form.elements.time).selectmenu('enable');
+			this.form.elements.time.dispatchEvent(
+				new Event('change', {
+					bubbles: true,
+					cancelable: true,
+				})
+			);
+		}
+
+		this.submitButton.disabled =
+			this.state.isSubmitting || this.state.isUpdatingSlots;
+
+		this.submitButton.textContent = this.state.isSubmitting
+			? 'Обновляем...'
+			: 'Обновить';
+
+		this.errorElement.innerHTML = this.state.error
+			? `<div class="alert alert--error"><p>${this.state.error}</p></div>`
+			: '';
+
+		this.prevState = { ...this.state };
+	}
+
+	bindEvents() {
+		document.addEventListener('submit', this.submitForm);
+		this.form.addEventListener('change', this.onChange);
+	}
+
+	destroy() {
+		document.removeEventListener('submit', this.submitForm);
+		this.form.removeEventListener('change', this.onChange);
+	}
+}
+
 class FittingFormCollection {
 	/**
 	 * @type {Map<string, BaseFittingForm>}
@@ -653,10 +876,16 @@ class FittingFormCollection {
 		document.querySelectorAll(ROOT_SELECTOR).forEach((fittingForm) => {
 			let fittingFormInstance = null;
 
-			if (fittingForm.id === 'singleDressForm') {
-				fittingFormInstance = new SingleFittingForm(fittingForm);
-			} else {
-				fittingFormInstance = new GlobalFittingForm(fittingForm);
+			switch (fittingForm.id) {
+				case 'singleDressForm':
+					fittingFormInstance = new SingleFittingForm(fittingForm);
+					break;
+				case 'editFittingForm':
+					fittingFormInstance = new EditFittingForm(fittingForm);
+					break;
+				default:
+					fittingFormInstance = new GlobalFittingForm(fittingForm);
+					break;
 			}
 
 			this.forms.set(fittingForm.id, fittingFormInstance);

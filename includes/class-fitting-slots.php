@@ -54,8 +54,8 @@ class Fitting_Slots {
 		return null;
 	}
 
-	public static function get_day_slots( $date, $current_time = null ) {
-		$available_slots = self::get_available_slots( $date );
+	public static function get_day_slots( $date, $current_time = null, $exclude_fitting_id = null ) {
+		$available_slots = self::get_available_slots( $date, $current_time, $exclude_fitting_id );
 		$all_slots       = self::generate_all_slots( $date );
 
 		foreach ( $all_slots as $time => &$slot ) {
@@ -90,9 +90,9 @@ class Fitting_Slots {
 		return $slots;
 	}
 
-	public static function get_available_slots( $date, $current_time = null ) {
+	public static function get_available_slots( $date, $current_time = null, $exclude_fitting_id = null ) {
 		$slots    = self::generate_slots( $date, $current_time );
-		$bookings = self::get_bookings( $date );
+		$bookings = self::get_bookings( $date, $exclude_fitting_id );
 		return self::apply_bookings_to_slots( $slots, $bookings );
 	}
 
@@ -122,24 +122,43 @@ class Fitting_Slots {
 	}
 
 	private static function get_max_fittings_for_slot( $date, $time ) {
+
 		$day_of_week   = gmdate( 'w', strtotime( $date ) );
 		$default_slots = 2; // Значение по умолчанию
 
-		// Здесь можно добавить логику для получения настроек количества слотов из базы данных
-		// Например:
-		// $settings = get_option('salon_love_fitting_settings');
-		// return isset($settings[$day_of_week][$time]) ? $settings[$day_of_week][$time] : $default_slots;
+		$forced_fittings_number_by_day = ! empty( get_field( 'forced_fittings_number_by_day', 'option' ) ) ? get_field( 'forced_fittings_number_by_day', 'option' ) : array();
 
-		return $default_slots;
+		if ( ! empty( $forced_fittings_number_by_day ) ) {
+			foreach ( $forced_fittings_number_by_day as $forced_fitting ) {
+				$current_date        = strtotime( $date . ' ' . $time );
+				$forced_fitting_date = strtotime( $forced_fitting['date'] );
+
+				if ( $current_date === $forced_fitting_date ) {
+					return $forced_fitting['fittings_number'];
+				}
+			}
+		}
+
+		$fittings_number_by_day_of_week = ! empty( get_field( 'fittings_number_by_day_of_week', 'option' ) ) ? get_field( 'fittings_number_by_day_of_week', 'option' ) : array();
+
+		$formatted_fittings = array();
+		if ( ! empty( $fittings_number_by_day_of_week ) ) {
+			foreach ( $fittings_number_by_day_of_week as $fitting ) {
+				$formatted_fittings[ $fitting['weekday'] ] = (int) $fitting['fittings_number'];
+			}
+		}
+
+		return isset( $formatted_fittings[ $day_of_week ] ) ? $formatted_fittings[ $day_of_week ] : $default_slots;
 	}
 
-	private static function get_bookings( $date ) {
+	private static function get_bookings( $date, $exclude_fitting_id = null ) {
 		$start_of_day = $date . ' 00:00:00';
 		$end_of_day   = $date . ' 23:59:59';
 
 		$args = array(
 			'post_type'      => 'fitting',
 			'posts_per_page' => -1,
+			'post_status'    => 'publish',
 			'meta_query'     => array(
 				array(
 					'key'     => 'fitting_time',
@@ -149,6 +168,10 @@ class Fitting_Slots {
 				),
 			),
 		);
+
+		if ( ! empty( $exclude_fitting_id ) ) {
+			$args['post__not_in'] = array( $exclude_fitting_id );
+		}
 
 		$query    = new WP_Query( $args );
 		$bookings = array();
@@ -171,11 +194,11 @@ class Fitting_Slots {
 		return $bookings;
 	}
 
-	public static function check_slot_availability( $date, $time, $fitting_type ) {
-		$slots = self::get_available_slots( $date );
+	public static function check_slot_availability( $date, $time, $fitting_type, $exclude_fitting_id = null ) {
+		$slots = self::get_available_slots( $date, null, $exclude_fitting_id );
 
 		if ( ! isset( $slots[ $time ] ) || $slots[ $time ] <= 0 ) {
-				return 'Выбранное время уже занято';
+				return 'Выбранное время уже занято' . $exclude_fitting_id;
 		}
 
 		$duration     = self::get_fitting_duration( $fitting_type );
@@ -183,23 +206,23 @@ class Fitting_Slots {
 		$current_time = strtotime( $date . ' ' . $time );
 
 		while ( $current_time < $end_time ) {
-				$check_time = gmdate( 'H:i', $current_time );
+			$check_time = gmdate( 'H:i', $current_time );
 			if ( ! isset( $slots[ $check_time ] ) || $slots[ $check_time ] <= 0 ) {
-					return 'Недостаточно свободного времени для выбранного типа примерки';
+					return 'Недостаточно свободного времени для выбранного типа примерки' . $exclude_fitting_id;
 			}
-				$current_time = strtotime( '+30 minutes', $current_time );
+			$current_time = strtotime( '+30 minutes', $current_time );
 		}
 
 		return true;
 	}
 
 	private static function get_fitting_duration( $fitting_type ) {
-		switch ( $fitting_type ) {
-			case 'wedding':
-				return 90;
-			default:
-				return 60;
-		}
+		$wedding_duration = 90;
+		$default_duration = 60;
+
+		return ( is_array( $fitting_type ) && in_array( 'wedding', $fitting_type ) ) || 'wedding' === $fitting_type
+			? $wedding_duration
+			: $default_duration;
 	}
 
 	private static function apply_bookings_to_slots( $slots, $bookings ) {

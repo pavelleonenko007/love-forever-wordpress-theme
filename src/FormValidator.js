@@ -18,9 +18,17 @@ export default class FormsValidator {
 	}
 
 	manageErrors(fieldControlElement, errorMessages) {
-		const fieldErrorsElement = fieldControlElement.parentElement.querySelector(
-			this.selectors.fieldErrors
-		);
+		const fieldErrorsElement = ['radio', 'checkbox'].includes(
+			fieldControlElement.type
+		)
+			? fieldControlElement.parentElement.parentElement.querySelector(
+					this.selectors.fieldErrors
+			  )
+			: fieldControlElement.parentElement.querySelector(
+					this.selectors.fieldErrors
+			  );
+
+		console.log({ fieldErrorsElement, fieldControlElement, errorMessages });
 
 		fieldErrorsElement.innerHTML = errorMessages
 			.map((message) => `<span class="field__error">${message}</span>`)
@@ -28,6 +36,26 @@ export default class FormsValidator {
 	}
 
 	validateField(fieldControlElement) {
+		if (
+			fieldControlElement.type === 'checkbox' &&
+			fieldControlElement.name.endsWith('[]')
+		) {
+			const form = fieldControlElement.closest('form');
+			const checkboxes = form.querySelectorAll(
+				`input[name="${fieldControlElement.name}"]`
+			);
+			const isValid = Array.from(checkboxes).some(
+				(checkbox) => checkbox.checked
+			);
+
+			this.manageErrors(
+				fieldControlElement,
+				isValid ? [] : [this.errorMessages.valueMissing()]
+			);
+			fieldControlElement.ariaInvalid = !isValid;
+			return isValid;
+		}
+
 		const errors = fieldControlElement.validity;
 		const errorMessages = [];
 

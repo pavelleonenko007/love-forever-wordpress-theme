@@ -1,0 +1,19 @@
+@use '../media' as *;
+
+.fitting-filter-form {
+	padding-block: 20rem;
+	display: flex;
+	justify-content: space-between;
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		gap: 16rem;
+		flex-grow: 1;
+	}
+
+	&__field {
+		display: inline-flex;
+		max-width: min(100%, 250rem);
+	}
+}
