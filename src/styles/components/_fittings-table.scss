@@ -15,6 +15,11 @@
 	}
 
 	tbody {
+		&.is-loading {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+		
 		tr:last-child {
 			td:first-child {
 				border-bottom-left-radius: 10rem;
