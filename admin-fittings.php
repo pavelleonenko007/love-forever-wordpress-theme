@@ -25,6 +25,17 @@ $post            = get_post( 471 );
 $fitting_id      = get_query_var( 'fitting_id' );
 $admin_page_link = get_the_permalink();
 $page_title      = ! empty( $fitting_id ) ? 'Редактировать примерку' : get_the_title();
+
+$fitting_steps        = array(
+	'delivery'   => 'Выдача',
+	'fitting'    => 'Подгонка',
+	're-fitting' => 'Повтор',
+);
+$fitting_steps_colors = array(
+	'delivery'   => '#F2DEDF',
+	'fitting'    => '#FCF9E0',
+	're-fitting' => '#E1EFDA',
+);
 ?>
 				<section class="section">
 					<div class="container container-fw n-top">
@@ -156,13 +167,6 @@ $page_title      = ! empty( $fitting_id ) ? 'Редактировать прим
 												<?php endforeach; ?>
 												<span class="field__errors" data-js-form-field-errors></span>
 											</fieldset>
-											<?php
-											$fitting_steps = array(
-												'delivery' => 'Выдача',
-												'fitting'  => 'Подгонка',
-												're-fitting' => 'Повтор',
-											);
-											?>
 											<fieldset class="edit-fitting-form__fieldset">
 												<legend>Этап</legend>
 												<?php foreach ( $fitting_steps as $fitting_steps_value => $fitting_steps_label ) : ?>
@@ -195,28 +199,42 @@ $page_title      = ! empty( $fitting_id ) ? 'Редактировать прим
 								$tomorrow = gmdate( 'Y-m-d', strtotime( '+1 day', current_time( 'timestamp' ) ) );
 								?>
 								<form id="filterFittingForm" class="admin-fittings__filter-form fitting-filter-form" data-js-filter-fitting-form>
-									<div class="fitting-filter-form__inner">
-										<div class="fitting-filter-form__field field">
-											<input type="search" name="s" id="filterFittingFormSearchField" placeholder="Поиск" value="" class="field__control">
-										</div>
-										<div class="fitting-filter-form__field field">
-											<input type="date" name="date" id="filterFittingFormDateField" class="field__control">
-										</div>
-										<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $today ); ?>">Сегодня</button>
-										<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $tomorrow ); ?>">Завтра</button>
-										<button type="reset" class="button button--link">Сбросить фильтры</button>
-										<input type="hidden" name="action" value="filter_fittings">
-										<?php wp_nonce_field( 'filter_fittings', '_filter_fitting_nonce', false ); ?>
-										<input type='hidden' value='474' name='wpessid' />
+									<div class="fitting-filter-form__actions">
+										<button 
+											type="button" 
+											class="button button--success" 
+											data-js-fitting-form-dialog-button 
+											data-js-dialog-open-button="globalFittingDialog"
+										>
+											Добавить примерку
+										</button>
 									</div>
-									<button 
-										type="button" 
-										class="button button--success" 
-										data-js-fitting-form-dialog-button 
-										data-js-dialog-open-button="globalFittingDialog"
-									>
-										Добавить примерку
-									</button>
+									<div class="fitting-filter-form__wrapper">
+										<div class="fitting-filter-form__inner">
+											<div class="fitting-filter-form__field field">
+												<input type="search" name="s" id="filterFittingFormSearchField" placeholder="Поиск" value="" class="field__control">
+											</div>
+											<div class="fitting-filter-form__field field">
+												<input type="date" name="date" id="filterFittingFormDateField" class="field__control">
+											</div>
+											<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $today ); ?>">Сегодня</button>
+											<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $tomorrow ); ?>">Завтра</button>
+											<button type="reset" class="button button--link">Сбросить фильтры</button>
+											<input type="hidden" name="action" value="filter_fittings">
+											<?php wp_nonce_field( 'filter_fittings', '_filter_fitting_nonce', false ); ?>
+											<input type='hidden' value='474' name='wpessid' />
+										</div>
+										<div class="fitting-step-tags">
+											<?php foreach ( $fitting_steps as $fitting_step_key => $fitting_step_label ) : ?>
+												<span 
+													class="fitting-step-tags__item fitting-step-tag fitting-step-tag--<?php echo esc_attr( $fitting_step_key ); ?>" 
+													style="background-color: <?php echo esc_attr( $fitting_steps_colors[ $fitting_step_key ] ); ?>;"
+												>
+													<?php echo esc_html( $fitting_step_label ); ?>
+												</span>
+											<?php endforeach; ?>
+										</div>
+									</div>
 								</form>
 								<table class="fittings-table">
 									<thead class="fittings-table__head">

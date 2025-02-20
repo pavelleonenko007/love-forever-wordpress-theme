@@ -1,0 +1,19 @@
+.fitting-step-tags {
+  display: flex;
+	flex-wrap: wrap;
+	gap: 6rem;
+}
+
+.fitting-step-tag {
+	height: 30rem;
+	padding-inline: 20rem;
+	border-radius: 100rem;
+	display: inline-flex;
+	align-items: center;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-family: Tt Chocolates, sans-serif;
+	font-size: 12rem;
+	line-height: 1;
+	font-weight: 500;
+}
