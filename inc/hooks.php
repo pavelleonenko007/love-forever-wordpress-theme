@@ -119,27 +119,31 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	$fitting_id              = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
-	$name                    = sanitize_text_field( wp_unslash( $_POST['name'] ) );
-	$phone                   = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
-	$fitting_type            = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
-	$fitting_step            = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : '';
-	$date                    = sanitize_text_field( wp_unslash( $_POST['date'] ) );
-	$time                    = sanitize_text_field( wp_unslash( $_POST['time'] ) );
-	$comment                 = ! empty( $_POST['comment'] ) ? sanitize_textarea_field( wp_unslash( $_POST['comment'] ) ) : '';
-	$ip_address              = ! empty( $_POST['ip-address'] ) ? sanitize_text_field( wp_unslash( $_POST['ip-address'] ) ) : '';
-	$target_dress            = ! empty( $_POST['target_dress'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['target_dress'] ) ) : 0;
-	$client_favorite_dresses = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
-	$is_valid_fitting_time   = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $fitting_type, $fitting_id );
+	$fitting_id                       = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
+	$name                             = sanitize_text_field( wp_unslash( $_POST['name'] ) );
+	$phone                            = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
+	$fitting_type                     = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
+	$fitting_step                     = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : '';
+	$date                             = sanitize_text_field( wp_unslash( $_POST['date'] ) );
+	$time                             = sanitize_text_field( wp_unslash( $_POST['time'] ) );
+	$comment                          = ! empty( $_POST['comment'] ) ? sanitize_textarea_field( wp_unslash( $_POST['comment'] ) ) : '';
+	$ip_address                       = ! empty( $_POST['ip-address'] ) ? sanitize_text_field( wp_unslash( $_POST['ip-address'] ) ) : '';
+	$target_dress                     = ! empty( $_POST['target_dress'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['target_dress'] ) ) : 0;
+	$client_favorite_dresses          = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
+	$has_change_fittings_capabilities = loveforever_is_user_has_manager_capability();
 
-	if ( true !== $is_valid_fitting_time ) {
-		wp_send_json_error(
-			array(
-				'message' => $is_valid_fitting_time,
-				'debug'   => 'Невалидное время примерки',
-			),
-			400
-		);
+	if ( ! $has_change_fittings_capabilities ) {
+		$is_valid_fitting_time = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $fitting_type, $fitting_id );
+
+		if ( true !== $is_valid_fitting_time ) {
+			wp_send_json_error(
+				array(
+					'message' => $is_valid_fitting_time,
+					'debug'   => 'Невалидное время примерки',
+				),
+				400
+			);
+		}
 	}
 
 	$fitting_post_data = array(
@@ -334,9 +338,9 @@ function loveforever_get_date_time_slots_via_ajax() {
 
 	$date_increment_ratio = ! empty( $_POST['date-increment-ratio'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['date-increment-ratio'] ) ) : 0;
 
-	$start_date  = gmdate( 'd.m.Y', strtotime( '+' . 3 * $date_increment_ratio . 'days', current_time( 'timestamp' ) ) );
-	$end_date    = gmdate( 'd.m.Y', strtotime( '+' . 3 * $date_increment_ratio + 2 . 'days', current_time( 'timestamp' ) ) );
-	$slots_range = Fitting_Slots::get_slots_range( $start_date, $end_date );
+	$start_date        = gmdate( 'd.m.Y', strtotime( '+' . 3 * $date_increment_ratio . 'days', current_time( 'timestamp' ) ) );
+	$end_date          = gmdate( 'd.m.Y', strtotime( '+' . 3 * $date_increment_ratio + 2 . 'days', current_time( 'timestamp' ) ) );
+	$slots_range       = Fitting_Slots::get_slots_range( $start_date, $end_date );
 	$can_edit_fittings = current_user_can( 'edit_fittings' ) || current_user_can( 'manage_options' );
 
 	$html = '';
@@ -361,7 +365,7 @@ function loveforever_get_date_time_slots_via_ajax() {
 							name="time" 
 							id="<?php echo esc_attr( 'globalDressFittingTimeField' . $time ); ?>" 
 							value="<?php echo esc_attr( $time ); ?>"
-							<?php echo 0 === $slot['available'] ? 'disabled' : ''; ?>
+							<?php echo ! $can_edit_fittings && 0 === $slot['available'] ? 'disabled' : ''; ?>
 							data-js-fitting-form-date-value="<?php echo esc_attr( gmdate( 'Y-m-d', strtotime( $slots_range_date ) ) ); ?>"
 						>
 						<span class="loveforever-radio__label">

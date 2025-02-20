@@ -124,7 +124,7 @@ $can_edit_fittings = current_user_can( 'edit_fittings' ) || current_user_can( 'm
 															name="time" 
 															id="<?php echo esc_attr( 'globalDressFittingTimeField' . $time ); ?>" 
 															value="<?php echo esc_attr( $time ); ?>"
-															<?php echo 0 === $slot['available'] ? 'disabled' : ''; ?>
+															<?php echo ! $can_edit_fittings && 0 === $slot['available'] ? 'disabled' : ''; ?>
 															data-js-fitting-form-date-value="<?php echo esc_attr( gmdate( 'Y-m-d', strtotime( $slots_range_date ) ) ); ?>"
 														>
 														<span class="loveforever-radio__label">

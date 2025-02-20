@@ -118,3 +118,7 @@ function loveforever_mask_phone( $phone ) {
 	$masked_phone = substr( $phone, 0, 9 ) . '...';
 	return $masked_phone;
 }
+
+function loveforever_is_user_has_manager_capability() {
+	return current_user_can( 'edit_fittings' ) || current_user_can( 'manage_options' );
+}
