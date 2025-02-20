@@ -86,22 +86,12 @@ $page_title      = ! empty( $fitting_id ) ? 'Редактировать прим
 												<label for="fittingTime" class="field__label">Время</label>
 												<select name="time" id="fittingTime" required data-js-custom-select>
 													<?php foreach ( $slots as $time => $slot_object ) : ?>
-														<?php if ( $slot_object['available'] === 0 ) : ?>
-															<option 
-																value="<?php echo esc_attr( $time ); ?>" 
-																<?php echo $time === $fitting_hours ? 'selected' : ''; ?>
-																disabled
-															>
-																<?php echo esc_html( $time ); ?>
-															</option>
-														<?php else : ?>
-															<option 
-																value="<?php echo esc_attr( $time ); ?>"
-																<?php echo $time === $fitting_hours ? 'selected' : ''; ?>
-															>
-																<?php echo esc_html( $time . ' (Доступно примерок: ' . $slot_object['available'] . ')' ); ?>
-															</option>
-														<?php endif; ?>
+														<option 
+															value="<?php echo esc_attr( $time ); ?>"
+															<?php echo $time === $fitting_hours ? 'selected' : ''; ?>
+														>
+															<?php echo esc_html( $time . ' (Доступно примерок: ' . $slot_object['available'] . ' из ' . $slot_object['max_fittings'] . ')' ); ?>
+														</option>
 													<?php endforeach; ?>
 												</select>
 												<span class="field__errors" id="fittingTimeErrors" data-js-form-field-errors></span>
