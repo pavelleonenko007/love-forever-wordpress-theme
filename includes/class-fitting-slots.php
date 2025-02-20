@@ -8,6 +8,8 @@
 defined( 'ABSPATH' ) || exit;
 
 class Fitting_Slots {
+	private static $min_fitting_duration = 60;
+
 	public static function get_slots_range( $start_date, $end_date ) {
 		$slots        = array();
 		$current_date = new DateTime( $start_date );
@@ -77,7 +79,7 @@ class Fitting_Slots {
 		$end_time   = strtotime( '21:00' );
 		$interval   = 30 * 60; // 30 minutes
 
-		while ( $start_time < $end_time ) {
+		while ( $start_time <= $end_time ) {
 				$time           = gmdate( 'H:i', $start_time );
 				$slots[ $time ] = array(
 					'max_fittings' => self::get_max_fittings_for_slot( $date, $time ),
@@ -91,9 +93,10 @@ class Fitting_Slots {
 	}
 
 	public static function get_available_slots( $date, $current_time = null, $exclude_fitting_id = null ) {
-		$slots    = self::generate_slots( $date, $current_time );
-		$bookings = self::get_bookings( $date, $exclude_fitting_id );
-		return self::apply_bookings_to_slots( $slots, $bookings );
+		$slots               = self::generate_slots( $date, $current_time );
+		$bookings            = self::get_bookings( $date, $exclude_fitting_id );
+		$slots_with_bookings = self::apply_bookings_to_slots( $slots, $bookings );
+		return self::apply_minimum_duration_rule( $slots_with_bookings );
 	}
 
 	private static function generate_slots( $date, $current_time = null ) {
@@ -109,7 +112,7 @@ class Fitting_Slots {
 			$current_time = strtotime( '00:00', strtotime( $date ) );
 		}
 
-		while ( $start_time < $end_time ) {
+		while ( $start_time <= $end_time ) {
 			$time = gmdate( 'H:i', $start_time );
 			// Проверяем, не прошло ли уже это время
 			if ( strtotime( $date . ' ' . $time ) > $current_time ) {
@@ -241,5 +244,31 @@ class Fitting_Slots {
 		}
 
 		return $slots;
+	}
+
+	private static function apply_minimum_duration_rule( $slots ) {
+		$min_slots_needed = self::$min_fitting_duration / 30;
+		$formatted_slots  = array();
+		$slot_times       = array_keys( $slots );
+
+		foreach ( $slot_times as $index => $time ) {
+			$current_count = $slots[ $time ];
+
+			if ( $current_count <= 0 ) {
+				$formatted_slots[ $time ] = 0;
+				continue;
+			}
+
+			if ( $current_count >= $min_slots_needed ) {
+				$formatted_slots[ $time ] = $current_count;
+				continue;
+			}
+
+			// Check next slot availability
+			$next_count               = isset( $slots[ $slot_times[ $index + 1 ] ] ) ? $slots[ $slot_times[ $index + 1 ] ] : 0;
+			$formatted_slots[ $time ] = ( $current_count + $next_count >= $min_slots_needed ) ? $current_count : 0;
+		}
+
+		return $formatted_slots;
 	}
 }
