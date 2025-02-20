@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 global $post;
 
 $name                    = get_field( 'name' );
-$number                  = get_field( 'phone' );
+$phone                   = get_field( 'phone' );
 $fitting_comment         = get_field( 'comment' );
 $ip_address              = get_field( 'ip_address' );
 $fitting_type            = get_field( 'fitting_type' );
@@ -47,14 +47,18 @@ $fitting_steps           = array(
 				<p><?php echo esc_html( $name ); ?></p>
 			<?php endif; ?>
 			<?php if ( ! empty( $phone ) ) : ?>
-				<p><a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>"><?php echo esc_html( $phone ); ?></a></p>
+				<p><a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" class="loveforever-link"><?php echo esc_html( $phone ); ?></a></p>
 			<?php endif; ?>
 		</div>
 	</td>
 	<td>
 		<div class="fittings-table__cell">
 			<?php if ( ! empty( $client_favorite_dresses ) ) : ?>
-				<p><a href="<?php echo esc_url( home_url( '/' ) . 'favorites?favorites=' . implode( ',', $client_favorite_dresses ) ); ?>">Избранное пользователя</a></p>
+				<p>
+					<a 
+						href="<?php echo esc_url( home_url( '/' ) . 'favorites?favorites=' . implode( ',', $client_favorite_dresses ) ); ?>" 	class="loveforever-link"
+					>Избранное пользователя</a>
+				</p>
 			<?php endif; ?>
 			<?php if ( ! empty( $ip_address ) ) : ?>
 				<p>IP Адрес: <?php echo esc_html( $ip_address ); ?></p>
