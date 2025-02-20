@@ -211,7 +211,9 @@ $page_title      = ! empty( $fitting_id ) ? 'Редактировать прим
 									</div>
 									<button 
 										type="button" 
-										class="button" data-js-fitting-form-dialog-button data-js-dialog-open-button="globalFittingDialog"
+										class="button button--success" 
+										data-js-fitting-form-dialog-button 
+										data-js-dialog-open-button="globalFittingDialog"
 									>
 										Добавить примерку
 									</button>

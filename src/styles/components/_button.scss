@@ -38,6 +38,15 @@
 		color: #000000;
 	}
 
+	&--success {
+		background-color: #28a745;
+		border-color: #28a745;
+
+		@include hover {
+			color: #218838;
+		}
+	}
+
 	&:disabled {
 		opacity: 0.6;
 		pointer-events: none;
