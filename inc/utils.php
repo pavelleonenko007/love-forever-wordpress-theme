@@ -122,3 +122,12 @@ function loveforever_mask_phone( $phone ) {
 function loveforever_is_user_has_manager_capability() {
 	return current_user_can( 'edit_fittings' ) || current_user_can( 'manage_options' );
 }
+
+function loveforever_format_special_hours( array $special_hours ) {
+	$formatted_slots = array();
+	foreach ( $special_hours as $special_hours_item ) {
+		$formatted_slots[ $special_hours_item['time'] ] = $special_hours_item['special_fittings_number'];
+	}
+
+	return $formatted_slots;
+}

@@ -147,7 +147,12 @@ class Fitting_Slots {
 		$formatted_fittings = array();
 		if ( ! empty( $fittings_number_by_day_of_week ) ) {
 			foreach ( $fittings_number_by_day_of_week as $fitting ) {
-				$formatted_fittings[ $fitting['weekday'] ] = (int) $fitting['fittings_number'];
+				if ( ! empty( $fitting['special_hours_capacity'] ) ) {
+					$special_hours_slots  = loveforever_format_special_hours( $fitting['special_hours_capacity'] );
+					$formatted_fittings[] = isset( $special_hours_slots[ $time ] ) ? (int) $special_hours_slots[ $time ] : (int) $fitting['fittings_number'];
+				} else {
+					$formatted_fittings[ $fitting['weekday'] ] = (int) $fitting['fittings_number'];
+				}
 			}
 		}
 

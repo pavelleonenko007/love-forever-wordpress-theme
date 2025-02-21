@@ -543,6 +543,74 @@
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_67b320b62cf6b"
+                },
+                {
+                    "key": "field_67b8444151502",
+                    "label": "Вместимость в особые часы",
+                    "name": "special_hours_capacity",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Добавить особые часы",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_67b845ac51503",
+                            "label": "Время",
+                            "name": "time",
+                            "aria-label": "",
+                            "type": "time_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "display_format": "H:i",
+                            "return_format": "H:i",
+                            "allow_in_bindings": 0,
+                            "parent_repeater": "field_67b8444151502"
+                        },
+                        {
+                            "key": "field_67b845df51504",
+                            "label": "Количество примерочных",
+                            "name": "special_fittings_number",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_67b8444151502"
+                        }
+                    ],
+                    "parent_repeater": "field_67b320b62cf6b"
                 }
             ]
         }
@@ -565,5 +633,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1739793944
+    "modified": 1740130546
 }
