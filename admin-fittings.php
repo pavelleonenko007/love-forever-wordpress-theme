@@ -200,14 +200,16 @@ $fitting_steps_colors = array(
 								?>
 								<form id="filterFittingForm" class="admin-fittings__filter-form fitting-filter-form" data-js-filter-fitting-form>
 									<div class="fitting-filter-form__actions">
-										<button 
-											type="button" 
-											class="button button--success" 
-											data-js-fitting-form-dialog-button 
-											data-js-dialog-open-button="globalFittingDialog"
-										>
-											Добавить примерку
-										</button>
+										<div class="fitting-step-tags">
+											<?php foreach ( $fitting_steps as $fitting_step_key => $fitting_step_label ) : ?>
+												<span 
+													class="fitting-step-tags__item fitting-step-tag fitting-step-tag--<?php echo esc_attr( $fitting_step_key ); ?>" 
+													style="background-color: <?php echo esc_attr( $fitting_steps_colors[ $fitting_step_key ] ); ?>;"
+												>
+													<?php echo esc_html( $fitting_step_label ); ?>
+												</span>
+											<?php endforeach; ?>
+										</div>
 									</div>
 									<div class="fitting-filter-form__wrapper">
 										<div class="fitting-filter-form__inner">
@@ -224,16 +226,14 @@ $fitting_steps_colors = array(
 											<?php wp_nonce_field( 'filter_fittings', '_filter_fitting_nonce', false ); ?>
 											<input type='hidden' value='474' name='wpessid' />
 										</div>
-										<div class="fitting-step-tags">
-											<?php foreach ( $fitting_steps as $fitting_step_key => $fitting_step_label ) : ?>
-												<span 
-													class="fitting-step-tags__item fitting-step-tag fitting-step-tag--<?php echo esc_attr( $fitting_step_key ); ?>" 
-													style="background-color: <?php echo esc_attr( $fitting_steps_colors[ $fitting_step_key ] ); ?>;"
-												>
-													<?php echo esc_html( $fitting_step_label ); ?>
-												</span>
-											<?php endforeach; ?>
-										</div>
+										<button 
+											type="button" 
+											class="button button--success" 
+											data-js-fitting-form-dialog-button 
+											data-js-dialog-open-button="globalFittingDialog"
+										>
+											Добавить примерку
+										</button>
 									</div>
 								</form>
 								<table class="fittings-table">
