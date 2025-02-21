@@ -164,6 +164,11 @@ class Fitting_Slots {
 			'post_status'    => 'publish',
 			'meta_query'     => array(
 				array(
+					'key'     => 'fitting_step',
+					'value'   => 'delivery',
+					'compare' => '!=',
+				),
+				array(
 					'key'     => 'fitting_time',
 					'value'   => array( $start_of_day, $end_of_day ),
 					'compare' => 'BETWEEN',

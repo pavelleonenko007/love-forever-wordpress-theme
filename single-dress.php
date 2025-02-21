@@ -29,6 +29,8 @@ $tags                = get_the_terms( get_the_ID(), 'dress_tag' );
 $dress_category      = get_the_terms( get_the_ID(), 'dress_category' );
 $related_products    = get_field( 'related_products' );
 
+$has_change_fittings_capabilities = loveforever_is_user_has_manager_capability();
+
 $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date();
 ?>
 				<section class="section">
@@ -354,7 +356,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														value="<?php echo esc_attr( get_the_ID() ); ?>"
 														form="singleDressForm"
 													>
-													<?php if ( ! empty( $_COOKIE['favorites'] ) ) : ?>
+													<?php if ( ! $has_change_fittings_capabilities && ! empty( $_COOKIE['favorites'] ) ) : ?>
 														<input 
 															type="hidden" 
 															name="client_favorite_dresses" 

@@ -132,7 +132,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	$client_favorite_dresses          = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
 	$has_change_fittings_capabilities = loveforever_is_user_has_manager_capability();
 
-	if ( ! $has_change_fittings_capabilities ) {
+	if ( ! $has_change_fittings_capabilities || 'delivery' !== $fitting_step ) {
 		$is_valid_fitting_time = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $fitting_type, $fitting_id );
 
 		if ( true !== $is_valid_fitting_time ) {
