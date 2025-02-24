@@ -120,7 +120,7 @@ class ProductFilterForm {
 			this.resetPage();
 		}
 
-		if (['dress_brand[]', 'style[]'].includes(event.target.name)) {
+		if (['brand[]', 'style[]'].includes(event.target.name)) {
 			return;
 		}
 

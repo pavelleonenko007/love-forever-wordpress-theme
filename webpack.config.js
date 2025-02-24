@@ -31,7 +31,7 @@ module.exports = (env) => {
 					!(plugin instanceof DependencyExtractionWebpackPlugin)
 			),
 			new MiniCssExtractPlugin({
-				filename: 'css/style.css',
+				filename: 'css/[name].css',
 			}),
 			new DependencyExtractionWebpackPlugin({
 				outputFilename: './bundle.asset.php',

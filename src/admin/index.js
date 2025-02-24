@@ -1,8 +1,13 @@
+import initDressSorting from './DressSort';
+import './styles/admin.scss';
+
 const REGULAR_PRICE_FIELD_SELECTOR = '#regularPriceField input';
 const DISCOUNT_PERCENT_FIELD_SELECTOR = '#salePercentField input';
 const PRICE_WITH_DISCOUNT_FIELD_SELECTOR = '#priceWithDiscountField input';
 
 jQuery(document).ready(function ($) {
+	initDressSorting();
+
 	const $regularPriceField = $(REGULAR_PRICE_FIELD_SELECTOR);
 	const $discountPercentField = $(DISCOUNT_PERCENT_FIELD_SELECTOR);
 	const $priceWithDiscountField = $(PRICE_WITH_DISCOUNT_FIELD_SELECTOR);

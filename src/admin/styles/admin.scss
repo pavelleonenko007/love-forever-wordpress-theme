@@ -1,0 +1,13 @@
+.sortable {
+	$root: &;
+
+	&__handle {
+		cursor: grab;
+	}
+
+	&__helper {
+		#{$root}__handle {
+			cursor: grabbing;
+		}
+	}
+}

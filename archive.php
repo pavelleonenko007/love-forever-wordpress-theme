@@ -5,8 +5,6 @@
  * @package 0.0.1
  */
 
-use function PHPSTORM_META\map;
-
 defined( 'ABSPATH' ) || exit;
 
 get_header(
@@ -53,7 +51,7 @@ $queried_object = get_queried_object();
 				$current_page        = ! empty( $_GET['page'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['page'] ) ) : get_query_var( 'paged' );
 				$selected_silhouette = ! empty( $_GET['silhouette'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['silhouette'] ) ) : null;
 				$orderby             = ! empty( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'views';
-				$other_filter_names  = array( 'dress_brand', 'style' );
+				$other_filter_names  = array( 'brand', 'style' );
 				$other_filters       = array();
 
 				foreach ( $other_filter_names as $other_filter_name ) {
@@ -299,10 +297,19 @@ $queried_object = get_queried_object();
 									$products_query_args['order']    = 'DESC';
 									break;
 								default:
-									$products_query_args['meta_key'] = 'product_views_count';
-									$products_query_args['orderby']  = array(
-										'menu_order'     => 'ASC',
-										'meta_value_num' => 'DESC',
+									$products_query_args['meta_query']['product_views_count']                       = array(
+										'key'     => 'product_views_count',
+										'compare' => 'EXISTS',
+										'type'    => 'NUMERIC',
+									);
+									$products_query_args['meta_query'][ 'dress_order_' . $queried_object->term_id ] = array(
+										'key'     => 'dress_order_' . $queried_object->term_id,
+										'compare' => 'EXISTS',
+										'type'    => 'NUMERIC',
+									);
+									$products_query_args['orderby'] = array(
+										'dress_order_' . $queried_object->term_id     => 'ASC',
+										'product_views_count' => 'DESC',
 									);
 									break;
 							}

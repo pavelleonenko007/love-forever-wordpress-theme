@@ -9,6 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_enqueue_scripts', 'loveforever_add_admin_scripts' );
 function loveforever_add_admin_scripts() {
+	wp_enqueue_style( 'admin', TEMPLATE_PATH . '/build/css/admin.css', array(), time() );
 	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_register_script( 'admin_script', TEMPLATE_PATH . '/js/admin.js', array( 'jquery' ), false, true );
 	wp_enqueue_script( 'admin_script' );
@@ -30,7 +31,7 @@ function loveforever_add_site_scripts() {
 	wp_enqueue_script( 'jquery' );
 
 	wp_enqueue_style( 'main', TEMPLATE_PATH . '/css/main.css', array(), time() );
-	wp_enqueue_style( 'bundle', TEMPLATE_PATH . '/build/css/style.css', array( 'main' ), time() );
+	wp_enqueue_style( 'bundle', TEMPLATE_PATH . '/build/css/bundle.css', array( 'main' ), time() );
 	wp_enqueue_style( 'custom', TEMPLATE_PATH . '/css/custom.css', array( 'bundle' ), time() );
 
 	wp_enqueue_script( 'jquery-ui-core' );

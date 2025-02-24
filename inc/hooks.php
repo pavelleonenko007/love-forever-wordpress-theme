@@ -455,6 +455,19 @@ function loveforever_get_filtered_products_via_ajax() {
 		),
 	);
 
+	$term_id = 0;
+
+	if ( ! empty( $_POST['taxonomy'] ) && ! empty( $_POST[ $_POST['taxonomy'] ] ) ) {
+		$taxonomy = sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) );
+		$term_id  = sanitize_text_field( wp_unslash( $_POST[ $taxonomy ] ) );
+
+		$products_query_args['tax_query'][] = array(
+			'taxonomy' => $taxonomy,
+			'field'    => 'term_id',
+			'terms'    => array( $term_id ),
+		);
+	}
+
 	switch ( $orderby ) {
 		case 'date':
 			$products_query_args['orderby'] = 'date';
@@ -471,23 +484,21 @@ function loveforever_get_filtered_products_via_ajax() {
 			$products_query_args['order']    = 'DESC';
 			break;
 		default:
-			$products_query_args['meta_key'] = 'product_views_count';
-			$products_query_args['orderby']  = array(
-				'menu_order'     => 'ASC',
-				'meta_value_num' => 'DESC',
+			$products_query_args['meta_query']['product_views_count']       = array(
+				'key'     => 'product_views_count',
+				'compare' => 'EXISTS',
+				'type'    => 'NUMERIC',
+			);
+			$products_query_args['meta_query'][ 'dress_order_' . $term_id ] = array(
+				'key'     => 'dress_order_' . $term_id,
+				'compare' => 'EXISTS',
+				'type'    => 'NUMERIC',
+			);
+			$products_query_args['orderby']                                 = array(
+				'dress_order_' . $term_id => 'ASC',
+				'product_views_count'     => 'DESC',
 			);
 			break;
-	}
-
-	if ( ! empty( $_POST['taxonomy'] ) && ! empty( $_POST[ $_POST['taxonomy'] ] ) ) {
-		$taxonomy = sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) );
-		$term_id  = sanitize_text_field( wp_unslash( $_POST[ $taxonomy ] ) );
-
-		$products_query_args['tax_query'][] = array(
-			'taxonomy' => $taxonomy,
-			'field'    => 'term_id',
-			'terms'    => array( $term_id ),
-		);
 	}
 
 	if ( ! empty( $_POST['silhouette'] ) ) {
@@ -756,16 +767,16 @@ function loveforever_add_product_to_favorites_via_ajax() {
 		200
 	);
 }
-add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
-function loveforever_modify_dress_category_query( $query ) {
-	if ( $query->is_tax( 'dress_category' ) ) {
-		// $query->set( 'posts_per_page', 3 );
-	}
+// add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
+// function loveforever_modify_dress_category_query( $query ) {
+// if ( $query->is_tax( 'dress_category' ) ) {
+// $query->set( 'posts_per_page', 3 );
+// }
 
-	if ( $query->is_post_type_archive( 'review' ) && ! is_admin() ) {
-		$query->set( 'posts_per_page', 3 );
-	}
-}
+// if ( $query->is_post_type_archive( 'review' ) && ! is_admin() ) {
+// $query->set( 'posts_per_page', 3 );
+// }
+// }
 
 function loveforever_breadcrumbs_attribute_filter( $li_attributes, $type, $id ) {
 	$pattern               = '/class="([^"]*)"/';
@@ -809,16 +820,16 @@ add_filter( 'acf/format_value/type=textarea', 'do_shortcode' );
 
 add_filter( 'manage_dress_posts_columns', 'loveforever_dress_add_sort_column' );
 function loveforever_dress_add_sort_column( $columns ) {
-	$columns['menu_order'] = 'Порядок';
-	$columns['discount']   = 'Скидка';
+	// $columns['menu_order'] = 'Порядок';
+	$columns['discount'] = 'Скидка';
 	return $columns;
 }
 
 add_action( 'manage_dress_posts_custom_column', 'loveforever_dress_sort_column_content', 10, 2 );
 function loveforever_dress_sort_column_content( $column_name, $post_id ) {
-	if ( 'menu_order' === $column_name ) {
-			echo esc_html( get_post( $post_id )->menu_order );
-	}
+	// if ( 'menu_order' === $column_name ) {
+	// echo esc_html( get_post( $post_id )->menu_order );
+	// }
 
 	if ( 'discount' === $column_name ) {
 		$discount     = get_field( 'discount_percent', $post_id );
@@ -1009,3 +1020,22 @@ function loveforever_change_password_form( $form_html, $post ) {
 
 	return $form_html;
 }
+
+// $dresses = get_posts(
+// array(
+// 'post_type'   => 'dress',
+// 'numberposts' => -1,
+// 'orderby'     => 'menu_order',
+// 'order'       => 'ASC',
+// )
+// );
+
+// global $wpdb;
+
+// foreach ( $dresses as $dress ) {
+// $wpdb->update(
+// $wpdb->posts,
+// array( 'menu_order' => 0 ),
+// array( 'ID' => $dress->ID )
+// );
+// }

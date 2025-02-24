@@ -16,5 +16,6 @@ require_once __DIR__ . '/inc/options.php';
 require_once __DIR__ . '/inc/functions.php';
 require_once __DIR__ . '/inc/hooks.php';
 
+require_once __DIR__ . '/includes/class-dress-order.php';
 require_once __DIR__ . '/includes/class-fitting-slots.php';
 require_once __DIR__ . '/inc/dress-importer.php';
