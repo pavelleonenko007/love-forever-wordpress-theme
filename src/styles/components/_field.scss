@@ -9,6 +9,12 @@
 	font-weight: 500;
 	line-height: 1;
 
+	&__body {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 10rem;
+	}
+
 	&__label {
 		margin-inline: 20rem;
 		font-weight: 500;

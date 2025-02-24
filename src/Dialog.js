@@ -38,7 +38,7 @@ class Dialog {
 		if (this.dialog.classList.contains(this.stateSelectors.isOpen)) {
 			return;
 		}
-		
+
 		this.dialog.classList.add(this.stateSelectors.isOpen);
 		document.documentElement.classList.add(this.stateSelectors.isLocked);
 
@@ -105,6 +105,7 @@ class Dialog {
 
 		if (
 			event.target.matches(this.selectors.closeButton) ||
+			!event.target.closest('.ui-menu-item') &&
 			!event.target.closest(this.selectors.dialogContent)
 		) {
 			this.close();

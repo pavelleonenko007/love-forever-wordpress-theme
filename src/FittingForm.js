@@ -85,6 +85,8 @@ class GlobalFittingForm extends BaseFittingForm {
 	constructor(form) {
 		super(form);
 
+		console.log(form);
+
 		this.steps = this.form.querySelectorAll(this.selectors.step);
 		this.backButton = this.form.querySelector(this.selectors.backButton);
 		this.nextButton = this.form.querySelector(this.selectors.nextButton);
@@ -379,6 +381,288 @@ class GlobalFittingForm extends BaseFittingForm {
 		this.backButton.removeEventListener('click', this.prevStep);
 		this.prevSlotsButton.removeEventListener('click', this.prevDates);
 		this.nextSlotsButton.removeEventListener('click', this.nextDates);
+		document.removeEventListener('dialogClose', this.closeDialogHandler);
+		document.removeEventListener('dialogOpen', this.openDialogHandler);
+	}
+}
+
+class GlobalFittingFormSimpler extends BaseFittingForm {
+	selectors = {
+		dateInput: '[data-js-fitting-form-date-control]',
+		submitButton: '[data-js-fitting-form-submit-button]',
+		errorsElement: '[data-js-fitting-form-errors]',
+		closestDialog: '[data-js-dialog]',
+		dialogTitle: '[data-js-dialog-title]',
+		dialogSelectedTime: '[data-js-fitting-form-selected-date]',
+	};
+
+	stateSelectors = {
+		isLoading: 'is-loading',
+	};
+
+	constructor(form) {
+		super(form);
+
+		this.submitButton = this.form.querySelector(this.selectors.submitButton);
+		this.errorsElement = this.form.querySelector(this.selectors.errorsElement);
+		this.closestDialog = this.form.closest(this.selectors.closestDialog);
+		this.dialogTitle = this.closestDialog?.querySelector(
+			this.selectors.dialogTitle
+		);
+		this.dialogSelectedTime = this.closestDialog.querySelector(
+			this.selectors.dialogSelectedTime
+		);
+
+		this.state = this._getProxyState({
+			...this.state,
+			dialogMessage: 'Запись на примерку',
+			dress_category: null,
+			isUpdatingSlots: false,
+			isSubmitting: false,
+		});
+
+		this.prevState = { ...this.state };
+
+		this.changeFormHandler = this.changeFormHandler.bind(this);
+		this.submitForm = this.submitForm.bind(this);
+		this.closeDialogHandler = this.closeDialogHandler.bind(this);
+		this.openDialogHandler = this.openDialogHandler.bind(this);
+
+		this.bindEvents();
+	}
+
+	_normalizeStep(stepNumber) {
+		if (stepNumber < 0) {
+			return 0;
+		}
+
+		if (stepNumber >= this.steps.length) {
+			return this.steps.length - 1;
+		}
+
+		return stepNumber;
+	}
+
+	/**
+	 *
+	 * @param {ChangeEvent} event
+	 */
+	changeFormHandler(event) {
+		const { target } = event;
+
+		if (target.dataset?.jsFittingFormDateValue) {
+			this.form.querySelector(this.selectors.dateInput).value =
+				target.dataset.jsFittingFormDateValue;
+		}
+
+		const formData = new FormData(this.form);
+		const formState = {};
+
+		for (const [key, value] of formData.entries()) {
+			if (key.endsWith('[]')) {
+				const arrayKey = key.slice(0, -2);
+				if (!formState[arrayKey]) {
+					formState[arrayKey] = [];
+				}
+				formState[arrayKey].push(value);
+			} else {
+				formState[key] = value;
+			}
+		}
+
+		// const formState = Object.fromEntries(new FormData(this.form));
+
+		for (const key in formState) {
+			if (Object.prototype.hasOwnProperty.call(formState, key)) {
+				const value = formState[key];
+				this.state[key] = value;
+			}
+		}
+	}
+
+	async getNewTimeSlots() {
+		try {
+			const formData = new FormData();
+
+			formData.append('action', 'get_fitting_time_slots');
+			formData.append('nonce', LOVE_FOREVER.NONCE);
+			formData.append('date', this.state.date);
+			formData.append('fitting-id', this.form.elements['fitting-id']);
+
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
+			});
+
+			const body = await response.json();
+
+			console.log({ body });
+
+			if (!body.success) {
+				throw new Error(body.data.message);
+			}
+
+			return body.data;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async updateTimeSlots() {
+		if (this.state.isUpdatingSlots) return;
+
+		this.state.isUpdatingSlots = true;
+
+		const { data, error } = await promiseWrapper(this.getNewTimeSlots());
+
+		if (error) {
+			this.state.success = false;
+			this.state.error = error.message;
+			this.state.isUpdatingSlots = false;
+			return;
+		}
+
+		const timeSelectControl = this.form.elements.time;
+		let timeOptions = '';
+
+		for (const time in data.slots) {
+			if (Object.prototype.hasOwnProperty.call(data.slots, time)) {
+				const slot = data.slots[time];
+
+				timeOptions += `<option value="${time}" ${
+					data.disableSlots && slot.available === 0 ? 'disabled' : ''
+				}>${time} (${slot.available} из ${slot.max_fittings})</option>`;
+			}
+		}
+
+		timeSelectControl.innerHTML = timeOptions;
+		this.state.isUpdatingSlots = false;
+	}
+
+	async submitForm(event) {
+		event.preventDefault();
+
+		if (this.state.isSubmitting) {
+			return;
+		}
+
+		this.state.isSubmitting = true;
+		this.state.error = null;
+
+		try {
+			const formData = new FormData(this.form);
+			formData.append('action', 'create_new_fitting_record');
+
+			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+				method: 'POST',
+				body: formData,
+			});
+
+			const body = await response.json();
+
+			console.log(body);
+
+			this.state.success = body.success;
+
+			if (!body.success) {
+				console.error(body.data.debug);
+				throw new Error(body.data.message);
+			}
+
+			this.state.dialogMessage = body.data.message;
+
+			document.dispatchEvent(
+				new Event('updateFittings', {
+					bubbles: true,
+					cancelable: true,
+				})
+			);
+		} catch (error) {
+			console.error(error);
+			this.state.error = error.message;
+		} finally {
+			this.state.isSubmitting = false;
+		}
+	}
+
+	closeDialogHandler(event) {
+		if (event.detail.dialogId === this.closestDialog?.id) {
+			this.reset();
+		}
+	}
+
+	openDialogHandler(event) {
+		if (event.detail.dialogId === this.closestDialog?.id) {
+			this.updateTimeSlots();
+		}
+	}
+
+	reset() {
+		this.form.reset();
+		this.state.success = false;
+		this.state.dialogMessage = 'Запись на примерку';
+		this.state.step = 0;
+		this.state.dateIncrementRatio = 0;
+		this.form.dispatchEvent(new Event('change'));
+	}
+
+	updateUI() {
+		console.log({ ...this.state });
+
+		if (this.prevState.date !== this.state.date) {
+			this.updateTimeSlots();
+		}
+
+		if (
+			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
+			!this.state.isUpdatingSlots
+		) {
+			$(this.form.elements.time).selectmenu('refresh');
+			$(this.form.elements.time).selectmenu('enable');
+			this.form.elements.time.dispatchEvent(
+				new Event('change', {
+					bubbles: true,
+					cancelable: true,
+				})
+			);
+		}
+
+		this.errorsElement.innerHTML = `<p>${this.state.error}</p>`;
+		this.errorsElement.hidden = !Boolean(this.state.error);
+
+		const allFieldChecked =
+			this.state.fitting_type &&
+			this.state.phone &&
+			this.state.name &&
+			this.state.date &&
+			this.state.time;
+
+		this.submitButton.disabled = !allFieldChecked || this.state.isSubmitting;
+
+		if (this.dialogTitle) {
+			this.dialogTitle.textContent = this.state.dialogMessage;
+		}
+
+		this.form.hidden = this.state.success;
+
+		if (this.closestDialog) {
+			this.form.nextElementSibling.hidden = !this.state.success;
+			this.form.nextElementSibling.disabled = !this.state.success;
+		}
+
+		this.prevState = { ...this.state };
+	}
+
+	bindEvents() {
+		this.form.addEventListener('change', this.changeFormHandler);
+		this.form.addEventListener('submit', this.submitForm);
+		document.addEventListener('dialogClose', this.closeDialogHandler);
+		document.addEventListener('dialogOpen', this.openDialogHandler);
+	}
+
+	destroy() {
+		this.form.removeEventListener('change', this.changeFormHandler);
+		this.form.removeEventListener('submit', this.submitForm);
 		document.removeEventListener('dialogClose', this.closeDialogHandler);
 		document.removeEventListener('dialogOpen', this.openDialogHandler);
 	}
@@ -882,6 +1166,9 @@ class FittingFormCollection {
 					break;
 				case 'editFittingForm':
 					fittingFormInstance = new EditFittingForm(fittingForm);
+					break;
+				case 'globalDressFittingFormSimpler':
+					fittingFormInstance = new GlobalFittingFormSimpler(fittingForm);
 					break;
 				default:
 					fittingFormInstance = new GlobalFittingForm(fittingForm);

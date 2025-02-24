@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
 				<p>Консультант проводит в зону кафе, где за чашкой кофе узнает когда  свадьба, тематика и предпочтения по платью, далее примеряем выбранные  модели и среди всех выбираем наиболее понравившиеся.</p>
 			</div>
 		</div>
-		<?php get_template_part( 'components/global-fitting-dialog' ); ?>
+		<?php get_template_part( 'components/global-fitting-dialog-simpler' ); ?>
 		<?php wp_footer(); ?>
 	</body>
 </html>

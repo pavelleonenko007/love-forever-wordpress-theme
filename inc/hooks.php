@@ -420,8 +420,9 @@ function loveforever_get_date_fitting_time_slots_via_ajax() {
 
 	wp_send_json_success(
 		array(
-			'slots'   => $fitting_slots_for_date,
-			'message' => "Слоты для $date успешно загружены",
+			'slots'        => $fitting_slots_for_date,
+			'disableSlots' => ! loveforever_is_user_has_manager_capability(),
+			'message'      => "Слоты для $date успешно загружены",
 		)
 	);
 }

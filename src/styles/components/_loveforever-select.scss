@@ -51,6 +51,7 @@
 		line-height: 1;
 		color: #000;
 		background-color: var(--background-color, #fff);
+		z-index: 1000;
 
 		&.is-active {
 			display: inline-block;
