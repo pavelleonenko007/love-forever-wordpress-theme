@@ -24,25 +24,31 @@
             "ui": 1
         },
         {
-            "key": "field_678d0fe7452ad",
-            "label": "Новый товар",
-            "name": "is_new",
+            "key": "field_67bd9ffd32979",
+            "label": "Бейдж",
+            "name": "badge",
             "aria-label": "",
-            "type": "true_false",
-            "instructions": "Переведите переключатель в положение \"Да\", если товар является новинкой",
-            "required": 1,
+            "type": "select",
+            "instructions": "",
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
                 "id": ""
             },
-            "message": "",
-            "default_value": 1,
+            "choices": {
+                "new": "Новинка",
+                "popular": "Популярное"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
             "allow_in_bindings": 0,
-            "ui_on_text": "Да",
-            "ui_off_text": "Нет",
-            "ui": 1
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
         },
         {
             "key": "field_676bbdb9c8d0d",
@@ -151,6 +157,55 @@
             "append": ""
         },
         {
+            "key": "field_67bd9fc632978",
+            "label": "Видео",
+            "name": "video",
+            "aria-label": "",
+            "type": "file",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_size": "",
+            "max_size": "",
+            "mime_types": "",
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_67bda05e3297a",
+            "label": "Показывать видео в карточке товара",
+            "name": "show_video_in_product_card",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_67bd9fc632978",
+                        "operator": "!=empty"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_676bbe93c8d0f",
             "label": "Изображения",
             "name": "images",
@@ -198,57 +253,6 @@
                     "allow_in_bindings": 0,
                     "preview_size": "medium",
                     "parent_repeater": "field_676bbe93c8d0f"
-                }
-            ]
-        },
-        {
-            "key": "field_677d01111e630",
-            "label": "Слайдер в карточке платья",
-            "name": "slider_in_dress_card",
-            "aria-label": "",
-            "type": "repeater",
-            "instructions": "Добавьте изображения в карточку товара. Можно оставить пустым",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "table",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Добавить изображение",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_677d01411e631",
-                    "label": "Изображение",
-                    "name": "image",
-                    "aria-label": "",
-                    "type": "image",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "library": "all",
-                    "min_width": "",
-                    "min_height": "",
-                    "min_size": "",
-                    "max_width": "",
-                    "max_height": "",
-                    "max_size": "",
-                    "mime_types": "",
-                    "allow_in_bindings": 0,
-                    "preview_size": "medium",
-                    "parent_repeater": "field_677d01111e630"
                 }
             ]
         },
@@ -304,5 +308,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1740138067
+    "modified": 1740480733
 }
