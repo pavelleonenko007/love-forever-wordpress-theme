@@ -49,10 +49,10 @@ get_header(
 													<?php
 													if ( ! empty( $subheading ) ) :
 														?>
-														<div class="p-12-12"><?php echo wp_kses_post( $subheading ); ?></div>
+														<div class="p-12-12"><?php echo wp_kses_post( mb_strtoupper( $subheading ) ); ?></div>
 													<?php endif; ?>
 													<?php if ( ! empty( $heading ) ) : ?>
-														<p class="p-86-96"><?php echo wp_kses_post( $heading ); ?></p>
+														<p class="p-86-96"><?php echo wp_kses_post( mb_strtolower( $heading ) ); ?></p>
 													<?php endif; ?>
 													<?php if ( ! empty( $description ) ) : ?>
 														<p class="p-16-20"><?php echo wp_kses_post( $description ); ?></p>

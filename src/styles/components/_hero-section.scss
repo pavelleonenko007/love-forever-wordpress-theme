@@ -1,0 +1,36 @@
+.hero-section {
+  $root: &;
+
+  &--no-image {
+    max-height: 600rem;
+    background-color: purple;
+    background-image: url("../assets/images/loveforever-background-gradient.webp");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  &__blur {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+
+    &-color {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f22ea9;
+      mix-blend-mode: color;
+    }
+
+    &-tone {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}

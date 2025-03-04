@@ -19,23 +19,33 @@ get_header(
 );
 
 $queried_object = get_queried_object();
+
+$thumbnail = get_field( 'thumbnail', $queried_object );
+
+$hero_section_classes = array( 'section', 'section_100vh', 'hero-section' );
+
+if ( empty( $thumbnail ) ) {
+	$hero_section_classes[] = 'hero-section--no-image';
+}
 ?>
-				<section class="section section_100vh">
+				<section class="<?php echo esc_attr( implode( ' ', $hero_section_classes ) ); ?>">
 					<div class="container container-fw n-top">
 						<?php get_template_part( 'components/marquee' ); ?>
 						<?php get_template_part( 'components/navbar' ); ?>
 						<div class="slider_home-slider_slide-in">
-							<div class="mom-abs">
-								<?php
-								$thumbnail = get_field( 'thumbnail', $queried_object );
-								if ( ! empty( $thumbnail ) ) :
-									?>
+							<?php if ( ! empty( $thumbnail ) ) : ?>
+								<div class="mom-abs">
 									<img src="<?php echo esc_url( wp_get_attachment_image_url( $thumbnail, 'full' ) ); ?>" loading="eager" alt="<?php echo esc_attr( get_post_meta( $thumbnail, '_wp_attachment_image_alt', true ) ); ?>" class="img-cover">
-								<?php endif; ?>
-							</div>
+								</div>
+							<?php else : ?>
+								<div class="hero-section__blur">
+									<div class="hero-section__blur-color"></div>
+									<div class="hero-section__blur-tone"></div>
+								</div>
+							<?php endif; ?>
 							<div class="slider-bottom-content inner-pages">
 								<?php get_template_part( 'components/breadcrumb' ); ?>
-								<h1 class="p-86-96"><?php echo esc_html( $queried_object->name ); ?></h1>
+								<h1 class="p-86-96"><?php echo esc_html( mb_strtolower( $queried_object->name ) ); ?></h1>
 								<?php if ( ! empty( $queried_object->description ) ) : ?>
 									<p class="p-16-20 mmax695"><?php echo wp_kses_post( $queried_object->description ); ?></p>
 								<?php endif; ?>
@@ -81,28 +91,34 @@ $queried_object = get_queried_object();
 									if ( ! empty( $silhouettes ) ) :
 										?>
 										<div class="horiz categeory-list">
-											<label class="label">
+											<label class="label loveforever-filter-radio">
 												<input 
 													type="radio" 
 													id="silhouette-0" 
 													name="silhouette" 
-													class="input" 
+													class="input loveforever-filter-radio__control" 
 													value=""
 													<?php echo empty( $selected_silhouette ) ? 'checked' : ''; ?>
 												>
-												<span for="silhouette-0">Все</span>
+												<span 
+													for="silhouette-0"
+													class="loveforever-filter-radio__label"
+												>Все</span>
 											</label>
 											<?php foreach ( $silhouettes as $silhouettes_index => $silhouette ) : ?>
-												<label class="label">
+												<label class="label loveforever-filter-radio">
 													<input 
 														type="radio" 
 														id="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>" 
 														name="silhouette" 
-														class="input" 
+														class="input loveforever-filter-radio__control" 
 														value="<?php echo esc_attr( $silhouette->term_id ); ?>"
 														<?php echo ! empty( $selected_silhouette ) && $silhouette->term_id === $selected_silhouette ? 'checked' : ''; ?>
 													>
-													<span for="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"><?php echo esc_html( $silhouette->name ); ?></span>
+													<span 
+														for="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"
+														class="loveforever-filter-radio__label"
+													><?php echo esc_html( $silhouette->name ); ?></span>
 												</label>
 											<?php endforeach; ?>
 										</div>

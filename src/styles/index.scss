@@ -3,6 +3,8 @@
 @use 'utils' as *;
 @use 'globals' as *;
 
+@use 'components/hero-section' as *;
+@use 'components/loveforever-filter-radio' as *;
 @use 'components/phone-button' as *;
 @use 'components/like-button' as *;
 @use 'components/like-counter-button' as *;

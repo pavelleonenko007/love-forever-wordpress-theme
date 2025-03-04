@@ -34,7 +34,9 @@ function loveforever_register_post_types() {
 			'show_ui'            => true,
 			'show_in_quick_edit' => true,
 			'hierarchical'       => true,
-			'rewrite'            => true,
+			'rewrite'            => array(
+				'slug' => 'dresses',
+			),
 			// 'query_var'             => taxonomy, // название параметра запроса
 			'capabilities'       => array(),
 			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
@@ -257,8 +259,8 @@ function loveforever_register_post_types() {
 	register_post_type(
 		'fitting',
 		array(
-			'label'         => null,
-			'labels'        => array(
+			'label'           => null,
+			'labels'          => array(
 				'name'               => 'Примерки',
 				'singular_name'      => 'Примерка',
 				'add_new'            => 'Добавить новую',
@@ -272,25 +274,25 @@ function loveforever_register_post_types() {
 				'parent_item_colon'  => '',
 				'menu_name'          => 'Примерки',
 			),
-			'description'   => '',
-			'public'        => true,
+			'description'     => '',
+			'public'          => true,
 			// 'publicly_queryable'  => null,
 			// 'exclude_from_search' => null,
-			'show_ui'       => true,
+			'show_ui'         => true,
 			// 'show_in_nav_menus'   => null,
-			'show_in_menu'  => null,
+			'show_in_menu'    => null,
 			// 'show_in_admin_bar'   => null,
-			'show_in_rest'  => true,
-			'rest_base'     => null,
-			'menu_position' => null,
-			'capability_type'   => array('fitting', 'fittings'),
-			'map_meta_cap'      => true,
-			'hierarchical'  => false,
-			'supports'      => array( 'title' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
-			'taxonomies'    => array(),
-			'has_archive'   => false,
-			'rewrite'       => true,
-			'query_var'     => true,
+			'show_in_rest'    => true,
+			'rest_base'       => null,
+			'menu_position'   => null,
+			'capability_type' => array( 'fitting', 'fittings' ),
+			'map_meta_cap'    => true,
+			'hierarchical'    => false,
+			'supports'        => array( 'title' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+			'taxonomies'      => array(),
+			'has_archive'     => false,
+			'rewrite'         => true,
+			'query_var'       => true,
 		)
 	);
 
@@ -442,126 +444,3 @@ function loveforever_register_post_types() {
 		)
 	);
 }
-
-// Изменение структуры ссылок для типа записи 'dress'
-function custom_dress_post_link( $post_link, $post ) {
-	if ( is_object( $post ) && $post->post_type == 'dress' ) {
-		$terms  = wp_get_object_terms( $post->ID, 'dress_category' );
-		$brands = wp_get_object_terms( $post->ID, 'brand' );
-
-		if ( $terms ) {
-			// Выбираем первую категорию как основную
-			$category_slug = $terms[0]->slug;
-			if ( $brands ) {
-				$brand_slug = $brands[0]->slug;
-				return home_url( "dress/$category_slug/$brand_slug/" . $post->post_name );
-			}
-			return home_url( "dress/$category_slug/" . $post->post_name );
-		}
-	}
-	return $post_link;
-}
-// add_filter( 'post_type_link', 'custom_dress_post_link', 10, 2 );
-
-// Регистрация новой структуры URL для типа записи 'dress'
-function custom_dress_permalinks( $rules ) {
-	$new_rules = array(
-		'dress/([^/]+)/([^/]+)/([^/]+)/?$' => 'index.php?dress=$matches[3]&dress_category=$matches[1]&brand=$matches[2]',
-		'dress/([^/]+)/([^/]+)/?$'         => 'index.php?dress_category=$matches[1]&brand=$matches[2]',
-		'dress/([^/]+)/?$'                 => 'index.php?dress_category=$matches[1]',
-	);
-	return $new_rules + $rules;
-}
-// add_filter( 'rewrite_rules_array', 'custom_dress_permalinks' );
-
-// Обновление структуры ссылок для типа записи 'dress'
-function custom_dress_permalink_structure() {
-	global $wp_rewrite;
-	$wp_rewrite->add_rewrite_tag( '%dress_category%', '([^/]+)', 'dress_category=' );
-	$wp_rewrite->add_rewrite_tag( '%brand%', '([^/]+)', 'brand=' );
-	$wp_rewrite->add_permastruct( 'dress', 'dress/%dress_category%/%brand%/%dress%', false );
-}
-// add_action( 'init', 'custom_dress_permalink_structure', 10, 0 );
-
-// Обеспечение правильной загрузки категорий и брендов
-function custom_dress_query_vars( $query_vars ) {
-	$query_vars[] = 'dress_category';
-	$query_vars[] = 'brand';
-	return $query_vars;
-}
-// add_filter( 'query_vars', 'custom_dress_query_vars' );
-
-// Изменение запроса для правильной загрузки категорий и брендов
-function custom_dress_request( $query_vars ) {
-	if ( isset( $query_vars['dress_category'] ) ) {
-		if ( isset( $query_vars['brand'] ) ) {
-			$query_vars['tax_query'] = array(
-				'relation' => 'AND',
-				array(
-					'taxonomy' => 'dress_category',
-					'field'    => 'slug',
-					'terms'    => $query_vars['dress_category'],
-				),
-				array(
-					'taxonomy' => 'brand',
-					'field'    => 'slug',
-					'terms'    => $query_vars['brand'],
-				),
-			);
-		} else {
-			$query_vars['tax_query'] = array(
-				array(
-					'taxonomy' => 'dress_category',
-					'field'    => 'slug',
-					'terms'    => $query_vars['dress_category'],
-				),
-			);
-		}
-		$query_vars['post_type'] = 'dress';
-	}
-	return $query_vars;
-}
-// add_filter( 'request', 'custom_dress_request' );
-
-// Перенаправление старых URL на новые
-function custom_dress_redirect() {
-	if ( is_tax( 'dress_category' ) || is_tax( 'brand' ) ) {
-		$queried_object = get_queried_object();
-		if ( is_tax( 'dress_category' ) ) {
-			wp_redirect( home_url( "dress/{$queried_object->slug}" ), 301 );
-			exit;
-		} elseif ( is_tax( 'brand' ) ) {
-			$category = get_term_by( 'slug', get_query_var( 'dress_category' ), 'dress_category' );
-			if ( $category ) {
-				wp_redirect( home_url( "dress/{$category->slug}/{$queried_object->slug}" ), 301 );
-				exit;
-			}
-		}
-	}
-}
-/*add_action( 'template_redirect', 'custom_dress_redirect' );*/
-
-// Добавляем функцию для установки канонического URL
-function custom_dress_canonical() {
-	if ( is_singular( 'dress' ) ) {
-		global $post;
-		$link = custom_dress_post_link( '', $post );
-		echo '<link rel="canonical" href="' . esc_url( $link ) . '" />' . "\n";
-	}
-}
-add_action( 'wp_head', 'custom_dress_canonical' );
-
-// Добавляем функцию для перенаправления на канонический URL
-function custom_dress_redirect_canonical() {
-	if ( is_singular( 'dress' ) ) {
-		global $post;
-		$canonical_link = custom_dress_post_link( '', $post );
-		$current_link   = home_url( $_SERVER['REQUEST_URI'] );
-
-		if ( $canonical_link !== $current_link ) {
-			wp_redirect( $canonical_link, 301 );
-			exit;
-		}
-	}
-}
-/*add_action( 'template_redirect', 'custom_dress_redirect_canonical' );*/
