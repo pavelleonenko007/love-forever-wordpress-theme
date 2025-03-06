@@ -709,8 +709,8 @@
 		transform: scaleX(1);
 	}
 
-	.prod-item:hover .img-cover,
+	/* .prod-item:hover .img-cover,
 	.choosed-item:hover .img-cover {
 		transform: scale(1.05);
-	}
+	} */
 }

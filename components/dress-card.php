@@ -8,61 +8,41 @@
 defined( 'ABSPATH' ) || exit;
 
 global $post;
-$price                = get_field( 'price' );
-$has_discount         = get_field( 'has_discount' );
-$price_with_discount  = get_field( 'price_with_discount' );
-$slider_in_dress_card = get_field( 'slider_in_dress_card' );
+$price               = get_field( 'price' );
+$has_discount        = get_field( 'has_discount' );
+$price_with_discount = get_field( 'price_with_discount' );
+$images              = get_field( 'images' );
 ?>
 
 <div id="w-node-_6e88719d-fe8f-116f-4337-b580b5a0b461-b5a0b461" class="prod-item">
 	<div class="prod-item_top">
-		<?php if ( empty( $slider_in_dress_card ) ) : ?>
-			<a href="<?php the_permalink(); ?>" class="link w-inline-block">
-				<div class="prod-item_img-mom">
-					<div class="mom-abs">
-						<?php if ( has_post_thumbnail() ) : ?>
-							<img src="<?php echo esc_url( get_the_post_thumbnail_url() ); ?>" loading="lazy" alt class="img-cover">
-						<?php endif; ?>
-					</div>
-				</div>
-			</a>
-		<?php else : ?>
-			<div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-				<div class="w-slider-mask">
-					<?php
-					foreach ( $slider_in_dress_card as $slide ) :
-						$image = $slide['image'];
-						?>
-						<div class="w-slide">
-							<a href="<?php the_permalink(); ?>" class="link w-inline-block">
-								<div class="prod-item_img-mom">
-									<div class="mom-abs">
-										<?php if ( ! empty( $image ) ) : ?>
-											<img alt src="<?php echo esc_url( $image['url'] ); ?>" loading="lazy" class="img-cover">
-										<?php endif; ?>
-									</div>
-								</div>
-							</a>
+		<a href="<?php the_permalink(); ?>" class="link w-inline-block">
+			<div class="prod-item_img-mom">
+				<div class="mom-abs">
+					<?php if ( ! empty( $images ) ) : ?>
+						<div class="card-slider" data-js-card-slider>
+							<ul class="card-slider__list">
+								<?php foreach ( $images as $index => $image ) : ?>
+									<li class="card-slider__list-item<?php echo ( 0 === $index ) ? ' is-active' : ''; ?>" data-js-card-slider-slide-item="<?php echo esc_attr( $index ); ?>">
+										<img src="<?php echo esc_url( wp_get_attachment_image_url( $image['image']['ID'], 'large' ) ); ?>" loading="lazy" alt class="img-cover">
+									</li>
+								<?php endforeach; ?>
+							</ul>
+							<ul class="card-slider__nav">
+								<?php
+								$count_images = count( $images );
+								for ( $i = 0; $i < $count_images; $i++ ) :
+									?>
+									<li class="card-slider__nav-item<?php echo ( 0 === $i ) ? ' is-active' : ''; ?>" data-js-card-slider-nav-item="<?php echo esc_attr( $i ); ?>"></li>
+								<?php endfor; ?>
+							</ul>
 						</div>
-					<?php endforeach; ?>
+					<?php elseif ( has_post_thumbnail() ) : ?>
+						<img src="<?php echo esc_url( get_the_post_thumbnail_url() ); ?>" loading="lazy" alt class="img-cover">
+					<?php endif; ?>
 				</div>
-				<div class="left-arrow w-slider-arrow-left">
-					<div class="svg w-embed">
-						<svg xmlns="http://www.w3.org/2000/svg" width="6" height="10" viewbox="0 0 6 10" fill="none">
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M0.750232 4.28598L5.25007 0L6 0.714289L1.50016 5.00027L5.99944 9.28571L5.24951 10L0 4.99998L0.74993 4.28569L0.750232 4.28598Z" fill="white"></path>
-						</svg>
-					</div>
-				</div>
-				<div class="right-arrow w-slider-arrow-right">
-					<div class="svg w-embed">
-						<svg xmlns="http://www.w3.org/2000/svg" width="6" height="10" viewbox="0 0 6 10" fill="none">
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M5.24977 4.28598L0.74993 0L0 0.714289L4.49984 5.00027L0.000560648 9.28571L0.750491 10L6 4.99998L5.25007 4.28569L5.24977 4.28598Z" fill="white"></path>
-						</svg>
-					</div>
-				</div>
-				<div class="none w-slider-nav w-round w-num"></div>
 			</div>
-		<?php endif; ?>
+		</a>
 		<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
 		<button type="button" class="btn-like like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
 			<div class="svg w-embed">

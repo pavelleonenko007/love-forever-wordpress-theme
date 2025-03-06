@@ -19,6 +19,7 @@ import ReviewFormCollection from './ReviewForm';
 import SearchFormCollection from './SearchForm';
 import './styles/index.scss';
 import VideoPlayerCollection from './VideoPlayer';
+import CardSliderCollection from './CardSlider';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -145,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		SearchFormCollection.destroyAll();
 		FavoritesButtonWithCounterCollection.destroyAll();
 		CopyToClipboardButtonCollection.destroyAll();
+		CardSliderCollection.destroyAll();
 		InputMaskCollection.destroyAll();
 		DialogCollection.destroyAll();
 		AccordionCollection.destroyAll();
@@ -194,6 +196,7 @@ function initPage() {
 
 	SearchFormCollection.init();
 	initHeroPageSliderPagination();
+	CardSliderCollection.init();
 	FavoritesButtonWithCounterCollection.init();
 	InputMaskCollection.init();
 	DialogCollection.init();

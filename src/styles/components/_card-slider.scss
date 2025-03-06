@@ -1,0 +1,71 @@
+@use "../media" as *;
+
+.card-slider {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    list-style: none;
+
+    &-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      &.is-active {
+        z-index: 2;
+      }
+    }
+  }
+
+  &__nav {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    list-style: none;
+
+    &-item {
+      padding: 6rem;
+      flex: 1;
+      display: flex;
+      align-items: end;
+
+      &::after {
+        content: "";
+        width: 100%;
+        height: 2rem;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      &.is-active {
+        &::after {
+          background-color: rgba(255, 255, 255, 1);
+        }
+      }
+
+      @include hover {
+        &::after {
+          background-color: rgba(255, 255, 255, 1);
+        }
+      }
+    }
+  }
+}
