@@ -20,6 +20,7 @@ import SearchFormCollection from './SearchForm';
 import './styles/index.scss';
 import VideoPlayerCollection from './VideoPlayer';
 import CardSliderCollection from './CardSlider';
+import CardVideoCollection from './CardVideo';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -147,6 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		FavoritesButtonWithCounterCollection.destroyAll();
 		CopyToClipboardButtonCollection.destroyAll();
 		CardSliderCollection.destroyAll();
+		CardVideoCollection.destroyAll();
 		InputMaskCollection.destroyAll();
 		DialogCollection.destroyAll();
 		AccordionCollection.destroyAll();
@@ -174,6 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		function (currentStatus, prevStatus) {
 			document.documentElement.classList.remove('htmldopmenuopened');
 
+			console.log('transitionCompleted');
+			
+
 			initPage();
 
 			switch (currentStatus.namespace) {
@@ -195,6 +200,7 @@ function initPage() {
 	console.log('init page');
 
 	SearchFormCollection.init();
+	CardVideoCollection.init();
 	initHeroPageSliderPagination();
 	CardSliderCollection.init();
 	FavoritesButtonWithCounterCollection.init();

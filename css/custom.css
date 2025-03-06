@@ -700,9 +700,9 @@
 		bottom: -5px;
 	}
 
-	.n-menu:hover:after,
+	.n-menu:hover:after,	
 	.navbar .a-12-12:hover:after,
-	.btn.btn-with-arrow:hover:after,
+	.btn.btn-with-arrow:hover:after,й
 	.bigcard-item .a-12-12:hover:after,
 	.footer .a-12-12:hover:after {
 		transform-origin: left;

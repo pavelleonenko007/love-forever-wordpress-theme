@@ -8,10 +8,12 @@
 defined( 'ABSPATH' ) || exit;
 
 global $post;
-$price               = get_field( 'price' );
-$has_discount        = get_field( 'has_discount' );
-$price_with_discount = get_field( 'price_with_discount' );
-$images              = get_field( 'images' );
+$price                      = get_field( 'price' );
+$has_discount               = get_field( 'has_discount' );
+$price_with_discount        = get_field( 'price_with_discount' );
+$images                     = get_field( 'images' );
+$video                      = get_field( 'video' );
+$show_video_in_product_card = get_field( 'show_video_in_product_card' );
 ?>
 
 <div id="w-node-_6e88719d-fe8f-116f-4337-b580b5a0b461-b5a0b461" class="prod-item">
@@ -19,7 +21,17 @@ $images              = get_field( 'images' );
 		<a href="<?php the_permalink(); ?>" class="link w-inline-block">
 			<div class="prod-item_img-mom">
 				<div class="mom-abs">
-					<?php if ( ! empty( $images ) ) : ?>
+					<?php if ( $show_video_in_product_card && ! empty( $video ) ) : ?>
+						<video 
+							class="card-video"
+							loop
+							muted
+							playsinline 
+							data-js-card-video
+						>
+							<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( $video['mime_type'] ); ?>">
+						</video>
+					<?php elseif ( ! empty( $images ) ) : ?>
 						<div class="card-slider" data-js-card-slider>
 							<ul class="card-slider__list">
 								<?php foreach ( $images as $index => $image ) : ?>
