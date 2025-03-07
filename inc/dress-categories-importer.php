@@ -15,11 +15,10 @@ add_action(
 			'/import-dress-categories',
 			array(
 				'methods'             => 'GET',
-				// 'permission_callback' => function () {
-				// 	return current_user_can( 'manage_options' );
-				// },
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
 				'callback'            => 'loveforever_import_dress_categories',
-				// 'callback'            => '__return_false',
 			)
 		);
 	}
@@ -81,12 +80,12 @@ function loveforever_import_dress_categories() {
 				// Add Yoast SEO metadata only for the final term in hierarchy
 				if ( $part === end( $parts ) ) {
 					// Set Yoast SEO title
-					// update_term_meta( $term_id, '_yoast_wpseo_title', $seo_title );
-					// // Set Yoast SEO description
-					// update_term_meta( $term_id, '_yoast_wpseo_metadesc', $seo_description );
-					// // Enable Yoast SEO for this term
-					// update_term_meta( $term_id, '_yoast_wpseo_opengraph-title', $seo_title );
-					// update_term_meta( $term_id, '_yoast_wpseo_opengraph-description', $seo_description );
+					delete_term_meta( $term_id, '_yoast_wpseo_title' );
+					// Set Yoast SEO description
+					delete_term_meta( $term_id, '_yoast_wpseo_metadesc' );
+					// Enable Yoast SEO for this term
+					delete_term_meta( $term_id, '_yoast_wpseo_opengraph-title' );
+					delete_term_meta( $term_id, '_yoast_wpseo_opengraph-description' );
 
 					WPSEO_Taxonomy_Meta::set_values(
 						$term_id,
@@ -116,10 +115,10 @@ function loveforever_import_dress_categories() {
 
 				// Update Yoast SEO metadata for existing terms if it's the final term
 				if ( $part === end( $parts ) ) {
-					// update_term_meta( $term_id, '_yoast_wpseo_title', $seo_title );
-					// update_term_meta( $term_id, '_yoast_wpseo_metadesc', $seo_description );
-					// update_term_meta( $term_id, '_yoast_wpseo_opengraph-title', $seo_title );
-					// update_term_meta( $term_id, '_yoast_wpseo_opengraph-description', $seo_description );
+					delete_term_meta( $term_id, '_yoast_wpseo_title' );
+					delete_term_meta( $term_id, '_yoast_wpseo_metadesc' );
+					delete_term_meta( $term_id, '_yoast_wpseo_opengraph-title' );
+					delete_term_meta( $term_id, '_yoast_wpseo_opengraph-description' );
 
 					WPSEO_Taxonomy_Meta::set_values(
 						$term_id,

@@ -36,6 +36,8 @@ function loveforever_register_post_types() {
 			'hierarchical'       => true,
 			'rewrite'            => array(
 				'slug' => 'dresses',
+				'hierarchical' => true,
+				'with_front' => false
 			),
 			// 'query_var'             => taxonomy, // название параметра запроса
 			'capabilities'       => array(),
