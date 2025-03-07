@@ -20,7 +20,7 @@ import SearchFormCollection from './SearchForm';
 import './styles/index.scss';
 import VideoPlayerCollection from './VideoPlayer';
 import CardSliderCollection from './CardSlider';
-import CardVideoCollection from './CardVideo';
+import PlayIfVisibleVideoCollection from './PlayIfVisibleVideoCollection';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		FavoritesButtonWithCounterCollection.destroyAll();
 		CopyToClipboardButtonCollection.destroyAll();
 		CardSliderCollection.destroyAll();
-		CardVideoCollection.destroyAll();
+		PlayIfVisibleVideoCollection.destroyAll();
 		InputMaskCollection.destroyAll();
 		DialogCollection.destroyAll();
 		AccordionCollection.destroyAll();
@@ -200,7 +200,7 @@ function initPage() {
 	console.log('init page');
 
 	SearchFormCollection.init();
-	CardVideoCollection.init();
+	PlayIfVisibleVideoCollection.init();
 	initHeroPageSliderPagination();
 	CardSliderCollection.init();
 	FavoritesButtonWithCounterCollection.init();

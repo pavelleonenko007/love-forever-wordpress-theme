@@ -20,6 +20,7 @@ get_header(
 $availability        = get_field( 'availability' );
 $is_new              = get_field( 'is_new' );
 $images              = get_field( 'images' );
+$video               = get_field( 'video' );
 $colors              = get_field( 'colors' );
 $price               = get_field( 'price' );
 $has_discount        = get_field( 'has_discount' );
@@ -51,7 +52,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 							<?php if ( ! empty( $images ) ) : ?>
 							<div data-delay="4000" data-animation="slide" class="m-prod-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
 								<div class="m-prod-slider_mask w-slider-mask">
-									<?php foreach ( $images as $image_slide ) : ?>
+									<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
 										<div class="w-slide">
 											<div class="mom-abs">
 												<?php if ( ! empty( $image_slide['image'] ) ) : ?>
@@ -59,6 +60,22 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 												<?php endif; ?>
 											</div>
 										</div>
+										<?php if ( 0 === $image_slide_index && ! empty( $video ) ) : ?>
+											<div class="w-slide">
+												<div class="mom-abs">
+													<video 
+														class="img-cover"
+														muted
+														playsinline
+														loop
+														autoplay
+														data-js-play-if-visible-video
+													>
+														<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( $video['mime_type'] ); ?>">
+													</video>
+												</div>
+											</div>
+										<?php endif; ?>
 									<?php endforeach; ?>
 								</div>
 								<div class="none w-slider-arrow-left">
@@ -78,10 +95,24 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 								</nav>
 								<?php if ( ! empty( $images ) ) : ?>
 									<div class="single-product__images">
-										<?php foreach ( $images as $image_item ) : ?>
+										<?php foreach ( $images as $image_item_index => $image_item ) : ?>
 											<div class="single-img-mom">
 												<img src="<?php echo esc_url( $image_item['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_item['image']['alt'] ); ?>" class="img-fw">
 											</div>
+											<?php if ( 0 === $image_item_index && ! empty( $video ) ) : ?>
+												<div class="single-img-mom">
+													<video 
+														class="img-fw"
+														muted
+														playsinline
+														loop
+														autoplay
+														data-js-play-if-visible-video
+													>
+														<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( $video['mime_type'] ); ?>">
+													</video>
+												</div>
+											<?php endif; ?>
 										<?php endforeach; ?>
 									</div>
 								<?php endif; ?>

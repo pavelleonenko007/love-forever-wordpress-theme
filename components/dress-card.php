@@ -27,7 +27,7 @@ $show_video_in_product_card = get_field( 'show_video_in_product_card' );
 							loop
 							muted
 							playsinline 
-							data-js-card-video
+							data-js-play-if-visible-video
 						>
 							<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( $video['mime_type'] ); ?>">
 						</video>
