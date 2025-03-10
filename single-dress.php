@@ -130,7 +130,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 										<?php if ( ! empty( $brand ) ) : ?>
 											<div class="p-12-12 uper m-12-12 single-product__content-brand"><?php echo esc_html( $brand ); ?></div>
 										<?php endif; ?>
-										<h1 class="p-24-24 h-single single-product__content-heading"><?php the_title(); ?></h1>
+										<h1 class="p-24-24 h-single single-product__content-heading"><?php echo wp_kses_post( loveforever_get_product_title( get_the_ID() ) ); ?></h1>
 									</div>
 									<?php if ( ! empty( $colors ) ) : ?>
 										<div class="horiz single-product__content-colors">

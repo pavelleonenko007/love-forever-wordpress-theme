@@ -426,3 +426,33 @@ function loveforever_get_dress_tags_by_category( $category_term_id ) {
 		$results
 	);
 }
+
+function loveforever_get_product_title( $product_id ) {
+	$catalog_titles = array(
+		'wedding' => 'Свадебное платье',
+		'evening' => 'Вечернее платье',
+		'prom'    => 'Выпускное платье',
+	);
+	$categories     = get_the_terms( $product_id, 'dress_category' );
+
+	if ( is_wp_error( $categories ) || empty( $categories ) ) {
+		return get_the_title( $product_id );
+	}
+
+	$categories = array_filter(
+		$categories,
+		function ( $category ) {
+			return 0 === $category->parent;
+		}
+	);
+
+	if ( count( $categories ) > 1 ) {
+		foreach ( $categories as $category ) {
+			if ( 'evening' === $category->slug ) {
+				return $catalog_titles['evening'] . ' ' . get_the_title( $product_id );
+			}
+		}
+	}
+
+	return $catalog_titles[ $categories[0]->slug ] . ' ' . get_the_title( $product_id );
+}
