@@ -21,9 +21,6 @@ class ProductFilterForm {
       this.selectors.paginationElement
     );
 
-    this.controller = new AbortController();
-    this.signal = this.controller.signal;
-
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.debouncedOnChange = debounce(this.onChange, 200);
@@ -114,8 +111,6 @@ class ProductFilterForm {
   }
 
   onChange(event) {
-    console.log(event);
-
     if (event.target.name && event.target.name !== "page") {
       this.resetPage();
     }
@@ -135,9 +130,12 @@ class ProductFilterForm {
   }
 
   async getFilteredProducts() {
-    if (this.filterForm.classList.contains(this.stateSelectors.isLoading)) {
-      this.controller.abort();
+    if (this.abortController) {
+      this.abortController.abort();
     }
+
+		this.abortController = new AbortController();
+		const signal = this.abortController.signal;
 
     const formData = new FormData(this.filterForm);
 
@@ -148,7 +146,7 @@ class ProductFilterForm {
       const response = await fetch(LOVE_FOREVER.AJAX_URL, {
         method: "POST",
         body: formData,
-        signal: this.signal,
+        signal,
       });
 
       const body = await response.json();

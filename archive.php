@@ -55,7 +55,7 @@ if ( empty( $thumbnail ) ) {
 				</section>
 				<?php get_template_part( 'template-parts/home/stories-section' ); ?>
 				<?php
-				$price_range         = loveforever_get_product_price_range();
+				$price_range         = loveforever_get_product_price_range( $queried_object->term_id );
 				$min_price           = ! empty( $_GET['min-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['min-price'] ) ) : $price_range['min_price'];
 				$max_price           = ! empty( $_GET['max-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['max-price'] ) ) : $price_range['max_price'];
 				$current_page        = ! empty( $_GET['page'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['page'] ) ) : get_query_var( 'paged' );

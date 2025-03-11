@@ -339,7 +339,44 @@ function loveforever_get_pagination_html( WP_Query $query, array $pagination_arg
 	return $output;
 }
 
-function loveforever_get_product_price_range() {
+function loveforever_get_product_price_range( $category_term_id = null ) {
+	global $wpdb;
+
+	if ( empty( $category_term_id ) ) {
+		return loveforever_get_product_price_range_without_category();
+	}
+
+	$query = $wpdb->prepare(
+		"SELECT 
+				MIN(final_price.meta_value) as min_price,
+				MAX(final_price.meta_value) as max_price
+		 FROM {$wpdb->posts} p
+		 JOIN {$wpdb->postmeta} final_price ON p.ID = final_price.post_id
+		 JOIN {$wpdb->term_relationships} term_relationships ON p.ID = term_relationships.object_id
+		 JOIN {$wpdb->term_taxonomy} term_taxonomy ON term_relationships.term_taxonomy_id = term_taxonomy.term_taxonomy_id
+		 WHERE p.post_type = %s
+		 AND p.post_status = 'publish'
+		 AND final_price.meta_key = 'final_price'
+		 AND final_price.meta_value > 0
+		 AND term_taxonomy.term_id = %d",
+		'dress',
+		$category_term_id
+	);
+
+	// Выполнение запроса
+	$result = $wpdb->get_row( $query );
+
+	if ( $result && null !== $result->min_price && null !== $result->max_price ) {
+			return array(
+				'min_price' => (float) $result->min_price,
+				'max_price' => (float) $result->max_price,
+			);
+	}
+
+	return false;
+}
+
+function loveforever_get_product_price_range_without_category() {
 	global $wpdb;
 
 	$query = $wpdb->prepare(
