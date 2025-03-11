@@ -128,7 +128,7 @@ if ( empty( $thumbnail ) ) {
 									if ( ! empty( $price_range ) ) :
 										?>
 										<div class="code-embed-7 w-embed" data-js-range-slider>
-											<div data-js-range-slider-value-min><?php echo esc_html( loveforever_format_price( $price_range['min_price'], 0 ) ); ?></div>
+											<div data-js-range-slider-value-min><?php echo esc_html( $min_price ); ?></div>
 											<div id="slider" data-js-range-slider-custom-component></div>
 											<div id="slider-range">
 												<input 
@@ -150,7 +150,7 @@ if ( empty( $thumbnail ) ) {
 													data-js-range-slider-control-max
 												>
 											</div>
-											<div data-js-range-slider-value-max><?php echo esc_html( loveforever_format_price( $price_range['max_price'], 0 ) ); ?></div>
+											<div data-js-range-slider-value-max><?php echo esc_html( $max_price ); ?></div>
 										</div>
 									<?php endif; ?>
 								</div>
