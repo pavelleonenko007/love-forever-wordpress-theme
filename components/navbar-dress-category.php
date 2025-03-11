@@ -12,7 +12,7 @@ if ( empty( $args['category'] ) ) {
 }
 
 $dress_category        = get_term( $args['category'] );
-$dropdown_menu_columns = $args['dropdown_menu_columns'];
+$columns               = $args['columns'];
 ?>
 <div class="menu-link-keeper">
 	<a 
@@ -21,72 +21,28 @@ $dropdown_menu_columns = $args['dropdown_menu_columns'];
 	>
 		<?php echo esc_html( str_replace( ' платья', '', $dress_category->name ) ); ?>
 	</a>
-	<?php if ( ! empty( $dropdown_menu_columns ) ) : ?>
+	<?php if ( ! empty( $columns ) ) : ?>
 		<div class="hovered-menue">
 			<?php
-			foreach ( $dropdown_menu_columns as $dropdown_menu_column ) :
-				if ( 'price' !== $dropdown_menu_column ) :
-					$tax_object = get_taxonomy( $dropdown_menu_column );
-					if ( ! empty( $tax_object ) ) :
-						?>
-						<div id="w-node-_144563be-6001-1af8-6446-1240953da88b-be61d3ef" class="m-h-vert">
-							<div class="p-16-16"><?php echo esc_html( $tax_object->labels->singular_name ); ?></div>
-							<?php
-							$terms_args = array(
-								'taxonomy'   => $tax_object->name,
-								'hide_empty' => false, // TODO: set to true!
-							);
-							$terms      = get_terms( $terms_args );
-							if ( ! empty( $terms ) ) :
-								?>
-								<div id="w-node-_144563be-6001-1af8-6446-1240953da88e-be61d3ef" class="m-h-vert">
-									<?php foreach ( $terms as $term_item ) : ?>
-										<a href="<?php echo esc_url( get_term_link( $dress_category ) . '?' . $tax_object->name . '=' . $term_item->term_id ); ?>" class="a-12-12 w-inline-block">
-											<div><?php echo esc_html( $term_item->name ); ?></div>
-										</a>
-									<?php endforeach; ?>
-								</div>
-							<?php endif; ?>
+			foreach ( $columns as $column ) :
+				if ( ! empty( $column['links'] ) ) :
+					?>
+					<div id="w-node-_144563be-6001-1af8-6446-1240953da88b-be61d3ef" class="m-h-vert">
+						<div class="p-16-16"><?php echo esc_html( $column['column_name'] ); ?></div>
+						<div id="w-node-_144563be-6001-1af8-6446-1240953da88e-be61d3ef" class="m-h-vert">
+							<?php foreach ( $column['links'] as $link_item ) :
+								$link = $link_item['link']; ?>
+								<a 
+									href="<?php echo esc_url( $link['url'] ); ?>" 
+									class="a-12-12 w-inline-block"
+									target="<?php echo esc_attr( $link['target'] ) ?? '_self'; ?>"
+								>
+									<div><?php echo esc_html( $link['title'] ); ?></div>
+								</a>
+							<?php endforeach; ?>
 						</div>
-						<?php
-					endif;
-				else :
-					$price_links = $args['price_links'];
-					if ( ! empty( $price_links ) ) :
-						?>
-						<div id="w-node-_144563be-6001-1af8-6446-1240953da904-be61d3ef" class="m-h-vert">
-							<div class="p-16-16">Стоимость</div>
-							<div id="w-node-_144563be-6001-1af8-6446-1240953da907-be61d3ef" class="m-h-vert">
-								<?php
-								foreach ( $price_links as $price_links_item ) :
-									$price_link       = get_term_link( $dress_category ) . '?';
-									$price_link_title = '';
-
-									if ( ! empty( $price_links_item['min_price'] ) ) {
-										$price_link .= 'min-price=' . $price_links_item['min_price'];
-									}
-
-									if ( ! empty( $price_links_item['max_price'] ) ) {
-										$price_link .= 'max-price=' . $price_links_item['max_price'];
-									}
-
-									if ( ! empty( $price_links_item['min_price'] ) && ! empty( $price_links_item['max_price'] ) ) {
-										$price_link_title = loveforever_format_price( $price_links_item['min_price'], 0 ) . ' ₽ – ' . loveforever_format_price( $price_links_item['max_price'], 0 ) . ' ₽';
-									} elseif ( ! empty( $price_links_item['min_price'] ) ) {
-										$price_link_title = 'от ' . loveforever_format_price( $price_links_item['min_price'], 0 ) . ' ₽';
-									} else {
-										$price_link_title = 'до ' . loveforever_format_price( $price_links_item['max_price'], 0 ) . ' ₽';
-									}
-
-									?>
-									<a href="<?php echo esc_url( $price_link ); ?>" class="a-12-12 w-inline-block">
-										<div><?php echo esc_html( $price_link_title ); ?></div>
-									</a>
-								<?php endforeach; ?>
-							</div>
-						</div>
-						<?php
-					endif;
+					</div>
+					<?php
 				endif;
 			endforeach;
 			?>

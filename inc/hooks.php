@@ -448,7 +448,7 @@ function loveforever_get_filtered_products_via_ajax() {
 		'paged'          => $page,
 		'meta_query'     => array(
 			array(
-				'key'     => 'price',
+				'key'     => 'final_price',
 				'value'   => array( $min_price, $max_price + 1 ),
 				'compare' => 'BETWEEN',
 				'type'    => 'NUMERIC',
@@ -475,12 +475,12 @@ function loveforever_get_filtered_products_via_ajax() {
 			$products_query_args['order']   = 'DESC';
 			break;
 		case 'min-price':
-			$products_query_args['meta_key'] = 'price';
+			$products_query_args['meta_key'] = 'final_price';
 			$products_query_args['orderby']  = 'meta_value_num';
 			$products_query_args['order']    = 'ASC';
 			break;
 		case 'max-price':
-			$products_query_args['meta_key'] = 'price';
+			$products_query_args['meta_key'] = 'final_price';
 			$products_query_args['orderby']  = 'meta_value_num';
 			$products_query_args['order']    = 'DESC';
 			break;
@@ -903,20 +903,22 @@ function loveforever_save_dress( $post_id ) {
 		$discount = intval( $_REQUEST['quick_discount_percent'] );
 
 		if ( $discount >= 0 && $discount <= 99 ) {
-			update_field( 'discount_percent', $discount, $post_id, );
-			update_field( 'has_discount', true, $post_id, );
+			update_field( 'discount_percent', $discount, $post_id );
+			update_field( 'has_discount', true, $post_id );
 
 			$regular_price = get_field( 'price', $post_id );
 
 			if ( ! empty( $regular_price ) ) {
-				$sale_price = $regular_price - ( $regular_price * $discount / 100 );
-				update_field( 'price_with_discount', ceil( $sale_price ), $post_id, );
+				$sale_price = ceil( $regular_price - ( $regular_price * $discount / 100 ) );
+				update_field( 'price_with_discount', $sale_price, $post_id );
+				update_post_meta( $post_id, 'final_price', $sale_price );
 			}
 		}
 
-		if ( $discount === 0 ) {
-			update_field( 'has_discount', false, $post_id, );
-			update_field( 'price_with_discount', '', $post_id, );
+		if ( 0 === $discount ) {
+			update_field( 'has_discount', false, $post_id );
+			update_field( 'price_with_discount', '', $post_id );
+			update_post_meta( $post_id, 'final_price', $regular_price );
 		}
 	}
 }
@@ -1021,6 +1023,40 @@ function loveforever_change_password_form( $form_html, $post ) {
 
 	return $form_html;
 }
+
+add_action( 'acf/save_post', 'loveforever_update_dress_final_price', 20 );
+function loveforever_update_dress_final_price( $post_id ) {
+	if ( 'dress' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	$regular_price = get_field( 'price', $post_id );
+	$sale_price    = get_field( 'price_with_discount', $post_id );
+
+	$final_price = $sale_price ? $sale_price : $regular_price;
+
+	update_post_meta( $post_id, 'final_price', $final_price );
+}
+
+function loveforever_update_all_dresses_final_price() {
+	$dresses = get_posts(
+		array(
+			'post_type'      => 'dress',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+		)
+	);
+
+	foreach ( $dresses as $dress ) {
+			$regular_price = get_field( 'price', $dress->ID );
+			$sale_price    = get_field( 'price_with_discount', $dress->ID );
+			$final_price   = $sale_price ? $sale_price : $regular_price;
+
+			update_post_meta( $dress->ID, 'final_price', $final_price );
+	}
+}
+
+// loveforever_update_all_dresses_final_price();
 
 // $dresses = get_posts(
 // array(

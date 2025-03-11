@@ -344,20 +344,14 @@ function loveforever_get_product_price_range() {
 
 	$query = $wpdb->prepare(
 		"SELECT 
-				MIN(CASE
-						WHEN sale_price.meta_value > 0 AND sale_price.meta_value < regular_price.meta_value
-						THEN sale_price.meta_value
-						ELSE regular_price.meta_value
-				END) as min_price,
-				MAX(regular_price.meta_value) as max_price
+				MIN(final_price.meta_value) as min_price,
+				MAX(final_price.meta_value) as max_price
 		 FROM {$wpdb->posts} p
-		 JOIN {$wpdb->postmeta} regular_price ON p.ID = regular_price.post_id
-		 LEFT JOIN {$wpdb->postmeta} sale_price ON p.ID = sale_price.post_id 
-				AND sale_price.meta_key = 'price_with_discount'
+		 JOIN {$wpdb->postmeta} final_price ON p.ID = final_price.post_id
 		 WHERE p.post_type = %s
 		 AND p.post_status = 'publish'
-		 AND regular_price.meta_key = 'price'
-		 AND regular_price.meta_value > 0",
+		 AND final_price.meta_key = 'final_price'
+		 AND final_price.meta_value > 0",
 		'dress'
 	);
 

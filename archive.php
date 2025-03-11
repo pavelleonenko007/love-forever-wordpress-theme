@@ -128,7 +128,7 @@ if ( empty( $thumbnail ) ) {
 									if ( ! empty( $price_range ) ) :
 										?>
 										<div class="code-embed-7 w-embed" data-js-range-slider>
-											<div data-js-range-slider-value-min><?php echo esc_html( loveforever_format_price( $price_range['min_price'] ) ); ?></div>
+											<div data-js-range-slider-value-min><?php echo esc_html( loveforever_format_price( $price_range['min_price'], 0 ) ); ?></div>
 											<div id="slider" data-js-range-slider-custom-component></div>
 											<div id="slider-range">
 												<input 
@@ -150,7 +150,7 @@ if ( empty( $thumbnail ) ) {
 													data-js-range-slider-control-max
 												>
 											</div>
-											<div data-js-range-slider-value-max><?php echo esc_html( loveforever_format_price( $price_range['max_price'] ) ); ?></div>
+											<div data-js-range-slider-value-max><?php echo esc_html( loveforever_format_price( $price_range['max_price'], 0 ) ); ?></div>
 										</div>
 									<?php endif; ?>
 								</div>
@@ -289,7 +289,7 @@ if ( empty( $thumbnail ) ) {
 								),
 								'meta_query'     => array(
 									array(
-										'key'     => 'price',
+										'key'     => 'final_price',
 										'value'   => array( $min_price, $max_price + 1 ),
 										'compare' => 'BETWEEN',
 										'type'    => 'NUMERIC',
@@ -303,12 +303,12 @@ if ( empty( $thumbnail ) ) {
 									$products_query_args['order']   = 'DESC';
 									break;
 								case 'min-price':
-									$products_query_args['meta_key'] = 'price';
+									$products_query_args['meta_key'] = 'final_price';
 									$products_query_args['orderby']  = 'meta_value_num';
 									$products_query_args['order']    = 'ASC';
 									break;
 								case 'max-price':
-									$products_query_args['meta_key'] = 'price';
+									$products_query_args['meta_key'] = 'final_price';
 									$products_query_args['orderby']  = 'meta_value_num';
 									$products_query_args['order']    = 'DESC';
 									break;

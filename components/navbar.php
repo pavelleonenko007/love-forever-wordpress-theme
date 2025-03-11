@@ -11,8 +11,13 @@ $address       = get_field( 'address', 'option' );
 $working_hours = get_field( 'working_hours', 'option' );
 $favorites     = loveforever_get_favorites();
 
-$left_menu          = get_field( 'left_menu', 'option' );
-$right_menu         = get_field( 'right_menu', 'option' );
+$left_menu  = get_field( 'left_menu', 'option' );
+$right_menu = get_field( 'right_menu', 'option' );
+
+// echo '<pre>';
+// var_dump( $left_menu, $right_menu );
+// echo '</pre>';
+
 $mobile_menu_items  = array( ...$left_menu, ...$right_menu );
 $only_catalog_items = array_filter(
 	$mobile_menu_items,
@@ -378,82 +383,37 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
 													</a>
 													<?php
-													$mobile_dropdown_menu_columns = $only_catalog_item['dropdown_menu_columns'];
-													if ( ! empty( $mobile_dropdown_menu_columns ) ) :
+													$dropdowns = $only_catalog_item['columns'];
+													$dropdowns = array_filter(
+														$dropdowns,
+														function ( $dropdown ) {
+															return ! empty( $dropdown['links'] );
+														}
+													);
+													if ( ! empty( $dropdowns ) ) :
 														?>
 														<div class="m-nav-cats">
-															<?php foreach ( $mobile_dropdown_menu_columns as $mobile_dropdown_menu_column ) : ?>
-																<?php
-																if ( 'price' !== $mobile_dropdown_menu_column ) :
-																	$tax_object = get_taxonomy( $mobile_dropdown_menu_column );
-																	if ( ! empty( $tax_object ) ) :
-																		?>
-																		<div class="m-nav-drops">
-																			<a href="#" class="m-nav-drop-btn w-inline-block">
-																				<div><?php echo esc_html( $tax_object->labels->singular_name ); ?></div>
-																				<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt class="image-6-drop">
-																			</a>
-																			<?php
-																			$terms_args = array(
-																				'taxonomy'   => $tax_object->name,
-																				'hide_empty' => false, // TODO: set to true!
-																			);
-																			$terms      = get_terms( $terms_args );
-																			if ( ! empty( $terms ) ) :
-																				?>
-																				<div class="m-nav-drop-contant">
-																					<div class="div-block-11">
-																						<?php foreach ( $terms as $term_item ) : ?>
-																							<a href="<?php echo esc_url( get_term_link( $dress_category ) . '?' . $tax_object->name . '=' . $term_item->term_id ); ?>" class="a-12-12 in-drop"><?php echo esc_html( $term_item->name ); ?></a>
-																						<?php endforeach; ?>
-																					</div>
-																				</div>
-																			<?php endif; ?>
+															<?php foreach ( $dropdowns as $dropdown ) : ?>
+																<div class="m-nav-drops">
+																	<a href="#" class="m-nav-drop-btn w-inline-block">
+																		<div><?php echo esc_html( $dropdown['column_name'] ); ?></div>
+																		<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop">
+																	</a>
+																	<div class="m-nav-drop-contant">
+																		<div class="div-block-11">
+																			<?php foreach ( $dropdown['links'] as $dropdown_link_item ) : ?>
+																				<?php $dropdown_link = $dropdown_link_item['link']; ?>
+																				<a 
+																					href="<?php echo esc_url( $dropdown_link['url'] ); ?>" 
+																					class="a-12-12 in-drop"
+																					target="<?php echo esc_attr( $dropdown_link['target'] ) ?? '_self'; ?>"
+																				>
+																					<?php echo esc_html( $dropdown_link['title'] ); ?>
+																				</a>
+																			<?php endforeach; ?>
 																		</div>
-																	<?php endif; ?>
-																	<?php
-																else :
-																	$price_links = $only_catalog_item['price_links'];
-																	if ( ! empty( $price_links ) ) :
-																		?>
-																		<div class="m-nav-drops">
-																			<a href="#" class="m-nav-drop-btn w-inline-block">
-																				<div>Cтоимость</div>
-																				<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt class="image-6-drop">
-																			</a>
-																			<div class="m-nav-drop-contant">
-																				<div class="div-block-11">
-																				<?php
-																				foreach ( $price_links as $price_links_item ) :
-																					$price_link       = get_term_link( $dress_category ) . '?';
-																					$price_link_title = '';
-
-																					if ( ! empty( $price_links_item['min_price'] ) ) {
-																						$price_link .= 'min-price=' . $price_links_item['min_price'];
-																					}
-
-																					if ( ! empty( $price_links_item['max_price'] ) ) {
-																						$price_link .= 'max-price=' . $price_links_item['max_price'];
-																					}
-
-																					if ( ! empty( $price_links_item['min_price'] ) && ! empty( $price_links_item['max_price'] ) ) {
-																						$price_link_title = loveforever_format_price( $price_links_item['min_price'], 0 ) . ' ₽ – ' . loveforever_format_price( $price_links_item['max_price'], 0 ) . ' ₽';
-																					} elseif ( ! empty( $price_links_item['min_price'] ) ) {
-																						$price_link_title = 'от ' . loveforever_format_price( $price_links_item['min_price'], 0 ) . ' ₽';
-																					} else {
-																						$price_link_title = 'до ' . loveforever_format_price( $price_links_item['max_price'], 0 ) . ' ₽';
-																					}
-
-																					?>
-																						<a href="<?php echo esc_url( $price_link ); ?>" class="a-12-12 in-drop"><?php echo esc_html( $price_link_title ); ?></a>
-																					<?php endforeach; ?>
-																				</div>
-																			</div>
-																		</div>
-																		<?php
-																	endif;
-																endif;
-																?>
+																	</div>
+																</div>
 															<?php endforeach; ?>
 														</div>
 													<?php endif; ?>

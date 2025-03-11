@@ -231,6 +231,11 @@ function initReviewsPage() {
 	FileInputCollection.init();
 }
 
+document.addEventListener('catalog:updated', () => {
+	CardSliderCollection.destroyAll();
+	CardSliderCollection.init();
+})
+
 document.addEventListener('DOMContentLoaded', () => {
 	console.log('load');
 
