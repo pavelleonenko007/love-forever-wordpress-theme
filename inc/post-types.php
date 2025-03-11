@@ -224,6 +224,41 @@ function loveforever_register_post_types() {
 	);
 
 	register_taxonomy(
+		'color',
+		null,
+		array(
+			'label'              => '',
+			'labels'             => array(
+				'name'              => 'Цвета',
+				'singular_name'     => 'Цвет',
+				'search_items'      => 'Поиск цветов',
+				'all_items'         => 'Все цвета',
+				'view_item '        => 'Просмотр цветов',
+				'parent_item'       => 'Родитель цвета',
+				'parent_item_colon' => 'Родитель цвета:',
+				'edit_item'         => 'Редактировать цвет',
+				'update_item'       => 'Обновить цвет',
+				'add_new_item'      => 'Добавить новый цвет',
+				'new_item_name'     => 'Название нового цвета',
+				'menu_name'         => 'Цвета',
+				'back_to_items'     => '← Назад к цветам',
+			),
+			'description'        => '',
+			'public'             => false,
+			'show_ui'            => true,
+			'show_in_quick_edit' => true,
+			'hierarchical'       => false,
+			'rewrite'            => true,
+			// 'query_var'             => taxonomy, // название параметра запроса
+			'capabilities'       => array(),
+			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+			'show_in_rest'       => true, // добавить в REST API
+			'rest_base'          => null, // taxonomy
+		)
+	);
+
+	register_taxonomy(
 		'faq_category',
 		null,
 		array(
@@ -334,7 +369,7 @@ function loveforever_register_post_types() {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-			'taxonomies'          => array( 'dress_category', 'dress_tag', 'silhouette', 'style', 'brand', 'fabric' ),
+			'taxonomies'          => array( 'dress_category', 'dress_tag', 'silhouette', 'style', 'brand', 'fabric', 'color' ),
 		)
 	);
 
