@@ -14,7 +14,8 @@ class Dress_Sorter {
 	public function __construct() {
 		add_action( 'wp_ajax_update_dress_order', array( $this, 'update_dress_order_via_ajax' ) );
 		add_action( 'init', array( $this, 'register_dress_order_fields' ) );
-		add_action( 'init', array( $this, 'setup_dress_order_fields_value' ), 20 );
+		add_action( 'current_screen', array( $this, 'maybe_setup_dress_order_fields_value' ), 10, 1 );
+		// add_action( 'init', array( $this, 'setup_dress_order_fields_value' ), 20 );
 		add_action( 'pre_get_posts', array( $this, 'sort_dresses_by_order' ) );
 		add_filter( 'manage_dress_posts_columns', array( $this, 'add_order_column' ) );
 		add_action( 'manage_dress_posts_custom_column', array( $this, 'show_order_column' ), 10, 2 );
@@ -106,6 +107,17 @@ class Dress_Sorter {
 					update_field( $this->meta_key . '_' . $dress_tax->term_id, 0, $dress->ID );
 				}
 			}
+		}
+	}
+
+	public function maybe_setup_dress_order_fields_value() {
+		// Only run on specific admin pages where it's needed
+		$screen = get_current_screen();
+
+		// Only run on the dress post type edit screen or when explicitly requested
+		if ( isset( $_GET['setup_dress_order'] ) ||
+		( $screen && 'dress' === $screen->post_type && 'edit' === $screen->base ) ) {
+			$this->setup_dress_order_fields_value();
 		}
 	}
 
@@ -295,7 +307,7 @@ class Dress_Sorter {
 
 		$data['menu_order'] = $new_order;
 
-		if ( ! $is_new_publish && $new_order === $previous_order ) {
+		if ( $new_order === $previous_order && ! $is_status_changed ) {
 			return $data;
 		}
 
@@ -333,6 +345,11 @@ class Dress_Sorter {
 
 		// Get all dress categories for this post
 		$dress_categories = wp_get_post_terms( $post_id, 'dress_category' );
+
+		// If no categories are found, exit early to prevent data loss
+		if ( empty( $dress_categories ) || is_wp_error( $dress_categories ) ) {
+			return;
+		}
 
 		foreach ( $dress_categories as $category ) {
 			if ( ! isset( $_POST['acf'][ 'field_' . $this->meta_key . '_' . $category->term_id ] ) ) {

@@ -7,6 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+$catalog_filter_form_id = 'catalogFilterForm';
+
 get_header(
 	null,
 	array(
@@ -61,7 +63,7 @@ if ( empty( $thumbnail ) ) {
 				$current_page        = ! empty( $_GET['page'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['page'] ) ) : get_query_var( 'paged' );
 				$selected_silhouette = ! empty( $_GET['silhouette'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['silhouette'] ) ) : null;
 				$orderby             = ! empty( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'views';
-				$other_filter_names  = array( 'brand', 'style' );
+				$other_filter_names  = array( 'brand', 'style', 'color' );
 				$other_filters       = array();
 
 				foreach ( $other_filter_names as $other_filter_name ) {
@@ -77,7 +79,7 @@ if ( empty( $thumbnail ) ) {
 				?>
 				<section id="catalog" class="section z">
 					<div class="container n-top">
-						<form id="catalogFilterForm" class="filters-form" data-js-product-filter-form>
+						<form id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" class="filters-form" data-js-product-filter-form>
 							<div class="vert vert-fw">
 								<div class="spleet m-vert">
 									<?php
@@ -195,84 +197,6 @@ if ( empty( $thumbnail ) ) {
 							<input type="hidden" name="<?php echo esc_attr( $queried_object->taxonomy ); ?>" value="<?php echo esc_attr( $queried_object->term_id ); ?>">
 							<input type="hidden" name="action" value="get_filtered_products">
 							<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce', false ); ?>
-							<?php if ( ! empty( $other_filters ) ) : ?>
-								<div id="filterDialog" role="dialog" class="dialog" data-js-dialog>
-									<div class="dialog__overlay" data-js-dialog-overlay>
-										<div class="dialog__content" data-js-dialog-content>
-											<div class="dialog-card">
-												<div class="dialog-card__header">
-													<h3 class="dialog-card__title noitalic uppercase ff-tt-chocolates" data-js-dialog-title>Фильтры</h3>
-												</div>
-												<div class="dialog-card__body">
-													<div id="filterDialogAccordion" class="accordion">
-														<?php foreach ( $other_filters as $other_filter_name => $other_filter_fields ) : ?>
-															<div class="accordion__item">
-																<h3 class="accordion__header">
-																	<button 
-																		class="accordion__trigger" 
-																		aria-expanded="false"
-																		aria-controls="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name ); ?>"
-																		data-js-accordion-trigger
-																		type="button"
-																		id="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name . '-trigger' ); ?>"
-																	>
-																		<span class="accordion__title"><?php echo esc_html( get_taxonomy( $other_filter_name )->labels->singular_name ); ?></span>
-																		<span class="accordion__icon" aria-hidden="true">
-																			<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-																				<path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-																			</svg>
-																		</span>
-																	</button>
-																</h3>
-																<div 
-																	class="accordion__panel" 
-																	id="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name ); ?>" 
-																	role="region" 
-																	aria-labelledby="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name . '-trigger' ); ?>"
-																	hidden
-																>
-																	<div class="accordion__content">
-																		<?php
-																		foreach ( $other_filter_fields as $other_filter_field ) :
-																			?>
-																			<label class="loveforever-checkbox">
-																				<input
-																					id="<?php echo esc_attr( $other_filter_name . '-' . $other_filter_field->term_id ); ?>"
-																					type="checkbox"
-																					name="<?php echo esc_attr( $other_filter_name . '[]' ); ?>"
-																					class="loveforever-checkbox__control"
-																					value="<?php echo esc_attr( $other_filter_field->term_id ); ?>"
-																				>
-																				<span class="loveforever-checkbox__label"><?php echo esc_html( $other_filter_field->name ); ?></span>
-																			</label>
-																			<?php
-																		endforeach;
-																		?>
-																	</div>
-																</div>
-															</div>
-														<?php endforeach; ?>
-													</div>
-												</div>
-												<div class="dialog-card__footer">
-													<button class="button" data-js-dialog-close-button>Показать результат</button>
-													<button type="reset" class="button button--link" data-js-dialog-close-button>Очистить</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<button type="button" class="dialog__close" data-js-dialog-close-button>
-										<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<mask id="mask0_451_2489" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
-												<rect width="18" height="18" fill="#D9D9D9"/>
-											</mask>
-											<g mask="url(#mask0_451_2489)">
-												<path fill-rule="evenodd" clip-rule="evenodd" d="M8.84924 8.14201L1.77818 1.07095L1.07107 1.77805L8.14214 8.84912L1.07107 15.9202L1.77817 16.6273L8.84924 9.55623L15.9203 16.6273L16.6274 15.9202L9.55635 8.84912L16.6274 1.77805L15.9203 1.07095L8.84924 8.14201Z" fill="black"/>
-											</g>
-										</svg>
-									</button>
-								</div>
-							<?php endif; ?>
 						</form>
 						<div class="catalog-grid catalog-page-grid" data-js-product-filter-form-content-element>
 							<?php
@@ -829,6 +753,98 @@ if ( empty( $thumbnail ) ) {
 				<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
 				<?php get_template_part( 'template-parts/global/faq-section', null, get_field( 'faqs', 'option' ) ); ?>
+				<?php if ( ! empty( $other_filters ) ) : ?>
+					<div id="filterDialog" role="dialog" class="dialog" data-js-dialog>
+						<div class="dialog__overlay" data-js-dialog-overlay>
+							<div class="dialog__content" data-js-dialog-content>
+								<div class="dialog-card">
+									<div class="dialog-card__header">
+										<h3 class="dialog-card__title noitalic uppercase ff-tt-chocolates" data-js-dialog-title>Фильтры</h3>
+									</div>
+									<div class="dialog-card__body">
+										<div id="filterDialogAccordion" class="accordion">
+											<?php foreach ( $other_filters as $other_filter_name => $other_filter_fields ) : ?>
+												<div class="accordion__item">
+													<h3 class="accordion__header">
+														<button 
+															class="accordion__trigger" 
+															aria-expanded="false"
+															aria-controls="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name ); ?>"
+															data-js-accordion-trigger
+															type="button"
+															id="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name . '-trigger' ); ?>"
+														>
+															<span class="accordion__title"><?php echo esc_html( get_taxonomy( $other_filter_name )->labels->singular_name ); ?></span>
+															<span class="accordion__icon" aria-hidden="true">
+																<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+																</svg>
+															</span>
+														</button>
+													</h3>
+													<div 
+														class="accordion__panel" 
+														id="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name ); ?>" 
+														role="region" 
+														aria-labelledby="<?php echo esc_attr( 'accordion-panel-' . $other_filter_name . '-trigger' ); ?>"
+														hidden
+													>
+														<div class="accordion__content">
+															<?php
+															foreach ( $other_filter_fields as $other_filter_field ) :
+																?>
+																<label class="loveforever-checkbox">
+																	<input
+																		form="<?php echo esc_attr( $catalog_filter_form_id ); ?>"
+																		id="<?php echo esc_attr( $other_filter_name . '-' . $other_filter_field->term_id ); ?>"
+																		type="checkbox"
+																		name="<?php echo esc_attr( $other_filter_name . '[]' ); ?>"
+																		class="loveforever-checkbox__control"
+																		value="<?php echo esc_attr( $other_filter_field->term_id ); ?>"
+																	>
+																	<span class="loveforever-checkbox__label"><?php echo esc_html( $other_filter_field->name ); ?></span>
+																</label>
+																<?php
+															endforeach;
+															?>
+														</div>
+													</div>
+												</div>
+											<?php endforeach; ?>
+										</div>
+									</div>
+									<div class="dialog-card__footer">
+										<button 
+											class="button" 
+											form="<?php echo esc_attr( $catalog_filter_form_id ); ?>" 
+											data-js-dialog-close-button
+										>
+											Показать результат
+										</button>
+										<button 
+											form="<?php echo esc_attr( $catalog_filter_form_id ); ?>"
+											type="reset" 
+											class="button button--link" 
+											data-js-dialog-close-button
+										>
+											Очистить
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="dialog__close" data-js-dialog-close-button>
+							<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<mask id="mask0_451_2489" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+									<rect width="18" height="18" fill="#D9D9D9"/>
+								</mask>
+								<g mask="url(#mask0_451_2489)">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M8.84924 8.14201L1.77818 1.07095L1.07107 1.77805L8.14214 8.84912L1.07107 15.9202L1.77817 16.6273L8.84924 9.55623L15.9203 16.6273L16.6274 15.9202L9.55635 8.84912L16.6274 1.77805L15.9203 1.07095L8.84924 8.14201Z" fill="black"/>
+								</g>
+							</svg>
+						</button>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>
