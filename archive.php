@@ -202,7 +202,7 @@ if ( empty( $thumbnail ) ) {
 							<?php
 							$products_query_args = array(
 								'post_type'      => 'dress',
-								'posts_per_page' => get_field( 'products_per_page', 'option' ),
+								'posts_per_page' => intval( get_field( 'products_per_page', 'option' ) ),
 								'paged'          => $current_page,
 								'tax_query'      => array(
 									array(
@@ -214,9 +214,9 @@ if ( empty( $thumbnail ) ) {
 								'meta_query'     => array(
 									array(
 										'key'     => 'final_price',
-										'value'   => array( $min_price, $max_price + 1 ),
+										'value'   => array( intval($min_price), intval($max_price + 1) ),
 										'compare' => 'BETWEEN',
-										'type'    => 'NUMERIC',
+										'type'    => 'DECIMAL',
 									),
 								),
 							);

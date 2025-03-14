@@ -348,8 +348,8 @@ function loveforever_get_product_price_range( $category_term_id = null ) {
 
 	$query = $wpdb->prepare(
 		"SELECT 
-				MIN(final_price.meta_value) as min_price,
-				MAX(final_price.meta_value) as max_price
+				MIN(CAST(final_price.meta_value AS UNSIGNED INTEGER)) as min_price,
+				MAX(CAST(final_price.meta_value AS UNSIGNED INTEGER)) as max_price
 		 FROM {$wpdb->posts} p
 		 JOIN {$wpdb->postmeta} final_price ON p.ID = final_price.post_id
 		 JOIN {$wpdb->term_relationships} term_relationships ON p.ID = term_relationships.object_id
@@ -358,7 +358,8 @@ function loveforever_get_product_price_range( $category_term_id = null ) {
 		 AND p.post_status = 'publish'
 		 AND final_price.meta_key = 'final_price'
 		 AND final_price.meta_value > 0
-		 AND term_taxonomy.term_id = %d",
+		 AND term_taxonomy.term_id = %d
+		 ORDER BY final_price.meta_value ASC",
 		'dress',
 		$category_term_id
 	);
@@ -368,8 +369,8 @@ function loveforever_get_product_price_range( $category_term_id = null ) {
 
 	if ( $result && null !== $result->min_price && null !== $result->max_price ) {
 			return array(
-				'min_price' => (float) $result->min_price,
-				'max_price' => (float) $result->max_price,
+				'min_price' => (int) $result->min_price,
+				'max_price' => (int) $result->max_price,
 			);
 	}
 
@@ -381,14 +382,15 @@ function loveforever_get_product_price_range_without_category() {
 
 	$query = $wpdb->prepare(
 		"SELECT 
-				MIN(final_price.meta_value) as min_price,
-				MAX(final_price.meta_value) as max_price
+				MIN(CAST(final_price.meta_value AS UNSIGNED INTEGER)) as min_price,
+				MAX(CAST(final_price.meta_value AS UNSIGNED INTEGER)) as max_price
 		 FROM {$wpdb->posts} p
 		 JOIN {$wpdb->postmeta} final_price ON p.ID = final_price.post_id
 		 WHERE p.post_type = %s
 		 AND p.post_status = 'publish'
 		 AND final_price.meta_key = 'final_price'
-		 AND final_price.meta_value > 0",
+		 AND final_price.meta_value > 0
+		 ORDER BY final_price.meta_value ASC",
 		'dress'
 	);
 

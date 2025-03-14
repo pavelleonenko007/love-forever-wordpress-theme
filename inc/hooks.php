@@ -1056,6 +1056,9 @@
 			 'post_status'    => 'publish',
 		 )
 	 );
+
+	 var_dump( count($dresses ));
+	 exit;
  
 	 foreach ( $dresses as $dress ) {
 			 $regular_price = get_field( 'price', $dress->ID );
@@ -1066,7 +1069,7 @@
 	 }
  }
  
- // loveforever_update_all_dresses_final_price();
+//  add_action('init', 'loveforever_update_all_dresses_final_price');
  
  // $dresses = get_posts(
  // array(
