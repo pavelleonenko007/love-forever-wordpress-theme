@@ -168,14 +168,21 @@ function loveforever_import_dresses() {
 			$images = $offer->picture;
 			if ( count( $images ) > 0 ) {
 				$featured_image_id = loveforever_download_and_add_image_to_library( (string) $images[0] );
-				set_post_thumbnail( $post_id, $featured_image_id );
+
+				if ( ! is_wp_error( $featured_image_id ) ) {
+					set_post_thumbnail( $post_id, $featured_image_id );
+				}
 
 				if ( count( $images ) > 1 ) {
 					$image_array = array();
 					for ( $i = 1; $i < count( $images ); $i++ ) {
 						$image_id      = loveforever_download_and_add_image_to_library( (string) $images[ $i ] );
-						$image_array[] = array( 'image' => $image_id );
+
+						if ( ! is_wp_error( $image_id ) ) {
+							$image_array[] = array( 'image' => $image_id );
+						}
 					}
+					
 					update_field( 'images', $image_array, $post_id );
 				}
 			}

@@ -24,8 +24,29 @@ function loveforever_is_current_url( string $test_url, $include_params = false )
 }
 
 function loveforever_download_and_add_image_to_library( $image_url ) {
+	if ( ! $image_url ) {
+		return new WP_Error( 'no_image_url', 'No image URL provided.' );
+	}
+
+	$response = wp_remote_get( $image_url );
+
+	// Проверка на ошибки запроса
+	if ( is_wp_error( $response ) ) {
+			return $response; // Возвращаем объект WP_Error
+	}
+
+	// Проверка на код ответа
+	if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return new WP_Error( 'invalid_response_code', 'Invalid response code: ' . wp_remote_retrieve_response_code( $response ) );
+	}
+
+	// Получаем содержимое изображения
+	$image_data = wp_remote_retrieve_body( $response );
+	if ( empty( $image_data ) ) {
+			return new WP_Error( 'empty_image', 'Получены пустые данные изображения' );
+	}
+
 	$upload_dir = wp_upload_dir();
-	$image_data = file_get_contents( $image_url );
 	$filename   = basename( $image_url );
 
 	if ( wp_mkdir_p( $upload_dir['path'] ) ) {
@@ -34,9 +55,20 @@ function loveforever_download_and_add_image_to_library( $image_url ) {
 		$file = $upload_dir['basedir'] . '/' . $filename;
 	}
 
-	file_put_contents( $file, $image_data );
+	$file_written = file_put_contents( $file, $image_data );
+
+	if ( false === $file_written ) {
+		return new WP_Error( 'file_save_error', 'Не удалось сохранить изображение' );
+	}
 
 	$wp_filetype = wp_check_filetype( $filename, null );
+
+	if ( empty( $wp_filetype['type'] ) ) {
+		// Удаляем файл, если его тип не распознан
+		@unlink( $file );
+		return new WP_Error( 'invalid_filetype', 'Недопустимый тип файла изображения' );
+	}
+
 	$attachment  = array(
 		'post_mime_type' => $wp_filetype['type'],
 		'post_title'     => sanitize_file_name( $filename ),
@@ -45,6 +77,13 @@ function loveforever_download_and_add_image_to_library( $image_url ) {
 	);
 
 	$attach_id = wp_insert_attachment( $attachment, $file );
+
+	// Проверяем, что attachment создан успешно
+	if ( is_wp_error( $attach_id ) ) {
+		@unlink( $file ); // Удаляем файл в случае ошибки
+		return $attach_id;
+	}
+
 	require_once ABSPATH . 'wp-admin/includes/image.php';
 	$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
 	wp_update_attachment_metadata( $attach_id, $attach_data );
