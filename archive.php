@@ -214,7 +214,7 @@ if ( empty( $thumbnail ) ) {
 								'meta_query'     => array(
 									array(
 										'key'     => 'final_price',
-										'value'   => array( intval($min_price), intval($max_price + 1) ),
+										'value'   => array( intval( $min_price ), intval( $max_price + 1 ) ),
 										'compare' => 'BETWEEN',
 										'type'    => 'DECIMAL',
 									),
