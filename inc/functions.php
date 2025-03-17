@@ -472,11 +472,13 @@ function loveforever_get_product_title( $product_id ) {
 		return get_the_title( $product_id );
 	}
 
-	$categories = array_filter(
-		$categories,
-		function ( $category ) {
-			return 0 === $category->parent;
-		}
+	$categories = array_values(
+		array_filter(
+			$categories,
+			function ( $category ) {
+				return 0 === $category->parent;
+			}
+		)
 	);
 
 	if ( count( $categories ) > 1 ) {
@@ -488,4 +490,23 @@ function loveforever_get_product_title( $product_id ) {
 	}
 
 	return $catalog_titles[ $categories[0]->slug ] . ' ' . get_the_title( $product_id );
+}
+
+function loveforever_get_product_images( $product_id ) {
+	$images = get_field( 'images', $product_id );
+
+	if ( ! empty( $images ) && has_post_thumbnail( $product_id ) ) {
+		array_unshift(
+			$images,
+			array(
+				'image' => array(
+					'ID'  => get_post_thumbnail_id( $product_id ),
+					'url' => get_the_post_thumbnail_url( $product_id, 'full' ),
+					'alt' => '',
+				),
+			)
+		);
+	}
+
+	return $images;
 }
