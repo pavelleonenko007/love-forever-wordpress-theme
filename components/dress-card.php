@@ -11,7 +11,7 @@ global $post;
 $price                      = get_field( 'price' );
 $has_discount               = get_field( 'has_discount' );
 $price_with_discount        = get_field( 'price_with_discount' );
-$images                     = get_field( 'images' );
+$images                     = loveforever_get_product_images( get_the_ID() );
 $video                      = get_field( 'video' );
 $show_video_in_product_card = get_field( 'show_video_in_product_card' );
 ?>
@@ -36,10 +36,13 @@ $show_video_in_product_card = get_field( 'show_video_in_product_card' );
 							<ul class="card-slider__list">
 								<?php foreach ( $images as $index => $image ) : ?>
 									<li class="card-slider__list-item<?php echo ( 0 === $index ) ? ' is-active' : ''; ?>" data-js-card-slider-slide-item="<?php echo esc_attr( $index ); ?>">
-										<?php /* wp_get_attachment_image( $image['image']['ID'], 'large', false, array(
+										<?php
+										/*
+										wp_get_attachment_image( $image['image']['ID'], 'large', false, array(
 											'loading' => 'lazy',
 											'class' => 'img-cover'
-										) ); */ ?>
+										) ); */
+										?>
 										<img src="<?php echo esc_url( wp_get_attachment_image_url( $image['image']['ID'], 'large' ) ); ?>" loading="lazy" alt class="img-cover">
 									</li>
 								<?php endforeach; ?>
@@ -54,10 +57,13 @@ $show_video_in_product_card = get_field( 'show_video_in_product_card' );
 							</ul>
 						</div>
 					<?php elseif ( has_post_thumbnail() ) : ?>
-						<?php /* the_post_thumbnail('large', array(
+						<?php
+						/*
+						the_post_thumbnail('large', array(
 							'loading' => 'lazy',
 							'class' => 'img-cover'
-						)); */ ?>
+						)); */
+						?>
 						<img src="<?php echo esc_url( get_the_post_thumbnail_url() ); ?>" loading="lazy" alt class="img-cover">
 					<?php endif; ?>
 				</div>

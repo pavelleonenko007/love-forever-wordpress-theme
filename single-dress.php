@@ -19,7 +19,7 @@ get_header(
 
 $availability        = get_field( 'availability' );
 $is_new              = get_field( 'is_new' );
-$images              = get_field( 'images' );
+$images              = loveforever_get_product_images( get_the_ID() );
 $video               = get_field( 'video' );
 $colors              = get_field( 'colors' );
 $price               = get_field( 'price' );
@@ -49,7 +49,9 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 									<?php get_template_part( 'components/breadcrumb', null, array( 'extra_classes' => array( 'breadcrumbs--single-dress' ) ) ); ?>
 								</nav>
 							</div>
-							<?php if ( ! empty( $images ) ) : ?>
+						<?php
+						if ( ! empty( $images ) ) :
+							?>
 							<div data-delay="4000" data-animation="slide" class="m-prod-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
 								<div class="m-prod-slider_mask w-slider-mask">
 									<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
