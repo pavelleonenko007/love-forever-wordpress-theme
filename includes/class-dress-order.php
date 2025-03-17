@@ -14,7 +14,7 @@ class Dress_Sorter {
 	public function __construct() {
 		add_action( 'wp_ajax_update_dress_order', array( $this, 'update_dress_order_via_ajax' ) );
 		add_action( 'init', array( $this, 'register_dress_order_fields' ) );
-		add_action( 'current_screen', array( $this, 'maybe_setup_dress_order_fields_value' ), 10, 1 );
+		// add_action( 'current_screen', array( $this, 'maybe_setup_dress_order_fields_value' ), 10, 1 );
 		// add_action( 'init', array( $this, 'setup_dress_order_fields_value' ), 20 );
 		add_action( 'pre_get_posts', array( $this, 'sort_dresses_by_order' ) );
 		add_filter( 'manage_dress_posts_columns', array( $this, 'add_order_column' ) );
@@ -114,9 +114,11 @@ class Dress_Sorter {
 		// Only run on specific admin pages where it's needed
 		$screen = get_current_screen();
 
+		var_dump($screen);
+
 		// Only run on the dress post type edit screen or when explicitly requested
 		if ( isset( $_GET['setup_dress_order'] ) ||
-		( $screen && 'dress' === $screen->post_type && 'edit' === $screen->base ) ) {
+		( $screen && 'dress' === $screen->post_type && 'post' === $screen->base ) ) {
 			$this->setup_dress_order_fields_value();
 		}
 	}
@@ -220,6 +222,8 @@ class Dress_Sorter {
 		if ( ! is_admin() || ! $query->is_main_query() || $this->post_type !== $query->get( 'post_type' ) ) {
 			return;
 		}
+
+		// var_dump($query);
 
 		$dress_category = isset( $_GET['dress_category'] ) ? get_term_by( 'slug', $_GET['dress_category'], 'dress_category' ) : null;
 
