@@ -18,7 +18,7 @@ get_header(
 	)
 );
 ?>
-				<section class="section section_100vh homepagesection">
+				<section class="section section_100vh homepagesection hero-section">
 					<div class="container container-fw n-top">
 						<?php get_template_part( 'components/marquee' ); ?>
 						<?php get_template_part( 'components/navbar' ); ?>
@@ -26,8 +26,8 @@ get_header(
 						$hero_slider = get_field( 'hero_slider' );
 						if ( ! empty( $hero_slider ) ) :
 							?>
-							<div data-delay="4000" data-animation="cross" class="slider_home-slider w-slider" data-target-element=".w-slider-mask" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-acf-repeater="hero_slider" data-nav-spacing="0" data-duration="500" data-infinite="true">
-								<div class="w-slider-mask">
+							<div data-delay="4000" data-animation="cross" class="slider_home-slider w-slider hero-slider" data-target-element=".w-slider-mask" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-acf-repeater="hero_slider" data-nav-spacing="0" data-duration="500" data-infinite="true">
+								<div class="hero-slider__mask w-slider-mask">
 									<?php
 									foreach ( $hero_slider as $slide ) :
 										$image       = $slide['image'];
@@ -36,16 +36,16 @@ get_header(
 										$description = $slide['description'];
 										$button      = $slide['button'];
 										?>
-										<div class="w-slide">
-											<div class="slider_home-slider_slide-in">
-												<div class="mom-abs">
+										<div class="hero-slider__slide w-slide">
+											<div class="slider_home-slider_slide-in hero-slider__slide-in">
+												<div class="mom-abs hero-slider__image">
 													<?php
 													if ( ! empty( $image ) ) :
 														?>
 														<img src="<?php echo esc_url( wp_get_attachment_image_url( $image, 'full' ) ); ?>" loading="eager" alt class="img-cover">
 													<?php endif; ?>
 												</div>
-												<div class="slider-bottom-content">
+												<div class="slider-bottom-content hero-slider__bottom-content">
 													<?php
 													if ( ! empty( $subheading ) ) :
 														?>
@@ -72,10 +72,10 @@ get_header(
 										</div>
 									<?php endforeach; ?>
 								</div>
-								<div class="slider_home-slider_l-btn w-slider-arrow-left">
+								<div class="slider_home-slider_l-btn w-slider-arrow-left hero-slider__arrow">
 									<div class="w-icon-slider-left"></div>
 								</div>
-								<div class="slider_home-slider_r-btn w-slider-arrow-right">
+								<div class="slider_home-slider_r-btn w-slider-arrow-right hero-slider__arrow">
 									<div class="w-icon-slider-right"></div>
 								</div>
 								<div class="slider_home-slider_nav w-slider-nav w-round"></div>

@@ -1,6 +1,12 @@
 .hero-section {
   $root: &;
 
+  height: auto;
+
+  &.section {
+    height: auto;
+  }
+
   &--no-image {
     max-height: 600rem;
     background-color: purple;
