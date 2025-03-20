@@ -4,22 +4,16 @@
   $root: &;
 
   &__image {
-    width: 100%;
-    position: static;
-
-    @include tablet {
-      position: absolute;
-    }
 
     & > img {
-      width: 100%;
+      object-position: top center;
     }
   }
 
-  &__bottom-content {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    translate: -50% 0;
-  }
+  // &__bottom-content {
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 50%;
+  //   translate: -50% 0;
+  // }
 }
