@@ -386,11 +386,11 @@
             "save_terms": 1,
             "load_terms": 1,
             "return_format": "id",
-            "field_type": "checkbox",
+            "field_type": "multi_select",
+            "allow_null": 1,
             "allow_in_bindings": 0,
             "bidirectional": 0,
             "multiple": 0,
-            "allow_null": 0,
             "bidirectional_target": []
         },
         {
@@ -412,11 +412,11 @@
             "save_terms": 1,
             "load_terms": 1,
             "return_format": "id",
-            "field_type": "checkbox",
+            "field_type": "multi_select",
+            "allow_null": 1,
             "allow_in_bindings": 0,
             "bidirectional": 0,
             "multiple": 0,
-            "allow_null": 0,
             "bidirectional_target": []
         },
         {
@@ -490,5 +490,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1742210256
+    "modified": 1744015175
 }

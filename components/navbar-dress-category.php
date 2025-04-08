@@ -11,8 +11,8 @@ if ( empty( $args['category'] ) ) {
 	return;
 }
 
-$dress_category        = get_term( $args['category'] );
-$columns               = $args['columns'];
+$dress_category = get_term( $args['category'] );
+$columns        = $args['columns'];
 ?>
 <div class="menu-link-keeper">
 	<a 
@@ -27,11 +27,13 @@ $columns               = $args['columns'];
 			foreach ( $columns as $column ) :
 				if ( ! empty( $column['links'] ) ) :
 					?>
-					<div id="w-node-_144563be-6001-1af8-6446-1240953da88b-be61d3ef" class="m-h-vert">
+					<div id="w-node-_144563be-6001-1af8-6446-1240953da88e-be61d3ef" class="m-h-vert">
 						<div class="p-16-16"><?php echo esc_html( $column['column_name'] ); ?></div>
-						<div id="w-node-_144563be-6001-1af8-6446-1240953da88e-be61d3ef" class="m-h-vert">
-							<?php foreach ( $column['links'] as $link_item ) :
-								$link = $link_item['link']; ?>
+						<div class="m-h-vert<?php echo 10 < count( $column['links'] ) ? ' grider' : ''; ?>">
+							<?php
+							foreach ( $column['links'] as $link_item ) :
+								$link = $link_item['link'];
+								?>
 								<a 
 									href="<?php echo esc_url( $link['url'] ); ?>" 
 									class="a-12-12 w-inline-block"

@@ -859,7 +859,7 @@ function loveforever_dress_sort_column_content( $column_name, $post_id ) {
 		$style_attr = '';
 		array_walk(
 			$badge_styles,
-			function ( $value, $key ) use( &$style_attr ) {
+			function ( $value, $key ) use ( &$style_attr ) {
 				$style_attr .= "$key: $value;";
 			}
 		);
@@ -1100,23 +1100,98 @@ function loveforever_set_default_views_count( $post_id, $post, $update ) {
 	}
 }
 
-// add_action('init', 'loveforever_update_all_dresses_final_price');
+function dress_admin_scripts() {
+	global $post;
 
-// $dresses = get_posts(
-// array(
-// 'post_type'   => 'dress',
-// 'numberposts' => -1,
-// 'orderby'     => 'menu_order',
-// 'order'       => 'ASC',
-// )
-// );
+	// Проверяем, находимся ли мы на странице редактирования платья
+	if ( isset( $post ) && $post->post_type === 'dress' ) {
+		// Регистрируем и подключаем наш скрипт
+		wp_enqueue_script( 'dress-acf-filter', get_template_directory_uri() . '/js/dress-acf-filter.js', array( 'jquery', 'acf-input' ), '1.0', true );
 
-// global $wpdb;
+		$map = array(
+			311 => 'wedding',
+			199 => 'evening',
+			282 => 'prom',
+			375 => 'boudoir',
+		);
 
-// foreach ( $dresses as $dress ) {
-// $wpdb->update(
-// $wpdb->posts,
-// array( 'menu_order' => 0 ),
-// array( 'ID' => $dress->ID )
-// );
-// }
+		$dependencies = array();
+
+		$dress_categories = get_terms(
+			array(
+				'taxonomy'   => 'dress_category',
+				'parent'     => 0,
+				'hide_empty' => false,
+			)
+		);
+
+		foreach ( $dress_categories as $dress_category ) {
+			$dependencies[ $dress_category->term_id ]['silhouette'] = get_field( 'silhouette', $dress_category );
+			$dependencies[ $dress_category->term_id ]['brand']      = get_field( 'brand', $dress_category );
+			$dependencies[ $dress_category->term_id ]['style']      = get_field( 'style', $dress_category );
+			$dependencies[ $dress_category->term_id ]['color']      = get_field( 'color', $dress_category );
+			$dependencies[ $dress_category->term_id ]['fabric']     = get_field( 'fabric', $dress_category );
+		}
+
+			// // Создаем массив зависимостей для передачи в JavaScript
+			// $dependencies = array(
+			// 	'wedding' => array( // ID категории "Свадебные платья"
+			// 		'silhouette' => array( 9, 17, 11, 15 ), // ID допустимых силуэтов
+			// 		'brand'      => array( 'brand1', 'brand2', 'brand3' ), // ID допустимых брендов
+			// 		'style'      => array( 'classic', 'modern', 'vintage' ), // ID допустимых стилей
+			// 		'color'      => array( 462, 469, 445, 470 ), // ID допустимых цветов
+			// 	),
+			// 	'evening' => array( // ID категории "Вечерние платья"
+			// 		'silhouette' => array( 'sheath', 'trumpet', 'ball-gown' ),
+			// 		'brand'      => array( 'brand2', 'brand4', 'brand5' ),
+			// 		'style'      => array( 'glamour', 'minimalist', 'luxury' ),
+			// 		'color'      => array( 'black', 'red', 'blue', 'gold', 'silver' ),
+			// 	),
+			// 		// Добавьте другие категории по аналогии
+			// );
+
+		// Передаем данные в JavaScript
+		wp_localize_script(
+			'dress-acf-filter',
+			'dressData',
+			array(
+				'map'          => $map,
+				'dependencies' => $dependencies,
+				'fieldKeys'    => array(
+					'category'   => 'dress_category', // Замените на ключ вашего поля категории
+					'silhouette' => 'silhouette', // Замените на ключ вашего поля силуэта
+					'brand'      => 'brand', // Замените на ключ вашего поля бренда
+					'style'      => 'style', // Замените на ключ вашего поля стиля
+					'color'      => 'color', // Замените на ключ вашего поля цвета
+					'fabric'     => 'fabric', // Замените на ключ вашего поля цвета
+				),
+			)
+		);
+	}
+}
+add_action( 'admin_enqueue_scripts', 'dress_admin_scripts' );
+
+add_filter(
+	'acf/fields/taxonomy/query/key=field_67d801f8498e7',
+	function ( $args, $field, $post_id ) {
+
+		$dress_categories = get_field( 'field_67d6fec761d73', $post_id );
+
+		error_log( wp_json_encode( $_POST ) );
+
+		error_log(
+			wp_json_encode(
+				array(
+					'dress_cat' => $dress_categories,
+					'args'      => $args,
+					'field'     => $field,
+					'id'        => $post_id,
+				)
+			)
+		);
+
+		return $args;
+	},
+	10,
+	3
+);
