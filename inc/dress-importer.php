@@ -35,6 +35,16 @@ class Loveforever_Dress_Importer {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		register_rest_route(
+			'dress-importer/v1',
+			'/clear',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'clear_all_dresses' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	/**
@@ -467,6 +477,56 @@ class Loveforever_Dress_Importer {
 			array( $this, 'xml_importer_admin_page' ),
 			'dashicons-upload',
 			30
+		);
+	}
+
+	public function clear_all_dresses() {
+		$post_type  = $this->post_type; // Тип постов
+		$limit      = -1; // Кол-во постов
+		$acf_fields = array( 'video', 'images' ); // Названия ACF полей
+
+		$args = array(
+			'post_type'      => $post_type,
+			'posts_per_page' => $limit,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+		);
+
+		$post_ids = get_posts( $args );
+
+		foreach ( $post_ids as $post_id ) {
+			$thumbnail_id = get_post_thumbnail_id( $post_id );
+			if ( $thumbnail_id ) {
+				wp_delete_attachment( $thumbnail_id, true );
+			}
+
+			foreach ( $acf_fields as $field_name ) {
+				$field_value = get_field( $field_name, $post_id );
+
+				if ( ! empty( $field_value ) ) {
+					if ( 'video' === $field_name ) {
+						wp_delete_attachment( $field_value['ID'], true );
+					}
+
+					if ( 'images' === $field_name ) {
+						foreach ( $field_value as $field_value_item ) {
+							if ( ! empty( $field_value_item['image'] ) ) {
+								wp_delete_attachment( $field_value_item['image']['ID'] );
+							}
+						}
+					}
+				}
+			}
+
+			wp_delete_post( $post_id, true );
+		}
+
+		return new WP_REST_Response(
+			array(
+				'message'       => 'Товары успешно удалены',
+				'total_deleted' => count( $post_ids ),
+			),
+			200
 		);
 	}
 }
