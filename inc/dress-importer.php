@@ -8,6 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 class Loveforever_Dress_Importer {
+
 	private $post_type = 'dress';
 
 	public function __construct() {
@@ -42,7 +43,7 @@ class Loveforever_Dress_Importer {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'clear_all_dresses' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => '__return_false',
 			)
 		);
 	}
@@ -50,7 +51,7 @@ class Loveforever_Dress_Importer {
 	/**
 	 * Initialize import progress tracking
 	 *
-	 * @param int $total_items Total number of items to import.
+	 * @param  int $total_items Total number of items to import.
 	 * @return void
 	 */
 	public function init_import_progress( $total_items ) {
@@ -68,8 +69,8 @@ class Loveforever_Dress_Importer {
 	/**
 	 * Update import progress
 	 *
-	 * @param int  $imported_count Current number of imported items.
-	 * @param bool $is_complete Whether the import is complete.
+	 * @param  int  $imported_count Current number of imported items.
+	 * @param  bool $is_complete    Whether the import is complete.
 	 * @return array Updated progress data
 	 */
 	public function update_import_progress( $imported_count, $is_complete = false ) {
@@ -180,7 +181,7 @@ class Loveforever_Dress_Importer {
 	/**
 	 * Загружает несколько изображений параллельно
 	 *
-	 * @param array $image_urls Массив URL изображений для загрузки
+	 * @param  array $image_urls Массив URL изображений для загрузки
 	 * @return array Массив ID загруженных изображений или WP_Error
 	 */
 	private function download_images_in_parallel( $image_urls ) {
@@ -194,9 +195,9 @@ class Loveforever_Dress_Importer {
 
 		// Включаем необходимые файлы для загрузки медиа
 		if ( ! function_exists( 'media_handle_sideload' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/image.php';
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			require_once ABSPATH . 'wp-admin/includes/media.php';
+			include_once ABSPATH . 'wp-admin/includes/image.php';
+			include_once ABSPATH . 'wp-admin/includes/file.php';
+			include_once ABSPATH . 'wp-admin/includes/media.php';
 		}
 
 		for ( $i = 0; $i < count( $image_urls ); $i++ ) {
@@ -387,7 +388,7 @@ class Loveforever_Dress_Importer {
 		<div class="wrap">
 			<h1>XML Product Importer</h1>
 			<p>Import products from XML file with featured images and ACF repeater fields.</p>
-			<?php $this->display_import_form(); ?>
+		<?php $this->display_import_form(); ?>
 		</div>
 		<?php
 	}
