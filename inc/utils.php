@@ -138,7 +138,7 @@ function loveforever_download_and_add_image_to_library( $image_url ) {
 		'post_status'    => 'inherit',
 	);
 
-	add_filter( 'intermediate_image_sizes_advanced', 'loveforever_delete_intermediate_image_sizes' );
+	add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 
 	// Вставляем файл в библиотеку медиа
 	$attachment_id = wp_insert_attachment( $attachment, $upload_path );
@@ -155,7 +155,7 @@ function loveforever_download_and_add_image_to_library( $image_url ) {
 
 	wp_update_attachment_metadata( $attachment_id, $attachment_data );
 
-	remove_filter( 'intermediate_image_sizes_advanced', 'loveforever_delete_intermediate_image_sizes' );
+	remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 
 	return $attachment_id;
 }
