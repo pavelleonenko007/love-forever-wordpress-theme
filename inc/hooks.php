@@ -1204,8 +1204,19 @@ add_filter(
 function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
 	if ( ! empty( $_REQUEST['include'] ) ) {
 		$args['include'] = $_REQUEST['include'];
-		$args['number']  = 0;
+		// $args['number']  = 0;
+		// $args['offset']  = 0;
+		// unset($args['paged']);
+		// $args['paged']  = 1;
 	}
+
+	// if ( ! empty( $_REQUEST['number'] ) && is_numeric( $_REQUEST['number'] ) ) {
+	// 	$args['number'] = intval( $_REQUEST['number'] );
+	// }
+
+	// if ( isset( $_REQUEST['paged'] ) && is_numeric( $_REQUEST['paged'] ) ) {
+	// 	$args['paged'] = intval( $_REQUEST['paged'] );
+	// }
 
 	error_log( '$ARGS: ' . wp_json_encode( $_REQUEST ) . ' | ' . wp_json_encode( $args ) );
 

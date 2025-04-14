@@ -34,55 +34,18 @@
 
 			const changeHandler = (event) => {
 				categoriesFieldValue = $select.val();
-
-				// Отключаем обработчик перед изменением значения
-				field.$el.off('change', changeHandler);
-
-				// filterFieldValues('field_67d801f8498e7');
-				// filterFieldValues('field_67d801c6498e4');
-
-				// filterFieldsCheckboxType();
-
-				// Включаем обработчик после изменения значения
-				field.$el.on('change', changeHandler);
 			};
 
 			field.$el.on('change', changeHandler);
 		}
 	});
 
-	// acf.add_filter("select2_ajax_results", function (json, params, instance) {
-	//   if (!categoriesFieldValue) {
-	//     return json;
-	//   }
-
-	//   if (instance.data.field.data.key === "field_67d801f8498e7") {
-	//     const { map, dependencies } = dressData;
-
-	//     /**
-	//      * @type {Array}
-	//      */
-	//     const allowedColors = dependencies[map[categoriesFieldValue[0]]].color;
-
-	//     if (!allowedColors) {
-	//       return json;
-	//     }
-
-	//     json.results = json.results.filter(
-	//       (colorObject) => allowedColors.indexOf(colorObject.id) !== -1
-	//     );
-	//   }
-	//   // do something to json
-
-	//   console.log({ json, params, instance });
-	//   // return
-	//   return json;
-	// });
-
 	acf.add_filter(
 		'select2_ajax_data',
 		function (data, args, $input, field, instance) {
-			console.log({ data, args, $input, field, instance });
+			console.log('select2_ajax_data', { data, args, $input, field, instance });
+
+			// return data;
 
 			// do something to data
 
@@ -107,65 +70,31 @@
 				return data;
 			}
 
+			// data['custom_filtered'] = '1';
 			data['include'] = allowedValues.join(',');
-			data['number'] = 0;
+			// data['per_page'] = 100;
+			// data['number'] = allowedValues.length;
+			// data['paged'] = 1;
 
 			console.log({ data });
 
 			return data;
-
-			// if (instance.data.field.data.key === 'field_67d801f8498e7') {
-			// 	let allowedColors = getAvailableFiltersByName('color');
-
-			// 	console.log({ colors: allowedColors });
-
-			// 	if (!allowedColors) {
-			// 		return data;
-			// 	}
-
-			// 	data['include'] = allowedColors.join(',');
-			// }
-
-			// if (instance.data.field.data.key === 'field_67d801c6498e4') {
-			// 	let allowedStyles = getAvailableFiltersByName('style');
-
-			// 	console.log({ styles: allowedStyles });
-
-			// 	if (!allowedStyles) {
-			// 		return data;
-			// 	}
-
-			// 	data['include'] = allowedStyles.join(',');
-			// }
-
-			// if (instance.data.field.data.key === 'field_67d8023f498e9') {
-			// 	let allowedBrands = getAvailableFiltersByName('brand');
-
-			// 	console.log({ brands: allowedBrands });
-
-			// 	if (!allowedBrands) {
-			// 		return data;
-			// 	}
-
-			// 	data['include'] = allowedBrands.join(',');
-			// }
-
-			// if (instance.data.field.data.key === 'field_67d80188498e3') {
-			// 	let allowedSilhouettes = getAvailableFiltersByName('silhouette');
-
-			// 	console.log({ silhouettes: allowedSilhouettes });
-
-			// 	if (!allowedSilhouettes) {
-			// 		return data;
-			// 	}
-
-			// 	data['include'] = allowedSilhouettes.join(',');
-			// }
-
-			// // return
-			// return data;
 		}
 	);
+
+	acf.add_filter('select2_ajax_results', function (json, params, instance) {
+		// do something to json
+
+		console.log('select2_ajax_results', { json, params, instance });
+
+		json.more = false;
+		json.pagination = {
+			more: false,
+		};
+
+		// return
+		return json;
+	});
 
 	function filterFieldsCheckboxType() {
 		console.log('filterFieldsCheckboxType');
