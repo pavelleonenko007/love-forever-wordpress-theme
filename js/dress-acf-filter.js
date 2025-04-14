@@ -2,15 +2,15 @@
 	let categoriesFieldValue = null;
 	const postForm = $('#post');
 
-	acf.addAction('ready', () => {
-		filterFieldsCheckboxType();
+	// acf.addAction('ready', () => {
+	// 	filterFieldsCheckboxType();
 
-		postForm.on('change', () => {
-			setTimeout(() => {
-				filterFieldsCheckboxType();
-			}, 200);
-		});
-	});
+	// 	postForm.on('change', () => {
+	// 		setTimeout(() => {
+	// 			filterFieldsCheckboxType();
+	// 		}, 200);
+	// 	});
+	// });
 
 	// Обрабатываем динамическую загрузку контента ACF
 	acf.addAction('append', function ($el) {
@@ -29,21 +29,19 @@
 			categoriesFieldValue = $select.val();
 
 			setTimeout(() => {
-				filterFieldsCheckboxType();
+				// filterFieldsCheckboxType();
 			}, 0);
 
 			const changeHandler = (event) => {
-				console.log('changeField');
-
 				categoriesFieldValue = $select.val();
 
 				// Отключаем обработчик перед изменением значения
 				field.$el.off('change', changeHandler);
 
-				filterFieldValues('field_67d801f8498e7');
-				filterFieldValues('field_67d801c6498e4');
+				// filterFieldValues('field_67d801f8498e7');
+				// filterFieldValues('field_67d801c6498e4');
 
-				filterFieldsCheckboxType();
+				// filterFieldsCheckboxType();
 
 				// Включаем обработчик после изменения значения
 				field.$el.on('change', changeHandler);
@@ -84,35 +82,36 @@
 	acf.add_filter(
 		'select2_ajax_data',
 		function (data, args, $input, field, instance) {
-			// do something to data
-
 			console.log({ data, args, $input, field, instance });
 
-      const map = {
-        field_67d801f8498e7: 'color',
-        field_67d8023f498e9: 'brand',
-        field_67d80188498e3: 'silhouette',
-        field_67d801c6498e4: 'style',
-        field_67d801dc498e5: 'fabric',
-        field_67d8020a498e8: 'dress_tag',
-      };
+			// do something to data
 
-      const fieldName = map[instance.data.field.data.key];
+			const map = {
+				field_67d801f8498e7: 'color',
+				field_67d8023f498e9: 'brand',
+				field_67d80188498e3: 'silhouette',
+				field_67d801c6498e4: 'style',
+				field_67d801dc498e5: 'fabric',
+				field_67d8020a498e8: 'dress_tag',
+			};
 
-      if (!fieldName) {
-        return data;
-      }
+			const fieldName = map[instance.data.field.data.key];
 
-      const allowedValues = getAvailableFiltersByName(fieldName);
+			if (!fieldName) {
+				return data;
+			}
 
-      if (!allowedValues) {
-        return data;
-      }
+			const allowedValues = getAvailableFiltersByName(fieldName);
 
-      data['include'] = allowedValues.join(',');
+			if (!allowedValues) {
+				return data;
+			}
 
-      return data;
+			data['include'] = allowedValues.join(',');
 
+			console.log({ data });
+
+			return data;
 
 			// if (instance.data.field.data.key === 'field_67d801f8498e7') {
 			// 	let allowedColors = getAvailableFiltersByName('color');
@@ -150,7 +149,7 @@
 			// 	data['include'] = allowedBrands.join(',');
 			// }
 
-      // if (instance.data.field.data.key === 'field_67d80188498e3') {
+			// if (instance.data.field.data.key === 'field_67d80188498e3') {
 			// 	let allowedSilhouettes = getAvailableFiltersByName('silhouette');
 
 			// 	console.log({ silhouettes: allowedSilhouettes });
@@ -228,101 +227,4 @@
 
 		return [...new Set(awailableFilters)];
 	}
-
-	function filterFieldValues(fieldKey) {
-		const map = {
-			field_67d801f8498e7: 'color',
-			field_67d8023f498e9: 'brand',
-			field_67d80188498e3: 'silhouette',
-			field_67d801c6498e4: 'style',
-			field_67d801dc498e5: 'fabric',
-			field_67d8020a498e8: 'dress_tag',
-		};
-		const $field = acf.getField(fieldKey);
-
-		if (!$field) {
-			return;
-		}
-
-		const allowedValues = getAvailableFiltersByName(map[fieldKey]);
-		const currentValues = $field.val() || [];
-		let newValues = [];
-
-		if (allowedValues.length > 0) {
-			currentValues.forEach((value) => {
-				if (allowedValues.indexOf(parseInt(value)) >= 0) {
-					newValues.push(parseInt(value));
-				}
-			});
-		} else {
-			newValues = [...currentValues];
-		}
-
-		// Проверяем, изменились ли значения, прежде чем вызывать событие
-		if (JSON.stringify(currentValues) !== JSON.stringify(newValues)) {
-			$field.val(newValues);
-			$field.trigger('change');
-			console.log($field.val());
-		}
-	}
-
-	// // Обработка изменений в поле выбора категории
-	// function initCategoryChangeHandler() {
-	//   var $categoryField = acf.getField("field_67d6fec761d73");
-
-	//   var postID = acf.get("post_id");
-
-	//   console.log(postID);
-
-	//   console.log($categoryField, $categoryField.val());
-
-	//   console.log($categoryField.select2);
-
-	//   if (!$categoryField.length) return;
-
-	//   // Обработка события изменения категории
-	//   $categoryField.select2.on("change", "select, input", function () {
-	//     // Принудительно очищаем поля других таксономий при изменении категории
-	//     clearTaxonomyFields();
-
-	//     // Перезагружаем форму для применения фильтров
-	//     // Можно также использовать более мягкий подход, но это самый надежный способ
-	//     // location.reload();
-	//   });
-	// }
-
-	// // Очистка полей таксономий
-	// function clearTaxonomyFields() {
-	//   var taxonomyFields = [
-	//     '.acf-field[data-name="color"]',
-	//     '.acf-field[data-name="style"]',
-	//     '.acf-field[data-name="silhouette"]',
-	//     '.acf-field[data-name="brand"]',
-	//   ];
-
-	//   taxonomyFields.forEach(function (selector) {
-	//     var $field = $(selector);
-
-	//     console.log($field);
-
-	//     // Для Select2 (AJAX)
-	//     // if ($field.find('select.select2-hidden-accessible').length) {
-	//     //     $field.find('select').val(null).trigger('change');
-	//     // }
-
-	//     // // Для обычных чекбоксов
-	//     // $field.find('input[type="checkbox"]').prop('checked', false);
-	//   });
-	// }
-
-	// // // Инициализация при загрузке страницы
-	// // $(document).ready(function() {
-	// //     // Инициализируем обработчик изменения категории
-	// //     initCategoryChangeHandler();
-	// // });
-
-	// // Также обрабатываем инициализацию ACF
-	// if (typeof acf !== "undefined") {
-	//   acf.addAction("ready", initCategoryChangeHandler);
-	// }
 })(jQuery);

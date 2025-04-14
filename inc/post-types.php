@@ -35,9 +35,9 @@ function loveforever_register_post_types() {
 			'show_in_quick_edit' => true,
 			'hierarchical'       => true,
 			'rewrite'            => array(
-				'slug' => 'dresses',
+				'slug'         => 'dresses',
 				'hierarchical' => true,
-				'with_front' => false
+				'with_front'   => false,
 			),
 			// 'query_var'             => taxonomy, // название параметра запроса
 			'capabilities'       => array(),
@@ -478,6 +478,32 @@ function loveforever_register_post_types() {
 			),
 			'menu_icon'     => 'dashicons-format-status',
 			'query_var'     => true,
+		)
+	);
+
+	register_post_type(
+		'auto_rule',
+		array(
+			'label'        => '',
+			'labels'       => array(
+				'name'               => 'Правила автокатегорий',
+				'singular_name'      => 'Правило автокатегоризации',
+				'add_new'            => 'Добавить новое',
+				'add_new_item'       => 'Добавить новое правило',
+				'edit_item'          => 'Редактировать правило',
+				'new_item'           => 'Новое правило',
+				'view_item'          => 'Посмотреть правило',
+				'search_items'       => 'Найти правило',
+				'not_found'          => 'Правила не найдены',
+				'not_found_in_trash' => 'Правила не найдены в корзине',
+				'parent_item_colon'  => '',
+				'menu_name'          => 'Правила автокатегоризации',
+			),
+			'public'       => false,
+			'show_ui'      => true,
+			'menu_icon'    => 'dashicons-randomize',
+			'supports'     => array( 'title' ),
+			'show_in_menu' => 'edit.php?post_type=dress',
 		)
 	);
 }

@@ -1135,19 +1135,19 @@ function dress_admin_scripts() {
 
 			// // Создаем массив зависимостей для передачи в JavaScript
 			// $dependencies = array(
-			// 	'wedding' => array( // ID категории "Свадебные платья"
-			// 		'silhouette' => array( 9, 17, 11, 15 ), // ID допустимых силуэтов
-			// 		'brand'      => array( 'brand1', 'brand2', 'brand3' ), // ID допустимых брендов
-			// 		'style'      => array( 'classic', 'modern', 'vintage' ), // ID допустимых стилей
-			// 		'color'      => array( 462, 469, 445, 470 ), // ID допустимых цветов
-			// 	),
-			// 	'evening' => array( // ID категории "Вечерние платья"
-			// 		'silhouette' => array( 'sheath', 'trumpet', 'ball-gown' ),
-			// 		'brand'      => array( 'brand2', 'brand4', 'brand5' ),
-			// 		'style'      => array( 'glamour', 'minimalist', 'luxury' ),
-			// 		'color'      => array( 'black', 'red', 'blue', 'gold', 'silver' ),
-			// 	),
-			// 		// Добавьте другие категории по аналогии
+			// 'wedding' => array( // ID категории "Свадебные платья"
+			// 'silhouette' => array( 9, 17, 11, 15 ), // ID допустимых силуэтов
+			// 'brand'      => array( 'brand1', 'brand2', 'brand3' ), // ID допустимых брендов
+			// 'style'      => array( 'classic', 'modern', 'vintage' ), // ID допустимых стилей
+			// 'color'      => array( 462, 469, 445, 470 ), // ID допустимых цветов
+			// ),
+			// 'evening' => array( // ID категории "Вечерние платья"
+			// 'silhouette' => array( 'sheath', 'trumpet', 'ball-gown' ),
+			// 'brand'      => array( 'brand2', 'brand4', 'brand5' ),
+			// 'style'      => array( 'glamour', 'minimalist', 'luxury' ),
+			// 'color'      => array( 'black', 'red', 'blue', 'gold', 'silver' ),
+			// ),
+			// Добавьте другие категории по аналогии
 			// );
 
 		// Передаем данные в JavaScript
@@ -1174,24 +1174,157 @@ add_action( 'admin_enqueue_scripts', 'dress_admin_scripts' );
 add_filter(
 	'acf/fields/taxonomy/query/key=field_67d801f8498e7',
 	function ( $args, $field, $post_id ) {
-
-		$dress_categories = get_field( 'field_67d6fec761d73', $post_id );
-
-		error_log( wp_json_encode( $_POST ) );
-
-		error_log(
-			wp_json_encode(
-				array(
-					'dress_cat' => $dress_categories,
-					'args'      => $args,
-					'field'     => $field,
-					'id'        => $post_id,
-				)
-			)
-		);
-
+		if ( ! empty( $_REQUEST['include'] ) ) {
+			$args['include'] = $_REQUEST['include'];
+		}
 		return $args;
 	},
 	10,
 	3
 );
+
+add_filter( 'acf/fields/taxonomy/query/key=field_67fbc6524cab9', 'loveforever_filter_base_dress_category_field' );
+add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', 'loveforever_filter_base_dress_category_field' );
+function loveforever_filter_base_dress_category_field( $args ) {
+	$args['parent'] = 0;
+	return $args;
+}
+
+add_action(
+	'acf/save_post',
+	function ( $post_id ) {
+		if ( get_post_type( $post_id ) !== 'auto_rule' ) {
+			return;
+		}
+
+		// Получаем поля
+		$base    = get_field( 'base_dress_category', $post_id );
+		$filters = get_field( 'filters', $post_id );
+		$target  = get_field( 'result_dress_category', $post_id );
+
+		if ( ! $base || ! $target ) {
+			return;
+		}
+
+		$filter_parts = array();
+
+		foreach ( $filters as $tax => $terms ) {
+			if ( ! empty( $terms ) ) {
+				$names = array();
+				foreach ( $terms as $term_id ) {
+						$term = get_term_by( 'term_id', $term_id, $tax );
+					if ( $term ) {
+						$names[] = $term->name;
+					}
+				}
+
+				if ( ! empty( $names ) ) {
+						$filter_parts[] = implode( ', ', $names );
+				}
+			}
+		}
+
+		$base_term   = get_term_by( 'term_id', $base, 'dress_category' );
+		$target_term = get_term_by( 'term_id', $target, 'dress_category' );
+
+		if ( ! $base_term || ! $target_term ) {
+			return;
+		}
+
+		// Формируем заголовок
+		$title = $base_term->name;
+		if ( ! empty( $filter_parts ) ) {
+			$title .= ' + ' . implode( ', ', $filter_parts );
+		}
+		$title .= ' → ' . $target_term->name;
+
+		// Обновляем заголовок
+		wp_update_post(
+			array(
+				'ID'         => $post_id,
+				'post_title' => $title,
+			)
+		);
+	},
+	20
+); // Поздний приоритет, чтобы ACF успел сохранить
+
+add_action(
+	'acf/save_post',
+	function ( $post_id ) {
+		if ( get_post_type( $post_id ) !== 'dress' ) {
+			return;
+		}
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		loveforever_apply_auto_rules_to_post( $post_id );
+	}
+);
+
+
+function loveforever_apply_auto_rules_to_post( $post_id ) {
+	$dress_categories  = wp_get_post_terms( $post_id, 'dress_category', array( 'fields' => 'ids' ) );
+	$filter_taxonomies = array( 'color', 'style', 'silhouette', 'brand', 'fabric' );
+
+	// Собираем термины поста
+	$dress_filters_ids = array();
+	foreach ( $filter_taxonomies as $tax ) {
+			$dress_filters_ids[ $tax ] = wp_get_post_terms( $post_id, $tax, array( 'fields' => 'ids' ) );
+	}
+
+	// Получаем все опубликованные правила
+	$rules = get_posts(
+		array(
+			'post_type'   => 'auto_rule',
+			'numberposts' => -1,
+			'post_status' => 'publish',
+		)
+	);
+
+	foreach ( $rules as $rule ) {
+		$base = get_field( 'base_dress_category', $rule->ID );
+
+		if ( ! in_array( $base, $dress_categories ) ) {
+			continue;
+		}
+
+		$filters = get_field( 'filters', $rule->ID );
+		$matched = true;
+
+		foreach ( $filter_taxonomies as $tax ) {
+			$required = $filters[ $tax ] ?? array();
+			if ( ! empty( $required ) ) {
+				if ( ! array_intersect( $required, $dress_filters_ids[ $tax ] ?? array() ) ) {
+					$matched = false;
+					break;
+				}
+			}
+		}
+
+		if ( $matched ) {
+			$target = get_field( 'result_dress_category', $rule->ID );
+
+			if ( $target ) {
+				// $linked = wp_set_post_terms( $post_id, array( $base, $target ), 'dress_category', true );
+				update_field( 'dress_category', array( $base, $target ), $post_id );
+			}
+		}
+	}
+}
+
+// add_action('acf/init', 'my_acf_op_init');
+// function my_acf_op_init() {
+
+// Check function exists.
+// if( function_exists('acf_add_options_sub_page') ) {
+// Add sub page.
+// $child = acf_add_options_sub_page(array(
+// 'page_title'  => 'Cвязи между фильрами и категориями',
+// 'menu_title'  => 'Связи',
+// 'parent_slug' => 'edit.php?post_type=dress',
+// ));
+// }
+// }
