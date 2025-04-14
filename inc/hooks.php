@@ -1172,16 +1172,43 @@ function dress_admin_scripts() {
 add_action( 'admin_enqueue_scripts', 'dress_admin_scripts' );
 
 add_filter(
-	'acf/fields/taxonomy/query/key=field_67d801f8498e7',
-	function ( $args, $field, $post_id ) {
-		if ( ! empty( $_REQUEST['include'] ) ) {
-			$args['include'] = $_REQUEST['include'];
-		}
-		return $args;
-	},
+	'acf/fields/taxonomy/query/key=field_67d8023f498e9',
+	'loveforever_filter_dress_taxonomy_filters',
 	10,
 	3
 );
+add_filter(
+	'acf/fields/taxonomy/query/key=field_67d80188498e3',
+	'loveforever_filter_dress_taxonomy_filters',
+	10,
+	3
+);
+add_filter(
+	'acf/fields/taxonomy/query/key=field_67d801c6498e4',
+	'loveforever_filter_dress_taxonomy_filters',
+	10,
+	3
+);
+add_filter(
+	'acf/fields/taxonomy/query/key=field_67d801dc498e5',
+	'loveforever_filter_dress_taxonomy_filters',
+	10,
+	3
+);
+add_filter(
+	'acf/fields/taxonomy/query/key=field_67d801f8498e7',
+	'loveforever_filter_dress_taxonomy_filters',
+	10,
+	3
+);
+function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
+	if ( ! empty( $_REQUEST['include'] ) ) {
+		$args['include'] = $_REQUEST['include'];
+		$args['number']  = 0;
+	}
+
+	return $args;
+}
 
 add_filter( 'acf/fields/taxonomy/query/key=field_67fbc6524cab9', 'loveforever_filter_base_dress_category_field' );
 add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', 'loveforever_filter_base_dress_category_field' );
