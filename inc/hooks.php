@@ -1207,6 +1207,8 @@ function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
 		$args['number']  = 0;
 	}
 
+	error_log( '$ARGS: ' . wp_json_encode( $_REQUEST ) . ' | ' . wp_json_encode( $args ) );
+
 	return $args;
 }
 

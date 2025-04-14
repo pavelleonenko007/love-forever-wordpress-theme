@@ -108,6 +108,7 @@
 			}
 
 			data['include'] = allowedValues.join(',');
+			data['number'] = 0;
 
 			console.log({ data });
 
