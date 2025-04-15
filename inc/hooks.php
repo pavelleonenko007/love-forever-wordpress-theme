@@ -1386,3 +1386,5 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 		wp_set_post_terms( $post_id, array_unique( array_merge( $dress_categories, $matched_terms ) ), 'dress_category' );
 	}
 }
+
+add_filter( 'big_image_size_threshold', '__return_false' );
