@@ -23,142 +23,174 @@ function loveforever_is_current_url( string $test_url, $include_params = false )
 	return loveforever_get_current_url( $include_params ) === $test_url;
 }
 
-// function loveforever_download_and_add_image_to_library( $image_url ) {
-// if ( ! function_exists( 'media_handle_sideload' ) ) {
-// require_once ABSPATH . 'wp-admin/includes/image.php';
-// require_once ABSPATH . 'wp-admin/includes/file.php';
-// require_once ABSPATH . 'wp-admin/includes/media.php';
-// }
-
-// Загружаем файл во временную директорию
-// $tmp = download_url( $image_url );
-
-// if ( is_wp_error( $tmp ) ) {
-// return $tmp;
-// }
-
-// Устанавливаем переменные для размещения
-// $file_array = array(
-// 'name'     => basename( $image_url ),
-// 'tmp_name' => $tmp,
-// );
-
-// $id = media_handle_sideload( $file_array );
-
-// удалим временный файлы
-// @unlink( $tmp );
-
-// return $id;
-// }
-
-function loveforever_download_and_add_image_to_library( $image_url ) {
-	// Проверяем URL
+function loveforever_download_and_add_image_to_library( $image_url, $timeout = 300 ) {
 	if ( empty( $image_url ) || ! filter_var( $image_url, FILTER_VALIDATE_URL ) ) {
-		return new WP_Error( 400, 'Невалидная ссылка на изображение: ' . $image_url );
+		return new WP_Error( 400, 'Невалидная ссылка на изображение: ' . esc_url_raw( $image_url ) );
 	}
 
-	// Получаем имя файла из URL
-	$filename = basename( parse_url( $image_url, PHP_URL_PATH ) );
-
-	// Определяем временный путь для файла
-	$upload_dir  = wp_upload_dir();
-	$upload_path = $upload_dir['path'] . '/' . wp_unique_filename( $upload_dir['path'], $filename );
-
-	// Инициализируем cURL
-	$ch = curl_init();
-
-	// Открываем файл для записи
-	$fp = @fopen( $upload_path, 'wb' );
-	if ( ! $fp ) {
-		error_log( 'Cannot open file for writing: ' . $upload_path );
-		return new WP_Error( 400, 'Cannot open file for writing: ' . $upload_path );
+	if ( ! function_exists( 'media_handle_sideload' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
 	}
 
-	// Настраиваем параметры cURL
-	curl_setopt( $ch, CURLOPT_URL, $image_url );
-	curl_setopt( $ch, CURLOPT_FILE, $fp );
-	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true ); // Следовать редиректам
-	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false ); // Не проверять SSL сертификаты
-	curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
-	curl_setopt( $ch, CURLOPT_TIMEOUT, 300 ); // Увеличенный таймаут для больших файлов
-	curl_setopt( $ch, CURLOPT_USERAGENT, 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) );
-	curl_setopt( $ch, CURLOPT_FAILONERROR, true ); // Вернуть ошибку при 4xx кодах ответа
+	$temp_file = null;
+	$attempt   = 0;
+	$retries   = 2;
 
-	// Выполняем запрос
-	$success = curl_exec( $ch );
+	// Повторяем загрузку при ошибке
+	while ( $attempt < $retries ) {
+		$temp_file = download_url( $image_url, $timeout );
 
-	// Проверяем на ошибки
-	if ( ! $success ) {
-		$error = curl_error( $ch );
-		curl_close( $ch );
-		fclose( $fp );
-		@unlink( $upload_path ); // Удаляем неполный файл
-		error_log( 'cURL Error: ' . $error . ' URL: ' . $image_url );
-		return new WP_Error( 400, 'cURL Error: ' . $error . ' URL: ' . $image_url );
+		if ( ! is_wp_error( $temp_file ) ) {
+			break;
+		}
+
+		// Если ошибка временная — пробуем снова
+		$error_msg = $temp_file->get_error_message();
+		error_log( '[loveforever_download] Попытка #' . ( $attempt + 1 ) . ' не удалась: ' . $error_msg . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
+
+		// Только при определённых ошибках стоит ретраить
+		if ( strpos( $error_msg, 'cURL error 18' ) === false && strpos( $error_msg, 'timed out' ) === false ) {
+			break; // Не сетевая ошибка — не ретраим
+		}
+
+		++$attempt;
+		sleep( 1 ); // небольшая пауза между попытками
 	}
 
-	// Получаем информацию о загрузке
-	$http_code    = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-	$content_type = curl_getinfo( $ch, CURLINFO_CONTENT_TYPE );
-
-	// Закрываем cURL сессию и файл
-	curl_close( $ch );
-	@fclose( $fp );
-
-	// Проверяем HTTP код ответа
-	if ( $http_code != 200 ) {
-		@unlink( $upload_path );
-		error_log( 'HTTP Error: ' . $http_code . ' URL: ' . $image_url );
-		return new WP_Error( $http_code, 'HTTP Error: ' . $http_code . ' URL: ' . $image_url );
+	if ( is_wp_error( $temp_file ) ) {
+		return new WP_Error( $temp_file->get_error_code(), 'Ошибка загрузки файла: ' . $temp_file->get_error_message() . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
 	}
 
-	// Проверяем размер файла
-	$filesize = filesize( $upload_path );
-	if ( $filesize <= 0 ) {
-		@unlink( $upload_path );
-		error_log( 'Zero size file downloaded from: ' . $image_url );
-		return new WP_Error( 400, 'Zero size file downloaded from: ' . $image_url );
-	}
-
-	$mime_type      = 'image/jpeg';
-	$check_filetype = wp_check_filetype( $filename, null );
-
-	if ( empty( $check_filetype['type'] ) ) {
-		// Если тип не определен, пробуем определить по MIME-типу из заголовка
-		$mime_type = $content_type ?: 'image/jpeg';
-	} else {
-		$mime_type = $check_filetype['type'];
-	}
-
-	// Подготавливаем данные для вставки в библиотеку медиа
-	$attachment = array(
-		'post_mime_type' => $mime_type,
-		'post_title'     => preg_replace( '/\.[^.]+$/', '', $filename ),
-		'post_content'   => '',
-		'post_status'    => 'inherit',
+	// Устанавливаем переменные для размещения
+	$file_array = array(
+		'name'     => sanitize_file_name( basename( $image_url ) ),
+		'tmp_name' => $temp_file,
 	);
 
 	add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 
-	// Вставляем файл в библиотеку медиа
-	$attachment_id = wp_insert_attachment( $attachment, $upload_path );
-
-	if ( is_wp_error( $attachment_id ) ) {
-		@unlink( $upload_path );
-		return $attachment_id;
-	}
-
-	require_once ABSPATH . 'wp-admin/includes/image.php';
-	require_once ABSPATH . 'wp-admin/includes/media.php';
-
-	$attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload_path );
-
-	wp_update_attachment_metadata( $attachment_id, $attachment_data );
+	$attachment_id = media_handle_sideload( $file_array );
 
 	remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 
+	if ( is_wp_error( $attachment_id ) ) {
+		@unlink( $temp_file );
+		return new WP_Error( $attachment_id->get_error_code(), 'Ошибка добавления в медиабиблиотеку: ' . $attachment_id->get_error_message() . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
+	}
+
 	return $attachment_id;
 }
+
+// function loveforever_download_and_add_image_to_library( $image_url ) {
+// Проверяем URL
+// if ( empty( $image_url ) || ! filter_var( $image_url, FILTER_VALIDATE_URL ) ) {
+// return new WP_Error( 400, 'Невалидная ссылка на изображение: ' . $image_url );
+// }
+
+// Получаем имя файла из URL
+// $filename = basename( parse_url( $image_url, PHP_URL_PATH ) );
+
+// Определяем временный путь для файла
+// $upload_dir  = wp_upload_dir();
+// $upload_path = $upload_dir['path'] . '/' . wp_unique_filename( $upload_dir['path'], $filename );
+
+// Инициализируем cURL
+// $ch = curl_init();
+
+// Открываем файл для записи
+// $fp = @fopen( $upload_path, 'wb' );
+// if ( ! $fp ) {
+// error_log( 'Cannot open file for writing: ' . $upload_path );
+// return new WP_Error( 400, 'Cannot open file for writing: ' . $upload_path );
+// }
+
+// Настраиваем параметры cURL
+// curl_setopt( $ch, CURLOPT_URL, $image_url );
+// curl_setopt( $ch, CURLOPT_FILE, $fp );
+// curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true ); // Следовать редиректам
+// curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false ); // Не проверять SSL сертификаты
+// curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
+// curl_setopt( $ch, CURLOPT_TIMEOUT, 300 ); // Увеличенный таймаут для больших файлов
+// curl_setopt( $ch, CURLOPT_USERAGENT, 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) );
+// curl_setopt( $ch, CURLOPT_FAILONERROR, true ); // Вернуть ошибку при 4xx кодах ответа
+
+// Выполняем запрос
+// $success = curl_exec( $ch );
+
+// Проверяем на ошибки
+// if ( ! $success ) {
+// $error = curl_error( $ch );
+// curl_close( $ch );
+// fclose( $fp );
+// @unlink( $upload_path ); // Удаляем неполный файл
+// error_log( 'cURL Error: ' . $error . ' URL: ' . $image_url );
+// return new WP_Error( 400, 'cURL Error: ' . $error . ' URL: ' . $image_url );
+// }
+
+// Получаем информацию о загрузке
+// $http_code    = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+// $content_type = curl_getinfo( $ch, CURLINFO_CONTENT_TYPE );
+
+// Закрываем cURL сессию и файл
+// curl_close( $ch );
+// @fclose( $fp );
+
+// Проверяем HTTP код ответа
+// if ( $http_code != 200 ) {
+// @unlink( $upload_path );
+// error_log( 'HTTP Error: ' . $http_code . ' URL: ' . $image_url );
+// return new WP_Error( $http_code, 'HTTP Error: ' . $http_code . ' URL: ' . $image_url );
+// }
+
+// Проверяем размер файла
+// $filesize = filesize( $upload_path );
+// if ( $filesize <= 0 ) {
+// @unlink( $upload_path );
+// error_log( 'Zero size file downloaded from: ' . $image_url );
+// return new WP_Error( 400, 'Zero size file downloaded from: ' . $image_url );
+// }
+
+// $mime_type      = 'image/jpeg';
+// $check_filetype = wp_check_filetype( $filename, null );
+
+// if ( empty( $check_filetype['type'] ) ) {
+// Если тип не определен, пробуем определить по MIME-типу из заголовка
+// $mime_type = $content_type ?: 'image/jpeg';
+// } else {
+// $mime_type = $check_filetype['type'];
+// }
+
+// Подготавливаем данные для вставки в библиотеку медиа
+// $attachment = array(
+// 'post_mime_type' => $mime_type,
+// 'post_title'     => preg_replace( '/\.[^.]+$/', '', $filename ),
+// 'post_content'   => '',
+// 'post_status'    => 'inherit',
+// );
+
+// add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
+
+// Вставляем файл в библиотеку медиа
+// $attachment_id = wp_insert_attachment( $attachment, $upload_path );
+
+// if ( is_wp_error( $attachment_id ) ) {
+// @unlink( $upload_path );
+// return $attachment_id;
+// }
+
+// require_once ABSPATH . 'wp-admin/includes/image.php';
+// require_once ABSPATH . 'wp-admin/includes/media.php';
+
+// $attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload_path );
+
+// wp_update_attachment_metadata( $attachment_id, $attachment_data );
+
+// remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
+
+// return $attachment_id;
+// }
 
 /**
  * Форматирует число в формат цены.

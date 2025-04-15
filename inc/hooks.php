@@ -1202,23 +1202,25 @@ add_filter(
 	3
 );
 function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
-	if ( ! empty( $_REQUEST['include'] ) ) {
-		$args['include'] = $_REQUEST['include'];
-		// $args['number']  = 0;
-		// $args['offset']  = 0;
-		// unset($args['paged']);
-		// $args['paged']  = 1;
+	error_log( '$ARGS_BEFORE: ' . wp_json_encode( $args ) );
+
+	if ( ! empty( $_POST['dress_id'] ) ) {
+		$include = array();
+
+		foreach ( $_POST['dress_id'] as $dress_id ) {
+			$cat                = get_term( $dress_id, 'dress_category' );
+			$allowed_taxonomies = ! empty( get_field( $args['taxonomy'], $cat ) ) ? get_field( $args['taxonomy'], $cat ) : array();
+
+			error_log( 'ALLOWED_TAX: ' . wp_json_encode( $allowed_taxonomies ) . ' | DRESS_ID: ' . $dress_id );
+			$include = array_merge( $include, $allowed_taxonomies );
+		}
+
+		$args['include'] = array_unique( $include );
 	}
 
-	// if ( ! empty( $_REQUEST['number'] ) && is_numeric( $_REQUEST['number'] ) ) {
-	// 	$args['number'] = intval( $_REQUEST['number'] );
-	// }
-
-	// if ( isset( $_REQUEST['paged'] ) && is_numeric( $_REQUEST['paged'] ) ) {
-	// 	$args['paged'] = intval( $_REQUEST['paged'] );
-	// }
-
-	error_log( '$ARGS: ' . wp_json_encode( $_REQUEST ) . ' | ' . wp_json_encode( $args ) );
+	error_log( '$ARGS: ' . wp_json_encode( $args ) );
+	error_log( '$_REQUEST: ' . wp_json_encode( $_REQUEST ) );
+	error_log( '$_POST: ' . wp_json_encode( $_POST ) );
 
 	return $args;
 }
@@ -1301,21 +1303,38 @@ add_action(
 		}
 
 		loveforever_apply_auto_rules_to_post( $post_id );
-	}
+	},
+	20
 );
 
 
 function loveforever_apply_auto_rules_to_post( $post_id ) {
-	$dress_categories  = wp_get_post_terms( $post_id, 'dress_category', array( 'fields' => 'ids' ) );
-	$filter_taxonomies = array( 'color', 'style', 'silhouette', 'brand', 'fabric' );
+	$dress_categories = get_field( 'dress_category', $post_id );
 
-	// Собираем термины поста
-	$dress_filters_ids = array();
-	foreach ( $filter_taxonomies as $tax ) {
-			$dress_filters_ids[ $tax ] = wp_get_post_terms( $post_id, $tax, array( 'fields' => 'ids' ) );
+	if ( empty( $dress_categories ) ) {
+		return;
 	}
 
-	// Получаем все опубликованные правила
+	$dress_categories_objects  = array_map( 'get_term', $dress_categories );
+	$parent_dress_categories   = array_filter( $dress_categories_objects, fn( $cat ) => 0 === $cat->parent );
+	$parent_dress_category_ids = array_map( fn( $cat ) => $cat->term_id, $parent_dress_categories );
+
+	if ( empty( $parent_dress_category_ids ) ) {
+		return;
+	}
+
+	$filters = array(
+		'brand'      => get_field( 'brand', $post_id ),
+		'style'      => get_field( 'style', $post_id ),
+		'silhouette' => get_field( 'silhouette', $post_id ),
+		'color'      => get_field( 'color', $post_id ),
+		'fabric'      => get_field( 'fabric', $post_id ),
+	);
+
+	if ( empty( array_filter( array_values( $filters ) ) ) ) {
+		return;
+	}
+
 	$rules = get_posts(
 		array(
 			'post_type'   => 'auto_rule',
@@ -1324,47 +1343,46 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 		)
 	);
 
-	foreach ( $rules as $rule ) {
-		$base = get_field( 'base_dress_category', $rule->ID );
+	$matched_terms = array();
 
-		if ( ! in_array( $base, $dress_categories ) ) {
+	foreach ( $rules as $rule ) {
+		$base_category_id   = get_field( 'base_dress_category', $rule->ID );
+		$result_category_id = get_field( 'result_dress_category', $rule->ID );
+		$rule_filters       = get_field( 'filters', $rule->ID );
+
+		if ( ! $base_category_id || ! $result_category_id ) {
 			continue;
 		}
 
-		$filters = get_field( 'filters', $rule->ID );
-		$matched = true;
+		if ( ! in_array( $base_category_id, $parent_dress_category_ids, true ) ) {
+			continue;
+		}
 
-		foreach ( $filter_taxonomies as $tax ) {
-			$required = $filters[ $tax ] ?? array();
-			if ( ! empty( $required ) ) {
-				if ( ! array_intersect( $required, $dress_filters_ids[ $tax ] ?? array() ) ) {
+		$matched = false;
+
+		foreach ( $rule_filters as $taxonomy => $rule_terms ) {
+			if ( empty( $rule_terms ) || empty( $filters[ $taxonomy ] ) ) {
+					continue;
+			}
+
+			$common = array_intersect( $filters[ $taxonomy ], $rule_terms );
+
+			if ( empty( $common ) ) {
 					$matched = false;
 					break;
-				}
 			}
+
+			$matched = true;
 		}
 
 		if ( $matched ) {
-			$target = get_field( 'result_dress_category', $rule->ID );
-
-			if ( $target ) {
-				// $linked = wp_set_post_terms( $post_id, array( $base, $target ), 'dress_category', true );
-				update_field( 'dress_category', array( $base, $target ), $post_id );
-			}
+				$matched_terms[] = $result_category_id;
 		}
 	}
+	
+	// 4. Сохраняем термы в ACF-поле таксономии
+	if ( ! empty( $matched_terms ) ) {
+		update_field( 'dress_category', array_unique( array_merge( $dress_categories, $matched_terms ) ), $post_id );
+		wp_set_post_terms( $post_id, array_unique( array_merge( $dress_categories, $matched_terms ) ), 'dress_category' );
+	}
 }
-
-// add_action('acf/init', 'my_acf_op_init');
-// function my_acf_op_init() {
-
-// Check function exists.
-// if( function_exists('acf_add_options_sub_page') ) {
-// Add sub page.
-// $child = acf_add_options_sub_page(array(
-// 'page_title'  => 'Cвязи между фильрами и категориями',
-// 'menu_title'  => 'Связи',
-// 'parent_slug' => 'edit.php?post_type=dress',
-// ));
-// }
-// }

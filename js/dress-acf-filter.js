@@ -24,7 +24,7 @@
 
 	acf.addAction('select2_init', ($select, args, settings, field) => {
 		if (field.data.key === 'field_67d6fec761d73') {
-			console.log({ $select, args, settings, field });
+			// console.log({ $select, args, settings, field });
 
 			categoriesFieldValue = $select.val();
 
@@ -34,6 +34,8 @@
 
 			const changeHandler = (event) => {
 				categoriesFieldValue = $select.val();
+
+				console.log({ categoriesFieldValue });
 			};
 
 			field.$el.on('change', changeHandler);
@@ -45,7 +47,11 @@
 		function (data, args, $input, field, instance) {
 			console.log('select2_ajax_data', { data, args, $input, field, instance });
 
-			// return data;
+			if (categoriesFieldValue) {
+				data['dress_id'] = categoriesFieldValue;
+			}
+
+			return data;
 
 			// do something to data
 
@@ -87,10 +93,11 @@
 
 		console.log('select2_ajax_results', { json, params, instance });
 
-		json.more = false;
-		json.pagination = {
-			more: false,
-		};
+		// json.limit = 100;
+		// json.more = false;
+		// json.pagination = {
+		// 	more: false,
+		// };
 
 		// return
 		return json;
@@ -147,7 +154,7 @@
 		for (let index = 0; index < categoriesFieldValue.length; index++) {
 			const categoryId = categoriesFieldValue[index];
 
-			if (dependencies[categoryId][filterName]) {
+			if (dependencies[categoryId] && dependencies[categoryId][filterName]) {
 				awailableFilters = [
 					...awailableFilters,
 					...dependencies[categoryId][filterName],

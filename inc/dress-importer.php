@@ -236,7 +236,7 @@ class Loveforever_Dress_Importer {
 				$images = $product->picture;
 
 				if ( count( $images ) > 0 ) {
-					$featured_image_id = loveforever_download_and_add_image_to_library( (string) $images[0] );
+					$featured_image_id = loveforever_download_and_add_image_to_library( (string) esc_url( trim( $images[0] ) ) );
 
 					if ( ! is_wp_error( $featured_image_id ) ) {
 						set_post_thumbnail( $post_id, $featured_image_id );
@@ -247,7 +247,8 @@ class Loveforever_Dress_Importer {
 					if ( count( $images ) > 1 ) {
 						$image_array = array();
 						for ( $i = 1; $i < count( $images ); $i++ ) {
-							$image_id = loveforever_download_and_add_image_to_library( (string) $images[ $i ] );
+							$image_id = loveforever_download_and_add_image_to_library( (string) esc_url( trim( $images[ $i ] ) ) );
+
 							if ( ! is_wp_error( $image_id ) ) {
 								$image_array[] = array( 'image' => $image_id );
 							} else {
@@ -315,7 +316,29 @@ class Loveforever_Dress_Importer {
 		// Первое обращение - получаем общее количество товаров
 		if ( $offset === 0 ) {
 			delete_transient( 'loveforever_import_progress' );
-			$xml         = simplexml_load_file( get_template_directory() . '/loveforever.xml' );
+			$xml_file = get_template_directory() . '/loveforever.xml';
+
+			if ( ! file_exists( $xml_file ) ) {
+				return new WP_REST_Response(
+					array(
+						'message' => 'XML файл не найден',
+					),
+					404
+				);
+			}
+
+			$xml = simplexml_load_file( $xml_file );
+			if ( false === $xml ) {
+				return new WP_REST_Response(
+					array(
+						'message' => 'Ошибка при загрузке XML файла',
+					),
+					500
+				);
+			}
+
+			error_log( wp_json_encode( $xml ) );
+
 			$total_items = count( $xml->shop->offers->offer );
 			$this->init_import_progress( $total_items );
 		}
@@ -406,6 +429,7 @@ class Loveforever_Dress_Importer {
 		</form>
 		<script>
 			let isLoading = false;
+			const $submitButton = jQuery('#xmlImporterForm').find('[type="submit"]');
 
 			function startImport() {
 				importBatch(0);
@@ -455,7 +479,6 @@ class Loveforever_Dress_Importer {
 
 			jQuery('#xmlImporterForm').on('submit', function(e) {
 				e.preventDefault();
-				const $submitButton = jQuery('#xmlImporterForm').find('[type="submit"]');
 				if (!isLoading) {
 					isLoading = true;
 					$submitButton.attr('disabled', isLoading);
