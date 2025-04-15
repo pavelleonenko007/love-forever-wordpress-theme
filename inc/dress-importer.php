@@ -310,7 +310,7 @@ class Loveforever_Dress_Importer {
 
 	public function dress_importer_callback( $request ) {
 		$params = $request->get_params();
-		$limit  = isset( $params['limit'] ) ? intval( $params['limit'] ) : 2;
+		$limit  = isset( $params['limit'] ) ? intval( $params['limit'] ) : 1;
 		$offset = isset( $params['offset'] ) ? intval( $params['offset'] ) : 0;
 
 		// Первое обращение - получаем общее количество товаров
@@ -436,7 +436,7 @@ class Loveforever_Dress_Importer {
 			}
 
 			function importBatch(offset) {
-				const batchSize = 2; // Размер пакета
+				const batchSize = 1; // Размер пакета
 				
 				// Показ индикатора прогресса
 				updateProgressUI("Импортируем товары...");
