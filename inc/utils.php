@@ -23,62 +23,159 @@ function loveforever_is_current_url( string $test_url, $include_params = false )
 	return loveforever_get_current_url( $include_params ) === $test_url;
 }
 
+// function loveforever_download_and_add_image_to_library( $image_url, $timeout = 300 ) {
+// if ( empty( $image_url ) || ! filter_var( $image_url, FILTER_VALIDATE_URL ) ) {
+// return new WP_Error( 400, 'Невалидная ссылка на изображение: ' . esc_url_raw( $image_url ) );
+// }
+
+// if ( ! function_exists( 'media_handle_sideload' ) ) {
+// require_once ABSPATH . 'wp-admin/includes/image.php';
+// require_once ABSPATH . 'wp-admin/includes/file.php';
+// require_once ABSPATH . 'wp-admin/includes/media.php';
+// }
+
+// $temp_file = null;
+// $attempt   = 0;
+// $retries   = 2;
+
+// Повторяем загрузку при ошибке
+// while ( $attempt < $retries ) {
+// $temp_file = download_url( $image_url, $timeout );
+
+// if ( ! is_wp_error( $temp_file ) ) {
+// break;
+// }
+
+// Если ошибка временная — пробуем снова
+// $error_msg = $temp_file->get_error_message();
+// error_log( '[loveforever_download] Попытка #' . ( $attempt + 1 ) . ' не удалась: ' . $error_msg . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
+
+// Только при определённых ошибках стоит ретраить
+// if ( strpos( $error_msg, 'cURL error 18' ) === false && strpos( $error_msg, 'timed out' ) === false ) {
+// break; // Не сетевая ошибка — не ретраим
+// }
+
+// ++$attempt;
+// sleep( 1 ); // небольшая пауза между попытками
+// }
+
+// if ( is_wp_error( $temp_file ) ) {
+// return new WP_Error( $temp_file->get_error_code(), 'Ошибка загрузки файла: ' . $temp_file->get_error_message() . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
+// }
+
+// Устанавливаем переменные для размещения
+// $file_array = array(
+// 'name'     => sanitize_file_name( basename( $image_url ) ),
+// 'tmp_name' => $temp_file,
+// );
+
+// add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
+
+// $attachment_id = media_handle_sideload( $file_array );
+
+// remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
+
+// if ( is_wp_error( $attachment_id ) ) {
+// @unlink( $temp_file );
+// return new WP_Error( $attachment_id->get_error_code(), 'Ошибка добавления в медиабиблиотеку: ' . $attachment_id->get_error_message() . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
+// }
+
+// return $attachment_id;
+// }
+
 function loveforever_download_and_add_image_to_library( $image_url, $timeout = 300 ) {
+	// Проверяем URL
 	if ( empty( $image_url ) || ! filter_var( $image_url, FILTER_VALIDATE_URL ) ) {
-		return new WP_Error( 400, 'Невалидная ссылка на изображение: ' . esc_url_raw( $image_url ) );
+		return new WP_Error( 400, 'Невалидная ссылка на изображение: ' . $image_url );
 	}
 
-	if ( ! function_exists( 'media_handle_sideload' ) ) {
-		require_once ABSPATH . 'wp-admin/includes/image.php';
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/media.php';
+	$upload_dir = wp_upload_dir();
+	if ( ! is_writable( $upload_dir['path'] ) ) {
+		return new WP_Error( 'upload_not_writable', 'Каталог загрузки недоступен для записи.' );
 	}
 
-	$temp_file = null;
-	$attempt   = 0;
-	$retries   = 2;
+	$filename    = sanitize_file_name( basename( parse_url( $image_url, PHP_URL_PATH ) ) );
+	$unique_name = wp_unique_filename( $upload_dir['path'], $filename );
+	$destination = trailingslashit( $upload_dir['path'] ) . $unique_name;
 
-	// Повторяем загрузку при ошибке
-	while ( $attempt < $retries ) {
-		$temp_file = download_url( $image_url, $timeout );
+	$retries  = 2;
+	$attempts = 0;
+	$success  = false;
+	$error    = null;
 
-		if ( ! is_wp_error( $temp_file ) ) {
+	while ( $attempts < $retries ) {
+		++$attempts;
+
+		$fp = @fopen( $destination, 'wb' );
+		if ( ! $fp ) {
+			return new WP_Error( 'file_open_error', 'Не удалось создать файл для записи: ' . $destination );
+		}
+
+		$ch = curl_init( $image_url );
+		curl_setopt_array(
+			$ch,
+			array(
+				CURLOPT_FILE           => $fp,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_TIMEOUT        => $timeout,
+				CURLOPT_SSL_VERIFYPEER => true,
+				CURLOPT_SSL_VERIFYHOST => 2,
+				CURLOPT_USERAGENT      => 'WordPress/' . get_bloginfo( 'version' ),
+				CURLOPT_FAILONERROR    => true,
+			)
+		);
+
+		$success    = curl_exec( $ch );
+		$curl_error = curl_error( $ch );
+		$http_code  = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+
+		curl_close( $ch );
+		fclose( $fp );
+
+		if ( $success && $http_code === 200 && filesize( $destination ) > 0 ) {
 			break;
+		} else {
+			@unlink( $destination );
+			$error = "Попытка {$attempts}: ошибка cURL — {$curl_error}, HTTP: {$http_code}";
+			error_log( '[loveforever_superfast_image_import] ' . $error );
+			sleep( 1 ); // небольшая задержка перед повторной попыткой
 		}
-
-		// Если ошибка временная — пробуем снова
-		$error_msg = $temp_file->get_error_message();
-		error_log( '[loveforever_download] Попытка #' . ( $attempt + 1 ) . ' не удалась: ' . $error_msg . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
-
-		// Только при определённых ошибках стоит ретраить
-		if ( strpos( $error_msg, 'cURL error 18' ) === false && strpos( $error_msg, 'timed out' ) === false ) {
-			break; // Не сетевая ошибка — не ретраим
-		}
-
-		++$attempt;
-		sleep( 1 ); // небольшая пауза между попытками
 	}
 
-	if ( is_wp_error( $temp_file ) ) {
-		return new WP_Error( $temp_file->get_error_code(), 'Ошибка загрузки файла: ' . $temp_file->get_error_message() . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
+	$mime_type      = 'image/jpeg';
+	$check_filetype = wp_check_filetype( $unique_name, null );
+
+	if ( ! empty( $check_filetype['type'] ) ) {
+		// Если тип не определен, пробуем определить по MIME - типу из заголовка
+		$mime_type = $check_filetype['type'];
 	}
 
-	// Устанавливаем переменные для размещения
-	$file_array = array(
-		'name'     => sanitize_file_name( basename( $image_url ) ),
-		'tmp_name' => $temp_file,
+	// Подготавливаем данные для вставки в библиотеку медиа
+	$attachment = array(
+		'post_mime_type' => $mime_type,
+		'post_title'     => preg_replace( '/\.[^.]+$/', '', $unique_name ),
+		'post_content'   => '',
+		'post_status'    => 'inherit',
 	);
 
 	add_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 
-	$attachment_id = media_handle_sideload( $file_array );
-
-	remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
+	// Вставляем файл в библиотеку медиа
+	$attachment_id = wp_insert_attachment( $attachment, $destination );
 
 	if ( is_wp_error( $attachment_id ) ) {
-		@unlink( $temp_file );
-		return new WP_Error( $attachment_id->get_error_code(), 'Ошибка добавления в медиабиблиотеку: ' . $attachment_id->get_error_message() . ', [ССЫЛКА НА ФАЙЛ]: ' . esc_url_raw( $image_url ) );
+		@unlink( $destination );
+		return $attachment_id;
 	}
+
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+
+	$attachment_data = wp_generate_attachment_metadata( $attachment_id, $destination );
+
+	wp_update_attachment_metadata( $attachment_id, $attachment_data );
+
+	remove_filter( 'intermediate_image_sizes_advanced', '__return_empty_array' );
 
 	return $attachment_id;
 }
