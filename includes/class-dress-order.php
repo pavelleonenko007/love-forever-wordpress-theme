@@ -363,10 +363,10 @@ class Dress_Sorter {
 			$previous_order = (int) $previous_field_values[ $this->meta_key . '_' . $category->term_id ];
 			$new_order      = (int) $_POST['acf'][ 'field_' . $this->meta_key . '_' . $category->term_id ];
 
-			if ( 0 === $new_order ) {
-				$new_order = 1;
-				$_POST['acf'][ 'field_' . $this->meta_key . '_' . $category->term_id ] = $new_order;
-			}
+			// if ( 0 === $new_order ) {
+			// 	$new_order = 1;
+			// 	$_POST['acf'][ 'field_' . $this->meta_key . '_' . $category->term_id ] = $new_order;
+			// }
 
 			if ( $new_order > $category->count ) {
 				$new_order = $category->count;
