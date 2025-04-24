@@ -448,6 +448,10 @@ function loveforever_get_filtered_products_via_ajax() {
 		'paged'          => intval( $page ),
 		'meta_query'     => array(
 			array(
+				'key'   => 'availability',
+				'value' => '1',
+			),
+			array(
 				'key'     => 'final_price',
 				'value'   => array( $min_price, $max_price + 1 ),
 				'compare' => 'BETWEEN',
@@ -1328,7 +1332,7 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 		'style'      => get_field( 'style', $post_id ),
 		'silhouette' => get_field( 'silhouette', $post_id ),
 		'color'      => get_field( 'color', $post_id ),
-		'fabric'      => get_field( 'fabric', $post_id ),
+		'fabric'     => get_field( 'fabric', $post_id ),
 	);
 
 	if ( empty( array_filter( array_values( $filters ) ) ) ) {
@@ -1379,7 +1383,7 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 				$matched_terms[] = $result_category_id;
 		}
 	}
-	
+
 	// 4. Сохраняем термы в ACF-поле таксономии
 	if ( ! empty( $matched_terms ) ) {
 		update_field( 'dress_category', array_unique( array_merge( $dress_categories, $matched_terms ) ), $post_id );

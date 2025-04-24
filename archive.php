@@ -213,6 +213,10 @@ if ( empty( $thumbnail ) ) {
 								),
 								'meta_query'     => array(
 									array(
+										'key'   => 'availability',
+										'value' => '1',
+									),
+									array(
 										'key'     => 'final_price',
 										'value'   => array( intval( $min_price ), intval( $max_price + 1 ) ),
 										'compare' => 'BETWEEN',
