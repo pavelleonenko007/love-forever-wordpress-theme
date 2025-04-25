@@ -292,6 +292,38 @@ function loveforever_register_post_types() {
 			'rest_base'          => null, // taxonomy
 		)
 	);
+	register_taxonomy(
+		'zodiac_sign',
+		null,
+		array(
+			'label'              => '',
+			'labels'             => array(
+				'name'          => 'Знаки зодиака',
+				'singular_name' => 'Знак зодиака',
+				'search_items'  => 'Поиск знаков зодиака',
+				'all_items'     => 'Все знаки зодиака',
+				'view_item '    => 'Просмотр знака зодиака',
+				'edit_item'     => 'Редактировать знак зодиака',
+				'update_item'   => 'Обновить знак зодиака',
+				'add_new_item'  => 'Добавить новый знак зодиака',
+				'new_item_name' => 'Название нового знака зодиака',
+				'menu_name'     => 'Знаки зодиака',
+				'back_to_items' => '← Назад к знакам зодиака',
+			),
+			'description'        => '',
+			'public'             => true,
+			'show_ui'            => true,
+			'show_in_quick_edit' => true,
+			'hierarchical'       => true,
+			'rewrite'            => true,
+			// 'query_var'             => taxonomy, // название параметра запроса
+			'capabilities'       => array(),
+			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+			'show_in_rest'       => null, // добавить в REST API
+			'rest_base'          => null, // taxonomy
+		)
+	);
 
 	register_post_type(
 		'fitting',
@@ -369,7 +401,7 @@ function loveforever_register_post_types() {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-			'taxonomies'          => array( 'dress_category', 'dress_tag', 'silhouette', 'style', 'brand', 'fabric', 'color' ),
+			'taxonomies'          => array( 'dress_category', 'dress_tag', 'silhouette', 'style', 'brand', 'fabric', 'color', 'zodiac_sign' ),
 		)
 	);
 
