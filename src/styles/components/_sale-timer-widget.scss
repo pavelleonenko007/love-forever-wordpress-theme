@@ -1,0 +1,56 @@
+@use '../media' as *;
+
+.sale-time-widget {
+  width: 100%;
+  padding-inline: 40rem;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  column-gap: 48rem;
+
+  @include mobile {
+    padding-inline: 0rem;
+    grid-template-columns: auto;
+    justify-content: stretch;
+  }
+
+  &__timer {
+    padding: 0;
+  }
+
+  &__text {
+    @include mobile-s {
+      max-width: unset !important;
+    }
+  }
+
+  &__cta {
+    margin: 0 !important;
+  }
+}
+
+.sale-timer {
+  @include mobile {
+
+    [data-js-timer-minutes-word] {
+      margin-right: 0;
+    }
+  }
+
+  &__counter {
+    width: 48rem;
+
+    @include mobile {
+      width: auto;
+      font-size: 40rem;
+
+      &[data-js-timer-seconds] {
+        display: none;
+
+        &+* {
+          display: none;
+        }
+      }
+
+    }
+  }
+}
