@@ -56,3 +56,9 @@ html {
 .serach-btn > .code-embed-3 {
 	width: 15rem;
 }
+
+picture:has(.img-cover) {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}

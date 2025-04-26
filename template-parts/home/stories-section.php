@@ -18,9 +18,17 @@ if ( $stories_query->have_posts() ) : ?>
 	<div class="container n-top m-scrll">
 		<div class="fast-links">
 			<?php
+			$i = 0;
 			while ( $stories_query->have_posts() ) :
 				$stories_query->the_post();
-				get_template_part( 'components/story' );
+				get_template_part(
+					'components/story',
+					null,
+					array(
+						'index' => $i,
+					)
+				);
+				++$i;
 			endwhile;
 			wp_reset_postdata();
 			?>
