@@ -86,12 +86,7 @@ if ( empty( $thumbnail ) ) {
 										let silhouettes = <?php echo wp_json_encode( loveforever_get_silhouettes_by_current_category() ); ?>;
 									</script>
 									<?php
-									$silhouettes = get_terms(
-										array(
-											'taxonomy'   => 'silhouette',
-											'hide_empty' => false, // TODO: make true or remove
-										)
-									);
+									$silhouettes = loveforever_get_silhouettes_by_current_category();
 
 									if ( ! empty( $silhouettes ) ) :
 										?>

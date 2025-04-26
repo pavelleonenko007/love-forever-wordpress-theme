@@ -550,11 +550,11 @@ function loveforever_get_silhouettes_by_current_category( $category_id = null ) 
 	}
 
 	$silhouettes = wp_get_object_terms(
-		$posts[0],
+		$posts,
 		'silhouette',
 		array(
-		'orderby' => 'name',
-		'order'   => 'ASC',
+			'orderby' => 'name',
+			'order'   => 'ASC',
 		)
 	);
 
