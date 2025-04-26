@@ -82,6 +82,9 @@ if ( empty( $thumbnail ) ) {
 						<form id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" class="filters-form" data-js-product-filter-form>
 							<div class="vert vert-fw">
 								<div class="spleet m-vert">
+									<script>
+										let silhouettes = <?php echo wp_json_encode( loveforever_get_silhouettes_by_current_category() ); ?>;
+									</script>
 									<?php
 									$silhouettes = get_terms(
 										array(
