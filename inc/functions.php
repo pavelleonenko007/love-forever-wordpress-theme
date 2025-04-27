@@ -511,13 +511,11 @@ function loveforever_get_product_images( $product_id ) {
 	return $images;
 }
 
-/**
- * Get silhouette terms associated with posts in the current dress_category
- *
- * @param int|null $category_id Optional category ID to check against. If null, uses current term.
- * @return array Array of WP_Term objects for silhouette taxonomy
- */
-function loveforever_get_silhouettes_by_current_category( $category_id = null ) {
+function loveforever_get_filter_terms_for_dress_category( $taxonomy = '', $category_id = null ) {
+	if ( '' === $taxonomy ) {
+		return array();
+	}
+
 	if ( ! $category_id ) {
 		$current_category = get_queried_object();
 
@@ -551,7 +549,7 @@ function loveforever_get_silhouettes_by_current_category( $category_id = null ) 
 
 	$silhouettes = wp_get_object_terms(
 		$posts,
-		'silhouette',
+		$taxonomy,
 		array(
 			'orderby' => 'name',
 			'order'   => 'ASC',
@@ -559,4 +557,44 @@ function loveforever_get_silhouettes_by_current_category( $category_id = null ) 
 	);
 
 	return $silhouettes;
+}
+
+/**
+ * Get silhouette terms associated with posts in the dress_category
+ *
+ * @param int|null $category_id Optional category ID to check against. If null, uses current term.
+ * @return array Array of WP_Term objects for silhouette taxonomy
+ */
+function loveforever_get_silhouettes_for_dress_category( $category_id = null ) {
+	return loveforever_get_filter_terms_for_dress_category( 'silhouette', $category_id );
+}
+
+/**
+ * Get brand terms associated with posts in the dress_category
+ *
+ * @param int|null $category_id Optional category ID to check against. If null, uses current term.
+ * @return array Array of WP_Term objects for silhouette taxonomy
+ */
+function loveforever_get_brands_for_dress_category( $category_id = null ) {
+	return loveforever_get_filter_terms_for_dress_category( 'brand', $category_id );
+}
+
+/**
+ * Get style terms associated with posts in the dress_category
+ *
+ * @param int|null $category_id Optional category ID to check against. If null, uses current term.
+ * @return array Array of WP_Term objects for silhouette taxonomy
+ */
+function loveforever_get_styles_for_dress_category( $category_id = null ) {
+	return loveforever_get_filter_terms_for_dress_category( 'style', $category_id );
+}
+
+/**
+ * Get color terms associated with posts in the dress_category
+ *
+ * @param int|null $category_id Optional category ID to check against. If null, uses current term.
+ * @return array Array of WP_Term objects for silhouette taxonomy
+ */
+function loveforever_get_colors_for_dress_category( $category_id = null ) {
+	return loveforever_get_filter_terms_for_dress_category( 'color', $category_id );
 }

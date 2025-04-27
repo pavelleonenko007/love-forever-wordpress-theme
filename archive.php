@@ -66,13 +66,17 @@ if ( empty( $thumbnail ) ) {
 				$other_filter_names  = array( 'brand', 'style', 'color' );
 				$other_filters       = array();
 
+				// foreach ( $other_filter_names as $other_filter_name ) {
+				// $other_filters[ $other_filter_name ] = get_terms(
+				// array(
+				// 'taxonomy'   => $other_filter_name,
+				// 'hide_empty' => false,
+				// )
+				// );
+				// }
+
 				foreach ( $other_filter_names as $other_filter_name ) {
-					$other_filters[ $other_filter_name ] = get_terms(
-						array(
-							'taxonomy'   => $other_filter_name,
-							'hide_empty' => false,
-						)
-					);
+					$other_filters[ $other_filter_name ] = loveforever_get_filter_terms_for_dress_category( $other_filter_name );
 				}
 
 				$other_filters = array_filter( $other_filters );
@@ -83,10 +87,10 @@ if ( empty( $thumbnail ) ) {
 							<div class="vert vert-fw">
 								<div class="spleet m-vert">
 									<script>
-										let silhouettes = <?php echo wp_json_encode( loveforever_get_silhouettes_by_current_category() ); ?>;
+										let silhouettes = <?php echo wp_json_encode( loveforever_get_silhouettes_for_dress_category() ); ?>;
 									</script>
 									<?php
-									$silhouettes = loveforever_get_silhouettes_by_current_category();
+									$silhouettes = loveforever_get_silhouettes_for_dress_category();
 
 									if ( ! empty( $silhouettes ) ) :
 										?>
