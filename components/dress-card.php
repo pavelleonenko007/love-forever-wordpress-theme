@@ -89,7 +89,7 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 		<?php endif; ?>
 	</div>
 	<a href="<?php the_permalink(); ?>" class="prod-item_bottom w-inline-block">
-		<div data-wp="post_title" class="p-12-12 uper m-12-12"><?php the_title(); ?> <?php echo $size; ?></div>
+		<div class="p-12-12 uper m-12-12"><?php the_title(); ?></div>
 		<?php
 		if ( ! empty( $price ) ) :
 			?>
