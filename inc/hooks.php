@@ -538,13 +538,25 @@ function loveforever_get_filtered_products_via_ajax() {
 
 	ob_start();
 
+	$card_index = 1;
 	while ( $products_query->have_posts() ) :
 		$products_query->the_post();
 		?>
 			<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
-				<?php get_template_part( 'components/dress-card' ); ?>
+				<?php
+				$position_in_block = ( $card_index - 1 ) % 6 + 1;
+				$size              = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
+				get_template_part(
+					'components/dress-card',
+					null,
+					array(
+						'size' => $size,
+					)
+				);
+				?>
 			</div>
 		<?php
+		++$card_index;
 	endwhile;
 	wp_reset_postdata();
 

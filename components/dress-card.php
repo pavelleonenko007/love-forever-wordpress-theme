@@ -14,6 +14,8 @@ $price_with_discount        = get_field( 'price_with_discount' );
 $images                     = loveforever_get_product_images( get_the_ID() );
 $video                      = get_field( 'video' );
 $show_video_in_product_card = get_field( 'show_video_in_product_card' );
+
+$size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 ?>
 
 <div id="w-node-_6e88719d-fe8f-116f-4337-b580b5a0b461-b5a0b461" class="prod-item">
@@ -43,7 +45,7 @@ $show_video_in_product_card = get_field( 'show_video_in_product_card' );
 											'class' => 'img-cover'
 										) ); */
 										?>
-										<img src="<?php echo esc_url( wp_get_attachment_image_url( $image['image']['ID'], 'large' ) ); ?>" loading="lazy" alt class="img-cover">
+										<img src="<?php echo esc_url( wp_get_attachment_image_url( $image['image']['ID'], $size ) ); ?>" loading="lazy" alt class="img-cover">
 									</li>
 								<?php endforeach; ?>
 							</ul>
@@ -87,7 +89,7 @@ $show_video_in_product_card = get_field( 'show_video_in_product_card' );
 		<?php endif; ?>
 	</div>
 	<a href="<?php the_permalink(); ?>" class="prod-item_bottom w-inline-block">
-		<div data-wp="post_title" class="p-12-12 uper m-12-12"><?php the_title(); ?></div>
+		<div data-wp="post_title" class="p-12-12 uper m-12-12"><?php the_title(); ?> <?php echo $size; ?></div>
 		<?php
 		if ( ! empty( $price ) ) :
 			?>
