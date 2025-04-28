@@ -1392,3 +1392,64 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 }
 
 add_filter( 'big_image_size_threshold', '__return_false' );
+
+add_action( 'acf/save_post', 'loveforever_appy_dress_to_sale_categories', 22 );
+function loveforever_appy_dress_to_sale_categories( $product_id ) {
+	if ( get_post_type( $product_id ) !== 'dress' ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	$sale_category_id = 379;
+
+	$has_discount = get_field( 'has_discount', $product_id );
+
+	if ( ! $has_discount ) {
+		return;
+	}
+
+	$dress_categories = wp_get_post_terms( $product_id, 'dress_category', array( 'fields' => 'all' ) );
+
+	$dress_category_ids = array_map( fn( $dress_cat ) => $dress_cat->term_id, $dress_categories );
+
+	$dress_category_ids[] = $sale_category_id; // sale category id!
+
+	$dress_category_ids = array_unique( $dress_category_ids );
+
+	update_field( 'dress_category', $dress_category_ids, $product_id );
+	wp_set_post_terms( $product_id, $dress_category_ids, 'dress_category' );
+
+	$base_categories = array();
+
+	$category_slugs = array(
+		'wedding',
+		'evening',
+		'prom',
+	);
+
+	foreach ( $dress_categories as $dress_cat ) {
+		if ( 0 === $dress_cat->parent ) {
+			$base_categories[] = $dress_cat;
+		}
+	}
+
+	$extra_cagegories_to_append = array();
+
+	foreach ( $base_categories as $base_cat ) {
+		if ( in_array( $base_cat->slug, $category_slugs, true ) ) {
+			$child_sale_cat = get_term_by( 'slug', $base_cat->slug . '-sale', 'dress_category' );
+
+			if ( ! ( $child_sale_cat instanceof WP_Term ) ) {
+				continue;
+			}
+
+			$extra_cagegories_to_append[] = $child_sale_cat->term_id;
+		}
+	}
+
+	update_field( 'dress_category', array_unique( array_merge( $dress_category_ids, $extra_cagegories_to_append ) ), $product_id );
+	wp_set_post_terms( $product_id, array_unique( array_merge( $dress_category_ids, $extra_cagegories_to_append ) ), 'dress_category' );
+}
