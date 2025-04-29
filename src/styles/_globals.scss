@@ -13,6 +13,10 @@ html {
 	transition-duration: 0ms;
 }
 
+.dopmenuopened .n-menu.w--current {
+	color: black;
+}
+
 .indirm-line {
 	z-index: 999;
 }
