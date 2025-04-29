@@ -45,7 +45,7 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 											'class' => 'img-cover'
 										) ); */
 										?>
-										<img src="<?php echo esc_url( wp_get_attachment_image_url( $image['image']['ID'], 'full' ) ); ?>" loading="lazy" alt class="img-cover">
+										<img src="<?php echo esc_url( wp_get_attachment_image_url( $image['image']['ID'], $size ) ); ?>" loading="lazy" alt class="img-cover">
 									</li>
 								<?php endforeach; ?>
 							</ul>
