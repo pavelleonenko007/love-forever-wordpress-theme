@@ -8,7 +8,7 @@
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	row-gap: 15rem;
+	column-gap: 15rem;
 	text-transform: uppercase;
 	font-size: 12rem;
 	font-weight: 500;
@@ -47,6 +47,30 @@
 		}
 	}
 
+	&--vk {
+		position: relative;
+		background-color: var(--blue);
+		border: 1rem solid var(--blue);
+		overflow: hidden;
+
+		@include hover {
+			background-color: var(--blue);
+			color: var(--white);
+			opacity: 0.75;
+		}
+	}
+
+	&--favorite {
+		background-color: var(--pink);
+		border: 1rem solid var(--pink);
+
+		@include hover{
+			background-color: var(--pink);
+			color: var(--white);
+			opacity: 0.75;
+		}
+	}
+
 	&:disabled {
 		opacity: 0.6;
 		pointer-events: none;
@@ -54,6 +78,19 @@
 
 	&[hidden] {
 		display: none;
+	}
+
+	&__icon {
+		width: 24rem;
+		height: 24rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-shrink: 0;
+	}
+
+	&__text {
+		flex-shrink: 0;
 	}
 }
 

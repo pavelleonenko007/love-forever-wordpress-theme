@@ -475,8 +475,8 @@ function loveforever_get_product_title( $product_id ) {
 	$categories = array_values(
 		array_filter(
 			$categories,
-			function ( $category ) {
-				return 0 === $category->parent;
+			function ( $category ) use ( $catalog_titles ) {
+				return in_array( $category->slug, array_keys( $catalog_titles ) );
 			}
 		)
 	);

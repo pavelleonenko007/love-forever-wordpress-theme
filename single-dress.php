@@ -228,27 +228,66 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 										<p class="p-16-20">Примерить и купить платье можно в нашем салоне: г. Санкт-Петербург, Вознесенский проспект 18 (м. Садовая) ежедневно с 10 до 22:00 по предварительной записи</p>
 										<p class="p-16-20">Для доставки в регионы <a href="#" class="btn-call-reqest">закажите обратный звонок</a></p>
 									</div>
-									<div class="horiz m-vert single-product__content-actions">
+									<div class="single-product__actions">
+										<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
+										<button 
+											type="button"
+											id="singleDressPageAddToFavoriteButton" 
+											class="button button--favorite<?php echo $is_in_favorites ? ' is-active' : ''; ?>"
+											data-js-add-to-favorite-button="<?php the_ID(); ?>"
+										>
+											<svg class="button__icon" viewBox="0 0 24 24">
+												<use href="#addToFavoritesIcon"></use>
+											</svg>
+											<span 
+												class="button__text"
+												data-js-add-to-favorite-button-text
+											><?php echo $is_in_favorites ? 'Удалить из избранного' : 'Добавить в избранное'; ?></span>
+										</button>
+										<div class="button button--vk">
+											<div id="vk_bookmarks" style="position: absolute; top: 50%; left: 50%; translate: -50% -50%; scale: 1.6; opacity: 0.001;"></div>
+											<script type="text/javascript">
+												VK.Widgets.Bookmarks("vk_bookmarks", {
+													height: '50rem'
+												});
+											</script>
+											<svg class="button__icon" viewBox="0 0 24 24">
+												<use href="#vkButton"></use>
+											</svg>
+											<span class="button__text">Сохранить в vk</span>
+										</div>
+									</div>
+									<!-- <div class="horiz m-vert single-product__content-actions">
 										<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
 										<button type="button" id="singleDressPageAddToFavoriteButton" class="btn in-single-btn line w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
 											<div class="svg-share lik w-embed">
-												<svg width="100%" height="100%" viewbox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28448 7.26555C-0.428161 8.95359 -0.428161 11.6904 1.28448 13.3784L8.00251 20L14.2045 13.8871L14.2022 13.8849L14.716 13.3784C16.4287 11.6904 16.4287 8.95359 14.716 7.26555C13.0034 5.5775 10.2267 5.5775 8.51402 7.26555L8.00026 7.77193L7.4865 7.26555C5.77386 5.5775 2.99713 5.5775 1.28448 7.26555Z" fill="white"></path>
-													<path fill-rule="evenodd" clip-rule="evenodd" d="M11.325 0.316509C10.8969 0.73852 10.8969 1.42272 11.325 1.84473L13.0045 3.50011L14.555 1.97189L14.5545 1.97134L14.6829 1.84473C15.1111 1.42272 15.1111 0.73852 14.6829 0.316509C14.2548 -0.105503 13.5606 -0.105503 13.1324 0.316509L13.004 0.443104L12.8755 0.316509C12.4474 -0.105503 11.7532 -0.105503 11.325 0.316509Z" fill="white"></path>
-													<path fill-rule="evenodd" clip-rule="evenodd" d="M17.5218 3.49713C16.8261 4.16029 16.8261 5.23546 17.5218 5.89862L20.251 8.49994L22.7706 6.09844L22.7697 6.09757L22.9784 5.89862C23.6742 5.23546 23.6742 4.16029 22.9784 3.49713C22.2826 2.83397 21.1546 2.83397 20.4588 3.49713L20.2501 3.69606L20.0414 3.49713C19.3456 2.83397 18.2176 2.83397 17.5218 3.49713Z" fill="white"></path>
+												<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<use href="#addToFavoritesIcon"></use>
 												</svg>
 											</div>
 											<div data-js-add-to-favorite-button-text><?php echo $is_in_favorites ? 'Удалить из избранного' : 'Добавить в избранное'; ?></div>
 										</button>
-										<a href="#" class="btn in-single-btn _2 w-inline-block">
-											<div class="svg-share lik w-embed">
-												<svg width="24" height="16" viewbox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M13.0718 16C4.87196 16 0.194878 9.99399 0 0H4.10743C4.24235 7.33533 7.27046 10.4424 9.66896 11.0831V0H13.5365V6.32633C15.9051 6.05405 18.3935 3.17117 19.233 0H23.1006C22.7842 1.64466 22.1537 3.20189 21.2483 4.57429C20.3429 5.94668 19.1823 7.10472 17.8389 7.97597C19.3384 8.77206 20.6629 9.89886 21.7249 11.282C22.7869 12.6651 23.5624 14.2732 24 16H19.7427C19.3498 14.5001 18.5513 13.1575 17.4473 12.1404C16.3433 11.1233 14.9829 10.4769 13.5365 10.2823V16H13.0718Z" fill="white"></path>
-												</svg>
-											</div>
-											<div>сохранить в vk</div>
-										</a>
-									</div>
+										<div class="vk-widget" style="overflow: hidden">
+											<a href="#" class="btn in-single-btn _2 w-inline-block" onclick="document.getElementById('vk_bookmarks').click();">
+												<div class="svg-share lik w-embed">
+													<svg width="24" height="16" viewbox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M13.0718 16C4.87196 16 0.194878 9.99399 0 0H4.10743C4.24235 7.33533 7.27046 10.4424 9.66896 11.0831V0H13.5365V6.32633C15.9051 6.05405 18.3935 3.17117 19.233 0H23.1006C22.7842 1.64466 22.1537 3.20189 21.2483 4.57429C20.3429 5.94668 19.1823 7.10472 17.8389 7.97597C19.3384 8.77206 20.6629 9.89886 21.7249 11.282C22.7869 12.6651 23.5624 14.2732 24 16H19.7427C19.3498 14.5001 18.5513 13.1575 17.4473 12.1404C16.3433 11.1233 14.9829 10.4769 13.5365 10.2823V16H13.0718Z" fill="white"></path>
+													</svg>
+												</div>
+												<div>сохранить в vk</div>
+											</a>
+										</div>
+									</div> -->
+									<svg style="display: none">
+										<symbol id="addToFavoritesIcon" viewBox="0 0 24 24">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M1.3118 8.62865C-0.437267 10.4011 -0.437267 13.2747 1.3118 15.0472L8.1727 21.9998L14.5066 15.5813L14.5043 15.579L15.029 15.0472C16.7781 13.2747 16.7781 10.4011 15.029 8.62865C13.2799 6.8562 10.4442 6.8562 8.69509 8.62865L8.1704 9.16036L7.64572 8.62865C5.89665 6.8562 3.06087 6.8562 1.3118 8.62865Z" fill="white"/>
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M11.5662 1.33233C11.129 1.77545 11.129 2.49386 11.5662 2.93697L13.2815 4.67513L14.8649 3.07049L14.8643 3.06991L14.9955 2.93697C15.4328 2.49386 15.4328 1.77545 14.9955 1.33233C14.5583 0.889222 13.8493 0.889222 13.4121 1.33233L13.2809 1.46526L13.1497 1.33233C12.7124 0.889222 12.0035 0.889222 11.5662 1.33233Z" fill="white"/>
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M17.8942 4.67214C17.1837 5.36846 17.1837 6.49739 17.8942 7.19371L20.6815 9.9251L23.2546 7.40353L23.2537 7.40262L23.4669 7.19371C24.1774 6.49739 24.1774 5.36846 23.4669 4.67214C22.7563 3.97582 21.6043 3.97582 20.8937 4.67214L20.6806 4.88103L20.4674 4.67214C19.7568 3.97582 18.6048 3.97582 17.8942 4.67214Z" fill="white"/>
+										</symbol>
+										<symbol id="vkButton" viewBox="0 0 24 24">
+											<path d="M13.0718 20C4.87196 20 0.194878 13.994 0 4H4.10743C4.24235 11.3353 7.27046 14.4424 9.66896 15.0831V4H13.5365V10.3263C15.9051 10.0541 18.3935 7.17117 19.233 4H23.1006C22.7842 5.64466 22.1537 7.20189 21.2483 8.57429C20.3429 9.94668 19.1823 11.1047 17.8389 11.976C19.3384 12.7721 20.6629 13.8989 21.7249 15.282C22.7869 16.6651 23.5624 18.2732 24 20H19.7427C19.3498 18.5001 18.5513 17.1575 17.4473 16.1404C16.3433 15.1232 14.9829 14.4769 13.5365 14.2823V20H13.0718Z" fill="white"/>
+										</symbol>
+									</svg>
 									<div class="horiz shere-line single-product__content-socials">
 										<div class="p-12-12 uper m-12-12">Поделиться</div>
 										<div class="share-block">
