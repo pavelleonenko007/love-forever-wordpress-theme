@@ -175,6 +175,8 @@ class Loveforever_Dress_Importer {
 			update_field( 'price', (string) $product->price, $post_id );
 		}
 
+		update_field( 'availability', 'true' == $product->store, $post_id );
+
 		update_post_meta( $post_id, 'final_price', (string) $product->price );
 	}
 
@@ -336,8 +338,6 @@ class Loveforever_Dress_Importer {
 					500
 				);
 			}
-
-			error_log( wp_json_encode( $xml ) );
 
 			$total_items = count( $xml->shop->offers->offer );
 			$this->init_import_progress( $total_items );
