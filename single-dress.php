@@ -26,7 +26,7 @@ $price               = get_field( 'price' );
 $has_discount        = get_field( 'has_discount' );
 $price_with_discount = $has_discount ? get_field( 'price_with_discount' ) : null;
 $brand               = ! empty( get_the_terms( get_the_ID(), 'brand' ) ) && ! is_wp_error( get_the_terms( get_the_ID(), 'brand' ) ) ? get_the_terms( get_the_ID(), 'brand' )[0]->name : null;
-$tags                = get_the_terms( get_the_ID(), 'dress_tag' );
+$tags                = wp_get_post_terms( get_the_ID(), array( 'brand', 'silhouette', 'style', 'color' ) );
 $dress_category      = get_the_terms( get_the_ID(), 'dress_category' );
 $related_products    = get_field( 'related_products' );
 
