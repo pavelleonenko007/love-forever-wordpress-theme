@@ -177,7 +177,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											<fieldset class="single-dress-form__fieldset">
 												<legend class="single-dress-form__legend">Запись на примерку</legend>
 												<div class="single-dress-form__inner">
-													<div class="field">
+													<div class="field" data-js-datepicker>
 														<input 
 															type="date" 
 															name="date" 
@@ -185,7 +185,23 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 															min="<?php echo esc_attr( $date_with_nearest_available_slots ); ?>"
 															id="singleDressFormDateField" 
 															class="field__control"
+															data-js-datepicker-original-control
 														>
+														<?php
+														$min_date          = wp_date( 'd.m.Y', strtotime( $date_with_nearest_available_slots ) );
+														$datepicker_config = array(
+															'minDate' => $min_date,
+														);
+														?>
+														<input 
+															type="text" 
+															name="altdate" 
+															id="singleDressFormCustomDateField" 
+															class="field__control"
+															value="<?php echo esc_attr( $min_date ); ?>"
+															data-js-datepicker-custom-control
+															data-js-datepicker-config="<?php echo esc_attr( wp_json_encode( $datepicker_config ) ); ?>"
+														/>
 													</div>
 													<?php
 													$slots           = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
@@ -428,14 +444,14 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														value="<?php echo esc_attr( get_the_ID() ); ?>"
 														form="singleDressForm"
 													>
-													<?php if ( ! $has_change_fittings_capabilities && ! empty( $_COOKIE['favorites'] ) ) : ?>
+													<?php /** if ( ! $has_change_fittings_capabilities && ! empty( $_COOKIE['favorites'] ) ) : */ ?>
 														<input 
 															type="hidden" 
 															name="client_favorite_dresses" 
 															value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_COOKIE['favorites'] ) ) ); ?>"
 															form="singleDressForm"
 														>
-													<?php endif; ?>
+													<?php // endif; ?>
 													<button type="submit" form="singleDressForm" class="button" data-js-fitting-form-submit-button>Записаться</button>
 												</div>
 												<div class="fitting-form__group-footer">

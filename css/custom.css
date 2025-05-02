@@ -204,9 +204,6 @@
 	height: 6px;
 	width: 98rem;
 }
-.ui-widget-header {
-	background: #f22ea9;
-}
 
 .ui-slider .ui-slider-handle {
 	position: absolute;
@@ -222,12 +219,6 @@
 	border: 2px solid white !important;
 	background: #f22ea9 !important;
 	outline: none !important;
-}
-
-.ui-widget.ui-widget-content {
-	border: 1px solid #0000001a;
-	border: none;
-	background: #0000001a;
 }
 
 .custom-select {

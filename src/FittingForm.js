@@ -11,13 +11,20 @@ class BaseFittingForm extends BaseComponent {
 	constructor(form) {
 		super();
 		this.form = form;
+		console.log(this.form.elements.date instanceof RadioNodeList);
+		console.log(this.form.elements);
+
 		this.state = this._getProxyState({
 			success: false,
 			error: null,
 			isSubmitting: false,
 			name: this.form.elements.name.value,
 			phone: this.form.elements.phone.value,
-			date: this.form.elements.date.value,
+			date:
+				this.form.elements.date instanceof RadioNodeList
+					? Array.from(this.form.elements.date).find((input) => !input.disabled)
+							.value
+					: this.form.elements.date.value,
 			time: this.form.elements.time.value,
 		});
 	}
@@ -705,10 +712,12 @@ class SingleFittingForm extends BaseFittingForm {
 			this.selectors.dialogFormWrapper
 		);
 		this.successCloseDialogButton = this.dialogFormWrapper.nextElementSibling;
+		console.log({ state: { ...this.state } });
+
 		this.state = this._getProxyState({
 			...this.state,
 			target_dress: this.form.elements.target_dress.value,
-			client_favorite_dresses: this.form.elements.client_favorite_dresses.value,
+			client_favorite_dresses: this.form.elements.client_favorite_dresses?.value,
 			submit_fitting_form_nonce:
 				this.form.elements.submit_fitting_form_nonce.value,
 			dialogMessage: 'Запись на примерку',
@@ -738,6 +747,8 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {ChangeEvent} event
 	 */
 	onChange = (event) => {
+		console.log({ event });
+
 		this.state.error = null;
 
 		const formData = Object.fromEntries(new FormData(this.form));
@@ -1159,6 +1170,8 @@ class FittingFormCollection {
 	static init() {
 		document.querySelectorAll(ROOT_SELECTOR).forEach((fittingForm) => {
 			let fittingFormInstance = null;
+
+			console.log(fittingForm.id);
 
 			switch (fittingForm.id) {
 				case 'singleDressForm':

@@ -40,6 +40,7 @@ function loveforever_add_site_scripts() {
 	wp_enqueue_script( 'jquery-ui-menu' );
 	wp_enqueue_script( 'jquery-ui-slider' );
 	wp_enqueue_script( 'jquery-ui-selectmenu' );
+	wp_enqueue_script( 'jquery-ui-datepicker' );
 	wp_enqueue_script( 'main', TEMPLATE_PATH . '/js/main.js', array( 'jquery' ), time(), true );
 	wp_enqueue_script( 'front', TEMPLATE_PATH . '/js/front.js', array( 'main' ), time(), true );
 	// wp_enqueue_script( 'barba', '//thevogne.ru/customfiles/barba.js', array( 'main' ), time(), true );
