@@ -28,6 +28,14 @@
 		text-transform: uppercase;
 		background-color: var(--bg-color);
 
+		&:is([type="date"]) {
+			appearance: none;
+		}
+
+		&:is(select) {
+			appearance: none;
+		}
+
 		&:is(textarea) {
 			padding-block: 20rem;
 			height: auto;

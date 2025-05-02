@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import MatchMedia from './MatchMedia';
 const ROOT_SELECTOR = '[data-js-custom-select]';
 
 class CustomSelect {
@@ -7,18 +8,33 @@ class CustomSelect {
 	};
 
 	constructor(element) {
+		this.root = element;
 		this.optionsAttr = element.dataset.jsCustomSelect
 			? JSON.parse(element.dataset.jsCustomSelect)
 			: {};
 
 		this.selectOptions = {
 			hasBorder: true,
+			type: 'select',
 			...this.optionsAttr,
 		};
 
-		this.select = $(element).selectmenu({
+		this.toogleSelectDeviceType();
+
+		this.bindEvents();
+	}
+
+	init() {
+		$(this.root).selectmenu({
 			width: false,
-			position: { at: 'left-20 bottom+15rem' },
+			position:
+				this.selectOptions.type === 'time'
+					? {
+							my: 'right top+10rem',
+							at: 'right bottom',
+							// collision: 'none',
+					  }
+					: {},
 			classes: {
 				'ui-selectmenu-button': classNames('loveforever-select', {
 					'loveforever-select--no-border': !this.selectOptions.hasBorder,
@@ -26,10 +42,25 @@ class CustomSelect {
 				'ui-selectmenu-button-open': 'is-active',
 				'ui-selectmenu-text': 'loveforever-select__value',
 				'ui-selectmenu-icon': 'loveforever-select__icon',
-				'ui-selectmenu-menu': 'loveforever-select__menu',
+				'ui-selectmenu-menu': classNames('loveforever-select__menu', {
+					'loveforever-select__menu--time': this.selectOptions.type === 'time',
+				}),
 				'ui-selectmenu-open': 'is-active',
 				'ui-selectmenu-disabled': 'is-disabled',
 			},
+			// open: function (event, ui) {
+			// 	if (window.innerWidth > 991) {
+			// 		return;
+			// 	}
+
+			// 	// const menuId = $(this).selectmenu('menuWidget').attr('id');
+			// 	// const $menu = $('#' + menuId);
+			// 	// const $dropdown = $menu.parent();
+			// 	// const width = parseFloat($menu.css('width'));
+			// 	// const parentLeft = parseFloat($dropdown.css('left'));
+			// 	// $('#' + menuId).css('width', `${width + 10}rem`);
+			// 	// $dropdown.css('left', `${parentLeft - 40}rem`);
+			// },
 			change: (event, ui) => {
 				console.log({ event, ui });
 				event.target.dispatchEvent(
@@ -41,8 +72,24 @@ class CustomSelect {
 		});
 	}
 
+	toogleSelectDeviceType(isMobile = MatchMedia.mobile.matches) {
+		console.log({ isMobile });
+
+		!isMobile ? this.init() : this.destroy();
+	}
+
+	bindEvents() {
+		MatchMedia.mobile.addEventListener('change', (event) => {
+			this.toogleSelectDeviceType(event.matches);
+		});
+	}
+
 	destroy() {
-		this.select.selectmenu('destroy');
+		if (!$(this.root).selectmenu('instance')) {
+			return;
+		}
+
+		$(this.root).selectmenu('destroy');
 	}
 }
 

@@ -212,8 +212,16 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														}
 													);
 													?>
-													<div class="single-dress-form__field-wrapper ui-front">
-														<select name="time" id="singleDressFormTimeField" data-js-custom-select>
+													<div class="single-dress-form__field-wrapper field ui-front">
+														<?php
+														$select_config = array(
+															'type' => 'time',
+														);
+														?>
+														<select 
+															class="field__control"
+															name="time" 
+															id="singleDressFormTimeField" data-js-custom-select="<?php echo esc_attr( wp_json_encode( $select_config ) ); ?>">
 															<?php foreach ( $available_slots as $time => $slot_data ) : ?>
 																<option 
 																	value="<?php echo esc_attr( $time ); ?>" 
