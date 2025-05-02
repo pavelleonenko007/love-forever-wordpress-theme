@@ -166,7 +166,7 @@ class Fitting_Slots {
 		$args = array(
 			'post_type'      => 'fitting',
 			'posts_per_page' => -1,
-			'post_status'    => 'publish',
+			// 'post_status'    => 'publish',
 			'meta_query'     => array(
 				array(
 					'key'     => 'fitting_step',
@@ -186,7 +186,7 @@ class Fitting_Slots {
 			$args['post__not_in'] = array( $exclude_fitting_id );
 		}
 
-		$query    = new WP_Query( $args );
+		$query = new WP_Query( $args );
 		$bookings = array();
 
 		if ( $query->have_posts() ) {

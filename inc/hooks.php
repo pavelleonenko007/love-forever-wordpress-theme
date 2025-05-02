@@ -123,7 +123,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	$name                             = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 	$phone                            = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
 	$fitting_type                     = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
-	$fitting_step                     = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : '';
+	$fitting_step                     = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : 'fitting';
 	$date                             = sanitize_text_field( wp_unslash( $_POST['date'] ) );
 	$time                             = sanitize_text_field( wp_unslash( $_POST['time'] ) );
 	$comment                          = ! empty( $_POST['comment'] ) ? sanitize_textarea_field( wp_unslash( $_POST['comment'] ) ) : '';

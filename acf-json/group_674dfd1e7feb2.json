@@ -108,11 +108,11 @@
                 "id": ""
             },
             "choices": {
-                "delivery": "Выдача",
                 "fitting": "Подгонка",
-                "re-fitting": "Повтор"
+                "re-fitting": "Повтор",
+                "delivery": "Выдача"
             },
-            "default_value": "",
+            "default_value": "fitting",
             "return_format": "value",
             "allow_null": 0,
             "other_choice": 0,
@@ -244,5 +244,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1739543873
+    "modified": 1746185619
 }

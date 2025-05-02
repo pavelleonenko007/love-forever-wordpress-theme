@@ -212,7 +212,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														}
 													);
 													?>
-													<div class="single-dress-form__field-wrapper">
+													<div class="single-dress-form__field-wrapper ui-front">
 														<select name="time" id="singleDressFormTimeField" data-js-custom-select>
 															<?php foreach ( $available_slots as $time => $slot_data ) : ?>
 																<option 
@@ -448,7 +448,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														<input 
 															type="hidden" 
 															name="client_favorite_dresses" 
-															value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_COOKIE['favorites'] ) ) ); ?>"
+															value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_COOKIE['favorites'] ?? '' ) ) ); ?>"
 															form="singleDressForm"
 														>
 													<?php // endif; ?>

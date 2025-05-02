@@ -17,6 +17,8 @@ class CustomSelect {
 		};
 
 		this.select = $(element).selectmenu({
+			width: false,
+			position: { at: 'left-20 bottom+15rem' },
 			classes: {
 				'ui-selectmenu-button': classNames('loveforever-select', {
 					'loveforever-select--no-border': !this.selectOptions.hasBorder,
