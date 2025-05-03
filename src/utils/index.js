@@ -107,8 +107,8 @@ export const copyTextToClipboard = (text) => {
 export const wait = (ms) => new Promise((res) => setTimeout(() => res(), ms));
 
 export function formatDateToRussian(dateString) {
-	console.log({dateString});
-	
+	console.log({ dateString });
+
 	const date = new Date(
 		dateString.replace(
 			/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/,
@@ -134,6 +134,15 @@ export function formatDateToRussian(dateString) {
 	return `${formattedDate}, ${weekday}, в ${formattedTime}`;
 }
 
+export function formatPrice(value, currency = 'RUB', locale = 'ru-RU') {
+	return new Intl.NumberFormat(locale, {
+		style: 'currency',
+		currency,
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0,
+	}).format(value);
+}
+
 /**
  *
  * @param {Promise<any>} promise
@@ -146,7 +155,6 @@ export const promiseWrapper = async (promise) => {
 	};
 };
 
-
 export const pxToRem = (pixels) => {
-  return pixels / 16
-}
+	return pixels / 16;
+};

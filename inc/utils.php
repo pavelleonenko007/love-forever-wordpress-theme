@@ -298,8 +298,8 @@ function loveforever_download_and_add_image_to_library( $image_url, $timeout = 3
  * @param string $thousands_separator Символ для разделения тысяч.
  * @return string Отформатированная цена.
  */
-function loveforever_format_price( $amount, $decimals = 2, $decimal_separator = '.', $thousands_separator = ' ' ) {
-	return number_format( $amount, $decimals, $decimal_separator, $thousands_separator );
+function loveforever_format_price( $amount, $decimals = 0, $decimal_separator = '.', $thousands_separator = ' ' ) {
+	return number_format( $amount, $decimals, $decimal_separator, $thousands_separator ) . ' ₽';
 }
 
 function loveforever_get_client_ip_address() {

@@ -1,0 +1,19 @@
+.lf-range-slider {
+	width: 98rem;
+	height: 6rem;
+	border-radius: 1000px;
+	background-color: rgba(0, 0, 0, 0.1);
+
+	&__range {
+		background-color: var(--pink);
+	}
+
+	&__dot {
+		width: 14rem;
+		height: 14rem;
+		border-radius: 100%;
+		position: absolute;
+		outline: 2rem solid var(--white);
+		background-color: var(--pink);
+	}
+}

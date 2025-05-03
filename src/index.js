@@ -146,6 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	Barba.Dispatcher.on('initStateChange', (currentStatus) => {
 		console.log('initStateChange');
 
+		closeMegaMenu();
+
 		SearchFormCollection.destroyAll();
 		FavoritesButtonWithCounterCollection.destroyAll();
 		CopyToClipboardButtonCollection.destroyAll();
@@ -198,6 +200,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	);
 });
+
+function closeMegaMenu() {
+	document.querySelectorAll('.lf-hover-menu').forEach((itemWithMegaMenu) => {
+		itemWithMegaMenu.classList.remove('active');
+	});
+}
 
 function initPage() {
 	console.log('init page');

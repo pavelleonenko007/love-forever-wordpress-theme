@@ -26,10 +26,6 @@
 	z-index: 1;
 }
 
-.ui-slider .ui-slider-handle {
-	cursor: grab;
-}
-
 .label {
 	cursor: pointer;
 }
@@ -199,26 +195,6 @@
 
 #slider-range {
 	display: none;
-}
-.ui-slider-horizontal {
-	height: 6px;
-	width: 98rem;
-}
-
-.ui-slider .ui-slider-handle {
-	position: absolute;
-	z-index: 2;
-	width: 1.2em;
-	height: 1.2em;
-	cursor: default;
-	-ms-touch-action: none;
-	touch-action: none;
-	width: 14rem;
-	height: 14rem;
-	border-radius: 100% !important;
-	border: 2px solid white !important;
-	background: #f22ea9 !important;
-	outline: none !important;
 }
 
 .custom-select {

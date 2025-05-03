@@ -132,7 +132,7 @@ if ( empty( $thumbnail ) ) {
 									if ( ! empty( $price_range ) ) :
 										?>
 										<div class="code-embed-7 w-embed" data-js-range-slider>
-											<div data-js-range-slider-value-min><?php echo esc_html( $min_price ); ?></div>
+											<div data-js-range-slider-value-min><?php echo esc_html( loveforever_format_price( $min_price ) ); ?></div>
 											<div id="slider" data-js-range-slider-custom-component></div>
 											<div id="slider-range">
 												<input 
@@ -154,7 +154,7 @@ if ( empty( $thumbnail ) ) {
 													data-js-range-slider-control-max
 												>
 											</div>
-											<div data-js-range-slider-value-max><?php echo esc_html( $max_price ); ?></div>
+											<div data-js-range-slider-value-max><?php echo esc_html( loveforever_format_price( $max_price ) ); ?></div>
 										</div>
 									<?php endif; ?>
 								</div>
@@ -278,7 +278,7 @@ if ( empty( $thumbnail ) ) {
 									<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
 										<?php
 										$position_in_block = ( $card_index - 1 ) % 6 + 1;
-										$size = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
+										$size              = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
 
 										get_template_part( 'components/dress-card', null, array( 'size' => $size ) );
 										?>

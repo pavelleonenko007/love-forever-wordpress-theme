@@ -1,3 +1,5 @@
+import { formatPrice } from './utils';
+
 const ROOT_SELECTOR = '[data-js-range-slider]';
 
 class RangeSlider {
@@ -32,6 +34,11 @@ class RangeSlider {
 		this.customRangeSliderComponent = $(
 			this.selectors.customRangeSliderComponent
 		).slider({
+			classes: {
+				'ui-slider': 'lf-range-slider',
+				'ui-slider-range': 'lf-range-slider__range',
+				'ui-slider-handle': 'lf-range-slider__dot',
+			},
 			range: true,
 			min: this.min,
 			max: this.max,
@@ -56,8 +63,8 @@ class RangeSlider {
 						})
 					);
 				}
-				this.minValueElement.textContent = this.minValue;
-				this.maxValueElement.textContent = this.maxValue;
+				this.minValueElement.textContent = formatPrice(this.minValue);
+				this.maxValueElement.textContent = formatPrice(this.maxValue);
 			},
 		});
 	}
