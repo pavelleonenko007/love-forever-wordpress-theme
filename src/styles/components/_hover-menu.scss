@@ -1,0 +1,5 @@
+.lf-hover-menu {
+	&.active {
+		grid-template-columns: repeat(5, auto);
+	}
+}

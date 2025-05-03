@@ -22,21 +22,21 @@ $columns        = $args['columns'];
 		<?php echo esc_html( str_replace( ' платья', '', $dress_category->name ) ); ?>
 	</a>
 	<?php if ( ! empty( $columns ) ) : ?>
-		<div class="hovered-menue">
+		<div class="hovered-menue lf-hover-menu">
 			<?php
 			foreach ( $columns as $column ) :
 				if ( ! empty( $column['links'] ) ) :
 					?>
-					<div id="w-node-_144563be-6001-1af8-6446-1240953da88e-be61d3ef" class="m-h-vert">
-						<div class="p-16-16"><?php echo esc_html( $column['column_name'] ); ?></div>
-						<div class="m-h-vert<?php echo 10 < count( $column['links'] ) ? ' grider' : ''; ?>">
+					<div id="w-node-_144563be-6001-1af8-6446-1240953da88e-be61d3ef" class="m-h-vert lf-hover-menu__column">
+						<div class="p-16-16 lf-hover-menu__column-title"><?php echo esc_html( $column['column_name'] ); ?></div>
+						<div class="m-h-vert lf-hover-menu__column-list<?php echo 10 < count( $column['links'] ) ? ' grider' : ''; ?>">
 							<?php
 							foreach ( $column['links'] as $link_item ) :
 								$link = $link_item['link'];
 								?>
 								<a 
 									href="<?php echo esc_url( $link['url'] ); ?>" 
-									class="a-12-12 w-inline-block"
+									class="a-12-12 lf-hover-menu__column-item w-inline-block"
 									target="<?php echo esc_attr( $link['target'] ) ?? '_self'; ?>"
 								>
 									<div><?php echo esc_html( $link['title'] ); ?></div>
