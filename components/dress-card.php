@@ -95,9 +95,9 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 			?>
 			<div class="horiz indirim-horiz">
 				<?php $first_price = loveforever_format_price( ! empty( $price_with_discount ) ? $price_with_discount : $price, 0 ); ?>
-				<div class="p-12-12 italic letter-5"><span><?php echo esc_html( $first_price ); ?></span> ₽</div>
+				<div class="p-12-12 italic letter-5"><span><?php echo esc_html( $first_price ); ?></span></div>
 				<?php if ( ! empty( $price_with_discount ) ) : ?>
-					<div class="p-12-12 italic letter-5 oldprice"><span><?php echo esc_html( loveforever_format_price( $price ) ); ?></span> ₽</div>
+					<div class="p-12-12 italic letter-5 oldprice"><span><?php echo esc_html( loveforever_format_price( $price ) ); ?></span></div>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
