@@ -1,0 +1,45 @@
+@use '../media' as *;
+
+.lf-like-button {
+	$root: &;
+
+	padding: 0;
+	width: 30rem;
+	height: 30rem;
+	position: absolute;
+	right: -5rem;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--pink);
+
+	@include hover {
+		#{$root}__icon {
+			fill: var(--white);
+		}
+	}
+
+	&::before {
+		content: '';
+		width: 5rem;
+		height: 5rem;
+		position: absolute;
+		top: -5rem;
+		right: 0;
+		background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+			#f22ea9;
+		clip-path: polygon(0 0, 0% 100%, 100% 100%);
+	}
+
+	&.is-active {
+		#{$root}__icon {
+			fill: var(--white);
+		}
+	}
+
+	&__icon {
+		width: 24rem;
+		height: 24rem;
+	}
+}
