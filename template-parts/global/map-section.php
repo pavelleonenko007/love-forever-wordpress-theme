@@ -59,8 +59,6 @@ if ( ! empty( $map_section['map'] ) ) :
 		async function initMap() {
 	await ymaps3.ready;
 	const customization = await (await fetch(`<?php echo get_template_directory_uri() . '/assets/yandex-map.json'; ?>`)).json();
-
-	console.log(customization);
 	
 
 	const {YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapFeature, YMapComplexEntity, YMapMarker} = ymaps3;
@@ -97,8 +95,6 @@ if ( ! empty( $map_section['map'] ) ) :
 		}
 		// Method for creating a marker element
 		_createMarker() {
-			console.log(this._props);
-			
 			const element = document.createElement('div');
 			element.className = 'marker';
 
@@ -125,9 +121,6 @@ if ( ! empty( $map_section['map'] ) ) :
 	imgElement.style.pointerEvents = 'none';
 				element.append(imgElement);
 			}
-
-
-			console.log({element});
 			
 			element.onclick = () => {
 				this._openPopup();
@@ -179,8 +172,6 @@ if ( ! empty( $map_section['map'] ) ) :
 
 				document.getElementById(element.dataset.popupTrigger)?.click();
 			};
-
-			console.log(this._props);
 			
 			const headerElement = document.createElement('header');
 			headerElement.className = 'lf-popup__header';

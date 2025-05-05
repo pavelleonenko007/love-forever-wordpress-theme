@@ -186,6 +186,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			initPage();
 
+			executeInlineScripts(document.querySelector('.barba-container'));
+
 			switch (currentStatus.namespace) {
 				case 'single-dress':
 					initSingleDressPage();
@@ -234,8 +236,6 @@ function closeMegaMenu() {
 
 function initPage() {
 	console.log('init page');
-
-	executeInlineScripts(document.querySelector('.barba-container'));
 
 	SearchFormCollection.init();
 	PlayIfVisibleVideoCollection.init();
