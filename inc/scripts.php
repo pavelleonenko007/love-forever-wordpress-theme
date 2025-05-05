@@ -41,6 +41,7 @@ function loveforever_add_site_scripts() {
 	wp_enqueue_script( 'jquery-ui-slider' );
 	wp_enqueue_script( 'jquery-ui-selectmenu' );
 	wp_enqueue_script( 'jquery-ui-datepicker' );
+	wp_enqueue_script( 'maps-yandex', 'https://api-maps.yandex.ru/v3/?apikey=4edbd054-8d5b-4022-81d1-3808d3f13102&lang=ru_RU', array( 'jquery' ), null );
 	wp_enqueue_script( 'main', TEMPLATE_PATH . '/js/main.js', array( 'jquery' ), time(), true );
 	wp_enqueue_script( 'front', TEMPLATE_PATH . '/js/front.js', array( 'main' ), time(), true );
 	// wp_enqueue_script( 'barba', '//thevogne.ru/customfiles/barba.js', array( 'main' ), time(), true );

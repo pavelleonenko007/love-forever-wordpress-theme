@@ -1,0 +1,42 @@
+@use '../media' as *;
+
+.lf-popup {
+	width: 260rem;
+	padding: 10rem;
+	border-radius: 10rem;
+	display: flex;
+	flex-direction: column;
+	row-gap: 20rem;
+	font-size: 16rem;
+	background-color: var(--white);
+	translate: 10% -110%;
+
+	@include mobile {
+		translate: -50% -140%;
+		font-size: 14rem;
+	}
+
+	&__header {
+		font-size: 18rem;
+		line-height: 1;
+		font-weight: 500;
+		
+		@include mobile {
+			font-size: 16rem;
+		}
+	}
+
+	&__body {
+		display: grid;
+		row-gap: 10rem;
+	}
+
+	&__phone {
+		font-weight: 500;
+		color: var(--pink);
+	}
+
+	&__hours {
+		font-weight: 500;
+	}
+}
