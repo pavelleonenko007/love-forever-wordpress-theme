@@ -42,7 +42,7 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 										<?php
 										echo wp_get_attachment_image(
 											$image['image']['ID'],
-											'full',
+											'fullhd',
 											false,
 											array(
 												'loading' => 'lazy',
@@ -65,7 +65,7 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 					<?php elseif ( has_post_thumbnail() ) : ?>
 						<?php
 						the_post_thumbnail(
-							'full',
+							'fullhd',
 							array(
 								'loading' => 'lazy',
 								'class'   => 'img-cover',

@@ -12,4 +12,6 @@ function loveforever_setup_theme() {
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'editor-styles' );
+
+	add_image_size( 'fullhd', 1920, 1080, false );
 }
