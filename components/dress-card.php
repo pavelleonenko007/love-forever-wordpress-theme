@@ -40,13 +40,16 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 								<?php foreach ( $images as $index => $image ) : ?>
 									<li class="card-slider__list-item<?php echo ( 0 === $index ) ? ' is-active' : ''; ?>" data-js-card-slider-slide-item="<?php echo esc_attr( $index ); ?>">
 										<?php
-										/*
-										wp_get_attachment_image( $image['image']['ID'], 'large', false, array(
-											'loading' => 'lazy',
-											'class' => 'img-cover'
-										) ); */
+										echo wp_get_attachment_image(
+											$image['image']['ID'],
+											'full',
+											false,
+											array(
+												'loading' => 'lazy',
+												'class'   => 'img-cover',
+											)
+										);
 										?>
-										<img src="<?php echo esc_url( wp_get_attachment_image_url( $image['image']['ID'], $size ) ); ?>" loading="lazy" alt class="img-cover">
 									</li>
 								<?php endforeach; ?>
 							</ul>
@@ -61,13 +64,14 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 						</div>
 					<?php elseif ( has_post_thumbnail() ) : ?>
 						<?php
-						/*
-						the_post_thumbnail('large', array(
-							'loading' => 'lazy',
-							'class' => 'img-cover'
-						)); */
+						the_post_thumbnail(
+							'full',
+							array(
+								'loading' => 'lazy',
+								'class'   => 'img-cover',
+							)
+						);
 						?>
-						<img src="<?php echo esc_url( get_the_post_thumbnail_url() ); ?>" loading="lazy" alt class="img-cover">
 					<?php endif; ?>
 				</div>
 			</div>
