@@ -195,7 +195,15 @@ $metro_stations   = get_field( 'metro_stations', 'option' );
 						</div>
 					</section>
 				<?php endif; ?>
-				<?php get_template_part( 'components/map' ); ?>
+				<?php
+				get_template_part(
+					'template-parts/global/map-section',
+					null,
+					array(
+						'is-contact-page' => true,
+					)
+				);
+				?>
 				<?php
 				$faq = get_field( 'faq' );
 				if ( ! empty( $faq ) ) :

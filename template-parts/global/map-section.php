@@ -7,7 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$map_section = get_field( 'map-section', 'option' );
+$is_contact_page = ! empty( $args['is-contact-page'] ) ? $args['is-contact-page'] : false;
+$map_section     = get_field( 'map-section', 'option' );
 
 if ( ! empty( $map_section['map'] ) ) :
 	$section_map = $map_section['map'];
@@ -46,7 +47,7 @@ if ( ! empty( $map_section['map'] ) ) :
 						</div>
 					<?php endif; ?>
 				</div>
-				<?php if ( ! empty( $button ) ) : ?>
+				<?php if ( ! $is_contact_page && ! empty( $button ) ) : ?>
 					<a href="<?php echo esc_url( $button['url'] ); ?>" class="btn pink-btn w-inline-block" target="<?php echo esc_attr( $button['target'] ); ?>">
 						<div><?php echo esc_html( $button['title'] ); ?></div>
 					</a>
