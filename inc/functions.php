@@ -600,10 +600,14 @@ function loveforever_get_colors_for_dress_category( $category_id = null ) {
 }
 
 function loveforever_get_product_badge_text( $product_id ) {
-	$badge_text = get_field( 'badge', $product_id );
+	$badge_values     = array(
+		'new'     => 'Новинка',
+		'popular' => 'Популярное',
+	);
+	$badge_text_value = get_field( 'badge', $product_id );
 
-	if ( $badge_text ) {
-		return $badge_text;
+	if ( $badge_text_value ) {
+		return $badge_values[ $badge_text_value ];
 	}
 
 	$has_discount = get_field( 'has_discount', $product_id );
