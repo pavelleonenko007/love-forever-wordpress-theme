@@ -201,6 +201,31 @@ document.addEventListener('DOMContentLoaded', function () {
 	);
 });
 
+function executeInlineScripts(container) {
+  const scripts = container.querySelectorAll('script');
+
+  scripts.forEach((oldScript) => {
+    const newScript = document.createElement('script');
+
+    // Копируем атрибуты (например, type, data-* и т.д.)
+    [...oldScript.attributes].forEach(attr =>
+      newScript.setAttribute(attr.name, attr.value)
+    );
+
+    // Если у скрипта src — создаем ссылку на внешний файл
+    if (oldScript.src) {
+      newScript.src = oldScript.src;
+      newScript.async = oldScript.async;
+    } else {
+      // Для инлайновых скриптов — копируем содержимое
+      newScript.textContent = oldScript.textContent;
+    }
+
+    // Вставляем и запускаем
+    oldScript.parentNode.replaceChild(newScript, oldScript);
+  });
+}
+
 function closeMegaMenu() {
 	document.querySelectorAll('.lf-hover-menu').forEach((itemWithMegaMenu) => {
 		itemWithMegaMenu.classList.remove('active');
@@ -209,6 +234,8 @@ function closeMegaMenu() {
 
 function initPage() {
 	console.log('init page');
+
+	executeInlineScripts(document.querySelector('.barba-container'));
 
 	SearchFormCollection.init();
 	PlayIfVisibleVideoCollection.init();

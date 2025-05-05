@@ -22,7 +22,7 @@ export default class PlayIfVisibleVideoCollection {
   }
 
   static destroyAll() {
-    PlayIfVisibleVideoCollection.intersectionObserver.disconnect();
+    PlayIfVisibleVideoCollection.intersectionObserver?.disconnect();
     PlayIfVisibleVideoCollection.intersectionObserver = null;
   }
 }
