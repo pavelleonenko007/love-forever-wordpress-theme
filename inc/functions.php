@@ -598,3 +598,19 @@ function loveforever_get_styles_for_dress_category( $category_id = null ) {
 function loveforever_get_colors_for_dress_category( $category_id = null ) {
 	return loveforever_get_filter_terms_for_dress_category( 'color', $category_id );
 }
+
+function loveforever_get_product_badge_text( $product_id ) {
+	$badge_text = get_field( 'badge', $product_id );
+
+	if ( $badge_text ) {
+		return $badge_text;
+	}
+
+	$has_discount = get_field( 'has_discount', $product_id );
+
+	if ( $has_discount ) {
+		return 'Скидка';
+	}
+
+	return '';
+}

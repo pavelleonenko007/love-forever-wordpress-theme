@@ -437,11 +437,6 @@
 		gap: 0rem;
 	}
 
-	.splide.no-pc,
-	.splide.y-pc {
-		overflow: hidden;
-	}
-
 	.otzivi-grid {
 		width: 100%;
 	}

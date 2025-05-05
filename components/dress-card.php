@@ -14,6 +14,7 @@ $price_with_discount        = get_field( 'price_with_discount' );
 $images                     = loveforever_get_product_images( get_the_ID() );
 $video                      = get_field( 'video' );
 $show_video_in_product_card = get_field( 'show_video_in_product_card' );
+$badge_text                 = loveforever_get_product_badge_text( get_the_ID() );
 
 $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 ?>
@@ -77,9 +78,9 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 				<use href="#heartIcon"></use>
 			</svg>
 		</button>
-		<?php if ( $has_discount ) : ?>
-			<div class="badge">
-				<div class="bagde__text">Скидка</div>
+		<?php if ( $badge_text ) : ?>
+			<div class="badge lf-badge">
+				<div class="bagde__text lf-badge__text"><?php echo esc_html( $badge_text ); ?></div>
 			</div>
 		<?php endif; ?>
 	</div>

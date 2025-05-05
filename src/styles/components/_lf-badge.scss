@@ -1,0 +1,28 @@
+@use '../media' as *;
+
+.lf-badge {
+	@include mobile {
+		top: 0;
+		left: 0;
+	}
+	
+	&::after {
+		content: '';
+		width: 5rem;
+		height: 5rem;
+		position: absolute;
+		bottom: -5rem;
+		left: 0;
+		background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+			#f22ea9;
+		clip-path: polygon(100% 0, 0 0, 100% 100%);
+
+		@include mobile {
+			display: none;
+		}
+	}
+
+	&__text {
+		font-weight: 500;
+	}
+}

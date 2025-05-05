@@ -14,6 +14,11 @@
 	align-items: center;
 	background-color: var(--pink);
 
+	@include mobile {
+		right: 0;
+		bottom: 0;
+	}
+
 	@include hover {
 		#{$root}__icon {
 			fill: var(--white);
@@ -30,6 +35,10 @@
 		background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
 			#f22ea9;
 		clip-path: polygon(0 0, 0% 100%, 100% 100%);
+
+		@include mobile {
+			display: none;
+		}
 	}
 
 	&.is-active {
