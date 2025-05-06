@@ -204,13 +204,13 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														/>
 													</div>
 													<?php
-													$slots           = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
-													$available_slots = array_filter(
-														$slots,
-														function ( $slot ) {
-															return $slot['available'] > 0;
-														}
-													);
+													$available_slots = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
+													// $available_slots = array_filter(
+													// $slots,
+													// function ( $slot ) {
+													// return $slot['available'] > 0;
+													// }
+													// );
 													?>
 													<div class="single-dress-form__field-wrapper field ui-front">
 														<?php

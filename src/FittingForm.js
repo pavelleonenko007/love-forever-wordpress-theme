@@ -798,6 +798,7 @@ class SingleFittingForm extends BaseFittingForm {
 			this.state.dialogMessage = body.data.message;
 			this.state.dateIncrementRatio = 1;
 			this.state.isSubmitted = true;
+			this.loadTimeSlots();
 		} catch (error) {
 			console.error(error);
 			this.state.error = error.message;

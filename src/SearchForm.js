@@ -29,12 +29,6 @@ class SearchForm {
 	}
 
 	async queryProducts() {
-		if (this.root.classList.contains(this.stateSelectors.isLoading)) {
-			return { html: '' };
-		}
-
-		this.root.classList.add(this.stateSelectors.isLoading);
-
 		const formData = new FormData(this.root);
 
 		if (!formData.get('s')) {
@@ -57,13 +51,11 @@ class SearchForm {
 				throw new Error(body.data.message);
 			}
 
-			console.log(body);
+			console.log({ body });
 
 			return body.data;
 		} catch (error) {
 			throw error;
-		} finally {
-			this.root.classList.remove(this.stateSelectors.isLoading);
 		}
 	}
 
@@ -78,9 +70,15 @@ class SearchForm {
 	 * @param {InputEvent} event
 	 */
 	onInput = async (event) => {
+		if (this.root.classList.contains(this.stateSelectors.isLoading)) {
+			return;
+		}
+
+		this.root.classList.add(this.stateSelectors.isLoading);
+
 		const { data, error } = await promiseWrapper(this.queryProducts());
 
-		console.log({ data, error, input: this.searchInput });
+		this.root.classList.remove(this.stateSelectors.isLoading);
 
 		if (error) {
 			console.error(error);
