@@ -87,6 +87,11 @@
 			padding-block: 5rem;
 			cursor: pointer;
 
+			&.ui-state-disabled {
+				opacity: 0.3;
+				cursor: not-allowed;
+			}
+
 			.ui-menu-item-wrapper {
 				display: flex;
 				justify-content: center;

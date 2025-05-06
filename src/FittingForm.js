@@ -712,16 +712,17 @@ class SingleFittingForm extends BaseFittingForm {
 			this.selectors.dialogFormWrapper
 		);
 		this.successCloseDialogButton = this.dialogFormWrapper.nextElementSibling;
-		console.log({ state: { ...this.state } });
 
 		this.state = this._getProxyState({
 			...this.state,
 			target_dress: this.form.elements.target_dress.value,
-			client_favorite_dresses: this.form.elements.client_favorite_dresses?.value,
+			client_favorite_dresses:
+				this.form.elements.client_favorite_dresses?.value,
 			submit_fitting_form_nonce:
 				this.form.elements.submit_fitting_form_nonce.value,
 			dialogMessage: 'Запись на примерку',
 			isUpdatingSlots: false,
+			isSubmitted: false,
 		});
 
 		this.prevState = { ...this.state };
@@ -739,6 +740,7 @@ class SingleFittingForm extends BaseFittingForm {
 		this.state.dialogMessage = 'Запись на примерку';
 		this.state.step = 0;
 		this.state.dateIncrementRatio = 0;
+		this.state.isSubmitted = false;
 		this.form.dispatchEvent(new Event('change'));
 	}
 
@@ -747,8 +749,6 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {ChangeEvent} event
 	 */
 	onChange = (event) => {
-		console.log({ event });
-
 		this.state.error = null;
 
 		const formData = Object.fromEntries(new FormData(this.form));
@@ -797,6 +797,7 @@ class SingleFittingForm extends BaseFittingForm {
 
 			this.state.dialogMessage = body.data.message;
 			this.state.dateIncrementRatio = 1;
+			this.state.isSubmitted = true;
 		} catch (error) {
 			console.error(error);
 			this.state.error = error.message;
@@ -810,7 +811,9 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {CustomEvent} event
 	 */
 	onCloseDialog = (event) => {
-		if (event.detail.dialogId === this.dialog.id) {
+		console.log('is submitted: ', this.state.isSubmitted);
+
+		if (event.detail.dialogId === this.dialog.id && this.state.isSubmitted) {
 			this.reset();
 		}
 	};
