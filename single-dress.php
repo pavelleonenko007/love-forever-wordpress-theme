@@ -161,7 +161,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 										<?php if ( ! empty( $price_with_discount ) ) : ?>
 											<div class="p-24-24 indirim-p-24-24"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?></div>
 											<?php
-											$discount = round( ( $price / $price_with_discount * 100 ) - 100 );
+											$discount = loveforever_get_product_discount( get_the_ID() );
 											?>
 											<div class="indirim-single">
 												<div class="p-12-12 uper m-12-12">-<?php echo esc_html( $discount ); ?>%</div>

@@ -618,3 +618,13 @@ function loveforever_get_product_badge_text( $product_id ) {
 
 	return '';
 }
+
+function loveforever_get_product_discount( $product_id ) {
+	$has_discount = get_field( 'has_discount', $product_id );
+
+	if ( ! $has_discount ) {
+		return 0;
+	}
+
+	return absint( get_field( 'discount_percent', $product_id ) );
+}
