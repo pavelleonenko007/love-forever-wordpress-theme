@@ -27,14 +27,7 @@ class CustomSelect {
 	init() {
 		$(this.root).selectmenu({
 			width: false,
-			position:
-				this.selectOptions.type === 'time'
-					? {
-							my: 'right top+10rem',
-							at: 'right bottom',
-							// collision: 'none',
-					  }
-					: {},
+			position: this.getDropdownPosition(),
 			classes: {
 				'ui-selectmenu-button': classNames('loveforever-select', {
 					'loveforever-select--no-border': !this.selectOptions.hasBorder,
@@ -42,25 +35,10 @@ class CustomSelect {
 				'ui-selectmenu-button-open': 'is-active',
 				'ui-selectmenu-text': 'loveforever-select__value',
 				'ui-selectmenu-icon': 'loveforever-select__icon',
-				'ui-selectmenu-menu': classNames('loveforever-select__menu', {
-					'loveforever-select__menu--time': this.selectOptions.type === 'time',
-				}),
+				'ui-selectmenu-menu': `loveforever-select__menu loveforever-select__menu--${this.selectOptions.type}`,
 				'ui-selectmenu-open': 'is-active',
 				'ui-selectmenu-disabled': 'is-disabled',
 			},
-			// open: function (event, ui) {
-			// 	if (window.innerWidth > 991) {
-			// 		return;
-			// 	}
-
-			// 	// const menuId = $(this).selectmenu('menuWidget').attr('id');
-			// 	// const $menu = $('#' + menuId);
-			// 	// const $dropdown = $menu.parent();
-			// 	// const width = parseFloat($menu.css('width'));
-			// 	// const parentLeft = parseFloat($dropdown.css('left'));
-			// 	// $('#' + menuId).css('width', `${width + 10}rem`);
-			// 	// $dropdown.css('left', `${parentLeft - 40}rem`);
-			// },
 			change: (event, ui) => {
 				console.log({ event, ui });
 				event.target.dispatchEvent(
@@ -70,6 +48,21 @@ class CustomSelect {
 				);
 			},
 		});
+	}
+
+	getDropdownPosition(type = 'select') {
+		switch (type) {
+			case 'time':
+				return {
+					my: 'right top+10rem',
+					at: 'right bottom',
+				};
+			default:
+				return {
+					my: 'left top',
+					at: 'left-5rem bottom',
+				};
+		}
 	}
 
 	toogleSelectDeviceType(isMobile = MatchMedia.mobile.matches) {

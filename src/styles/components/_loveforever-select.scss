@@ -46,6 +46,7 @@
 	}
 
 	&__menu {
+		display: none;
 		border: 1rem solid rgba(0, 0, 0, 0.1);
 		position: absolute;
 		z-index: 1000;
@@ -77,32 +78,54 @@
 					gap: 4rem 6rem;
 				}
 			}
+
+			& .ui-menu-item {
+				padding-block: 5rem;
+				cursor: pointer;
+
+				&.ui-state-disabled {
+					opacity: 0.3;
+					cursor: not-allowed;
+				}
+
+				.ui-menu-item-wrapper {
+					display: flex;
+					justify-content: center;
+					padding: 5rem;
+					border-radius: 100rem;
+
+					&.ui-state-active {
+						background-color: var(--pink);
+						color: var(--white);
+					}
+				}
+			}
+		}
+
+		&--select {
+			font-size: 12rem;
+			line-height: 1;
+			font-weight: 500;
+
+			.ui-menu.ui-widget {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+			}
+
+			& .ui-menu-item {
+				padding: 8rem 50rem 8rem 10rem;
+				text-transform: uppercase;
+				cursor: pointer;
+
+				@include hover {
+					background-color: rgba(0, 0, 0, 0.1);
+				}
+			}
 		}
 
 		&.is-active {
 			display: inline-block;
-		}
-
-		& .ui-menu-item {
-			padding-block: 5rem;
-			cursor: pointer;
-
-			&.ui-state-disabled {
-				opacity: 0.3;
-				cursor: not-allowed;
-			}
-
-			.ui-menu-item-wrapper {
-				display: flex;
-				justify-content: center;
-				padding: 5rem;
-				border-radius: 100rem;
-
-				&.ui-state-active {
-					background-color: var(--pink);
-					color: var(--white);
-				}
-			}
 		}
 	}
 }
