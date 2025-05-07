@@ -383,7 +383,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
 													</a>
 													<?php
-													$dropdowns = $only_catalog_item['columns'];
+													$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
 													$dropdowns = array_filter(
 														$dropdowns,
 														function ( $dropdown ) {

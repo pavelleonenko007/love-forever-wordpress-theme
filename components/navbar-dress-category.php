@@ -12,14 +12,18 @@ if ( empty( $args['category'] ) ) {
 }
 
 $dress_category = get_term( $args['category'] );
+$green_badge    = ! empty( $args['green_badge'] ) ? $args['green_badge'] : '';
 $columns        = $args['columns'];
 ?>
 <div class="menu-link-keeper">
 	<a 
 		href="<?php echo esc_url( get_term_link( $dress_category ) ); ?>" 
-		class="n-menu w-nav-link"
+		class="n-menu lf-nav-link w-nav-link"
 	>
-		<?php echo esc_html( str_replace( ' платья', '', $dress_category->name ) ); ?>
+		<span><?php echo esc_html( str_replace( ' платья', '', $dress_category->name ) ); ?></span>
+		<?php if ( ! empty( $green_badge ) ) : ?>
+			<span class="lf-nav-link__badge"><?php echo esc_html( $green_badge ); ?></span>
+		<?php endif; ?>
 	</a>
 	<?php if ( ! empty( $columns ) ) : ?>
 		<div class="hovered-menue lf-hover-menu">
