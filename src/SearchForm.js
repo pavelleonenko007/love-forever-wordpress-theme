@@ -1,3 +1,4 @@
+import Barba from 'barba.js';
 import { debounce, promiseWrapper } from './utils';
 
 const ROOT_SELECTOR = '[data-js-search-form]';
@@ -89,14 +90,28 @@ class SearchForm {
 		this.searchResultsElement.innerHTML = data.html;
 	};
 
+	/**
+	 * @param {SubmitEvent} event
+	 */
+	onSubmit = (event) => {
+		event.preventDefault();
+
+		const formData = new FormData(this.root);
+		const queryParams = new URLSearchParams(Object.fromEntries(formData));
+
+		Barba.Pjax.goTo(`${window.location.origin}/?${queryParams.toString()}`);
+	};
+
 	bindEvents() {
 		this.searchInput.addEventListener('input', this.onDebouncedInput);
 		this.root.addEventListener('reset', this.onReset);
+		this.root.addEventListener('submit', this.onSubmit);
 	}
 
 	destroy() {
 		this.searchInput.removeEventListener('input', this.onDebouncedInput);
 		this.root.removeEventListener('reset', this.onReset);
+		this.root.removeEventListener('submit', this.onSubmit);
 	}
 }
 
