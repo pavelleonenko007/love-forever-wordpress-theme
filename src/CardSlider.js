@@ -1,88 +1,94 @@
-const ROOT_SELECTOR = "[data-js-card-slider]";
+const ROOT_SELECTOR = '[data-js-card-slider]';
 
 class CardSlider {
-  selectors = {
-    root: ROOT_SELECTOR,
-    slideItem: "[data-js-card-slider-slide-item]",
-    navItem: "[data-js-card-slider-nav-item]",
-  };
+	selectors = {
+		root: ROOT_SELECTOR,
+		slideItem: '[data-js-card-slider-slide-item]',
+		navItem: '[data-js-card-slider-nav-item]',
+	};
 
-  stateSelectors = {
-    isActive: "is-active",
-  };
+	stateSelectors = {
+		isActive: 'is-active',
+	};
 
-  /**
-   *
-   * @param {HTMLElement} element
-   */
-  constructor(element) {
-    this.root = element;
+	/**
+	 *
+	 * @param {HTMLElement} element
+	 */
+	constructor(element) {
+		this.root = element;
 
-    this.bindEvents();
-  }
+		this.bindEvents();
+	}
 
-  /**
-   *
-   * @param {number} num
-   */
-  activateSlide(num) {
-    this.root
-      .querySelectorAll(this.selectors.slideItem)
-      .forEach((slideItem, index) => {
-        slideItem.classList.toggle(this.stateSelectors.isActive, index === num);
-      });
+	/**
+	 *
+	 * @param {number} num
+	 */
+	activateSlide(num) {
+		this.root
+			.querySelectorAll(this.selectors.slideItem)
+			.forEach((slideItem, index) => {
+				slideItem.classList.toggle(this.stateSelectors.isActive, index === num);
+			});
 
-    this.root
-      .querySelectorAll(this.selectors.navItem)
-      .forEach((navItem, index) => {
-        navItem.classList.toggle(this.stateSelectors.isActive, index === num);
-      });
-  }
+		this.root
+			.querySelectorAll(this.selectors.navItem)
+			.forEach((navItem, index) => {
+				navItem.classList.toggle(this.stateSelectors.isActive, index === num);
+			});
+	}
 
-  /**
-   *
-   * @param {MouseEvent} event
-   */
-  onMouseOver = (event) => {
-    const { target } = event;
-    const navItem = target.closest(this.selectors.navItem);
+	/**
+	 *
+	 * @param {MouseEvent} event
+	 */
+	onMouseOver = (event) => {
+		const { target } = event;
+		const navItem = target.closest(this.selectors.navItem);
 
-    if (!navItem) {
-      return;
-    }
+		if (!navItem) {
+			return;
+		}
 
-    const activeSlideIndex = parseInt(navItem.dataset.jsCardSliderNavItem);
+		const activeSlideIndex = parseInt(navItem.dataset.jsCardSliderNavItem);
 
-    this.activateSlide(activeSlideIndex);
-  };
+		this.activateSlide(activeSlideIndex);
+	};
 
-  bindEvents() {
-    this.root.addEventListener("mouseover", this.onMouseOver);
-  }
+	onMouseLeave = (event) => {
+		this.activateSlide(0);
+	};
 
-  destroy() {
-    this.root.removeEventListener("mouseover", this.onMouseOver);
-  }
+	bindEvents() {
+		this.root.addEventListener('mouseover', this.onMouseOver);
+		this.root.addEventListener('mouseleave', this.onMouseLeave);
+	}
+
+	destroy() {
+		this.root.removeEventListener('mouseover', this.onMouseOver);
+		this.root.removeEventListener('mouseleave', this.onMouseLeave);
+	}
 }
 
 export default class CardSliderCollection {
-  /**
-   * @type {Map<HTMLElement, CardSlider>}
-   */
-  static cardSliders = new Map();
+	/**
+	 * @type {Map<HTMLElement, CardSlider>}
+	 */
+	static cardSliders = new Map();
 
-  static init() {
-    document.querySelectorAll(ROOT_SELECTOR).forEach((element) => {
-      const cardSliderInstance = new CardSlider(element);
+	static init() {
+		document.querySelectorAll(ROOT_SELECTOR).forEach((element) => {
+			const cardSliderInstance = new CardSlider(element);
 
-      CardSliderCollection.cardSliders.set(element, cardSliderInstance);
-    });
-  }
+			CardSliderCollection.cardSliders.set(element, cardSliderInstance);
+		});
+	}
 
-  static destroyAll() {
-    CardSliderCollection.cardSliders.forEach((cardSlider) => {
-      cardSlider.destroy();
-    });
-    CardSliderCollection.cardSliders.clear();
-  }
+	static destroyAll() {
+		CardSliderCollection.cardSliders.forEach((cardSlider) => {
+			cardSlider.destroy();
+		});
+		CardSliderCollection.cardSliders.clear();
+	}
 }
