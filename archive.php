@@ -37,7 +37,17 @@ if ( empty( $thumbnail ) ) {
 						<div class="slider_home-slider_slide-in">
 							<?php if ( ! empty( $thumbnail ) ) : ?>
 								<div class="mom-abs">
-									<img src="<?php echo esc_url( wp_get_attachment_image_url( $thumbnail, 'full' ) ); ?>" loading="eager" alt="<?php echo esc_attr( get_post_meta( $thumbnail, '_wp_attachment_image_alt', true ) ); ?>" class="img-cover">
+									<?php
+									echo wp_get_attachment_image(
+										$thumbnail,
+										'full',
+										false,
+										array(
+											'class'   => 'img-cover',
+											'loading' => 'eager',
+										)
+									);
+									?>
 								</div>
 							<?php else : ?>
 								<div class="hero-section__blur">
