@@ -628,3 +628,14 @@ function loveforever_get_product_discount( $product_id ) {
 
 	return absint( get_field( 'discount_percent', $product_id ) );
 }
+
+// $products = get_posts(
+// 	array(
+// 		'post_type'   => 'dress',
+// 		'numberposts' => -1,
+// 	)
+// );
+
+// foreach ( $products as $p ) {
+// 	update_field( 'availability', true, $p->ID );
+// }
