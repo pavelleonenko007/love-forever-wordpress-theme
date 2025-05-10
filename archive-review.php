@@ -258,9 +258,10 @@ $reviews_hero_section = get_field( 'reviews_hero_section', 'option' );
 			<div class="dialog__overlay" data-js-dialog-overlay>
 				<div class="review-dialog__content dialog__content" data-js-dialog-content>
 					<div class="review-dialog__card review-card">
+						<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/review-popup-icon.svg' ); ?>" alt="" class="review-card__icon">
 						<div class="review-card__title"></div>
 						<div class="review-card__description"></div>
-						<button type="button" class="button" data-js-dialog-close-button>Хорошо</button>
+						<button type="button" class="review-card__button button button--pink" data-js-dialog-close-button>Хорошо</button>
 					</div>
 				</div>
 			</div>

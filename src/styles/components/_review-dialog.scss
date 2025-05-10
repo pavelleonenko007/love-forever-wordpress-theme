@@ -4,13 +4,13 @@
 	padding: 40rem;
 	width: 100%;
 	max-width: min(460rem, calc(100vw - 20rem));
-	min-height: 332rem;
 	position: fixed;
 	top: 50%;
 	left: 50%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 	row-gap: 20rem;
 	font-size: 16rem;
 	line-height: 1.25;
@@ -19,6 +19,11 @@
 
 	@include mobile-s {
 		padding: 20rem;
+	}
+
+	&__icon {
+		width: 70rem;
+		height: 66rem;
 	}
 
 	&__title {
@@ -30,5 +35,9 @@
 
 	&__description {
 		text-align: center;
+	}
+
+	&__button {
+		align-self: stretch;
 	}
 }
