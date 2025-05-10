@@ -1,0 +1,15 @@
+@use '../media' as *;
+
+.review-page {
+	&__title {
+		margin-bottom: 30rem;
+
+		@include mobile {
+			margin-bottom: 20rem;
+		}
+	}
+
+	&__list {
+		margin: 0;
+	}
+}

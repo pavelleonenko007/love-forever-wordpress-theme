@@ -13,6 +13,15 @@ html {
 	transition-duration: 0ms;
 }
 
+a[href]:where(:not([class])) {
+	color: var(--pink);
+	transition: opacity 0.3s ease-out;
+
+	@include hover {
+		opacity: 0.65;
+	}
+}
+
 .dopmenuopened .n-menu.w--current {
 	color: black;
 }

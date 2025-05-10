@@ -70,13 +70,13 @@ $reviews_hero_section = get_field( 'reviews_hero_section', 'option' );
 						<?php endif; ?>
 					</div>
 				</section>
-				<section class="section">
+				<section class="section review-page">
 					<div class="container">
 						<div class="spleet">
-							<h2 class="h-36-36">Прислать отзыв</h2>
+							<h1 class="h-36-36 review-page__title">Прислать отзыв</h1>
 						</div>
 						<div class="spleet spleet-top">
-							<ol role="list" class="otziv-left-ul p-16-20 w-list-unstyled">
+							<ol role="list" class="otziv-left-ul p-16-20 w-list-unstyled review-page__list">
 								<li>
 									<p>Начните с описания продукта или услуги, оцените его качество, удобство использования, внешний вид и другие характеристики.</p>
 								</li>
@@ -245,29 +245,13 @@ $reviews_hero_section = get_field( 'reviews_hero_section', 'option' );
 										<input type="hidden" name="action" value="add_review">
 										<?php wp_nonce_field( 'submit_review_form', '_submit_review_form_nonce', false ); ?>
 										<input type="submit" data-wait="отправка..." class="btn send-btn w-button" value="отправить">
-										<div class="p-12-12 uper op03 m-12-12">Нажимая отправить вы соглашаетесь с <a href="#">политикой конфиденциальности</a></div>
+										<div class="p-12-12 uper m-12-12 reviews-form__legal">Нажимая отправить вы соглашаетесь с <a href="#">политикой конфиденциальности</a></div>
 									</div>
 								</form>
-								<div class="w-form-done" data-js-review-form-success-message>
-									<div>Thank you! Your submission has been received!</div>
-								</div>
-								<div class="w-form-fail" data-js-review-form-global-error>
-									<div>Oops! Something went wrong while submitting the form.</div>
-								</div>
 							</div>
 						</div>
 					</div>
 				</section>
-				<div class="succes-block">
-					<div class="succes-div">
-						<img src="<?php echo get_template_directory_uri(); ?>/images/672b6e5326479af83bdbf512_Group20441.svg" loading="lazy" alt class="image-4">
-						<div class="p-21-21">Отзыв успешно отправлен</div>
-						<p class="p-16-20">Ваш отзыв будет опубликован в течение 48 часов после нашей проверки. Спасибо за понимание!</p>
-						<a href="#" class="btn in-single-btn close-sucess w-inline-block">
-							<div>хорошо</div>
-						</a>
-					</div>
-				</div>
 			</div>
 		</div>
 		<div id="reviewDialog" role="dialog" class="review-dialog dialog" data-js-dialog>
