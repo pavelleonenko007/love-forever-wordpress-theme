@@ -95,30 +95,125 @@ $reviews_hero_section = get_field( 'reviews_hero_section', 'option' );
 							</ol>
 							<div class="otz-form-block">
 								<form id="addReview" class="reviews-form" data-js-form data-js-review-form data-wf-page-id="67249dc1fa10238682ee40ae" data-wf-element-id="d744d5e4-a65e-3d82-0a54-f293122549ec" novalidate>
-									<div class="field">
-										<input 
-											class="field__control" 
-											maxlength="256" 
-											name="name" 
-											placeholder="Имя" 
-											type="text" 
-											id="addReviewNameField" 
-											aria-errormessage="addReviewNameFieldErrors"
-											required
-										>
-										<span class="field__errors" id="addReviewNameFieldErrors" data-js-form-field-errors></span>
-									</div>
-									<div class="field">
-										<input 
-											class="field__control" 
-											maxlength="256" 
-											name="date" 
-											placeholder="Дата" 
-											type="date" 
-											id="addReviewDateField" 
-											required
-										>
-										<span class="field__errors" id="addReviewDateFieldErrors" data-js-form-field-errors></span>
+									<div class="reviews-form__grid">
+										<div class="field">
+											<fieldset class="field__control star-rating">
+												<legend class="sr-only">Оценка</legend>
+												<input 
+													id="star5"
+													type="radio" 
+													name="rating" 
+													value="5" 
+													required
+													aria-errormessage="rating-errors"
+												/>
+												<label for="star5" class="star-rating__label">
+													<span aria-hidden="true" class="star-rating__span">
+														<svg width="16" height="16" class="star-rating__icon">
+															<use href="#star"></use>
+														</svg>
+													</span>
+												</label>
+												<input 
+													id="star4"
+													type="radio" 
+													name="rating" 
+													value="4" 
+													required
+													aria-errormessage="rating-errors"
+												/>
+												<label for="star4" class="star-rating__label">
+													<span aria-hidden="true" class="star-rating__span">
+														<svg width="16" height="16" class="star-rating__icon">
+															<use href="#star"></use>
+														</svg>
+													</span>
+												</label>
+												<input 
+													id="star3"
+													type="radio" 
+													name="rating" 
+													value="3" 
+													required
+													aria-errormessage="rating-errors"
+												/>
+												<label for="star3" class="star-rating__label">
+													<span aria-hidden="true" class="star-rating__span">
+														<svg width="16" height="16" class="star-rating__icon">
+															<use href="#star"></use>
+														</svg>
+													</span>
+												</label>
+												<input 
+													id="star2"
+													type="radio" 
+													name="rating" 
+													value="2" 
+													required
+													aria-errormessage="rating-errors"
+												/>
+												<label for="star2" class="star-rating__label">
+													<span aria-hidden="true" class="star-rating__span">
+														<svg width="16" height="16" class="star-rating__icon">
+															<use href="#star"></use>
+														</svg>
+													</span>
+												</label>
+												<input 
+													id="star1"
+													type="radio" 
+													name="rating" 
+													value="1" 
+													required
+													aria-errormessage="rating-errors"
+												/>
+												<label for="star1" class="star-rating__label">
+													<span aria-hidden="true" class="star-rating__span">
+														<svg width="16" height="16" class="star-rating__icon">
+															<use href="#star"></use>
+														</svg>
+													</span>
+												</label>
+												<span class="field__errors" id="rating-errors" data-js-form-field-errors></span>
+											</fieldset>
+										</div>
+										<div class="field">
+											<input 
+												class="field__control" 
+												maxlength="256" 
+												name="name" 
+												placeholder="Имя" 
+												type="text" 
+												id="addReviewNameField" 
+												title="Пожалуйста, укажите ваше имя"
+												aria-errormessage="addReviewNameFieldErrors"
+												required
+											>
+											<span class="field__errors" id="addReviewNameFieldErrors" data-js-form-field-errors></span>
+										</div>
+										<div class="field" data-js-datepicker>
+											<input 
+												type="date" 
+												name="date" 
+												value="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>"
+												id="singleDressFormDateField" 
+												class="field__control"
+												title="Пожалуйста, укажите дату"
+												data-js-datepicker-original-control
+											>
+											<?php
+											$today = wp_date( 'd.m.Y' );
+											?>
+											<input 
+												type="text" 
+												name="altdate" 
+												id="singleDressFormCustomDateField" 
+												class="field__control"
+												value="<?php echo esc_attr( $today ); ?>"
+												data-js-datepicker-custom-control
+											/>
+											<span class="field__errors" id="addReviewDateFieldErrors" data-js-form-field-errors></span>
+										</div>
 									</div>
 									<div class="relaive">
 										<div class="field">
@@ -129,6 +224,7 @@ $reviews_hero_section = get_field( 'reviews_hero_section', 'option' );
 												name="review_text" 
 												class="field__control"
 												rows="10"
+												title="Оставьте ваши впечатления"
 												required
 											></textarea>
 											<span class="field__errors" id="addReviewReviewTextFieldErrors" data-js-form-field-errors></span>
@@ -174,5 +270,21 @@ $reviews_hero_section = get_field( 'reviews_hero_section', 'option' );
 				</div>
 			</div>
 		</div>
+		<div id="reviewDialog" role="dialog" class="review-dialog dialog" data-js-dialog>
+			<div class="dialog__overlay" data-js-dialog-overlay>
+				<div class="review-dialog__content dialog__content" data-js-dialog-content>
+					<div class="review-dialog__card review-card">
+						<div class="review-card__title"></div>
+						<div class="review-card__description"></div>
+						<button type="button" class="button" data-js-dialog-close-button>Хорошо</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+			<symbol id="star" viewBox="-1 -1 18 17" >
+				<path d="M3.06751 14.8876C3.33312 15.0818 3.66655 15.0208 4.0678 14.7323L8.00111 11.9034L11.9288 14.7323C12.3357 15.0208 12.6635 15.0818 12.9347 14.8876C13.1947 14.6935 13.2568 14.3718 13.0929 13.9059L11.5501 9.36855L15.5117 6.573C15.9187 6.29008 16.0712 5.99609 15.9695 5.68551C15.8678 5.38041 15.5683 5.2251 15.0653 5.23064L10.1995 5.25838L8.71881 0.698899C8.5606 0.232966 8.32889 0 8.00111 0C7.66767 0 7.43602 0.232966 7.28341 0.698899L5.79709 5.25838L0.931308 5.23064C0.428338 5.2251 0.134468 5.38041 0.0327444 5.68551C-0.074631 5.99609 0.0836066 6.29008 0.484851 6.573L4.44644 9.36855L2.90362 13.9059C2.74538 14.3718 2.80755 14.6935 3.06751 14.8876Z"/>
+			</symbol>
+		</svg>
 		<?php get_template_part( 'components/footer' ); ?>
 		<?php get_footer(); ?>

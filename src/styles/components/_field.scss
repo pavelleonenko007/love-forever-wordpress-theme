@@ -1,4 +1,6 @@
 .field {
+	$root: &;
+
 	--text-color: #000;
 	--bg-color: transparent;
 
@@ -28,7 +30,7 @@
 		text-transform: uppercase;
 		background-color: var(--bg-color);
 
-		&:is([type="date"]) {
+		&:is([type='date']) {
 			appearance: none;
 		}
 
@@ -46,6 +48,7 @@
 			color: rgba(0, 0, 0, 0.3);
 		}
 
+		&:has(#{$root}__errors:not(:empty)),
 		&[aria-invalid='true'] {
 			border-color: red;
 		}

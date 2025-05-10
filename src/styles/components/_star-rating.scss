@@ -1,0 +1,61 @@
+@use '../mixins' as *;
+@use '../media' as *;
+
+.star-rating {
+	padding-block: 14rem;
+	position: relative;
+	display: inline-flex;
+	flex-direction: row-reverse; // важно!
+	justify-content: flex-end;
+	align-items: center;
+
+	.field__errors {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		text-transform: none;
+	}
+
+	legend {
+		@include sr-only;
+	}
+
+	&__label {
+		margin: 0;
+		padding: 2rem;
+		color: transparent;
+		cursor: pointer;
+
+		:checked + & {
+			color: var(--pink);
+		}
+
+		:checked + & ~ & {
+			color: var(--pink);
+		}
+
+		@include hover {
+			color: var(--pink);
+
+			& ~ .star-rating__label {
+				color: var(--pink);
+			}
+		}
+	}
+
+	&__span {
+		color: inherit;
+	}
+
+	&__icon {
+		width: 16rem;
+		height: 16rem;
+		fill: currentColor;
+		stroke: var(--pink);
+		stroke-linejoin: round;
+	}
+
+	input[type='radio'] {
+		appearance: none;
+	}
+}

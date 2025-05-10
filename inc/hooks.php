@@ -626,9 +626,14 @@ function loveforever_add_review_via_ajax() {
 
 	$errors = array();
 
+	$rating      = ! empty( $_POST['rating'] ) ? absint( sanitize_text_field( wp_unslash( $_POST['rating'] ) ) ) : null;
 	$name        = ! empty( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
 	$date        = ! empty( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
 	$review_text = ! empty( $_POST['review_text'] ) ? sanitize_textarea_field( wp_unslash( $_POST['review_text'] ) ) : '';
+
+	if ( empty( $rating ) ) {
+		$errors['rating'] = 'Пожалуйста, поставьте оценку';
+	}
 
 	if ( empty( $name ) ) {
 		$errors['name'] = 'Пожалуйста, укажите ваше имя';
@@ -661,6 +666,7 @@ function loveforever_add_review_via_ajax() {
 		)
 	);
 
+	update_field( 'rating', $rating, $review_post_id );
 	update_field( 'author', $name, $review_post_id );
 	update_field( 'review_text', $review_text, $review_post_id );
 

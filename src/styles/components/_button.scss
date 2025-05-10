@@ -47,6 +47,15 @@
 		}
 	}
 
+	&--pink {
+		background-color: var(--pink);
+		border-color: var(--pink);
+
+		@include hover {
+			color: var(--pink);
+		}
+	}
+
 	&--vk {
 		position: relative;
 		background-color: var(--blue);
@@ -64,7 +73,7 @@
 		background-color: var(--pink);
 		border: 1rem solid var(--pink);
 
-		@include hover{
+		@include hover {
 			background-color: var(--pink);
 			color: var(--white);
 			opacity: 0.75;

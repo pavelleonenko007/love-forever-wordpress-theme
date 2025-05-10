@@ -1,3 +1,5 @@
+import DialogCollection from './Dialog';
+
 const ROOT_SELECTOR = '[data-js-review-form]';
 
 class ReviewForm {
@@ -18,6 +20,7 @@ class ReviewForm {
 	 */
 	constructor(element) {
 		this.root = element;
+		this.dialogId = 'reviewDialog';
 
 		this.onSubmit = this.onSubmit.bind(this);
 
@@ -56,14 +59,20 @@ class ReviewForm {
 	}
 
 	showGlobalError(error) {
-		this.root.hidden = true;
-
-		const globalErrorElement = this.root.parentElement.querySelector(
-			this.selectors.globalErrorElementSelector
+		const dialogInstance = DialogCollection.getDialogsById(this.dialogId);
+		console.log({dialogInstance});
+		
+		const dialogTitle = dialogInstance.dialog.querySelector(
+			'.review-card__title'
+		);
+		const dialogDescrition = dialogInstance.dialog.querySelector(
+			'.review-card__description'
 		);
 
-		globalErrorElement.innerHTML = error;
-		globalErrorElement.style.display = 'block';
+		dialogTitle.textContent = 'Ошибка';
+		dialogDescrition.textContent = error;
+
+		dialogInstance.open();
 	}
 
 	clearErrors() {
@@ -81,14 +90,19 @@ class ReviewForm {
 	}
 
 	showSuccessMessage(message) {
-		this.root.hidden = true;
-
-		const successMessageElement = this.root.parentElement.querySelector(
-			this.selectors.successMessageElementSelector
+		const dialogInstance = DialogCollection.getDialogsById(this.dialogId);
+		console.log({dialogInstance});
+		const dialogTitle = dialogInstance.dialog.querySelector(
+			'.review-card__title'
+		);
+		const dialogDescrition = dialogInstance.dialog.querySelector(
+			'.review-card__description'
 		);
 
-		successMessageElement.innerHTML = message;
-		successMessageElement.style.display = 'block';
+		dialogTitle.textContent = 'Отзыв успешно отправлен';
+		dialogDescrition.textContent = message;
+
+		dialogInstance.open();
 	}
 
 	resetForm() {
@@ -102,11 +116,6 @@ class ReviewForm {
 				})
 			);
 		});
-
-		this.root.hidden = false;
-		this.root.parentElement.querySelector(
-			this.selectors.successMessageElementSelector
-		).style.display = 'none';
 	}
 
 	/**
@@ -146,10 +155,6 @@ class ReviewForm {
 			}
 
 			this.showSuccessMessage(body.data.message);
-
-			setTimeout(() => {
-				this.resetForm();
-			}, 3_000);
 		} catch (error) {
 			console.error(error);
 			this.showGlobalError(error.message);
@@ -158,12 +163,23 @@ class ReviewForm {
 		}
 	}
 
+	/**
+	 * @param {CustomEvent} event
+	 */
+	onDialogClose = (event) => {
+		if (event.detail.dialogId === this.dialogId) {
+			this.resetForm();
+		}
+	};
+
 	bindEvents() {
 		document.addEventListener('submit', this.onSubmit);
+		window.addEventListener('dialogClose', this.onDialogClose);
 	}
 
 	destroy() {
 		document.removeEventListener('submit', this.onSubmit);
+		window.removeEventListener('dialogClose', this.onDialogClose);
 	}
 }
 

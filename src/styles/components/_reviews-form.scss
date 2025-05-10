@@ -5,6 +5,19 @@
 	flex-direction: column;
 	row-gap: 10rem;
 
+	&__grid {
+		display: grid;
+		gap: 10rem;
+
+		@include tablet-above {
+			grid-template-rows: repeat(2, minmax(0, 1fr));
+	
+			& > *:has(.star-rating) {
+				grid-column: span 2;
+			}
+		}
+	}
+
 	&[hidden] {
 		display: none;
 	}

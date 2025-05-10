@@ -5,7 +5,7 @@ export default class FormsValidator {
 	};
 
 	errorMessages = {
-		valueMissing: () => 'Пожалуйста, заполните это поле',
+		valueMissing: ({ title }) => title || 'Пожалуйста, заполните это поле',
 		patternMismatch: ({ title }) => title || 'Данные не соответствуют формату',
 		tooShort: ({ minLength }) =>
 			`Слишком короткое значение, минимум символов — ${minLength}`,

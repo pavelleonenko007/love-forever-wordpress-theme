@@ -2,6 +2,7 @@
 @use 'mixins' as *;
 @use 'utils' as *;
 @use 'globals' as *;
+@use 'media' as *;
 
 @use 'components/hover-menu' as *;
 @use 'components/hero-section' as *;
@@ -44,6 +45,8 @@
 @use 'components/lf-map' as *;
 @use 'components/lf-popup' as *;
 @use 'components/lf-nav-link' as *;
+@use 'components/review-dialog' as *;
+@use 'components/star-rating' as *;
 
 @use 'pages/archive' as *;
 @use 'pages/single-product' as *;
