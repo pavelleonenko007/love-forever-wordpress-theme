@@ -23,6 +23,7 @@ import CardSliderCollection from './CardSlider';
 import PlayIfVisibleVideoCollection from './PlayIfVisibleVideoCollection';
 import { SaleTimerCollection } from './SaleTimer';
 import CustomDatepickerCollection from './CustomDatePicker';
+import Stories from './Stories';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -204,28 +205,28 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function executeInlineScripts(container) {
-  const scripts = container.querySelectorAll('script');
+	const scripts = container.querySelectorAll('script');
 
-  scripts.forEach((oldScript) => {
-    const newScript = document.createElement('script');
+	scripts.forEach((oldScript) => {
+		const newScript = document.createElement('script');
 
-    // Копируем атрибуты (например, type, data-* и т.д.)
-    [...oldScript.attributes].forEach(attr =>
-      newScript.setAttribute(attr.name, attr.value)
-    );
+		// Копируем атрибуты (например, type, data-* и т.д.)
+		[...oldScript.attributes].forEach((attr) =>
+			newScript.setAttribute(attr.name, attr.value)
+		);
 
-    // Если у скрипта src — создаем ссылку на внешний файл
-    if (oldScript.src) {
-      newScript.src = oldScript.src;
-      newScript.async = oldScript.async;
-    } else {
-      // Для инлайновых скриптов — копируем содержимое
-      newScript.textContent = oldScript.textContent;
-    }
+		// Если у скрипта src — создаем ссылку на внешний файл
+		if (oldScript.src) {
+			newScript.src = oldScript.src;
+			newScript.async = oldScript.async;
+		} else {
+			// Для инлайновых скриптов — копируем содержимое
+			newScript.textContent = oldScript.textContent;
+		}
 
-    // Вставляем и запускаем
-    oldScript.parentNode.replaceChild(newScript, oldScript);
-  });
+		// Вставляем и запускаем
+		oldScript.parentNode.replaceChild(newScript, oldScript);
+	});
 }
 
 function closeMegaMenu() {
@@ -235,8 +236,6 @@ function closeMegaMenu() {
 }
 
 function initPage() {
-	console.log('init page');
-
 	SearchFormCollection.init();
 	PlayIfVisibleVideoCollection.init();
 	initHeroPageSliderPagination();
@@ -304,6 +303,25 @@ window.addEventListener('load', (event) => {
 	FFFafterLoad();
 });
 
+window.addEventListener('dialogOpen', (event) => {
+	const dialogId = event.detail.dialogId;
+
+	if (dialogId === 'storiesDialog') {
+		const storiesDialog = DialogCollection.getDialogsById('storiesDialog');
+		const trigger = event.detail.trigger;
+		const storyNumber = trigger.dataset.jsStoryButton
+			? parseInt(trigger.dataset.jsStoryButton)
+			: 0;
+
+		const storiesElement =
+			storiesDialog.dialog.querySelector('[data-js-stories]');
+
+		new Stories(storiesElement, {
+			startSlide: storyNumber,
+		});
+	}
+});
+
 function FFFafterEnter() {
 	AllPages();
 }
@@ -331,106 +349,168 @@ function AllPages() {
 	// 	}
 	// });
 
-	const splideGalleries = document.querySelectorAll('.splide');
+	const blogSplides = document.querySelectorAll('.splide.blog');
 
-	$('.splide-arrow')
-		.eq(0)
-		.on('click', function () {
-			$(this)
-				.closest('.container')
-				.find('.splide__arrow.splide__arrow--prev')
-				.click();
+	blogSplides.forEach((splideBlogSlider) => {
+		const splideBlogInstance = new Splide(splideBlogSlider, {
+			// type: 'loop',
+			perMove: 1,
+			perPage: 1,
+			pagination: false,
+			arrows: true,
+			focus: 'left',
+			speed: 500,
+			gap: '10rem',
+			autoplay: false,
+			interval: 2000,
+			pagination: true,
+			focus: 0,
+			omitEnd: true,
+			rewind: true,
+
+			mediaQuery: 'min',
+			breakpoints: {
+				993: {
+					destroy: true,
+					perPage: 1,
+				},
+			},
 		});
 
-	$('.splide-arrow')
-		.eq(1)
-		.on('click', function () {
-			$(this)
-				.closest('.container')
-				.find('.splide__arrow.splide__arrow--next')
-				.click();
-		});
-
-	splideGalleries.forEach((splideElement) => {
-		if ($(splideElement).hasClass('blog')) {
-			//	var datanum = $(splideElement).attr('data-nums');
-
-			var splide = new Splide(splideElement, {
-				// type: 'loop',
-				perMove: 1,
-				perPage: 1,
-				pagination: false,
-				arrows: true,
-				focus: 'left',
-				speed: 500,
-				gap: '10rem',
-				autoplay: false,
-				interval: 2000,
-				pagination: true,
-				focus: 0,
-				omitEnd: true,
-				rewind: true,
-
-				mediaQuery: 'min',
-				breakpoints: {
-					993: {
-						destroy: true,
-						perPage: 1,
-					},
-				},
-			});
-			splide.mount();
-		} else if ($(splideElement).hasClass('no-pc')) {
-			var splide = new Splide(splideElement, {
-				// type: 'loop',
-				perMove: 1,
-				perPage: 2,
-				pagination: false,
-				arrows: true,
-				focus: 'left',
-				speed: 500,
-				gap: '10rem',
-				autoplay: false,
-				interval: 2000,
-				pagination: true,
-				focus: 0,
-				omitEnd: true,
-				rewind: true,
-
-				mediaQuery: 'min',
-				breakpoints: {
-					993: {
-						destroy: true,
-						perPage: 2,
-					},
-				},
-			});
-			splide.mount();
-		} else {
-			var splide = new Splide(splideElement, {
-				// type: 'loop',
-				perMove: 1,
-				perPage: 4,
-				pagination: false,
-				arrows: true,
-				focus: 'left',
-				speed: 500,
-				gap: '10rem',
-				autoplay: false,
-				interval: 2000,
-				pagination: true,
-				focus: 0,
-				omitEnd: true,
-				rewind: true,
-				breakpoints: {
-					993: {
-						perPage: 1,
-					},
-				},
-			});
-			splide.mount();
-		}
+		splideBlogInstance.mount();
 	});
+
+	const mobileOnlySplides = document.querySelectorAll(
+		'.splide.no-pc:not(.blog)'
+	);
+
+	mobileOnlySplides.forEach((mobileOnlySlider) => {
+		const mobileOnlySplideInstance = new Splide(mobileOnlySlider, {
+			// type: 'loop',
+			perMove: 1,
+			perPage: 2,
+			pagination: false,
+			arrows: true,
+			focus: 'left',
+			speed: 500,
+			gap: '10rem',
+			autoplay: false,
+			interval: 2000,
+			pagination: true,
+			focus: 0,
+			omitEnd: true,
+			rewind: true,
+
+			mediaQuery: 'min',
+			breakpoints: {
+				993: {
+					destroy: true,
+					perPage: 2,
+				},
+			},
+		});
+
+		mobileOnlySplideInstance.mount();
+	});
+
+	// $('.splide-arrow')
+	// 	.eq(0)
+	// 	.on('click', function () {
+	// 		$(this)
+	// 			.closest('.container')
+	// 			.find('.splide__arrow.splide__arrow--prev')
+	// 			.click();
+	// 	});
+
+	// $('.splide-arrow')
+	// 	.eq(1)
+	// 	.on('click', function () {
+	// 		$(this)
+	// 			.closest('.container')
+	// 			.find('.splide__arrow.splide__arrow--next')
+	// 			.click();
+	// 	});
+
+	// splideGalleries.forEach((splideElement) => {
+	// 	if ($(splideElement).hasClass('blog')) {
+	// 		//	var datanum = $(splideElement).attr('data-nums');
+
+	// 		var splide = new Splide(splideElement, {
+	// 			// type: 'loop',
+	// 			perMove: 1,
+	// 			perPage: 1,
+	// 			pagination: false,
+	// 			arrows: true,
+	// 			focus: 'left',
+	// 			speed: 500,
+	// 			gap: '10rem',
+	// 			autoplay: false,
+	// 			interval: 2000,
+	// 			pagination: true,
+	// 			focus: 0,
+	// 			omitEnd: true,
+	// 			rewind: true,
+
+	// 			mediaQuery: 'min',
+	// 			breakpoints: {
+	// 				993: {
+	// 					destroy: true,
+	// 					perPage: 1,
+	// 				},
+	// 			},
+	// 		});
+	// 		splide.mount();
+	// 	} else if ($(splideElement).hasClass('no-pc')) {
+	// 		var splide = new Splide(splideElement, {
+	// 			// type: 'loop',
+	// 			perMove: 1,
+	// 			perPage: 2,
+	// 			pagination: false,
+	// 			arrows: true,
+	// 			focus: 'left',
+	// 			speed: 500,
+	// 			gap: '10rem',
+	// 			autoplay: false,
+	// 			interval: 2000,
+	// 			pagination: true,
+	// 			focus: 0,
+	// 			omitEnd: true,
+	// 			rewind: true,
+
+	// 			mediaQuery: 'min',
+	// 			breakpoints: {
+	// 				993: {
+	// 					destroy: true,
+	// 					perPage: 2,
+	// 				},
+	// 			},
+	// 		});
+	// 		splide.mount();
+	// 	} else {
+	// 		var splide = new Splide(splideElement, {
+	// 			// type: 'loop',
+	// 			perMove: 1,
+	// 			perPage: 4,
+	// 			pagination: false,
+	// 			arrows: true,
+	// 			focus: 'left',
+	// 			speed: 500,
+	// 			gap: '10rem',
+	// 			autoplay: false,
+	// 			interval: 2000,
+	// 			pagination: true,
+	// 			focus: 0,
+	// 			omitEnd: true,
+	// 			rewind: true,
+	// 			breakpoints: {
+	// 				993: {
+	// 					perPage: 1,
+	// 				},
+	// 			},
+	// 		});
+	// 		splide.mount();
+	// 	}
+	// });
 
 	// доп меню при наведении
 
@@ -527,7 +607,6 @@ function removeFilesItem(target) {
 }
 
 function otzivi() {
-	console.log('otzivi');
 	$('.slider-oyziv_nav').each(function () {
 		var nums = $(this).find('div').length;
 		$(this).append('<div class="slider-oyziv-last">&nbsp;/ ' + nums + '</div>');

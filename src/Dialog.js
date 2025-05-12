@@ -34,7 +34,7 @@ class Dialog {
 		this.bindEvents();
 	}
 
-	open() {
+	open(trigger = null) {
 		if (this.dialog.classList.contains(this.stateSelectors.isOpen)) {
 			return;
 		}
@@ -49,6 +49,7 @@ class Dialog {
 				bubbles: true,
 				detail: {
 					dialogId: this.dialog.id,
+					trigger,
 				},
 			})
 		);
@@ -98,15 +99,15 @@ class Dialog {
 			event.preventDefault();
 
 			if (openButton.dataset.jsDialogOpenButton === this.dialog.id) {
-				this.open();
+				this.open(openButton);
 				return;
 			}
 		}
 
 		if (
 			event.target.matches(this.selectors.closeButton) ||
-			!event.target.closest('.ui-menu-item') &&
-			!event.target.closest(this.selectors.dialogContent)
+			(!event.target.closest('.ui-menu-item') &&
+				!event.target.closest(this.selectors.dialogContent))
 		) {
 			this.close();
 			return;
@@ -127,6 +128,7 @@ class Dialog {
 	}
 
 	destroy() {
+		this.close();
 		document.body.removeEventListener('click', this.onClick);
 		this.dialog.removeEventListener('keydown', this.onKeyDown);
 	}

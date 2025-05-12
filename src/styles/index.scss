@@ -47,6 +47,8 @@
 @use 'components/lf-nav-link' as *;
 @use 'components/review-dialog' as *;
 @use 'components/star-rating' as *;
+@use 'components/stories' as *;
+@use 'components/story' as *;
 
 @use 'pages/archive' as *;
 @use 'pages/single-product' as *;

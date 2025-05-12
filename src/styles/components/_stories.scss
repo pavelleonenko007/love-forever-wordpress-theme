@@ -1,0 +1,131 @@
+@use '../media' as *;
+
+.stories {
+	display: block;
+
+	&__list {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		gap: 2rem;
+		list-style: none;
+	}
+
+	&__item {
+		border-radius: 100%;
+		margin: 0;
+		padding: 0;
+		width: 2.5rem;
+		height: 2.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+
+		& > a {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: lightgray;
+		}
+	}
+}
+
+.stories-slider {
+	// --slide-width: min(100vw, 465rem);
+
+	&__track {
+		overflow: visible !important;
+	}
+
+	&__list {
+		pointer-events: none;
+	}
+
+	&__slide {
+		pointer-events: all;
+		// width: var(--slide-width);
+		// height: calc(var(--slide-width) * 1.7777777778);
+		// aspect-ratio: 9 / 16;
+		background-color: lightgray;
+		transition: all 0.3s ease-out;
+
+		&:not(.is-active) {
+			scale: 0.85;
+			opacity: 0.85;
+
+			@include mobile-s {
+				scale: 1;
+			}
+		}
+	}
+}
+
+.story-slider {
+	height: 100%;
+
+	&__track {
+		height: 100%;
+	}
+
+	&__slide {
+		width: 100%;
+
+		&:not(.is-active) {
+			pointer-events: none;
+		}
+	}
+
+	.splide__pagination {
+		margin: 0;
+		padding: 0 4rem;
+		position: absolute;
+		top: 0;
+		right: 0;
+		left: 0;
+		display: flex !important;
+		gap: 4rem;
+
+		&__page {
+			--progress: 0;
+
+			border: none;
+			padding: 0;
+			margin: 0;
+			height: 4rem;
+			width: 100%;
+			background-color: rgba(255, 255, 255, 0.5);
+
+			&::after {
+				content: '';
+				width: calc(100% * var(--progress));
+				height: 100%;
+				display: block;
+				background-color: rgb(255, 255, 255);
+			}
+		}
+
+		li {
+			flex-grow: 1;
+		}
+	}
+}
+
+.stories-dialog {
+	&__overlay {
+		background-color: rgba(0, 0, 0, 0.9);
+	}
+
+	&__content {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		translate: -50% -50%;
+	}
+
+	&__close {
+		color: #fff;
+	}
+}
