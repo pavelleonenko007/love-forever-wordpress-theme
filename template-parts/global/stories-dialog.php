@@ -92,7 +92,8 @@ if ( ! empty( $stories ) ) :
 																	?>
 																	<a
 																		href="<?php echo esc_url( $cta['url'] ); ?>" 
-																		class="story__cta button button--pink"
+																		class="story__cta button button--pink" 
+																		data-js-story-cta
 																	><?php echo esc_html( $cta['title'] ); ?></a>
 																<?php endif; ?>
 															</div>

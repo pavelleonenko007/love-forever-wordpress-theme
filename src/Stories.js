@@ -9,6 +9,7 @@ export default class Stories {
 	selectors = {
 		rootSlider: ROOT_SELECTOR,
 		innerSlider: '[data-js-story]',
+		storyCta: '[data-js-story-cta]',
 	};
 
 	constructor(element, options = { startSlide: 0 }) {
@@ -195,7 +196,13 @@ export default class Stories {
 	 * @param {PointerEvent} event
 	 */
 	onPointerDown = (event) => {
+		if (event.target.closest(this.selectors.storyCta)) {
+			return;
+		}
+
 		event.preventDefault();
+		event.stopPropagation();
+
 		this.pressStartTime = Date.now();
 
 		const activeStory = this.stories.get(this.activeStoryIndex);
