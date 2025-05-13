@@ -81,19 +81,21 @@ if ( ! empty( $stories ) ) :
 															?>
 														<?php endif; ?>
 														<div class="story__body">
-															<div class="story__title h3">Заголовок</div>
 															<div class="story__content">
-																<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat veniam explicabo modi animi libero hic voluptatem, molestiae cum</p>
+																<div class="story__title h3">Заголовок</div>
+																<div class="story__description">
+																	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat veniam explicabo modi animi libero hic voluptatem, molestiae cum</p>
+																</div>
+																<?php
+																if ( ! empty( $slide['cta'] ) ) :
+																	$cta = $slide['cta'];
+																	?>
+																	<a
+																		href="<?php echo esc_url( $cta['url'] ); ?>" 
+																		class="story__cta button button--pink"
+																	><?php echo esc_html( $cta['title'] ); ?></a>
+																<?php endif; ?>
 															</div>
-															<?php
-															if ( ! empty( $slide['cta'] ) ) :
-																$cta = $slide['cta'];
-																?>
-																<a
-																	href="<?php echo esc_url( $cta['url'] ); ?>" 
-																	class="story__cta button"
-																><?php echo esc_html( $cta['title'] ); ?></a>
-															<?php endif; ?>
 														</div>
 													</div>
 												</li>
