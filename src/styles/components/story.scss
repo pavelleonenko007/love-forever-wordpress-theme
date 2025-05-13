@@ -4,7 +4,7 @@
 	$root: &;
 
 	--story-width: min(465rem, 100vw);
-	--story-height: min(calc(var(--story-width) * 1.7777777778), 100vh);
+	--story-height: min(calc(var(--story-width) * 1.7777777778), 100dvh);
 
 	width: var(--story-width);
 	height: var(--story-height);
@@ -22,7 +22,7 @@
 
 	@include mobile-s {
 		width: 100vw;
-		height: 100vh;
+		height: 100dvh;
 	}
 
 	&__bg {
