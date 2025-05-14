@@ -196,7 +196,12 @@ export default class Stories {
 	 * @param {PointerEvent} event
 	 */
 	onPointerDown = (event) => {
-		if (event.target.closest(this.selectors.storyCta)) {
+		console.log(event.target);
+
+		if (
+			event.target.closest(this.selectors.storyCta) ||
+			event.target.closest('.splide__pagination__page')
+		) {
 			return;
 		}
 
