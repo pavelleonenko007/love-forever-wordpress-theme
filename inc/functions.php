@@ -506,9 +506,11 @@ function loveforever_get_product_images( $product_id ) {
 				),
 			)
 		);
+
+		return array_filter( $images, fn( $item ) => ! empty( $item['image'] ) );
 	}
 
-	return array_filter( $images, fn( $item ) => ! empty( $item['image'] ) );
+	return $images;
 }
 
 function loveforever_get_filter_terms_for_dress_category( $taxonomy = '', $category_id = null ) {
