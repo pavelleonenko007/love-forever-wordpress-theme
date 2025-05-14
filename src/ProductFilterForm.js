@@ -127,12 +127,26 @@ class ProductFilterForm {
 		this.getFilteredProducts();
 	}
 
+	scrollToCatalogIfNecessary() {
+		const catalogElement = document.getElementById('catalog');
+
+		if (catalogElement) {
+			const catalogRect = catalogElement.getBoundingClientRect();
+
+			if (catalogRect.top < 0) {
+				catalogElement.scrollIntoView({ behavior: 'smooth' });
+			}
+		}
+	}
+
 	async getFilteredProducts() {
 		if (this.abortController) {
 			this.abortController.abort();
 		}
 
 		document.documentElement.classList.add(this.stateSelectors.isLoading);
+
+		this.scrollToCatalogIfNecessary();
 
 		this.abortController = new AbortController();
 		const signal = this.abortController.signal;
@@ -143,8 +157,6 @@ class ProductFilterForm {
 		this.contentElement.classList.add(this.stateSelectors.isLoading);
 
 		try {
-			await wait(1_000);
-
 			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
 				method: 'POST',
 				body: formData,
@@ -153,7 +165,7 @@ class ProductFilterForm {
 
 			const body = await response.json();
 
-			console.log(body);
+			console.log({ body });
 
 			if (!body.success) {
 				throw new Error(body.data.message);
@@ -170,16 +182,6 @@ class ProductFilterForm {
 			this.filterForm.classList.remove(this.stateSelectors.isLoading);
 			this.contentElement.classList.remove(this.stateSelectors.isLoading);
 			this.updateQueryParams(formData);
-
-			const catalogElement = document.getElementById('catalog');
-
-			if (catalogElement) {
-				const catalogRect = catalogElement.getBoundingClientRect();
-
-				if (catalogRect.top < 0) {
-					catalogElement.scrollIntoView({ behavior: 'smooth' });
-				}
-			}
 
 			document.dispatchEvent(
 				new Event('catalog:updated', {
