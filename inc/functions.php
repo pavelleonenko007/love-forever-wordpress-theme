@@ -508,7 +508,7 @@ function loveforever_get_product_images( $product_id ) {
 		);
 	}
 
-	return $images;
+	return array_filter( $images, fn( $item ) => ! empty( $item['image'] ) );
 }
 
 function loveforever_get_filter_terms_for_dress_category( $taxonomy = '', $category_id = null ) {
@@ -630,12 +630,12 @@ function loveforever_get_product_discount( $product_id ) {
 }
 
 // $products = get_posts(
-// 	array(
-// 		'post_type'   => 'dress',
-// 		'numberposts' => -1,
-// 	)
+// array(
+// 'post_type'   => 'dress',
+// 'numberposts' => -1,
+// )
 // );
 
 // foreach ( $products as $p ) {
-// 	update_field( 'availability', true, $p->ID );
+// update_field( 'availability', true, $p->ID );
 // }

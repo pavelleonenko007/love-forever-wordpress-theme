@@ -67,142 +67,142 @@ function initHeroPageSliderPagination() {
 new FormsValidator();
 new MaskedPhoneButtonCollection();
 
-document.addEventListener('DOMContentLoaded', function () {
-	Barba.Pjax.start();
-	Barba.Prefetch.init();
+// document.addEventListener('DOMContentLoaded', function () {
+// 	Barba.Pjax.start();
+// 	Barba.Prefetch.init();
 
-	Barba.Pjax.originalPreventCheck = Barba.Pjax.preventCheck;
+// 	Barba.Pjax.originalPreventCheck = Barba.Pjax.preventCheck;
 
-	Barba.Pjax.preventCheck = function (evt, element) {
-		if (!Barba.Pjax.originalPreventCheck(evt, element)) {
-			return false;
-		}
+// 	Barba.Pjax.preventCheck = function (evt, element) {
+// 		if (!Barba.Pjax.originalPreventCheck(evt, element)) {
+// 			return false;
+// 		}
 
-		if (element.closest('#wpadminbar')) {
-			return false;
-		}
+// 		if (element.closest('#wpadminbar')) {
+// 			return false;
+// 		}
 
-		return true;
-	};
+// 		return true;
+// 	};
 
-	var FadeTransition = Barba.BaseTransition.extend({
-		start: function () {
-			console.log('transition start');
+// 	var FadeTransition = Barba.BaseTransition.extend({
+// 		start: function () {
+// 			console.log('transition start');
 
-			this.newContainerLoading
-				.then(this.startTracking.bind(this))
-				.then(this.fadeOut.bind(this))
-				.then(this.fadeIn.bind(this));
-		},
-		fadeOut: function () {
-			// RangeSliderCollection.destroyAll();
-			return $(this.oldContainer)
-				.animate({ visibility: 'visible' }, 100)
-				.promise();
-		},
-		startTracking: function () {
-			const productId = this.newContainer.dataset.productId;
+// 			this.newContainerLoading
+// 				.then(this.startTracking.bind(this))
+// 				.then(this.fadeOut.bind(this))
+// 				.then(this.fadeIn.bind(this));
+// 		},
+// 		fadeOut: function () {
+// 			// RangeSliderCollection.destroyAll();
+// 			return $(this.oldContainer)
+// 				.animate({ visibility: 'visible' }, 100)
+// 				.promise();
+// 		},
+// 		startTracking: function () {
+// 			const productId = this.newContainer.dataset.productId;
 
-			if (productId) {
-				const formData = new FormData();
-				formData.append('action', 'track_product_view');
-				formData.append('product_id', productId);
+// 			if (productId) {
+// 				const formData = new FormData();
+// 				formData.append('action', 'track_product_view');
+// 				formData.append('product_id', productId);
 
-				return fetch(`${window.origin}/wp-admin/admin-ajax.php`, {
-					method: 'POST',
-					credentials: 'same-origin',
-					body: formData,
-				})
-					.then((response) => response.json())
-					.then((data) => {
-						console.log(data);
-					})
-					.catch((error) =>
-						console.error('Error tracking product view:', error)
-					);
-			}
+// 				return fetch(`${window.origin}/wp-admin/admin-ajax.php`, {
+// 					method: 'POST',
+// 					credentials: 'same-origin',
+// 					body: formData,
+// 				})
+// 					.then((response) => response.json())
+// 					.then((data) => {
+// 						console.log(data);
+// 					})
+// 					.catch((error) =>
+// 						console.error('Error tracking product view:', error)
+// 					);
+// 			}
 
-			return Promise.resolve();
-		},
-		fadeIn: function () {
-			$(window).scrollTop(0);
+// 			return Promise.resolve();
+// 		},
+// 		fadeIn: function () {
+// 			$(window).scrollTop(0);
 
-			var _this = this;
-			_this.done();
+// 			var _this = this;
+// 			_this.done();
 
-			console.log('done');
+// 			console.log('done');
 
-			FFFafterEnter();
-			FFFafterLoad();
+// 			FFFafterEnter();
+// 			FFFafterLoad();
 
-			Webflow.destroy();
-			Webflow.ready();
-			Webflow.require('ix2').init();
-		},
-	});
-	Barba.Pjax.getTransition = function () {
-		return FadeTransition;
-	};
+// 			Webflow.destroy();
+// 			Webflow.ready();
+// 			Webflow.require('ix2').init();
+// 		},
+// 	});
+// 	Barba.Pjax.getTransition = function () {
+// 		return FadeTransition;
+// 	};
 
-	Barba.Dispatcher.on('initStateChange', (currentStatus) => {
-		console.log('initStateChange');
+// 	Barba.Dispatcher.on('initStateChange', (currentStatus) => {
+// 		console.log('initStateChange');
 
-		closeMegaMenu();
+// 		closeMegaMenu();
 
-		SearchFormCollection.destroyAll();
-		FavoritesButtonWithCounterCollection.destroyAll();
-		CopyToClipboardButtonCollection.destroyAll();
-		CardSliderCollection.destroyAll();
-		PlayIfVisibleVideoCollection.destroyAll();
-		InputMaskCollection.destroyAll();
-		DialogCollection.destroyAll();
-		AccordionCollection.destroyAll();
-		// FittingFormCollection.destroyAll();
-		ProductFilterFormCollection.destroyAll();
-		RangeSliderCollection.destroyAll();
-		ReviewFormCollection.destroyAll();
-		FileInputCollection.destroyAll();
-		VideoPlayerCollection.destroyAll();
-		CustomSelectCollection.destroyAll();
-		FilterFittingFormCollection.destroyAll();
-		SaleTimerCollection.destroyAll();
-		CustomDatepickerCollection.destroyAll();
-	});
+// 		SearchFormCollection.destroyAll();
+// 		FavoritesButtonWithCounterCollection.destroyAll();
+// 		CopyToClipboardButtonCollection.destroyAll();
+// 		CardSliderCollection.destroyAll();
+// 		PlayIfVisibleVideoCollection.destroyAll();
+// 		InputMaskCollection.destroyAll();
+// 		DialogCollection.destroyAll();
+// 		AccordionCollection.destroyAll();
+// 		// FittingFormCollection.destroyAll();
+// 		ProductFilterFormCollection.destroyAll();
+// 		RangeSliderCollection.destroyAll();
+// 		ReviewFormCollection.destroyAll();
+// 		FileInputCollection.destroyAll();
+// 		VideoPlayerCollection.destroyAll();
+// 		CustomSelectCollection.destroyAll();
+// 		FilterFittingFormCollection.destroyAll();
+// 		SaleTimerCollection.destroyAll();
+// 		CustomDatepickerCollection.destroyAll();
+// 	});
 
-	Barba.Dispatcher.on(
-		'newPageReady',
-		function (currentStatus, oldStatus, container, newPageRawHTML) {
-			const match = newPageRawHTML.match(/data-wf-page="([^"]+)"/);
-			const pageId = match ? match[1] : '';
-			$('html').attr('data-wf-page', pageId);
-		}
-	);
+// 	Barba.Dispatcher.on(
+// 		'newPageReady',
+// 		function (currentStatus, oldStatus, container, newPageRawHTML) {
+// 			const match = newPageRawHTML.match(/data-wf-page="([^"]+)"/);
+// 			const pageId = match ? match[1] : '';
+// 			$('html').attr('data-wf-page', pageId);
+// 		}
+// 	);
 
-	Barba.Dispatcher.on(
-		'transitionCompleted',
-		function (currentStatus, prevStatus) {
-			document.documentElement.classList.remove('htmldopmenuopened');
+// 	Barba.Dispatcher.on(
+// 		'transitionCompleted',
+// 		function (currentStatus, prevStatus) {
+// 			document.documentElement.classList.remove('htmldopmenuopened');
 
-			console.log('transitionCompleted');
+// 			console.log('transitionCompleted');
 
-			initPage();
+// 			initPage();
 
-			executeInlineScripts(document.querySelector('.barba-container'));
+// 			executeInlineScripts(document.querySelector('.barba-container'));
 
-			switch (currentStatus.namespace) {
-				case 'single-dress':
-					initSingleDressPage();
-					break;
-				case 'catalog':
-					initCatalogPage();
-					break;
-				case 'archive-review':
-					initReviewsPage();
-					break;
-			}
-		}
-	);
-});
+// 			switch (currentStatus.namespace) {
+// 				case 'single-dress':
+// 					initSingleDressPage();
+// 					break;
+// 				case 'catalog':
+// 					initCatalogPage();
+// 					break;
+// 				case 'archive-review':
+// 					initReviewsPage();
+// 					break;
+// 			}
+// 		}
+// 	);
+// });
 
 function executeInlineScripts(container) {
 	const scripts = container.querySelectorAll('script');
