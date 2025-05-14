@@ -81,3 +81,7 @@ picture:has(.img-cover) {
 		object-position: top;
 	}
 }
+
+.splide.is-initialized:not(.is-active) .splide__list.otzivi-grid {
+	display: flex;
+}
