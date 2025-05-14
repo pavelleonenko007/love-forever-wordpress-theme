@@ -1,4 +1,3 @@
-import './styles/index.scss';
 import '@splidejs/splide/css/core';
 
 import Splide from '@splidejs/splide';

@@ -17,13 +17,13 @@ import ProductFilterFormCollection from './ProductFilterForm';
 import RangeSliderCollection from './RangeSlider';
 import ReviewFormCollection from './ReviewForm';
 import SearchFormCollection from './SearchForm';
-import './styles/index.scss';
 import VideoPlayerCollection from './VideoPlayer';
 import CardSliderCollection from './CardSlider';
 import PlayIfVisibleVideoCollection from './PlayIfVisibleVideoCollection';
 import { SaleTimerCollection } from './SaleTimer';
 import CustomDatepickerCollection from './CustomDatePicker';
 import Stories from './Stories';
+import './styles/index.scss';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
