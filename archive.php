@@ -871,4 +871,5 @@ if ( empty( $thumbnail ) ) {
 			</div>
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>
+		<?php get_template_part( 'template-parts/global/stories-dialog' ); ?>
 		<?php get_footer(); ?>

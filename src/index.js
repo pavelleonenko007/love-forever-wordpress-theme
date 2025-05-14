@@ -282,17 +282,20 @@ document.addEventListener('DOMContentLoaded', () => {
 	new DeleteFittingButton();
 
 	initPage();
+	initSingleDressPage();
+	initCatalogPage();
+	initReviewsPage();
 
-	switch (Barba.HistoryManager.currentStatus().namespace) {
-		case 'single-dress':
-			initSingleDressPage();
-		case 'catalog':
-			initCatalogPage();
-			break;
-		case 'archive-review':
-			initReviewsPage();
-			break;
-	}
+	// switch (Barba.HistoryManager.currentStatus().namespace) {
+	// 	case 'single-dress':
+	// 		initSingleDressPage();
+	// 	case 'catalog':
+	// 		initCatalogPage();
+	// 		break;
+	// 	case 'archive-review':
+	// 		initReviewsPage();
+	// 		break;
+	// }
 });
 
 document.addEventListener('DOMContentLoaded', (event) => {
