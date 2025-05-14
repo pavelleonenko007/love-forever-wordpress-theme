@@ -428,7 +428,7 @@ function loveforever_get_date_fitting_time_slots_via_ajax() {
 }
 
 add_action( 'wp_ajax_get_filtered_products', 'loveforever_get_filtered_products_via_ajax' );
-add_action( 'wp_ajax_get_filtered_products', 'loveforever_get_filtered_products_via_ajax' );
+add_action( 'wp_ajax_nopriv_get_filtered_products', 'loveforever_get_filtered_products_via_ajax' );
 function loveforever_get_filtered_products_via_ajax() {
 	if ( ! isset( $_POST['submit_filter_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['submit_filter_form_nonce'] ) ), 'submit_filter_form' ) ) {
 		wp_send_json_error(
