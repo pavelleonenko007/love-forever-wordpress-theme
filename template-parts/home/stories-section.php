@@ -14,9 +14,9 @@ $stories_query_args = array(
 $stories_query      = new WP_Query( $stories_query_args );
 
 if ( $stories_query->have_posts() ) : ?>
-<section data-acf-layout="stories-section" class="section">
-	<div class="container n-top m-scrll">
-		<div class="fast-links">
+<section class="section stories-section">
+	<div class="container n-top m-scrll stories-section__container">
+		<div class="fast-links stories-section__list">
 			<?php
 			$i = 0;
 			while ( $stories_query->have_posts() ) :
