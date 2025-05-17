@@ -19,4 +19,5 @@ require_once __DIR__ . '/inc/hooks.php';
 require_once __DIR__ . '/includes/class-dress-order.php';
 require_once __DIR__ . '/includes/class-fitting-slots.php';
 require_once __DIR__ . '/inc/dress-importer.php';
+require_once __DIR__ . '/inc/cli/reupdate-posts.php';
 // require_once __DIR__ . '/inc/dress-categories-importer.php'.
