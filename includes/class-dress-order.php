@@ -8,10 +8,32 @@
 defined( 'ABSPATH' ) || exit;
 
 class Dress_Sorter {
+	/**
+	 * Singleton instance.
+	 *
+	 * @var Dress_Sorter|null
+	 */
+	private static $instance = null;
+
 	private $post_type = 'dress'; // Assuming your post type is 'dress'
 	private $meta_key  = 'dress_order';
 
-	public function __construct() {
+	/**
+	 * Get singleton instance.
+	 *
+	 * @return Dress_Sorter
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Private constructor to prevent direct instantiation.
+	 */
+	private function __construct() {
 		add_action( 'wp_ajax_update_dress_order', array( $this, 'update_dress_order_via_ajax' ) );
 		add_action( 'init', array( $this, 'register_dress_order_fields' ) );
 		// add_action( 'current_screen', array( $this, 'maybe_setup_dress_order_fields_value' ), 10, 1 );
@@ -28,6 +50,16 @@ class Dress_Sorter {
 		add_action( 'before_delete_post', array( $this, 'handle_dress_deletion' ), 10, 1 );
 		add_action( 'wp_trash_post', array( $this, 'handle_dress_deletion' ), 10, 1 );
 	}
+
+	/**
+	 * Prevent cloning of the instance.
+	 */
+	private function __clone() {}
+
+	/**
+	 * Prevent unserializing of the instance.
+	 */
+	public function __wakeup() {}
 
 	public function register_dress_order_fields() {
 		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
@@ -492,8 +524,6 @@ class Dress_Sorter {
 	}
 }
 
-new Dress_Sorter();
-
 add_action(
 	'init',
 	function () {
@@ -501,11 +531,6 @@ add_action(
 			'post_type'      => 'dress',
 			'fields'         => 'ids',
 			'posts_per_page' => -1,
-			// 'meta_key'       => 'dress_order_4',
-			// 'orderby'        => 'meta_value_num',
-			// 'post__not_in'   => array( 101, 27, 177, 45, 105, 193, 55, 123, 204, 63 ),
-			// 'paged'          => 2,
-			// 'order'          => 'ASC',
 			'tax_query'      => array(
 				array(
 					'taxonomy' => 'dress_category',
@@ -514,14 +539,8 @@ add_action(
 				),
 			),
 		);
-
-		// $posts = ( new WP_Query( $other_dresses_args ) )->posts;
-
-		// foreach ( $posts as $posts_item ) {
-		// update_field( 'dress_order_4', 0, $posts_item );
-		// }
-
-		// var_dump( $other_dresses_args );
-		// var_dump( ( new WP_Query( $other_dresses_args ) )->posts );
 	}
 );
+
+// Initialize the singleton instance
+Dress_Sorter::get_instance();
