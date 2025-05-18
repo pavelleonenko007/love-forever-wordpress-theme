@@ -1,7 +1,357 @@
 import BaseComponent from './BaseComponent';
+import DialogCollection from './Dialog';
 import { formatDateToRussian, promiseWrapper, wait } from './utils';
 
 const ROOT_SELECTOR = '[data-js-fitting-form]';
+
+const getAvailableSlotsForDate = async (date) => {
+	try {
+		const formData = new FormData();
+		formData.append('action', 'get_fitting_time_slots');
+		formData.append('nonce', LOVE_FOREVER.NONCE);
+		formData.append('date', date);
+
+		const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+			method: 'POST',
+			body: formData,
+		});
+
+		const body = await response.json();
+
+		// console.log(body);
+
+		if (!body.success) {
+			console.error(body.data.debug);
+			throw new Error(body.data.message);
+		}
+
+		return body.data;
+	} catch (error) {
+		throw error;
+	}
+};
+
+/**
+ * @param {FormData} formData
+ */
+const createFittingRecord = async (formData) => {
+	try {
+		const response = await fetch(LOVE_FOREVER.AJAX_URL, {
+			method: 'POST',
+			body: formData,
+		});
+
+		const body = await response.json();
+
+		// console.log(body);
+
+		if (!body.success) {
+			console.error(body.data.debug);
+			throw new Error(body.data.message);
+		}
+
+		return body.data;
+	} catch (error) {
+		throw error;
+	}
+};
+
+window.addEventListener('fitting:datetimechange', (event) => {
+	const globalFittingDialog = DialogCollection.getDialogsById(
+		'globalFittingDialog'
+	)?.dialog;
+	const singleProductFittingDialog = DialogCollection.getDialogsById(
+		'singleProductFittingDialog'
+	)?.dialog;
+
+	[globalFittingDialog, singleProductFittingDialog].forEach((dialog) => {
+		const dialogTimeElement = dialog.querySelector(
+			'[data-js-fitting-form-selected-date]'
+		);
+
+		if (dialogTimeElement) {
+			console.log({ dialogTimeElement });
+
+			dialogTimeElement.textContent = formatDateToRussian(
+				event.detail.datetime
+			);
+		}
+	});
+});
+
+window.addEventListener('fitting:created', (event) => {
+	const messageElements = document.querySelectorAll('[data-js-dialog-title]');
+
+	messageElements.forEach((messageElement) => {
+		messageElement.textContent = event.detail.message;
+	});
+
+	const globalFittingDialog = DialogCollection.getDialogsById(
+		'globalFittingDialog'
+	)?.dialog;
+	const singleProductFittingDialog = DialogCollection.getDialogsById(
+		'singleProductFittingDialog'
+	)?.dialog;
+
+	[globalFittingDialog, singleProductFittingDialog].forEach((dialog) => {
+		const closeButtons = dialog.querySelectorAll(
+			'[data-js-dialog-close-button]'
+		);
+		const fieldsContainerElement = dialog.querySelector(
+			'.fitting-form__group-body'
+		);
+		const legalElement = dialog.querySelector('.fitting-form__group-footer');
+
+		closeButtons.forEach((closeButton) => {
+			closeButton.disabled = false;
+			closeButton.hidden = false;
+		});
+
+		if (fieldsContainerElement) {
+			fieldsContainerElement.hidden = true;
+		}
+
+		if (legalElement) {
+			legalElement.hidden = true;
+		}
+	});
+});
+
+window.addEventListener('fitting:createerror', (event) => {
+	const errorElements = document.querySelectorAll(
+		'[data-js-fitting-form-errors]'
+	);
+
+	errorElements.forEach((errorElement) => {
+		errorElement.textContent = event.detail.message;
+		errorElement.hidden = false;
+
+		setTimeout(() => {
+			errorElement.textContent = '';
+			errorElement.hidden = true;
+		}, 3_000);
+	});
+});
+
+class FittingForm {
+	selectors = {
+		root: ROOT_SELECTOR,
+	};
+
+	/**
+	 * @param {HTMLFormElement} element
+	 */
+	constructor(element) {
+		this.root = element;
+		this.submitButton = Array.from(
+			document.querySelectorAll('button[type="submit"]')
+		).find((button) => button.form === this.root);
+
+		this.hasBeenSubmitted = false;
+
+		this.bindEvents();
+
+		this.validateForm();
+
+		this.emitDateTimeUpdate();
+	}
+
+	emitDateTimeUpdate() {
+		const datetime = `${this.root.date.value} ${this.root.time.value}`;
+
+		window.dispatchEvent(
+			new CustomEvent('fitting:datetimechange', {
+				detail: {
+					datetime,
+				},
+			})
+		);
+	}
+
+	async updateTimeSlots() {
+		console.log('updateTimeSlots');
+
+		/**
+		 * @type {HTMLSelectElement}
+		 */
+		const timeControl = this.root.time;
+		const $customSelectInstance = $(timeControl).selectmenu('instance');
+
+		timeControl.disabled = true;
+
+		if ($customSelectInstance !== undefined) {
+			$(timeControl).selectmenu('disable');
+		}
+
+		const { data, error } = await promiseWrapper(
+			getAvailableSlotsForDate(this.root.date.value)
+		);
+
+		if (error) {
+			alert(error);
+			return;
+		}
+
+		timeControl.innerHTML = '';
+
+		for (const time in data.slots) {
+			const slot = data.slots[time];
+			const option = document.createElement('option');
+
+			option.value = time;
+			option.textContent = time;
+			option.disabled = slot.available < 1;
+
+			timeControl.append(option);
+		}
+
+		timeControl.disabled = false;
+
+		if ($customSelectInstance !== undefined) {
+			$(timeControl).selectmenu('enable');
+			$(timeControl).selectmenu('refresh');
+		}
+
+		timeControl.dispatchEvent(
+			new Event('change', {
+				bubbles: true,
+			})
+		);
+	}
+
+	validateForm() {
+		const requiredFields = ['date', 'time', 'name', 'phone'];
+		const formData = new FormData(this.root);
+
+		let isValid = true;
+
+		for (let [name, value] of formData) {
+			if (!requiredFields.includes(name)) {
+				continue;
+			}
+
+			value = value.trim();
+
+			if (!value) {
+				isValid = false;
+				break;
+			}
+		}
+
+		const submitButton = Array.from(
+			document.querySelectorAll('[data-js-fitting-form-submit-button]')
+		).find((button) => button.form === this.root);
+
+		if (submitButton) {
+			submitButton.disabled = !isValid;
+		}
+	}
+
+	onChange = (event) => {
+		if (event.target.form !== this.root) {
+			return;
+		}
+
+		if (event.target.name === 'date') {
+			this.updateTimeSlots();
+		}
+
+		if (event.target.name === 'time') {
+			this.emitDateTimeUpdate();
+		}
+
+		this.validateForm();
+	};
+
+	/**
+	 * @param {SubmitEvent} event
+	 */
+	onSubmit = async (event) => {
+		event.preventDefault();
+
+		this.submitButton.disabled = true;
+
+		const formData = new FormData(this.root);
+
+		formData.append('action', 'create_new_fitting_record');
+
+		const { data, error } = await promiseWrapper(createFittingRecord(formData));
+
+		this.hasBeenSubmitted = true;
+
+		this.submitButton.disabled = false;
+
+		if (error) {
+			window.dispatchEvent(
+				new CustomEvent('fitting:createerror', {
+					detail: {
+						message: error,
+					},
+				})
+			);
+			return;
+		}
+
+		window.dispatchEvent(
+			new CustomEvent('fitting:created', {
+				detail: {
+					message: data.message,
+				},
+			})
+		);
+	};
+
+	/**
+	 * @param {CustomEvent} event
+	 */
+	onDialogClose = (event) => {
+		if (
+			!['singleProductFittingDialog', 'globalFittingDialog'].includes(
+				event.detail.dialogId
+			)
+		) {
+			return;
+		}
+
+		if (!this.hasBeenSubmitted) {
+			return;
+		}
+
+		this.root.reset();
+
+		const { dialog } = DialogCollection.getDialogsById(event.detail.dialogId);
+
+		const dialogTitle = dialog.querySelector('[data-js-dialog-title]');
+		const fieldsContainerElement = dialog.querySelector(
+			'.fitting-form__group-body'
+		);
+		const legalElement = dialog.querySelector('.fitting-form__group-footer');
+		const closeButton = dialog.querySelector('.dialog-card__body-button');
+
+		dialogTitle.textContent = 'Запись на примерку';
+
+		if (fieldsContainerElement) {
+			fieldsContainerElement.hidden = false;
+		}
+
+		if (legalElement) {
+			legalElement.hidden = false;
+		}
+
+		if (closeButton) {
+			closeButton.hidden = true;
+			closeButton.disabled = true;
+		}
+
+		this.updateTimeSlots();
+	};
+
+	bindEvents() {
+		document.addEventListener('change', this.onChange);
+		this.root.addEventListener('submit', this.onSubmit);
+		document.addEventListener('dialogClose', this.onDialogClose);
+	}
+}
 
 class BaseFittingForm extends BaseComponent {
 	/**
@@ -11,8 +361,6 @@ class BaseFittingForm extends BaseComponent {
 	constructor(form) {
 		super();
 		this.form = form;
-		console.log(this.form.elements.date instanceof RadioNodeList);
-		console.log(this.form.elements);
 
 		this.state = this._getProxyState({
 			success: false,
@@ -91,8 +439,6 @@ class GlobalFittingForm extends BaseFittingForm {
 
 	constructor(form) {
 		super(form);
-
-		console.log(form);
 
 		this.steps = this.form.querySelectorAll(this.selectors.step);
 		this.backButton = this.form.querySelector(this.selectors.backButton);
@@ -503,7 +849,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 			const body = await response.json();
 
-			console.log({ body });
+			// console.log({ body });
 
 			if (!body.success) {
 				throw new Error(body.data.message);
@@ -567,7 +913,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 			const body = await response.json();
 
-			console.log(body);
+			// console.log(body);
 
 			this.state.success = body.success;
 
@@ -614,8 +960,6 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	updateUI() {
-		console.log({ ...this.state });
-
 		if (this.prevState.date !== this.state.date) {
 			this.updateTimeSlots();
 		}
@@ -756,6 +1100,7 @@ class SingleFittingForm extends BaseFittingForm {
 		for (const name in formData) {
 			if (Object.prototype.hasOwnProperty.call(formData, name)) {
 				const value = formData[name];
+
 				this.state[name] = value;
 			}
 		}
@@ -812,8 +1157,6 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {CustomEvent} event
 	 */
 	onCloseDialog = (event) => {
-		console.log('is submitted: ', this.state.isSubmitted);
-
 		if (event.detail.dialogId === this.dialog.id && this.state.isSubmitted) {
 			this.reset();
 		}
@@ -874,22 +1217,24 @@ class SingleFittingForm extends BaseFittingForm {
 			this.state.isUpdatingSlots
 		);
 
-		if (this.state.isUpdatingSlots) {
-			$(this.form.elements.time).selectmenu('disable');
-		}
+		if ($(this.form.elements.time).selectmenu('instance') !== undefined) {
+			if (this.state.isUpdatingSlots) {
+				$(this.form.elements.time).selectmenu('disable');
+			}
 
-		if (
-			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
-			!this.state.isUpdatingSlots
-		) {
-			$(this.form.elements.time).selectmenu('refresh');
-			$(this.form.elements.time).selectmenu('enable');
-			this.form.elements.time.dispatchEvent(
-				new Event('change', {
-					bubbles: true,
-					cancelable: true,
-				})
-			);
+			if (
+				this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
+				!this.state.isUpdatingSlots
+			) {
+				$(this.form.elements.time).selectmenu('enable');
+				$(this.form.elements.time).selectmenu('refresh');
+				this.form.elements.time.dispatchEvent(
+					new Event('change', {
+						bubbles: true,
+						cancelable: true,
+					})
+				);
+			}
 		}
 
 		if (
@@ -1089,8 +1434,6 @@ class EditFittingForm extends BaseFittingForm {
 
 		const { data, error } = await promiseWrapper(this.updateFitting());
 
-		console.log({ data, error });
-
 		this.state.isSubmitting = false;
 
 		if (error) {
@@ -1105,8 +1448,6 @@ class EditFittingForm extends BaseFittingForm {
 	};
 
 	updateUI() {
-		console.log({ ...this.state });
-
 		if (this.prevState.date !== this.state.date) {
 			this.updateTimeSlots();
 		}
@@ -1174,8 +1515,7 @@ class FittingFormCollection {
 	static init() {
 		document.querySelectorAll(ROOT_SELECTOR).forEach((fittingForm) => {
 			let fittingFormInstance = null;
-
-			console.log(fittingForm.id);
+			// let fittingFormInstance = new FittingForm(fittingForm);
 
 			switch (fittingForm.id) {
 				case 'singleDressForm':

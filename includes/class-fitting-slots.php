@@ -186,7 +186,7 @@ class Fitting_Slots {
 			$args['post__not_in'] = array( $exclude_fitting_id );
 		}
 
-		$query = new WP_Query( $args );
+		$query    = new WP_Query( $args );
 		$bookings = array();
 
 		if ( $query->have_posts() ) {
@@ -211,7 +211,7 @@ class Fitting_Slots {
 		$slots = self::get_available_slots( $date, null, $exclude_fitting_id );
 
 		if ( ! isset( $slots[ $time ] ) || $slots[ $time ] <= 0 ) {
-				return 'Выбранное время уже занято' . $exclude_fitting_id;
+				return 'Выбранное время уже занято';
 		}
 
 		$duration     = self::get_fitting_duration( $fitting_type );

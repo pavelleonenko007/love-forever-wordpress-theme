@@ -5,6 +5,8 @@ class BaseComponent {
 				return target[prop];
 			},
 			set: (target, prop, newValue) => {
+				console.log(`Set ${newValue} to ${prop}`);
+
 				const currentValue = target[prop];
 
 				target[prop] = newValue;

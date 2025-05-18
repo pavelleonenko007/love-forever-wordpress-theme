@@ -470,7 +470,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 										<div class="fitting-form__errors" data-js-fitting-form-errors hidden></div>
 										<input type="hidden" name="submit_fitting_form_nonce" value="<?php echo esc_attr( wp_create_nonce( 'submit_fitting_form' ) ); ?>" form="singleDressForm">
 									</div>
-									<button type="dialog-card__body-button button" class="button" disabled hidden data-js-dialog-close-button>Хорошо</button>
+									<button type="button" class="dialog-card__body-button button" disabled hidden data-js-dialog-close-button>Хорошо</button>
 								</div>
 							</div>
 						</div>

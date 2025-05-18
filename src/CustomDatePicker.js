@@ -26,6 +26,9 @@ class CustomDatepicker {
 			: {};
 
 		$(this.customControl).datepicker({
+			classes: {
+				'ui-datepicker': 'lf-datepicker',
+			},
 			showOtherMonths: true,
 			selectOtherMonths: true,
 			dateFormat: 'dd.mm.yy',
@@ -50,6 +53,7 @@ class CustomDatepicker {
 
 		if (isMobile) {
 			$(this.customControl).datepicker('hide');
+			// $(this.customControl).datepicker('disable');
 		}
 	}
 

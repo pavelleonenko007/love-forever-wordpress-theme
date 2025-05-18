@@ -41,6 +41,10 @@
 		justify-content: space-between;
 		row-gap: 20rem;
 		overflow: hidden;
+
+		&-button {
+			flex-shrink: 0;
+		}
 	}
 
 	&__footer {

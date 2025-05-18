@@ -22,6 +22,10 @@ a[href]:where(:not([class])) {
 	}
 }
 
+*[hidden] {
+	display: none !important;
+}
+
 .dopmenuopened .n-menu.w--current {
 	color: black;
 }
