@@ -1201,16 +1201,11 @@ class SingleFittingForm extends BaseFittingForm {
 
 			for (const time in body.data.slots) {
 				const slot = body.data.slots[time];
-
-				console.log({ [time]: slot });
-
 				const option = document.createElement('option');
 
 				option.value = time;
 				option.textContent = time;
 				option.disabled = slot.available === 0;
-
-				console.log(slot.available, slot.available > 0);
 				
 				if (newSelectedOption === null && slot.available > 0) {
 					option.selected = true;
@@ -1218,24 +1213,13 @@ class SingleFittingForm extends BaseFittingForm {
 				}
 
 				timeSelectControl.append(option);
-				// if (Object.prototype.hasOwnProperty.call(body.data.slots, time)) {
-				// 	const slot = body.data.slots[time];
-
-				// 	timeOptions += `<option value="${time}" ${
-				// 		slot.available === 0 ? 'disabled' : ''
-				// 	}>${time}</option>`;
-				// }
 			}
 
-			console.log(newSelectedOption);
-
-			// timeSelectControl.innerHTML = timeOptions;
-
-			// timeSelectControl.dispatchEvent(
-			// 	new Event('change', {
-			// 		bubbles: true,
-			// 	})
-			// );
+			timeSelectControl.dispatchEvent(
+				new Event('change', {
+					bubbles: true,
+				})
+			);
 		} catch (error) {
 			console.error(error);
 			alert(error.message);
