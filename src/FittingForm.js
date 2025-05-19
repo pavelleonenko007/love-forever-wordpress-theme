@@ -1093,6 +1093,8 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {ChangeEvent} event
 	 */
 	onChange = (event) => {
+		console.log({ event });
+
 		this.state.error = null;
 
 		const formData = Object.fromEntries(new FormData(this.form));
@@ -1163,6 +1165,8 @@ class SingleFittingForm extends BaseFittingForm {
 	};
 
 	async loadTimeSlots() {
+		console.log('loadTimeSlots');
+
 		const selectedDate = this.form.elements.date.value;
 
 		if (!selectedDate) return;
@@ -1190,19 +1194,48 @@ class SingleFittingForm extends BaseFittingForm {
 			}
 
 			const timeSelectControl = this.form.elements.time;
-			let timeOptions = '';
+
+			timeSelectControl.innerHTML = '';
+			// let timeOptions = '';
+			let newSelectedOption = null;
 
 			for (const time in body.data.slots) {
-				if (Object.prototype.hasOwnProperty.call(body.data.slots, time)) {
-					const slot = body.data.slots[time];
+				const slot = body.data.slots[time];
 
-					timeOptions += `<option value="${time}" ${
-						slot.available === 0 ? 'disabled' : ''
-					}>${time}</option>`;
+				console.log({ [time]: slot });
+
+				const option = document.createElement('option');
+
+				option.value = time;
+				option.textContent = time;
+				option.disabled = slot.available === 0;
+
+				console.log(slot.available, slot.available > 0);
+				
+				if (newSelectedOption === null && slot.available > 0) {
+					option.selected = true;
+					newSelectedOption = option;
 				}
+
+				timeSelectControl.append(option);
+				// if (Object.prototype.hasOwnProperty.call(body.data.slots, time)) {
+				// 	const slot = body.data.slots[time];
+
+				// 	timeOptions += `<option value="${time}" ${
+				// 		slot.available === 0 ? 'disabled' : ''
+				// 	}>${time}</option>`;
+				// }
 			}
 
-			timeSelectControl.innerHTML = timeOptions;
+			console.log(newSelectedOption);
+
+			// timeSelectControl.innerHTML = timeOptions;
+
+			// timeSelectControl.dispatchEvent(
+			// 	new Event('change', {
+			// 		bubbles: true,
+			// 	})
+			// );
 		} catch (error) {
 			console.error(error);
 			alert(error.message);

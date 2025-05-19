@@ -275,7 +275,7 @@ class Fitting_Slots {
 			}
 
 			// Check next slot availability
-			$next_count               = isset( $slots[ $slot_times[ $index + 1 ] ] ) ? $slots[ $slot_times[ $index + 1 ] ] : 0;
+			$next_count               = isset( $slot_times[ $index + 1 ] ) && isset( $slots[ $slot_times[ $index + 1 ] ] ) ? $slots[ $slot_times[ $index + 1 ] ] : 0;
 			$formatted_slots[ $time ] = ( $current_count + $next_count >= $min_slots_needed ) ? $current_count : 0;
 		}
 
