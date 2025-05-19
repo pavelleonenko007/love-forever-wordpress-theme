@@ -52,10 +52,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 						<?php
 						if ( ! empty( $images ) ) :
 							?>
-							<div data-delay="4000" data-animation="slide" class="m-prod-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-								<div class="m-prod-slider_mask w-slider-mask">
+							<div data-delay="4000" data-animation="slide" class="m-prod-slider lf-single-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+								<div class="m-prod-slider_mask lf-single-slider__mask w-slider-mask">
 									<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
-										<div class="w-slide">
+										<div class="lf-single-slider__slide w-slide">
 											<div class="mom-abs">
 												<?php if ( ! empty( $image_slide['image'] ) ) : ?>
 													<img src="<?php echo esc_url( $image_slide['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_slide['image']['alt'] ); ?>" class="img-cover">
