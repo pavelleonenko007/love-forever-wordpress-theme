@@ -530,24 +530,24 @@ function AllPages() {
 	$('.hovered-menue_close-menu').hover(function () {
 		$('.hovered-menue.active').removeClass('active');
 		$('.navbar').removeClass('dopmenuopened');
-		$('.serach-btn').removeClass('serach-open');
+		$('.lf-icon-button--search').removeClass('is-active');
 		$('html').removeClass('htmldopmenuopened');
 	});
 
 	// открыть поиск по клику
 
-	$('.serach-btn').click(function () {
+	$('.lf-icon-button--search').click(function () {
 		$('.menuline').removeClass('mobmenuopened');
 
-		if ($(this).hasClass('serach-open')) {
-			$(this).removeClass('serach-open');
+		if ($(this).hasClass('is-active')) {
+			$(this).removeClass('is-active');
 			$('.hovered-menue.active').removeClass('active');
 			$('.navbar').removeClass('dopmenuopened');
 			$('html').removeClass('htmldopmenuopened');
 			$(this).next().removeClass('active');
 			$(this).closest('.navbar').removeClass('dopmenuopened');
 		} else {
-			$(this).addClass('serach-open');
+			$(this).addClass('is-active');
 			$('.hovered-menue.active').removeClass('active');
 			$('.navbar').removeClass('dopmenuopened');
 			$('html').addClass('htmldopmenuopened');

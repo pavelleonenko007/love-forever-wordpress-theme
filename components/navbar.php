@@ -39,31 +39,24 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 				<div class="l-spacer"></div>
 				<div class="menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5">
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 like-counter-button w-inline-block <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-							<div class="code-embed-3 lik w-embed">
-								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
+						<!-- Favorites button -->
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+							<div class="lf-icon-button__icon-wrapper">
+								<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+									<use href="#heartIcon"></use>
 								</svg>
 							</div>
-							<span class="like-counter-button__inner">
-								<span class="like-counter-button__text">Избранное</span>
-								<span data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
-							</span>
+							<span class="lf-icon-button__counter" data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
 						</a>
+						<!-- Favorites button end -->
 						<div class="menu-link-keeper">
-							<a href="#" class="serach-btn w-inline-block">
-								<div class="code-embed-3 w-embed">
-									<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewbox="0 0 15 16" fill="none">
-										<path d="M13.5387 15.0696L13.4669 15.1437L13.3951 15.0696L9.40606 10.9541C8.52482 11.6053 7.44441 11.9889 6.27713 11.9889C3.30451 11.9889 0.9 9.50359 0.9 6.44444C0.9 3.3853 3.30451 0.9 6.27713 0.9C9.24976 0.9 11.6543 3.3853 11.6543 6.44444C11.6543 7.94871 11.0731 9.31368 10.1292 10.3129L14.0718 14.3804L14.1393 14.45L14.0718 14.5196L13.5387 15.0696ZM1.85388 6.44444C1.85388 8.96951 3.83716 11.0111 6.27713 11.0111C8.71711 11.0111 10.7004 8.96951 10.7004 6.44444C10.7004 3.91938 8.71711 1.87778 6.27713 1.87778C3.83716 1.87778 1.85388 3.91938 1.85388 6.44444Z" fill="white" stroke="white" stroke-width="0.2"></path>
+							<button type="button" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
+								<div class="lf-icon-button__icon-wrapper">
+									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
+										<use href="#searchIcon"></use>
 									</svg>
 								</div>
-								<div class="code-embed-3 w-embed">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewbox="0 0 16 15" fill="none">
-										<line x1="15.3536" y1="0.353553" x2="1.35355" y2="14.3536" stroke="black"></line>
-										<line y1="-0.5" x2="19.799" y2="-0.5" transform="matrix(0.707107 0.707107 0.707107 -0.707107 1 0)" stroke="black"></line>
-									</svg>
-								</div>
-							</a>
+							</button>
 							<div class="hovered-menue search-m">
 								<div id="w-node-_29763d6b-4a4a-4ba9-96d9-354223034cf4-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
@@ -287,11 +280,11 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							</div>
 						</div>
 						<div class="menu-link-keeper">
-							<a href="#" class="menu-bnt w-inline-block">
-								<div class="b-line"></div>
-								<div class="b-line"></div>
-								<div class="b-line"></div>
-							</a>
+							<button type="button" class="lf-burger-button menu-bnt w-inline-block">
+								<div class="lf-burger-button__line b-line"></div>
+								<div class="lf-burger-button__line b-line"></div>
+								<div class="lf-burger-button__line b-line"></div>
+							</button>
 							<div class="hovered-menue mob-menue">
 								<div class="mob-menu-kee">
 									<div class="m-nav-keep">
@@ -502,16 +495,10 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 						?>
 						<div class="div-block-5">
 							<div class="menu-link-keeper">
-								<a href="#" class="serach-btn w-inline-block">
-									<div class="code-embed-3 w-embed">
-										<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewbox="0 0 15 16" fill="none">
-											<path d="M13.5387 15.0696L13.4669 15.1437L13.3951 15.0696L9.40606 10.9541C8.52482 11.6053 7.44441 11.9889 6.27713 11.9889C3.30451 11.9889 0.9 9.50359 0.9 6.44444C0.9 3.3853 3.30451 0.9 6.27713 0.9C9.24976 0.9 11.6543 3.3853 11.6543 6.44444C11.6543 7.94871 11.0731 9.31368 10.1292 10.3129L14.0718 14.3804L14.1393 14.45L14.0718 14.5196L13.5387 15.0696ZM1.85388 6.44444C1.85388 8.96951 3.83716 11.0111 6.27713 11.0111C8.71711 11.0111 10.7004 8.96951 10.7004 6.44444C10.7004 3.91938 8.71711 1.87778 6.27713 1.87778C3.83716 1.87778 1.85388 3.91938 1.85388 6.44444Z" fill="white" stroke="white" stroke-width="0.2"></path>
-										</svg>
-									</div>
-									<div class="code-embed-3 w-embed">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewbox="0 0 16 15" fill="none">
-											<line x1="15.3536" y1="0.353553" x2="1.35355" y2="14.3536" stroke="black"></line>
-											<line y1="-0.5" x2="19.799" y2="-0.5" transform="matrix(0.707107 0.707107 0.707107 -0.707107 1 0)" stroke="black"></line>
+								<a href="#" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
+									<div class="lf-icon-button__icon-wrapper">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
+											<use href="#searchIcon" />
 										</svg>
 									</div>
 								</a>
@@ -688,17 +675,16 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 									<div id="w-node-_144563be-6001-1af8-6446-1240953daacd-be61d3ef" class="hovered-menue_close-menu"></div>
 								</div>
 							</div>
-							<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 like-counter-button w-inline-block <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-								<div class="code-embed-3 lik w-embed">
-									<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
+							<!-- Favorites button -->
+							<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+								<div class="lf-icon-button__icon-wrapper">
+									<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+										<use href="#heartIcon"></use>
 									</svg>
 								</div>
-								<span class="like-counter-button__inner">
-									<span class="like-counter-button__text">Избранное</span>
-									<span data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
-								</span>
+								<span class="lf-icon-button__counter" data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
 							</a>
+							<!-- Favorites button end -->
 						</div>
 					</div>
 					<!-- Desktop rigth menu end -->
@@ -806,16 +792,10 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 					</div>
 					<div class="div-block-5 wh-head">
 						<div class="menu-link-keeper">
-							<a href="#" class="serach-btn w-inline-block">
-								<div class="code-embed-3 w-embed">
-									<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewbox="0 0 15 16" fill="none">
-										<path d="M13.5387 15.0696L13.4669 15.1437L13.3951 15.0696L9.40606 10.9541C8.52482 11.6053 7.44441 11.9889 6.27713 11.9889C3.30451 11.9889 0.9 9.50359 0.9 6.44444C0.9 3.3853 3.30451 0.9 6.27713 0.9C9.24976 0.9 11.6543 3.3853 11.6543 6.44444C11.6543 7.94871 11.0731 9.31368 10.1292 10.3129L14.0718 14.3804L14.1393 14.45L14.0718 14.5196L13.5387 15.0696ZM1.85388 6.44444C1.85388 8.96951 3.83716 11.0111 6.27713 11.0111C8.71711 11.0111 10.7004 8.96951 10.7004 6.44444C10.7004 3.91938 8.71711 1.87778 6.27713 1.87778C3.83716 1.87778 1.85388 3.91938 1.85388 6.44444Z" fill="white" stroke="white" stroke-width="0.2"></path>
-									</svg>
-								</div>
-								<div class="code-embed-3 w-embed">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewbox="0 0 16 15" fill="none">
-										<line x1="15.3536" y1="0.353553" x2="1.35355" y2="14.3536" stroke="black"></line>
-										<line y1="-0.5" x2="19.799" y2="-0.5" transform="matrix(0.707107 0.707107 0.707107 -0.707107 1 0)" stroke="black"></line>
+							<a href="#" class="lf-icon-button lf-icon-button--search">
+								<div class="lf-icon-button__icon-wrapper">
+									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
+										<use href="#searchIcon" />
 									</svg>
 								</div>
 							</a>
@@ -992,14 +972,14 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b954-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block like-counter-button <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-							<div class="code-embed-3 lik w-embed">
-								<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+							<div class="lf-icon-button__icon-wrapper">
+								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon" viewBox="0 0 16 16">
+									<use href="#heartIcon"/>
 								</svg>
 							</div>
-							<span class="like-counter-button__inner">
-								<span data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
+							<span class="lf-icon-button__counter" data-js-favorites-button-counter>
+								<?php echo esc_html( (string) count( $favorites ) ); ?>
 							</span>
 						</a>
 					</div>
@@ -1007,13 +987,13 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 			</div>
 			<div class="spleet pc-none">
 				<div class="menu-line p-12-12 white uper n-voreder">
-					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="link-block-2 w-inline-block <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-						<div class="code-embed-3 lik w-embed">
-							<svg width="100%" height="100%" viewbox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" clip-rule="evenodd" d="M1.28444 1.26599C-0.428147 2.95398 -0.428147 5.69069 1.28444 7.37868L8.00225 14L14.204 7.88731L14.2018 7.8851L14.7156 7.37868C16.4281 5.69069 16.4281 2.95398 14.7156 1.26599C13.003 -0.421998 10.2263 -0.421998 8.51374 1.26599L8 1.77236L7.48626 1.26599C5.77367 -0.421998 2.99703 -0.421998 1.28444 1.26599Z" fill="white"></path>
+					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+						<div class="lf-icon-button__icon-wrapper">
+							<svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+								<use href="#heartIcon"  />
 							</svg>
 						</div>
-						<div data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></div>
+						<div data-js-favorites-button-counter class="lf-icon-button__counter"><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 					</a>
 				</div>
 				<div class="l-spacer">
@@ -1028,16 +1008,10 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 				<div class="menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5 wh-head">
 						<div class="menu-link-keeper">
-							<a href="#" class="serach-btn w-inline-block">
-								<div class="code-embed-3 w-embed">
-									<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewbox="0 0 15 16" fill="none">
-										<path d="M13.5387 15.0696L13.4669 15.1437L13.3951 15.0696L9.40606 10.9541C8.52482 11.6053 7.44441 11.9889 6.27713 11.9889C3.30451 11.9889 0.9 9.50359 0.9 6.44444C0.9 3.3853 3.30451 0.9 6.27713 0.9C9.24976 0.9 11.6543 3.3853 11.6543 6.44444C11.6543 7.94871 11.0731 9.31368 10.1292 10.3129L14.0718 14.3804L14.1393 14.45L14.0718 14.5196L13.5387 15.0696ZM1.85388 6.44444C1.85388 8.96951 3.83716 11.0111 6.27713 11.0111C8.71711 11.0111 10.7004 8.96951 10.7004 6.44444C10.7004 3.91938 8.71711 1.87778 6.27713 1.87778C3.83716 1.87778 1.85388 3.91938 1.85388 6.44444Z" fill="white" stroke="white" stroke-width="0.2"></path>
-									</svg>
-								</div>
-								<div class="code-embed-3 w-embed">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewbox="0 0 16 15" fill="none">
-										<line x1="15.3536" y1="0.353553" x2="1.35355" y2="14.3536" stroke="black"></line>
-										<line y1="-0.5" x2="19.799" y2="-0.5" transform="matrix(0.707107 0.707107 0.707107 -0.707107 1 0)" stroke="black"></line>
+							<a href="#" class="lf-icon-button lf-icon-button--search">
+								<div class="lf-icon-button__icon-wrapper">
+									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
+										<use href="#searchIcon" />
 									</svg>
 								</div>
 							</a>
@@ -1266,11 +1240,11 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							</div>
 						</div>
 						<div class="menu-link-keeper">
-							<a href="#" class="menu-bnt w-inline-block">
-								<div class="b-line"></div>
-								<div class="b-line"></div>
-								<div class="b-line"></div>
-							</a>
+							<button type="button" class="lf-burger-button menu-bnt w-inline-block">
+								<div class="lf-burger-button__line b-line"></div>
+								<div class="lf-burger-button__line b-line"></div>
+								<div class="lf-burger-button__line b-line"></div>
+							</button>
 							<?php
 							if ( ! empty( $mobile_menu_items ) ) :
 								?>

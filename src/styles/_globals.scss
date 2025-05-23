@@ -26,8 +26,47 @@ a[href]:where(:not([class])) {
 	display: none !important;
 }
 
-.dopmenuopened .n-menu.w--current {
+.n-menu {
+	.white-top &,
+	.dopmenuopened & {
+		color: black;
+
+		&.w--current {
+			color: black;
+		}
+	}
+}
+
+.header.menuline {
+	.htmldopmenuopened & {
+		color: black;
+
+		.p-12-12.uper.white {
+			color: black;
+		}
+	}
+
+	.white-top & {
+		.p-12-12.uper.white {
+			color: black;
+		}
+	}
+}
+
+.fixed-navbar.menuline {
 	color: black;
+
+	.menu-line {
+		color: inherit;
+	}
+
+	.n-menu {
+		color: inherit;
+	}
+}
+
+.m-nav-drop-btn {
+	color: var(--black);
 }
 
 .indirm-line {
@@ -41,9 +80,27 @@ a[href]:where(:not([class])) {
 	@include tablet {
 		column-gap: 0rem;
 	}
+}
 
-	&.wh-head {
-		column-gap: 0rem;
+.hovered-menue {
+	&.search-m.active {
+		height: 100dvh;
+	}
+
+	&_close-menu {
+		@include tablet {
+			display: none;
+		}	
+	}
+}
+
+.serch-mob {
+	overflow: auto;
+}
+
+.m-nav-cats {
+	@include tablet {
+		margin-bottom: 0;
 	}
 }
 

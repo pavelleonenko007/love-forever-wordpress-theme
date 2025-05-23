@@ -125,15 +125,6 @@ defined( 'ABSPATH' ) || exit;
 		.logo-keeper{pointer-events:none}
 		.logo-keeper a{pointer-events:all}
 		.hovered-menue.active{display:grid}
-		.fixed-navbar a,
-		.fixed-navbar .p-12-12.uper.white,
-		.white-top header a,
-		.white-top header .p-12-12.uper.white,
-		.dopmenuopened a,
-		.dopmenuopened .p-12-12.uper.white{color:black}
-		.fixed-navbar path,
-		.white-top header path,
-		.dopmenuopened path{fill:black}
 		.fixed-navbar .lik path,
 		.fixed-navbar .pink-svg path,
 		.white-top header .lik path,

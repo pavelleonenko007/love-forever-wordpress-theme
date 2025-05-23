@@ -1,0 +1,15 @@
+@use '../media' as *;
+
+.lf-burger-button {
+	display: none;
+
+	@include tablet {
+		margin-right: -4rem;
+		padding: 4rem;
+		display: inline-flex;
+		width: 24rem;
+		height: 24rem;
+		min-width: 24rem;
+		background-color: transparent;
+	}
+}
