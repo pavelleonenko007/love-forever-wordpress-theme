@@ -276,8 +276,6 @@ document.addEventListener('catalog:updated', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	console.log('load');
-
 	new AddToFavoriteButtonCollection();
 	new DeleteFittingButton();
 
@@ -425,7 +423,42 @@ function AllPages() {
 			});
 		});
 
+		cardSliderInstance.on('drag', () => {
+			/**
+			 * @type {HTMLElement}
+			 */
+			const list = cardSlider.querySelector('.splide__list');
+			list.style.willChange = 'transform';
+		});
+
+		cardSliderInstance.on('moved', () => {
+			/**
+			 * @type {HTMLElement}
+			 */
+			const list = cardSlider.querySelector('.splide__list');
+			list.style.willChange = null;
+		});
+
 		cardSliderInstance.mount();
+
+		const originalTranslate = cardSliderInstance.Components.Move.translate;
+
+		cardSliderInstance.Components.Move.translate = function (
+			position,
+			preventLoop
+		) {
+			if (!cardSliderInstance.is('fade')) {
+				const destination = position;
+				const transform = `translate${cardSliderInstance.Components.Direction.resolve(
+					'X'
+				)}(${destination}px) translateZ(0)`;
+				cardSliderInstance.Components.Elements.list.style.transform = transform;
+
+				if (position !== destination) {
+					cardSliderInstance.emit('shifted');
+				}
+			}
+		};
 
 		cardSlider.addEventListener('mouseover', (event) => {
 			const paginationButton = event.target.closest('[data-splide-page]');
@@ -639,7 +672,6 @@ function otzivi() {
 	$('.slider-oyziv_nav').each(function () {
 		var nums = $(this).find('div').length;
 		$(this).append('<div class="slider-oyziv-last">&nbsp;/ ' + nums + '</div>');
-		console.log(nums);
 	});
 }
 

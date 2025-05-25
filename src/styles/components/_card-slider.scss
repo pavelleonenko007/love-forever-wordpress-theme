@@ -10,6 +10,17 @@
 		height: 100%;
 	}
 
+	&__list {
+		backface-visibility: hidden;
+		translate: 0 0 0;
+
+		&-item {
+			transform: translate3d(0px, 0, 0);
+			z-index: 2;
+			will-change: inherit;
+		}
+	}
+
 	&__pagination {
 		margin: 0;
 		padding: 0 !important;
