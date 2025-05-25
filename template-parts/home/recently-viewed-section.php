@@ -36,7 +36,15 @@ if ( ! empty( $recently_viewed ) ) :
 						$query->the_post();
 						?>
 						<div id="w-node-_060f033b-d108-876e-d4aa-9a2eeb269f38-7ea1ac8d" class="splide__slide">
-							<?php get_template_part( 'components/dress-card' ); ?>
+							<?php
+							get_template_part(
+								'components/dress-card',
+								null,
+								array(
+									'show_carousel' => false,
+								)
+							);
+							?>
 						</div>
 					<?php endwhile; ?>
 					<?php wp_reset_postdata(); ?>

@@ -416,6 +416,32 @@ function AllPages() {
 		mobileOnlySplideInstance.mount();
 	});
 
+	document.querySelectorAll('[data-js-card-splide]').forEach((cardSlider) => {
+		const cardSliderInstance = new Splide(cardSlider);
+
+		cardSliderInstance.on('pagination:mounted', (data) => {
+			data.items.forEach(function (item) {
+				item.button.dataset.splidePage = item.page;
+			});
+		});
+
+		cardSliderInstance.mount();
+
+		cardSlider.addEventListener('mouseover', (event) => {
+			const paginationButton = event.target.closest('[data-splide-page]');
+
+			if (!paginationButton) return;
+
+			const page = parseInt(paginationButton.dataset.splidePage);
+
+			cardSliderInstance.go(page);
+		});
+
+		cardSlider.addEventListener('mouseleave', (event) => {
+			cardSliderInstance.go(0);
+		});
+	});
+
 	// $('.splide-arrow')
 	// 	.eq(0)
 	// 	.on('click', function () {

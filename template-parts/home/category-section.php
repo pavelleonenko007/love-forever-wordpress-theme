@@ -40,7 +40,15 @@ if ( $dress_query->have_posts() ) :
 							$dress_query->the_post();
 							?>
 							<div id="w-node-cd7ab443-534b-d5a8-285a-97ee704f3d95-7ea1ac8d" class="splide__slide">
-								<?php get_template_part( 'components/dress-card' ); ?>
+								<?php
+								get_template_part(
+									'components/dress-card',
+									null,
+									array(
+										'show_carousel' => false,
+									)
+								);
+								?>
 							</div>
 							<?php
 						endwhile;

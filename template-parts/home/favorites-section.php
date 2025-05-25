@@ -37,7 +37,7 @@ if ( ! empty( $_COOKIE['favorites'] ) ) :
 								$query->the_post();
 								?>
 								<div id="w-node-b3928613-0859-fa0e-0b82-3fb78df5fb76-7ea1ac8d" class="splide__slide">
-									<?php get_template_part( 'components/dress-card' ); ?>
+									<?php get_template_part( 'components/dress-card', null, array( 'show_carousel' => false ) ); ?>
 								</div>
 								<?php
 							endwhile;

@@ -16,7 +16,8 @@ $video                      = get_field( 'video' );
 $show_video_in_product_card = get_field( 'show_video_in_product_card' );
 $badge_text                 = loveforever_get_product_badge_text( get_the_ID() );
 
-$size = ! empty( $args['size'] ) ? $args['size'] : 'large';
+$size          = ! empty( $args['size'] ) ? $args['size'] : 'large';
+$show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel'] : true;
 ?>
 
 <div id="w-node-_6e88719d-fe8f-116f-4337-b580b5a0b461-b5a0b461" class="prod-item">
@@ -34,8 +35,47 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 						>
 							<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( $video['mime_type'] ); ?>">
 						</video>
-					<?php elseif ( ! empty( $images ) ) : ?>
-						<div class="card-slider" data-js-card-slider>
+					<?php elseif ( ! empty( $images ) && $show_carousel ) : ?>
+						<?php
+						$slider_config = array(
+							'type'        => 'loop',
+							'perPage'     => 1,
+							'perMove'     => 1,
+							'speed'       => 0,
+							'arrows'      => false,
+							'classes'     => array(
+								'pagination' => 'card-slider__pagination splide__pagination your-class-pagination',
+								'page'       => 'card-slider__page splide__pagination__page',
+							),
+							'breakpoints' => array(
+								991 => array(
+									'speed' => 250,
+								),
+							),
+						);
+						?>
+						<div class="card-slider splide" aria-label="<?php echo esc_attr( 'Карусель изображений платья ' . get_the_title() ); ?>" data-splide="<?php echo esc_attr( wp_json_encode( $slider_config ) ); ?>" data-js-card-splide="">
+							<div class="card-slider__track splide__track">
+								<ul class="card-slider__list splide__list">
+									<?php foreach ( $images as $index => $image ) : ?>
+										<li class="card-slider__list-item splide__slide">
+											<?php
+											echo wp_get_attachment_image(
+												$image['image']['ID'],
+												'fullhd',
+												false,
+												array(
+													'loading' => 'lazy',
+													'class'   => 'img-cover',
+												)
+											);
+											?>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+						</div>
+						<!-- <div class="card-slider" data-js-card-slider>
 							<ul class="card-slider__list">
 								<?php foreach ( $images as $index => $image ) : ?>
 									<li class="card-slider__list-item<?php echo ( 0 === $index ) ? ' is-active' : ''; ?>" data-js-card-slider-slide-item="<?php echo esc_attr( $index ); ?>">
@@ -61,7 +101,7 @@ $size = ! empty( $args['size'] ) ? $args['size'] : 'large';
 									<li class="card-slider__nav-item<?php echo ( 0 === $i ) ? ' is-active' : ''; ?>" data-js-card-slider-nav-item="<?php echo esc_attr( $i ); ?>"></li>
 								<?php endfor; ?>
 							</ul>
-						</div>
+						</div> -->
 					<?php elseif ( has_post_thumbnail() ) : ?>
 						<?php
 						the_post_thumbnail(
