@@ -49,7 +49,7 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 							),
 							'breakpoints' => array(
 								991 => array(
-									'speed' => 250,
+									'speed' => 450,
 								),
 							),
 						);
