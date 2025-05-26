@@ -643,12 +643,13 @@ function loveforever_get_product_root_category( int $product_id ) {
 		return get_term_by( 'slug', 'wedding', 'dress_category' );
 	}
 
-	return array_find(
-		$dress_categories,
-		function ( $term ) use ( $categories_names ) {
-			return 0 === $term->parent && in_array( $term->slug, $categories_names, true );
+	foreach ( $dress_categories as $term ) {
+		if ( 0 === $term->parent && in_array( $term->slug, $categories_names, true ) ) {
+			return $term;
 		}
-	);
+	}
+
+	return get_term_by( 'slug', 'wedding', 'dress_category' );
 }
 
 function loveforever_format_filter_link_for_tag( WP_Term $tag, int $product_id ) {
