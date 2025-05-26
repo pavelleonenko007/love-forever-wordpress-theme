@@ -340,8 +340,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 									</div>
 									<?php if ( ! empty( $tags ) ) : ?>
 										<div class="cats-horiz single-product__content-tags">
-											<?php foreach ( $tags as $tag ) : ?>
-												<a href="#" class="btn grey-border_btn in-single w-inline-block">
+											<?php
+											foreach ( $tags as $tag ) :
+												?>
+												<a href="<?php echo esc_url( loveforever_format_filter_link_for_tag( $tag, get_the_ID() ) ); ?>" class="btn grey-border_btn in-single w-inline-block">
 													<div>#<?php echo esc_html( $tag->name ); ?></div>
 												</a>
 											<?php endforeach; ?>

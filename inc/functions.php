@@ -631,13 +631,34 @@ function loveforever_get_product_discount( $product_id ) {
 	return absint( get_field( 'discount_percent', $product_id ) );
 }
 
-// $products = get_posts(
-// array(
-// 'post_type'   => 'dress',
-// 'numberposts' => -1,
-// )
-// );
+function loveforever_get_product_root_category( int $product_id ) {
+	$categories_names = array(
+		'wedding',
+		'evening',
+		'prom',
+	);
+	$dress_categories = get_the_terms( $product_id, 'dress_category' );
 
-// foreach ( $products as $p ) {
-// update_field( 'availability', true, $p->ID );
-// }
+	if ( is_wp_error( $dress_categories ) || ! $dress_categories ) {
+		return get_term_by( 'slug', 'wedding', 'dress_category' );
+	}
+
+	return array_find(
+		$dress_categories,
+		function ( $term ) use ( $categories_names ) {
+			return 0 === $term->parent && in_array( $term->slug, $categories_names, true );
+		}
+	);
+}
+
+function loveforever_format_filter_link_for_tag( WP_Term $tag, int $product_id ) {
+	$root_dress_category = loveforever_get_product_root_category( $product_id );
+
+	$postfix = '';
+
+	if ( $tag->taxonomy !== 'silhouette' ) {
+		$postfix = '[]';
+	}
+
+	return get_term_link( $root_dress_category ) . '?' . $tag->taxonomy . $postfix . '=' . $tag->term_id;
+}

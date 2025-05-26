@@ -278,6 +278,30 @@ if ( empty( $thumbnail ) ) {
 								);
 							}
 
+							if ( isset( $_GET['brand'] ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'brand',
+									'field'    => 'term_id',
+									'terms'    => array_map( 'absint', wp_unslash( $_GET['brand'] ) ),
+								);
+							}
+
+							if ( isset( $_GET['style'] ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'style',
+									'field'    => 'term_id',
+									'terms'    => array_map( 'absint', wp_unslash( $_GET['style'] ) ),
+								);
+							}
+
+							if ( isset( $_GET['color'] ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'color',
+									'field'    => 'term_id',
+									'terms'    => array_map( 'absint', wp_unslash( $_GET['color'] ) ),
+								);
+							}
+
 							$products_query = new WP_Query( $products_query_args );
 
 							if ( $products_query->have_posts() ) :
