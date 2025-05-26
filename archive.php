@@ -848,6 +848,7 @@ if ( empty( $thumbnail ) ) {
 																		name="<?php echo esc_attr( $other_filter_name . '[]' ); ?>"
 																		class="loveforever-checkbox__control"
 																		value="<?php echo esc_attr( $other_filter_field->term_id ); ?>"
+																		<?php checked( isset( $_GET[ $other_filter_name ] ) && in_array( $other_filter_field->term_id, $_GET[ $other_filter_name ] ) ); ?>
 																	>
 																	<span class="loveforever-checkbox__label"><?php echo esc_html( $other_filter_field->name ); ?></span>
 																</label>

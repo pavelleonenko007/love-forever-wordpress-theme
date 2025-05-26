@@ -522,6 +522,22 @@ function loveforever_get_filtered_products_via_ajax() {
 		);
 	}
 
+	if ( ! empty( $_POST['brand'] ) ) {
+		$products_query_args['tax_query'][] = array(
+			'taxonomy' => 'brand',
+			'field'    => 'term_id',
+			'terms'    => array_map( 'intval', wp_unslash( $_POST['brand'] ) ),
+		);
+	}
+
+	if ( ! empty( $_POST['color'] ) ) {
+		$products_query_args['tax_query'][] = array(
+			'taxonomy' => 'color',
+			'field'    => 'term_id',
+			'terms'    => array_map( 'intval', wp_unslash( $_POST['color'] ) ),
+		);
+	}
+
 	// wp_send_json_success( $products_query_args );
 
 	$products_query = new WP_Query( $products_query_args );

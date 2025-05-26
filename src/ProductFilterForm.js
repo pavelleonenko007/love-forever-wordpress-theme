@@ -44,7 +44,12 @@ class ProductFilterForm {
 			formData.delete(key);
 		});
 
-		const params = new URLSearchParams(Object.fromEntries(formData));
+		const params = new URLSearchParams();
+
+		for (const [key, value] of formData.entries()) {
+			params.append(key, value);
+		}
+
 		const paramsString = params.toString();
 
 		window.history.replaceState(
