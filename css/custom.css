@@ -370,10 +370,6 @@
 	display: none;
 }
 
-.section:has(.splide) {
-	overflow: hidden;
-}
-
 .splide__arrow,
 .splide__sr {
 	display: none;

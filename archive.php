@@ -93,7 +93,12 @@ if ( empty( $thumbnail ) ) {
 				?>
 				<section id="catalog" class="section z">
 					<div class="container n-top">
-						<form id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" class="filters-form" data-js-product-filter-form>
+						<form 
+							id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" 
+							class="filters-form" 
+							data-js-product-filter-form
+							<?php echo 0 !== $queried_object->parent ? 'hidden' : ''; ?>
+						>
 							<div class="vert vert-fw">
 								<div class="spleet m-vert">
 									<script>
