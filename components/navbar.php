@@ -1339,8 +1339,8 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 															<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
 														</a>
 														<?php
-														$mobile_dropdown_menu_columns = $only_catalog_item['dropdown_menu_columns'];
-														if ( ! empty( $mobile_dropdown_menu_columns ) ) :
+														if ( ! empty( $only_catalog_item['dropdown_menu_columns'] ) ) :
+															$mobile_dropdown_menu_columns = $only_catalog_item['dropdown_menu_columns'];
 															?>
 															<div class="m-nav-cats">
 																<?php foreach ( $mobile_dropdown_menu_columns as $mobile_dropdown_menu_column ) : ?>

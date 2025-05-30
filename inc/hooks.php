@@ -119,6 +119,10 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
+	if ( ! class_exists( 'AppointmentManager' ) ) {
+		require_once get_template_directory() . '/includes/bootstrap.php';
+	}
+
 	$fitting_id                       = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
 	$name                             = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 	$phone                            = sanitize_text_field( wp_unslash( $_POST['phone'] ) );

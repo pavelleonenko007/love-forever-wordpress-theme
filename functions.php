@@ -7,6 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/includes/bootstrap.php';
+
 require_once __DIR__ . '/inc/constants.php';
 require_once __DIR__ . '/inc/utils.php';
 require_once __DIR__ . '/inc/setup.php';

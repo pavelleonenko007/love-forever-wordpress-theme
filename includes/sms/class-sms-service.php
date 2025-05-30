@@ -1,0 +1,65 @@
+<?php
+/**
+ *  class-sms-service
+ *
+ * @package 0.0.1
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+class SmsService {
+	private SmsProviderInterface $provider;
+
+	public function __construct( SmsProviderInterface $provider ) {
+		$this->provider = $provider;
+	}
+
+	public function send_appointment_sms( int $post_id ): void {
+		$timestamp = strtotime( get_field( 'fitting_time', $post_id ) );
+		$phone     = get_field( 'phone', $post_id );
+
+		if ( ! $phone || ! $timestamp ) {
+			Logger::log( 'SMS: Не удалось получить телефон или дату для записи', compact( 'post_id', 'phone', 'timestamp' ) );
+			return;
+		}
+
+		$text = 'Ждём в «LOVE FOREVER» – ' . date_i18n( 'd.m.Y (D) в H:i', $timestamp )
+			. ' на примерку: м. Садовая, Вознесенский пр-кт 18 (9 мин. от метро). Тел: 8 (931) 341-20-36';
+
+		$success = $this->provider->send( $phone, $text );
+		if ( ! $success ) {
+			Logger::log( 'SMS: Не удалось отправить SMS с приглашением', compact( 'post_id', 'phone', 'text' ) );
+		}
+	}
+
+	public function send_reminder_sms( int $post_id ): void {
+		$timestamp = strtotime( get_field( 'fitting_time', $post_id ) );
+		$phone     = get_field( 'phone', $post_id );
+		if ( ! $phone || ! $timestamp ) {
+			return;
+		}
+
+		$text = 'До Вашей примерки в салоне «LOVE FOREVER» - м. Садовая осталось 2 часа (' . date_i18n( 'd.m.Y (D) в H:i', $timestamp )
+			. '). Тел. салона: 8 (931) 341-20-36';
+
+		$success = $this->provider->send( $phone, $text );
+		if ( ! $success ) {
+			Logger::log( 'SMS: Не удалось отправить SMS с напоминанием', compact( 'post_id', 'phone', 'text' ) );
+		}
+	}
+
+	public function send_feedback_sms( int $post_id ): void {
+		$phone = get_field( 'phone', $post_id );
+		if ( ! $phone ) {
+			return;
+		}
+
+		$text = 'Пожалуйста, оцените ваш визит в «LOVE FOREVER» – https://clck.ru/WRCeL';
+
+		$success = $this->provider->send( $phone, $text );
+
+		if ( ! $success ) {
+			Logger::log( 'SMS: Не удалось отправить SMS с просьбой об отзыве', compact( 'post_id', 'phone' ) );
+		}
+	}
+}
