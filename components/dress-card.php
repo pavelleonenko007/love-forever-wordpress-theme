@@ -38,19 +38,27 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 					<?php elseif ( ! empty( $images ) && $show_carousel ) : ?>
 						<?php
 						$slider_config = array(
-							'type'        => 'loop',
-							'perPage'     => 1,
-							'perMove'     => 1,
-							'speed'       => 0,
-							'arrows'      => false,
-							'classes'     => array(
+							'type'         => 'loop',
+							'perPage'      => 1,
+							'perMove'      => 1,
+							'speed'        => 0,
+							'arrows'       => false,
+							'lazyLoad'     => 'nearby',
+							'preloadPages' => 1,
+							'classes'      => array(
 								'pagination' => 'card-slider__pagination splide__pagination your-class-pagination',
 								'page'       => 'card-slider__page splide__pagination__page',
 							),
-							'breakpoints' => array(
+							'breakpoints'  => array(
 								991 => array(
-									'speed'       => 450,
-									'rewindSpeed' => 450,
+									'speed'             => 600,
+									'rewindSpeed'       => 600,
+									'waitForTransition' => true,
+									'easing'            => 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+									'flickPower'        => 400,
+									'flickMaxPages'     => 1,
+									'snap'              => true,
+									'slideFocus'        => false,
 								),
 							),
 						);
@@ -76,33 +84,6 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 								</ul>
 							</div>
 						</div>
-						<!-- <div class="card-slider" data-js-card-slider>
-							<ul class="card-slider__list">
-								<?php foreach ( $images as $index => $image ) : ?>
-									<li class="card-slider__list-item<?php echo ( 0 === $index ) ? ' is-active' : ''; ?>" data-js-card-slider-slide-item="<?php echo esc_attr( $index ); ?>">
-										<?php
-										echo wp_get_attachment_image(
-											$image['image']['ID'],
-											'fullhd',
-											false,
-											array(
-												'loading' => 'lazy',
-												'class'   => 'img-cover',
-											)
-										);
-										?>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-							<ul class="card-slider__nav">
-								<?php
-								$count_images = count( $images );
-								for ( $i = 0; $i < $count_images; $i++ ) :
-									?>
-									<li class="card-slider__nav-item<?php echo ( 0 === $i ) ? ' is-active' : ''; ?>" data-js-card-slider-nav-item="<?php echo esc_attr( $i ); ?>"></li>
-								<?php endfor; ?>
-							</ul>
-						</div> -->
 					<?php elseif ( has_post_thumbnail() ) : ?>
 						<?php
 						the_post_thumbnail(

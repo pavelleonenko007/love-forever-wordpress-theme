@@ -1,5 +1,27 @@
 .splide {
 	&__track {
 		overflow: visible;
+		transform: translateZ(0);
+		backface-visibility: hidden;
+	}
+
+	&__list {
+		transform: translateZ(0);
+	}
+
+	&__slide {
+		transform: translateZ(0);
+		backface-visibility: hidden;
+
+		img {
+			backface-visibility: hidden;
+			transform: translateZ(0);
+
+			image-rendering: -webkit-optimize-contrast;
+			image-rendering: optimize-contrast;
+
+			max-width: 100%;
+			display: block;
+		}
 	}
 }
