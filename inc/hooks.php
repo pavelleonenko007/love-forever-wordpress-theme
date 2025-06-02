@@ -1491,3 +1491,40 @@ function loveforever_appy_dress_to_sale_categories( $product_id ) {
 	update_field( 'dress_category', array_unique( array_merge( $dress_category_ids, $extra_cagegories_to_append ) ), $product_id );
 	wp_set_post_terms( $product_id, array_unique( array_merge( $dress_category_ids, $extra_cagegories_to_append ) ), 'dress_category' );
 }
+
+add_action( 'admin_footer-edit.php', 'custom_admin_bar_js_for_dress' );
+function custom_admin_bar_js_for_dress() {
+	global $typenow;
+
+	if ( $typenow !== 'dress' ) {
+		return;
+	}
+
+	$main_categories = get_terms(
+		array(
+			'taxonomy'   => 'dress_category',
+			'parent'     => 0,
+			'orderby'    => 'count',
+			'order'      => 'DESC',
+			'hide_empty' => false,
+		)
+	);
+
+	$html = '<div style="padding-block: 20px; display: flex; flex-wrap: wrap; gap: 10px;">';
+
+	foreach ( $main_categories as $main_category ) {
+		$html .= '<a href="' . admin_url( 'edit.php?post_type=dress&dress_category=' . $main_category->slug ) . '" class="button button-small button-primary">' . $main_category->name . '</a>';
+	}
+
+	$html .= '</div>';
+	?>
+	<script>
+	jQuery(function($) {
+		var $form = $('.wp-header-end'); // верхняя часть таблицы
+		if ($form.length) {
+			$form.after('<?php echo $html; ?>');
+		}
+	});
+	</script>
+	<?php
+}
