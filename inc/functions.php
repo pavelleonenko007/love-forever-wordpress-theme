@@ -663,3 +663,12 @@ function loveforever_format_filter_link_for_tag( WP_Term $tag, int $product_id )
 
 	return get_term_link( $root_dress_category ) . '?' . $tag->taxonomy . $postfix . '=' . $tag->term_id;
 }
+
+function loveforever_get_video_mime_type( $video ) {
+	$accepted_mime_types = array(
+		'video/mp4',
+		'video/webm',
+	);
+
+	return in_array( $video['mime_type'], $accepted_mime_types ) ? $accepted_mime_types[ $video['mime_type'] ] : $accepted_mime_types[0];
+}

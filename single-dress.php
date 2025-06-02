@@ -73,7 +73,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														autoplay
 														data-js-play-if-visible-video
 													>
-														<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( $video['mime_type'] ); ?>">
+														<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
 													</video>
 												</div>
 											</div>
@@ -111,7 +111,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														autoplay
 														data-js-play-if-visible-video
 													>
-														<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( $video['mime_type'] ); ?>">
+														<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
 													</video>
 												</div>
 											<?php endif; ?>
