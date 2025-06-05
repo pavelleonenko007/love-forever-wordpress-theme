@@ -82,10 +82,10 @@ if ( ! empty( $stories ) ) :
 														<?php endif; ?>
 														<div class="story__body">
 															<div class="story__content">
-																<div class="story__title h3">Заголовок</div>
-																<div class="story__description">
-																	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat veniam explicabo modi animi libero hic voluptatem, molestiae cum</p>
-																</div>
+                                                                <div class="story__title h3"><?php echo $slide['story_title']; ?></div>
+                                                                <div class="story__description">
+                                                                    <p><?php echo $slide['story_description']; ?></p>
+                                                                </div>
 																<?php
 																if ( ! empty( $slide['cta'] ) ) :
 																	$cta = $slide['cta'];
