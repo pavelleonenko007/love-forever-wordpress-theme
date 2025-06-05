@@ -672,3 +672,18 @@
 		transform: scale(1.05);
 	} */
 }
+
+
+.section._404-page {
+    min-height: 100dvh;
+}
+.section._404-page .navbar {
+    height: auto;
+}
+.story__content {
+	width: 100%;
+	align-items: flex-start;
+}
+.story__content .button {
+	min-width: 50%;
+}
