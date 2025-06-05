@@ -77,7 +77,9 @@ class Fitting_Slots {
 		$slots      = array();
 		$start_time = strtotime( '10:00' );
 		$end_time   = strtotime( '21:00' );
-		$interval   = 30 * 60; // 30 minutes
+        $use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+
+        $interval = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
 
 		while ( $start_time <= $end_time ) {
 				$time           = gmdate( 'H:i', $start_time );
@@ -103,7 +105,9 @@ class Fitting_Slots {
 		$slots      = array();
 		$start_time = strtotime( '10:00' );
 		$end_time   = strtotime( '21:00' );
-		$interval   = 30 * 60; // 30 minutes
+        $use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+
+        $interval = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
 
 		// Если дата - сегодня и текущее время не указано, используем текущее время
 		if ( $current_time === null && gmdate( 'Y-m-d' ) === $date ) {

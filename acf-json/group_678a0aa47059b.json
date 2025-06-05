@@ -398,6 +398,27 @@
             "selected": 0
         },
         {
+            "key": "field_68412f888d2d9",
+            "label": "Интервал слотов на примерку",
+            "name": "fitting_slots_interval",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "60 мин.",
+            "ui_off_text": "30 мин.",
+            "ui": 1
+        },
+        {
             "key": "field_67b32579c7d6f",
             "label": "Принудительное количество примерочных в определенную дату",
             "name": "forced_fittings_number_by_day",
@@ -633,5 +654,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1740130546
+    "modified": 1749102597
 }
