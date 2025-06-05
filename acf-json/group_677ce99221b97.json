@@ -47,6 +47,50 @@
                     "parent_repeater": "field_677ce9e02d84f"
                 },
                 {
+                    "key": "field_684128078dc52",
+                    "label": "Заголовок",
+                    "name": "story_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_677ce9e02d84f"
+                },
+                {
+                    "key": "field_684129558dc53",
+                    "label": "описание",
+                    "name": "story_description",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_677ce9e02d84f"
+                },
+                {
                     "key": "field_677ce9fb2d850",
                     "label": "CTA",
                     "name": "cta",
@@ -105,5 +149,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1736239820
+    "modified": 1749101094
 }
