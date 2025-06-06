@@ -125,20 +125,34 @@ if ( empty( $thumbnail ) ) {
 												>Все</span>
 											</label>
 											<?php foreach ( $silhouettes as $silhouettes_index => $silhouette ) : ?>
-												<label class="label loveforever-filter-radio">
-													<input 
-														type="radio" 
-														id="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>" 
-														name="silhouette" 
-														class="input loveforever-filter-radio__control" 
-														value="<?php echo esc_attr( $silhouette->term_id ); ?>"
-														<?php echo ! empty( $selected_silhouette ) && $silhouette->term_id === $selected_silhouette ? 'checked' : ''; ?>
-													>
-													<span 
-														for="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"
-														class="loveforever-filter-radio__label"
-													><?php echo esc_html( $silhouette->name ); ?></span>
-												</label>
+                                                <?php if( $silhouettes_index === 7 ) : ?>
+                                                <div class="dropdown-container">
+                                                    <div class="more-button label loveforever-filter-radio">
+                                                        Еще
+                                                        <svg width="6" height="4" viewBox="0 0 6 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.48716 3.41604L0 0.583958L0.512837 0L3 2.83208L5.48716 0L6 0.583958L3.51284 3.41604L3 4L2.48716 3.41604Z" fill="black"/>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="dropdown-menu">
+                                                <?php endif; ?>
+                                                    <label class="label loveforever-filter-radio">
+                                                        <input
+                                                            type="radio"
+                                                            id="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"
+                                                            name="silhouette"
+                                                            class="input loveforever-filter-radio__control"
+                                                            value="<?php echo esc_attr( $silhouette->term_id ); ?>"
+                                                            <?php echo ! empty( $selected_silhouette ) && $silhouette->term_id === $selected_silhouette ? 'checked' : ''; ?>
+                                                        >
+                                                        <span
+                                                            for="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"
+                                                            class="loveforever-filter-radio__label"
+                                                        ><?php echo esc_html( $silhouette->name ); ?></span>
+                                                    </label>
+                                                <?php if( $silhouettes_index === count($silhouettes) - 1 ) : ?>
+                                                    </div>
+                                                </div>
+                                                <?php endif; ?>
 											<?php endforeach; ?>
 										</div>
 									<?php endif; ?>
