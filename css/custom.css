@@ -506,15 +506,20 @@
 	}
 
 	.horiz.categeory-list {
+		width: 100%;
 		overflow: hidden;
 		overflow-x: auto;
-		margin-left: -20rem;
-		margin-right: -20rem;
-		padding-left: 20rem;
 	}
 
 	.filters-form.blog-form {
 		padding-bottom: 20rem;
+	}
+}
+
+@media screen and (max-width: 479px) {
+	.horiz.categeory-list {
+		margin: 0;
+		padding: 0;
 	}
 }
 
@@ -686,4 +691,88 @@
 }
 .story__content .button {
 	min-width: 50%;
+}
+
+
+/* Скрытие лишних пунктов в "Еще" */
+.loveforever-filter-radio:nth-child(n+9):not(.dropdown-container) {
+	display: none;
+}
+
+.dropdown-container {
+	position: relative;
+	display: inline-block;
+}
+
+.more-button {
+	display: flex;
+	align-items: center;
+	color: #000000;
+	cursor: pointer;
+	border-radius: 25px;
+	transition: all 0.3s ease;
+	user-select: none;
+	text-transform: uppercase;
+}
+
+.more-button svg {
+	margin-left: 5px;
+}
+
+
+.dropdown-menu {
+	border: 1rem solid #e9ecef;
+	padding: 8px 0;
+	min-width: 200px;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: white;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition: all 0.3s ease;
+}
+
+.dropdown-container:hover .dropdown-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.dropdown-menu .loveforever-filter-radio {
+	display: flex;
+	width: 100%;
+	padding: 10px 16px;
+	margin-top: 10px;
+}
+
+.dropdown-menu .loveforever-filter-radio:first-child {
+	margin-top: 0;
+}
+
+@media (max-width: 991px) {
+	.more-button {
+		display: none;
+	}
+
+	.dropdown-menu {
+		position: relative;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		padding: 0;
+		border: none;
+		box-shadow: none;
+		display: flex;
+	}
+
+	.dropdown-menu .loveforever-filter-radio {
+		width: auto;
+		padding: 0 0 20rem 0;
+		margin-top: 0;
+		flex-shrink: 0;
+	}
 }
