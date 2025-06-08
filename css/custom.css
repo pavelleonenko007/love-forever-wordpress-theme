@@ -506,15 +506,20 @@
 	}
 
 	.horiz.categeory-list {
+		width: 100%;
 		overflow: hidden;
 		overflow-x: auto;
-		margin-left: -20rem;
-		margin-right: -20rem;
-		padding-left: 20rem;
 	}
 
 	.filters-form.blog-form {
 		padding-bottom: 20rem;
+	}
+}
+
+@media screen and (max-width: 479px) {
+	.horiz.categeory-list {
+		margin: 0;
+		padding: 0;
 	}
 }
 
@@ -768,6 +773,6 @@
 		width: auto;
 		padding: 0 0 20rem 0;
 		margin-top: 0;
+		flex-shrink: 0;
 	}
-
 }
