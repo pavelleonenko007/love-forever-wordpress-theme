@@ -716,20 +716,19 @@
 
 
 .dropdown-menu {
+	border: 1rem solid #e9ecef;
+	padding: 8px 0;
+	min-width: 200px;
 	position: absolute;
 	top: 100%;
 	left: 0;
 	background: white;
-	border: 2px solid #e9ecef;
-	border-radius: 8px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	min-width: 200px;
 	z-index: 1000;
 	opacity: 0;
 	visibility: hidden;
 	transform: translateY(-10px);
 	transition: all 0.3s ease;
-	padding: 8px 0;
 }
 
 .dropdown-container:hover .dropdown-menu {
