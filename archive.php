@@ -189,8 +189,12 @@ if ( empty( $thumbnail ) ) {
 								</div>
 								<div class="_1px-line"></div>
 								<div class="spleet botm-filter">
-									<div class="custom-filter-drop">
-										<select id="orderby" name="orderby" data-js-custom-select="<?php echo esc_attr( wp_json_encode( array( 'hasBorder' => false ) ) ); ?>">
+									<div class="custom-filter-drop lf-select">
+										<select 
+											id="orderby" 
+											name="orderby" 
+											class="lf-select__control" 
+											data-js-custom-select="<?php echo esc_attr( wp_json_encode( array( 'hasBorder' => false ) ) ); ?>">
 											<?php
 											$orderby_options = array(
 												'views' => 'По популярности',
