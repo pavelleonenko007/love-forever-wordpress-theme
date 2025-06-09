@@ -25,6 +25,6 @@ $price = get_field( 'price' );
 		</div>
 	</div>
 	<a href="<?php the_permalink(); ?>" class="search-ajaxed_item_a w-inline-block">
-		<div class="itelic"><?php echo esc_html( loveforever_format_price( $price, 0 ) . ' ₽' ); ?></div>
+		<div class="itelic"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?></div>
 	</a>
 </div>
