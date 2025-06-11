@@ -23,10 +23,11 @@ class SmsService {
 			return;
 		}
 
-		$text = 'Ждём в «LOVE FOREVER» – ' . date_i18n( 'd.m.Y (D) в H:i', $timestamp )
-			. ' на примерку: м. Садовая, Вознесенский пр-кт 18 (9 мин. от метро). Тел: 8 (931) 341-20-36';
+		$fitting_date_time = date_i18n( 'd.m.Y (D) в H:i', $timestamp );
 
-		$success = $this->provider->send( $phone, $text );
+		$text = "Ждём в LOVE FOREVER – $fitting_date_time на примерку: м. Садовая, Вознесенский пр-кт 18 (9 мин. от метро). Тел: 8 (931) 341-20-36";
+
+		$success = $this->provider->send( $phone, $text, SmsRoute::CASCADE );
 		if ( ! $success ) {
 			Logger::log( 'SMS: Не удалось отправить SMS с приглашением', compact( 'post_id', 'phone', 'text' ) );
 		}
@@ -39,10 +40,11 @@ class SmsService {
 			return;
 		}
 
-		$text = 'До Вашей примерки в салоне «LOVE FOREVER» - м. Садовая осталось 2 часа (' . date_i18n( 'd.m.Y (D) в H:i', $timestamp )
-			. '). Тел. салона: 8 (931) 341-20-36';
+		$fitting_date_time = date_i18n( 'd.m.Y в H:i', $timestamp );
 
-		$success = $this->provider->send( $phone, $text );
+		$text = "До Вашей примерки в салоне LOVE FOREVER - м. Садовая осталось 2 часа ($fitting_date_time). Тел. салона: 8 (931) 341-20-36";
+
+		$success = $this->provider->send( $phone, $text, SmsRoute::CASCADE );
 		if ( ! $success ) {
 			Logger::log( 'SMS: Не удалось отправить SMS с напоминанием', compact( 'post_id', 'phone', 'text' ) );
 		}
@@ -54,9 +56,9 @@ class SmsService {
 			return;
 		}
 
-		$text = 'Пожалуйста, оцените ваш визит в «LOVE FOREVER» – https://clck.ru/WRCeL';
+		$text = 'Пожалуйста, оцените ваш визит в LOVE FOREVER – https://clck.ru/WRCeL';
 
-		$success = $this->provider->send( $phone, $text );
+		$success = $this->provider->send( $phone, $text, SmsRoute::SMS_ONLY );
 
 		if ( ! $success ) {
 			Logger::log( 'SMS: Не удалось отправить SMS с просьбой об отзыве', compact( 'post_id', 'phone' ) );

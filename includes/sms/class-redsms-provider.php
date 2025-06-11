@@ -21,7 +21,7 @@ class RedSmsProvider implements SmsProviderInterface {
 		return self::$instance ??= new self();
 	}
 
-	public function send( string $phone, string $text ): bool {
+	public function send( string $phone, string $text, SmsRoute $route = SmsRoute::CASCADE ): bool {
 		$ts     = 'ts-value-' . time();
 		$secret = md5( $ts . $this->api_key );
 
@@ -34,7 +34,7 @@ class RedSmsProvider implements SmsProviderInterface {
 
 		$body = wp_json_encode(
 			array(
-				'route' => 'viber,sms',
+				'route' => $route,
 				'from'  => $this->sender,
 				'to'    => $phone,
 				'text'  => $text,
