@@ -23,7 +23,7 @@ class SmsService {
 			return;
 		}
 
-		$fitting_date_time = date_i18n( 'd.m.Y (D) в H:i', $timestamp );
+		$fitting_date_time = date_i18n( 'd.m.Y в H:i', $timestamp );
 
 		$text = "Ждём в LOVE FOREVER – $fitting_date_time на примерку: м. Садовая, Вознесенский пр-кт 18 (9 мин. от метро). Тел: 8 (931) 341-20-36";
 
