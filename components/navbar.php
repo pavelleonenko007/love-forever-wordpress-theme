@@ -516,6 +516,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 													required
 													data-js-search-form-search-input
 												>
+												<input type="hidden" name="posts_per_page" value="12">
 												<input type="submit" class="search-button w-button" value="Search">
 												<button type="reset" class="clear-search">Очистить</button>
 											</form>
