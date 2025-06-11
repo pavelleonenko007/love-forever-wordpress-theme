@@ -270,6 +270,100 @@ function initReviewsPage() {
 	FileInputCollection.init();
 }
 
+function initSearchResultsImageOnHover() {
+	const searchResultsElements = document.querySelectorAll('.search-ajaxed');
+
+	if (searchResultsElements.length < 1) {
+		return;
+	}
+	// Функция для обновления позиции изображения
+	const updateImagePosition = (parentItem, previewElement) => {
+		previewElement.style.visibility = 'hidden'; // Скрываем, но сохраняем место в DOM
+		previewElement.style.opacity = '0';
+		previewElement.style.display = 'block'; // Делаем блочным, чтобы получить размеры
+
+		const parentRect = parentItem.getBoundingClientRect();
+		const previewRect = previewElement.getBoundingClientRect();
+
+		if (previewRect.top < parentRect.top) {
+			previewElement.style.translate = `0 ${Math.round(
+				parentRect.top - previewRect.top
+			)}px`;
+		}
+
+		// Возвращаем исходную видимость
+		previewElement.style.visibility = 'visible';
+		previewElement.style.opacity = '1';
+	};
+
+	const searchResultsObserver = new MutationObserver((mutationsList) => {
+		for (let mutation of mutationsList) {
+			if (mutation.type === 'childList') {
+				mutation.addedNodes.forEach((searchResultElement) => {
+					searchResultElement.onmouseenter = (event) => {
+						const imagePreviewElement = searchResultElement.querySelector(
+							'[data-js-search-result-image-preview]'
+						);
+
+						updateImagePosition(
+							searchResultElement.parentElement,
+							imagePreviewElement
+						);
+
+						searchResultElement.addEventListener(
+							'mouseleave',
+							() => {
+								imagePreviewElement.style.display = 'none';
+								imagePreviewElement.style.translate = null;
+							},
+							{
+								once: true,
+							}
+						);
+					};
+				});
+			}
+		}
+	});
+
+	searchResultsElements.forEach((searchResultsElement) => {
+		searchResultsObserver.observe(searchResultsElement, {
+			subtree: true,
+			attributes: true,
+			childList: true,
+		});
+	});
+
+	// document.body.addEventListener('mouseenter', (event) => {
+	// 	console.log({ event });
+
+	// 	if (!event.target.closest('[data-js-search-result]')) {
+	// 		return;
+	// 	}
+
+	// 	/**
+	// 	 * @type {HTMLElement}
+	// 	 */
+	// 	const searchResultElement = event.target.closest('[data-js-search-result]');
+	// 	const imagePreviewElement = searchResultElement.querySelector(
+	// 		'[data-js-search-result-image-preview]'
+	// 	);
+
+	// 	updateImagePosition(searchResultElement.parentElement, imagePreviewElement);
+
+	// 	searchResultElement.addEventListener(
+	// 		'mouseleave',
+	// 		() => {
+	// 			imagePreviewElement.style.display = 'none';
+	// 			imagePreviewElement.style.translate = null;
+	// 		},
+	// 		{
+	// 			once: true,
+	// 		}
+	// 	);
+	// });
+}
+
 document.addEventListener('catalog:updated', () => {
 	CardSliderCollection.destroyAll();
 	CardSliderCollection.init();
@@ -278,6 +372,7 @@ document.addEventListener('catalog:updated', () => {
 document.addEventListener('DOMContentLoaded', () => {
 	new AddToFavoriteButtonCollection();
 	new DeleteFittingButton();
+	initSearchResultsImageOnHover();
 
 	initPage();
 	initSingleDressPage();

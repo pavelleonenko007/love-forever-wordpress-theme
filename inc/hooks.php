@@ -1001,7 +1001,7 @@ function loveforever_query_products_via_ajax() {
 	$query_string = sanitize_text_field( wp_unslash( $_POST['s'] ) );
 	$query_args   = array(
 		'post_type'      => 'dress',
-		'posts_per_page' => 6,
+		'posts_per_page' => isset( $_POST['posts_per_page'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['posts_per_page'] ) ) ) : 6,
 		's'              => $query_string,
 	);
 	$query        = new WP_Query( $query_args );

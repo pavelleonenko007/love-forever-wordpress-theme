@@ -1,0 +1,49 @@
+@use '../media' as *;
+
+.search-ajaxed {
+	gap: 0 !important;
+}
+
+.lf-search-result {
+	padding-block: 10rem;
+	width: 100%;
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	color: var(--black);
+	text-decoration: none;
+
+	@include hover {
+		z-index: 2;
+	}
+
+	& > * {
+		display: block;
+		flex-shrink: 0;
+	}
+
+	&__image {
+		height: auto;
+
+		&-wrapper {
+			width: 225rem;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			overflow: visible;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			translate: -50% -50%;
+		}
+
+		&-preview {
+			width: 225rem; // Фиксированная ширина
+			height: auto; // Автоматическая высота для сохранения пропорций
+			position: absolute;
+			visibility: hidden;
+			opacity: 0;
+			pointer-events: none;
+		}
+	}
+}

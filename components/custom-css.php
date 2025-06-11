@@ -179,8 +179,8 @@ defined( 'ABSPATH' ) || exit;
 		display:none
 		}
 		html:has(.search-input:not(:placeholder-shown)) .search-ajaxed{display:flex}
-		.search-ajaxed_item .search-ajaxed_item_0px{display:none}
-		.search-ajaxed_item:hover .search-ajaxed_item_0px{display:flex}
+		/* .search-ajaxed_item .search-ajaxed_item_0px{display:none}
+		.search-ajaxed_item:hover .search-ajaxed_item_0px{display:flex} */
 		.input-file input {
 		font-size: 0;
 		background-image: url('https://cdn.prod.website-files.com/653b83c22352f8081d9d44ea/661e66ae664669f80bb3691d_file.svg');
