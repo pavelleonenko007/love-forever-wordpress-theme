@@ -150,3 +150,7 @@ picture:has(.img-cover) {
 .splide.is-initialized:not(.is-active) .splide__list.otzivi-grid {
 	display: flex;
 }
+
+.filters-form {
+	z-index: unset;
+}

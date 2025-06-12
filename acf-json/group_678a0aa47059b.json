@@ -357,6 +357,33 @@
             "selected": 0
         },
         {
+            "key": "field_684af3b2cc98f",
+            "label": "Сетка каталога",
+            "name": "catalog_grid",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Выберите вид каталога",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "4": "4 колонки",
+                "3": "3 колонки"
+            },
+            "default_value": 4,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
             "key": "field_67974d4b3cbec",
             "label": "Количество товаров на странице",
             "name": "products_per_page",
@@ -586,6 +613,7 @@
                     "collapsed": "",
                     "button_label": "Добавить особые часы",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_67b320b62cf6b",
                     "sub_fields": [
                         {
                             "key": "field_67b845ac51503",
@@ -630,8 +658,7 @@
                             "append": "",
                             "parent_repeater": "field_67b8444151502"
                         }
-                    ],
-                    "parent_repeater": "field_67b320b62cf6b"
+                    ]
                 }
             ]
         }
@@ -654,5 +681,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1749102597
+    "modified": 1749742997
 }

@@ -236,7 +236,20 @@ if ( empty( $thumbnail ) ) {
 							<input type="hidden" name="action" value="get_filtered_products">
 							<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce', false ); ?>
 						</form>
-						<div class="lf-catalog-grid lf-catalog-grid--3-col catalog-grid catalog-page-grid" data-js-product-filter-form-content-element>
+						<?php
+						$catalog_grid_classes = array(
+							'catalog-grid',
+							'catalog-page-grid',
+							'lf-catalog-grid',
+						);
+
+						$catalog_grid = get_field( 'catalog_grid', 'option' );
+
+						if ( '3' === $catalog_grid ) {
+							$catalog_grid_classes[] = 'lf-catalog-grid--3-col';
+						}
+						?>
+						<div class="<?php echo esc_attr( implode( ' ', $catalog_grid_classes ) ); ?>" data-js-product-filter-form-content-element>
 							<?php
 							$products_query_args = array(
 								'post_type'      => 'dress',
