@@ -21,7 +21,15 @@ class RedSmsProvider implements SmsProviderInterface {
 		return self::$instance ??= new self();
 	}
 
-	public function send( string $phone, string $text, SmsRoute $route = SmsRoute::CASCADE ): bool {
+	/**
+	 * Send an SMS message
+	 *
+	 * @param string $phone The recipient's phone number
+	 * @param string $text The message text
+	 * @param string $route The route to use (SmsRoute constant)
+	 * @return bool Whether the message was sent successfully
+	 */
+	public function send( string $phone, string $text, string $route = SmsRoute::CASCADE ): bool {
 		$ts     = 'ts-value-' . time();
 		$secret = md5( $ts . $this->api_key );
 

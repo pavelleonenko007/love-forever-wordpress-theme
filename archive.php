@@ -236,7 +236,7 @@ if ( empty( $thumbnail ) ) {
 							<input type="hidden" name="action" value="get_filtered_products">
 							<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce', false ); ?>
 						</form>
-						<div class="catalog-grid catalog-page-grid" data-js-product-filter-form-content-element>
+						<div class="lf-catalog-grid lf-catalog-grid--3-col catalog-grid catalog-page-grid" data-js-product-filter-form-content-element>
 							<?php
 							$products_query_args = array(
 								'post_type'      => 'dress',
