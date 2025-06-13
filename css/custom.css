@@ -322,14 +322,6 @@
 	display: flex;
 }
 
-.filters-form {
-	z-index: 1;
-}
-
-.filtersopened .filters-form {
-	z-index: 10;
-}
-
 /*.checkbox:hover {*/
 /*    border-color: #ffffff;*/
 /*    background-color: #231e1500;*/
