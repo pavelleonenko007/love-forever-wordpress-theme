@@ -120,16 +120,6 @@ class LoveForever_Dress_Importer {
 		<?php
 	}
 
-	private function ensure_array( $value ): array {
-		if ( is_array( $value ) ) {
-			return $value;
-		}
-		if ( $value instanceof Traversable ) {
-			return iterator_to_array( $value );
-		}
-		return array( $value );
-	}
-
 
 	private function clean_product_name( $product_name ) {
 		error_log( 'Start cleaning name for ' . $product_name );
@@ -230,13 +220,16 @@ class LoveForever_Dress_Importer {
 			return;
 		}
 
-		$pictures = $this->ensure_array( $product->picture );
+		$pictures = $product->picture;
 
-		if ( ! empty( $pictures ) ) {
+		if ( $pictures instanceof \SimpleXMLElement && $pictures->count() > 0 ) {
 			$image_ids = array();
 
 			foreach ( $pictures as $picture ) {
 				$image_id = $this->import_image( (string) esc_url( trim( $picture ) ), $post_id );
+
+				error_log( 'Image: ' . (string) $image_id );
+
 				if ( $image_id ) {
 					$image_ids[] = $image_id;
 				}
@@ -248,10 +241,13 @@ class LoveForever_Dress_Importer {
 				set_post_thumbnail( $post_id, $image_ids[0] );
 
 				$gallery_images = array_map( fn( $id ) => array( 'image' => $id ), array_slice( $image_ids, 1 ) );
-				update_field( 'gallery', $gallery_images, $post_id );
+				update_field( 'images', $gallery_images, $post_id );
 
 				error_log( 'Successfully attached ' . count( $image_ids ) . ' images to post ' . $post_id );
 			}
+		} else {
+			$feature_image_id = $this->import_image( (string) esc_url( trim( $pictures ) ), $post_id );
+			set_post_thumbnail( $post_id, $feature_image_id );
 		}
 	}
 
@@ -414,10 +410,11 @@ class LoveForever_Dress_Importer {
 	 * Import image from URL.
 	 *
 	 * @param string $url Image URL.
-	 * @param int    $post_id Post ID to attach image to.
 	 * @return int|false Attachment ID or false on failure.
 	 */
-	private function import_image( $url, $post_id ) {
+	private function import_image( $url ) {
+		error_log( 'Downloading... ' . $url );
+
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
@@ -432,7 +429,7 @@ class LoveForever_Dress_Importer {
 			'tmp_name' => $tmp,
 		);
 
-		$attachment_id = media_handle_sideload( $file_array, $post_id );
+		$attachment_id = media_handle_sideload( $file_array, 0 );
 		if ( is_wp_error( $attachment_id ) ) {
 			@unlink( $tmp );
 			return false;
