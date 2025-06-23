@@ -14,4 +14,5 @@ function loveforever_setup_theme() {
 	add_theme_support( 'editor-styles' );
 
 	add_image_size( 'fullhd', 1920, 1920, false );
+	add_image_size( 'qhd', 2560, 2560, false );
 }

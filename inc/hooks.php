@@ -570,7 +570,8 @@ function loveforever_get_filtered_products_via_ajax() {
 					'components/dress-card',
 					null,
 					array(
-						'size' => $size,
+						'size'     => $size,
+						'is_paged' => $products_query->is_paged(),
 					)
 				);
 				?>
@@ -1527,4 +1528,9 @@ function custom_admin_bar_js_for_dress() {
 	});
 	</script>
 	<?php
+}
+
+add_filter( 'wp_editor_set_quality', 'loveforever_set_image_quality' );
+function loveforever_set_image_quality( $quality ) {
+	return 100;
 }

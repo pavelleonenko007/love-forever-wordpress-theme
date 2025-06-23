@@ -353,7 +353,7 @@ if ( empty( $thumbnail ) ) {
 										$position_in_block = ( $card_index - 1 ) % 6 + 1;
 										$size              = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
 
-										get_template_part( 'components/dress-card', null, array( 'size' => $size ) );
+										get_template_part( 'components/dress-card', null, array( 'size' => $size, 'is_paged' => $products_query->is_paged() ) );
 										?>
 									</div>
 									<?php
