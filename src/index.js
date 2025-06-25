@@ -786,26 +786,6 @@ function AllPages() {
 
 	// открыть поиск по клику
 
-	// Array.from(document.querySelectorAll('.lf-icon-button--search')).forEach(
-	// 	(searchButton) => {
-	// 		const openSearchMenu = () => {
-	// 			document
-	// 				.querySelectorAll('.menuline')
-	// 				.forEach((menuline) => menuline.classList.remove('mobmenuopened'));
-
-	// 			dropdownMenus.forEach((dropdownMenu) =>
-	// 				dropdownMenu.classList.remove('active')
-	// 			);
-
-	// 			searchButton.classList.add('is-active');
-	// 			navbar.classList.add('dopmenuopened');
-	// 			document.documentElement.classList.add('htmldopmenuopened');
-
-	// 			searchButton.nextElementSibling.classList.add('active');
-	// 		};
-	// 	}
-	// );
-
 	$('.lf-icon-button--search').click(function () {
 		$('.menuline').removeClass('mobmenuopened');
 

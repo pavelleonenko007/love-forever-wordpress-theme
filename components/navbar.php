@@ -410,57 +410,6 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 															<?php endforeach; ?>
 														</div>
 													<?php endif; ?>
-													<?php
-													$products_query_args = array(
-														'post_type'      => 'dress',
-														'posts_per_page' => 3,
-														'meta_key'       => 'product_views_count',
-														'orderby'        => array(
-															'menu_order'     => 'ASC',
-															'meta_value_num' => 'DESC',
-														),
-														'tax_query'      => array(
-															array(
-																'taxonomy' => 'dress_category',
-																'field'    => 'term_id',
-																'terms'    => $dress_category->term_id,
-															),
-														),
-													);
-													$products_query      = new WP_Query( $products_query_args );
-													if ( $products_query->have_posts() ) :
-														?>
-														<div class="div-block-12">
-															<?php
-															while ( $products_query->have_posts() ) :
-																$products_query->the_post();
-																?>
-																<a href="<?php the_permalink(); ?>" class="choosed-item w-inline-block">
-																	<div class="mom-abs">
-																		<?php if ( has_post_thumbnail() ) : ?>
-																			<img 
-																				src="<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'large' ) ); ?>" loading="lazy" 
-																				alt 
-																				class="img-cover"
-																			>
-																		<?php endif; ?>
-																	</div>
-																	<div class="choosed-item_bottom">
-																		<div><?php the_title(); ?></div>
-																		<?php
-																		$price = get_field( 'price' );
-																		if ( ! empty( $price ) ) :
-																			?>
-																			<div class="text-block"><?php echo esc_html( loveforever_format_price( $price, 0 ) . ' ₽' ); ?></div>
-																		<?php endif; ?>
-																	</div>
-																</a>
-																<?php
-															endwhile;
-															wp_reset_postdata();
-															?>
-														</div>
-													<?php endif; ?>
 												</div>
 											<?php endforeach; ?>
 										</div>
@@ -1417,57 +1366,6 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 																	endif;
 																	?>
 																<?php endforeach; ?>
-															</div>
-														<?php endif; ?>
-														<?php
-														$products_query_args = array(
-															'post_type'      => 'dress',
-															'posts_per_page' => 3,
-															'meta_key'       => 'product_views_count',
-															'orderby'        => array(
-																'menu_order'     => 'ASC',
-																'meta_value_num' => 'DESC',
-															),
-															'tax_query'      => array(
-																array(
-																	'taxonomy' => 'dress_category',
-																	'field'    => 'term_id',
-																	'terms'    => $dress_category->term_id,
-																),
-															),
-														);
-														$products_query      = new WP_Query( $products_query_args );
-														if ( $products_query->have_posts() ) :
-															?>
-															<div class="div-block-12">
-																<?php
-																while ( $products_query->have_posts() ) :
-																	$products_query->the_post();
-																	?>
-																	<a href="<?php the_permalink(); ?>" class="choosed-item w-inline-block">
-																		<div class="mom-abs">
-																			<?php if ( has_post_thumbnail() ) : ?>
-																				<img 
-																					src="<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'large' ) ); ?>" loading="lazy" 
-																					alt 
-																					class="img-cover"
-																				>
-																			<?php endif; ?>
-																		</div>
-																		<div class="choosed-item_bottom">
-																			<div><?php the_title(); ?></div>
-																			<?php
-																			$price = get_field( 'price' );
-																			if ( ! empty( $price ) ) :
-																				?>
-																				<div class="text-block"><?php echo esc_html( loveforever_format_price( $price, 0 ) . ' ₽' ); ?></div>
-																			<?php endif; ?>
-																		</div>
-																	</a>
-																	<?php
-																endwhile;
-																wp_reset_postdata();
-																?>
 															</div>
 														<?php endif; ?>
 													</div>
