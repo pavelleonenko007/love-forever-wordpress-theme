@@ -1,6 +1,8 @@
 .lf-icon-button {
 	$root: &;
 
+	position: relative;
+	z-index: 1;
 	padding: 4rem;
 	height: 24rem;
 	min-width: 24rem;

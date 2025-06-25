@@ -702,7 +702,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 				<div class="l-spacer"></div>
 				<div class="menu-line p-12-12 white uper rev">
 					<?php if ( ! empty( PHONE ) ) : ?>
-						<div class="horiz">
+						<div class="horiz lf-hidden-phone">
 							<div id="headerPhoneNumber" data-js-phone-number="<?php echo esc_attr( PHONE ); ?>"><?php echo esc_html( loveforever_mask_phone( PHONE ) ); ?></div>
 							<button type="button" data-js-phone-number-button="headerPhoneNumber" class="show-all-btn phone-button uppercase">Показать</button>
 						</div>
@@ -787,7 +787,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
 						<?php endforeach; ?>
 					<?php endif; ?>
-					<div class="horiz">
+					<div class="horiz lf-hidden-phone">
 						<div id="fixedHeaderPhoneNumber" data-js-phone-number="<?php echo esc_attr( PHONE ); ?>"><?php echo esc_html( loveforever_mask_phone( PHONE ) ); ?></div>
 						<button type="button" class="show-all-btn phone-button uppercase" data-js-phone-number-button="fixedHeaderPhoneNumber">Показать</button>
 					</div>

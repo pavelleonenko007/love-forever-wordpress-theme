@@ -671,24 +671,140 @@ function AllPages() {
 
 	// доп меню при наведении
 
-	$('.n-menu').hover(function () {
-		if ($(this).parent().hasClass('menu-link-keeper')) {
-			$('.hovered-menue.active').removeClass('active');
-			$('.navbar').removeClass('dopmenuopened');
-			$(this).next().addClass('active');
-			$(this).closest('.navbar').addClass('dopmenuopened');
-			$('html').addClass('htmldopmenuopened');
-		}
-	});
+	const navbar = document.querySelector('.navbar');
+	const dropdownMenus = document.querySelectorAll('.hovered-menue');
 
-	$('.hovered-menue_close-menu').hover(function () {
-		$('.hovered-menue.active').removeClass('active');
-		$('.navbar').removeClass('dopmenuopened');
-		$('.lf-icon-button--search').removeClass('is-active');
-		$('html').removeClass('htmldopmenuopened');
-	});
+	Array.from(document.querySelectorAll('.lf-nav-link'))
+		.filter((navlink) => navlink.closest('.menu-link-keeper'))
+		.forEach((navLink, index) => {
+			const closeDropdownMenuElement = navLink.nextElementSibling.querySelector(
+				'.hovered-menue_close-menu'
+			);
+
+			let canBeOpened = !navLink.classList.contains('is-active');
+
+			document.body.addEventListener(
+				'mousemove',
+				(event) => {
+					if (!event.target.closest('.menu-link-keeper')) {
+						canBeOpened = true;
+					}
+				},
+				{
+					once: true,
+				}
+			);
+
+			const openDropdown = () => {
+				dropdownMenus.forEach((dropdown) => {
+					dropdown.classList.remove('active');
+				});
+
+				document.querySelectorAll('.lf-icon-button--search').forEach(iconButton => {
+					iconButton.classList.remove('is-active');
+				})
+
+				navLink.nextElementSibling.classList.add('active');
+
+				navbar.classList.add('dopmenuopened');
+				document.documentElement.classList.add('htmldopmenuopened');
+			};
+
+			const closeDropdown = () => {
+				dropdownMenus.forEach((dropdown) => {
+					dropdown.classList.remove('active');
+				});
+
+				navbar.classList.remove('dopmenuopened');
+
+				document.documentElement.classList.remove('htmldopmenuopened');
+
+				document
+					.querySelectorAll('.lf-icon-button--search')
+					.forEach((searchButton) =>
+						searchButton.classList.remove('is-active')
+					);
+			};
+			/**
+			 * @param {MouseEvent} event
+			 */
+			function onMouseEnter(event) {
+				if (!canBeOpened) {
+					return;
+				}
+
+				openDropdown();
+
+				navLink.parentElement.addEventListener('mouseleave', onMouseLeave, {
+					once: true,
+				});
+			}
+
+			/**
+			 * @param {MouseEvent} event
+			 */
+			function onMouseLeave(event) {
+				console.log('leave', event);
+
+				closeDropdown();
+
+				canBeOpened = true;
+
+				navLink.addEventListener('mouseenter', onMouseEnter, {
+					once: true,
+				});
+			}
+
+			closeDropdownMenuElement.addEventListener('mouseenter', () => {
+				closeDropdown();
+			});
+
+			navLink.parentElement.addEventListener('mouseenter', onMouseEnter, {
+				once: true,
+			});
+
+			navLink.parentElement.addEventListener('mouseleave', onMouseLeave, {
+				once: true,
+			});
+		});
+	// $('.n-menu').hover(function () {
+	// 	if ($(this).parent().hasClass('menu-link-keeper')) {
+	// 		$('.hovered-menue.active').removeClass('active');
+	// 		$('.navbar').removeClass('dopmenuopened');
+	// 		$(this).next().addClass('active');
+	// 		$(this).closest('.navbar').addClass('dopmenuopened');
+	// 		$('html').addClass('htmldopmenuopened');
+	// 	}
+	// });
+
+	// $('.hovered-menue_close-menu').hover(function () {
+	// 	$('.hovered-menue.active').removeClass('active');
+	// 	$('.navbar').removeClass('dopmenuopened');
+	// 	$('.lf-icon-button--search').removeClass('is-active');
+	// 	$('html').removeClass('htmldopmenuopened');
+	// });
 
 	// открыть поиск по клику
+
+	// Array.from(document.querySelectorAll('.lf-icon-button--search')).forEach(
+	// 	(searchButton) => {
+	// 		const openSearchMenu = () => {
+	// 			document
+	// 				.querySelectorAll('.menuline')
+	// 				.forEach((menuline) => menuline.classList.remove('mobmenuopened'));
+
+	// 			dropdownMenus.forEach((dropdownMenu) =>
+	// 				dropdownMenu.classList.remove('active')
+	// 			);
+
+	// 			searchButton.classList.add('is-active');
+	// 			navbar.classList.add('dopmenuopened');
+	// 			document.documentElement.classList.add('htmldopmenuopened');
+
+	// 			searchButton.nextElementSibling.classList.add('active');
+	// 		};
+	// 	}
+	// );
 
 	$('.lf-icon-button--search').click(function () {
 		$('.menuline').removeClass('mobmenuopened');
@@ -718,6 +834,7 @@ function AllPages() {
 		$('.dopmenuopened').removeClass('dopmenuopened');
 		$('.serach-btn').removeClass('serach-open');
 		$('.hovered-menue.active').removeClass('active');
+		$('.lf-icon-button--search').removeClass('is-active');
 		if ($(this).closest('.menuline').hasClass('mobmenuopened')) {
 			$('html').removeClass('htmldopmenuopened');
 
