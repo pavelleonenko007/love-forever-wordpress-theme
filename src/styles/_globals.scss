@@ -57,6 +57,13 @@ a[href]:where(:not([class])) {
 	}
 }
 
+.m-none {
+	.menu-line:not(:has(.lf-nav-link)) {
+		position: relative;
+		z-index: 1;
+	}
+}
+
 .fixed-navbar.menuline {
 	color: black;
 
@@ -88,7 +95,9 @@ a[href]:where(:not([class])) {
 
 .hovered-menue {
 	&.search-m.active {
-		height: 100dvh;
+		@include tablet {
+			height: 100dvh;
+		}
 	}
 
 	&_close-menu {

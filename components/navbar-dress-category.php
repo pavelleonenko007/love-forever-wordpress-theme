@@ -16,10 +16,23 @@ $green_badge    = ! empty( $args['green_badge'] ) ? $args['green_badge'] : '';
 $columns        = $args['columns'];
 ?>
 <div class="menu-link-keeper">
-	<a 
-		href="<?php echo esc_url( get_term_link( $dress_category ) ); ?>" 
-		class="n-menu lf-nav-link w-nav-link"
-	>
+	<?php
+	$link_class_names = array(
+		'n-menu',
+		'lf-nav-link',
+		'w-nav-link',
+	);
+
+	if ( loveforever_is_current_url( get_term_link( $dress_category ) ) ) {
+		$link_class_names[] = 'is-active';
+	}
+
+	$link_attributes = array(
+		'href'  => esc_url( get_term_link( $dress_category ) ),
+		'class' => esc_attr( implode( ' ', $link_class_names ) ),
+	);
+	?>
+	<a <?php echo loveforever_prepare_tag_attributes_as_string( $link_attributes ); ?>>
 		<span><?php echo esc_html( str_replace( ' платья', '', $dress_category->name ) ); ?></span>
 		<?php if ( ! empty( $green_badge ) ) : ?>
 			<span class="lf-nav-link__badge"><?php echo esc_html( $green_badge ); ?></span>
@@ -52,38 +65,6 @@ $columns        = $args['columns'];
 				endif;
 			endforeach;
 			?>
-			<?php
-			$products_query_args = array(
-				'post_type'      => 'dress',
-				'posts_per_page' => 3,
-				'meta_key'       => 'product_views_count',
-				'orderby'        => array(
-					'menu_order'     => 'ASC',
-					'meta_value_num' => 'DESC',
-				),
-				'tax_query'      => array(
-					array(
-						'taxonomy' => 'dress_category',
-						'field'    => 'term_id',
-						'terms'    => $dress_category->term_id,
-					),
-				),
-			);
-			$products_query      = new WP_Query( $products_query_args );
-			if ( $products_query->have_posts() ) :
-				?>
-				<div id="w-node-_144563be-6001-1af8-6446-1240953da917-be61d3ef" class="menu-choosed-items">
-					<?php
-					while ( $products_query->have_posts() ) :
-						$products_query->the_post();
-						?>
-						<?php get_template_part( 'components/navbar-dress-card' ); ?>
-						<?php
-					endwhile;
-					wp_reset_postdata();
-					?>
-				</div>
-			<?php endif; ?>
 			<div id="w-node-_144563be-6001-1af8-6446-1240953da930-be61d3ef" class="hovered-menue_close-menu"></div>
 		</div>
 	<?php endif; ?>

@@ -393,3 +393,13 @@ function loveforever_delete_intermediate_image_sizes( $sizes ) {
 
 	return $new_sizes;
 }
+
+function loveforever_prepare_tag_attributes_as_string( $attributes ) {
+	return array_reduce(
+		array_keys( $attributes ),
+		function ( $acc, $attr_name ) use ( $attributes ) {
+			return $acc . ' ' . $attr_name . '="' . $attributes[ $attr_name ] . '"';
+		},
+		''
+	);
+}
