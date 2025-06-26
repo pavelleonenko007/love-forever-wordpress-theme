@@ -26,10 +26,6 @@ a[href]:where(:not([class])) {
 	display: none !important;
 }
 
-#barba-wrapper {
-	overflow: hidden;
-}
-
 .n-menu {
 	.white-top &,
 	.dopmenuopened & {
@@ -127,7 +123,7 @@ a[href]:where(:not([class])) {
 }
 
 .single-styk {
-	top: 60rem;
+	top: 64rem;
 }
 
 .map-keeper {
