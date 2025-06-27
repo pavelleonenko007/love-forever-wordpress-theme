@@ -353,7 +353,14 @@ if ( empty( $thumbnail ) ) {
 										$position_in_block = ( $card_index - 1 ) % 6 + 1;
 										$size              = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
 
-										get_template_part( 'components/dress-card', null, array( 'size' => $size, 'is_paged' => $products_query->is_paged() ) );
+										get_template_part(
+											'components/dress-card',
+											null,
+											array(
+												'size'     => $size,
+												'is_paged' => $products_query->is_paged(),
+											)
+										);
 										?>
 									</div>
 									<?php
@@ -820,16 +827,25 @@ if ( empty( $thumbnail ) ) {
 					</div>
 				</section>
 				<?php
-				$dress_tags = loveforever_get_dress_tags_by_category( $queried_object->term_id );
-				if ( ! empty( $dress_tags ) ) :
-					?>
+				// Сбор всех фильтров только по платьям из текущей категории
+				$category_id = isset( $queried_object->term_id ) ? (int) $queried_object->term_id : 0;
+				$all_filters = array();
+				if ( $category_id ) {
+					$all_filters = loveforever_get_category_filters_fast( $category_id, array( 'brand', 'style', 'color', 'fabric', 'silhouette' ) );
+				}
+				?>
+				<?php if ( ! empty( $all_filters ) ) : ?>
 					<section class="section">
 						<div class="container">
 							<div class="cats-line">
-								<?php foreach ( $dress_tags as $dress_tag ) : ?>
-									<a class="btn grey-border_btn w-inline-block">
-										<div class="p-12-12 uper m-12-12"><?php echo esc_html( '#' . $dress_tag->name ); ?></div>
-									</a>
+								<?php foreach ( $all_filters as $taxonomy => $terms ) : ?>
+									<?php foreach ( $terms as $term ) : ?>
+										<a href="<?php echo esc_url( loveforever_format_filter_link_for_tag( $term, 0 ) ); ?>" class="btn grey-border_btn w-inline-block">
+											<div class="p-12-12 uper m-12-12">
+												<?php echo esc_html( '#' . $term->name ); ?>
+											</div>
+										</a>
+									<?php endforeach; ?>
 								<?php endforeach; ?>
 							</div>
 						</div>
