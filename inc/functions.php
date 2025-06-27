@@ -631,12 +631,16 @@ function loveforever_get_product_discount( $product_id ) {
 	return absint( get_field( 'discount_percent', $product_id ) );
 }
 
+/**
+ * Если передать ID = 0, то get_post(0) вернет пост, который записан в $_GLOBALS (зависит от контекста, если это таксономия, то первый пост в таксономии, если это страница поста/страницы, то вернет объект этого поста)
+ */
 function loveforever_get_product_root_category( int $product_id ) {
 	$categories_names = array(
 		'wedding',
 		'evening',
 		'prom',
 	);
+	
 	$dress_categories = get_the_terms( $product_id, 'dress_category' );
 
 	if ( is_wp_error( $dress_categories ) || ! $dress_categories ) {
@@ -671,4 +675,60 @@ function loveforever_get_video_mime_type( $video ) {
 	);
 
 	return in_array( $video['mime_type'], $accepted_mime_types ) ? $accepted_mime_types[ $video['mime_type'] ] : $accepted_mime_types[0];
+}
+
+/**
+ * Получить все используемые фильтры (термины таксономий) для платьев в категории за один SQL-запрос
+ *
+ * @param int $category_id ID категории платья (dress_category)
+ * @param array|null $taxonomies Список таксономий (по умолчанию основные фильтры)
+ * @return array Массив [taxonomy => [WP_Term, ...], ...]
+ */
+function loveforever_get_category_filters_fast( $category_id, $taxonomies = null ) {
+	global $wpdb;
+
+	$category_id = (int) $category_id;
+	if ( ! $category_id ) {
+		return array();
+	}
+
+	if ( ! $taxonomies ) {
+		$taxonomies = array( 'brand', 'style', 'color', 'fabric', 'silhouette', 'dress_tag' );
+	}
+
+	$taxonomies_sql = "'" . implode( "','", array_map( 'esc_sql', $taxonomies ) ) . "'";
+
+	$query = $wpdb->prepare(
+		"SELECT t.term_id, t.name, t.slug, tt.taxonomy
+		 FROM {$wpdb->terms} t
+		 INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
+		 INNER JOIN {$wpdb->term_relationships} tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
+		 INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID
+		 INNER JOIN {$wpdb->term_relationships} tr_cat ON p.ID = tr_cat.object_id
+		 INNER JOIN {$wpdb->term_taxonomy} tt_cat ON tr_cat.term_taxonomy_id = tt_cat.term_taxonomy_id
+		 WHERE p.post_type = 'dress'
+		   AND p.post_status = 'publish'
+		   AND tt.taxonomy IN ($taxonomies_sql)
+		   AND tt_cat.taxonomy = 'dress_category'
+		   AND tt_cat.term_id = %d
+		 GROUP BY t.term_id, tt.taxonomy
+		 ORDER BY tt.taxonomy, t.name ASC",
+		$category_id
+	);
+
+	$results = $wpdb->get_results( $query );
+
+	$filters = array();
+	if ( ! empty( $results ) ) {
+		foreach ( $results as $row ) {
+			$term = new WP_Term( (object) array(
+				'term_id'  => $row->term_id,
+				'name'     => $row->name,
+				'slug'     => $row->slug,
+				'taxonomy' => $row->taxonomy,
+			) );
+			$filters[ $row->taxonomy ][] = $term;
+		}
+	}
+	return $filters;
 }
