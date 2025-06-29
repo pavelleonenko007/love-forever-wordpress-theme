@@ -878,6 +878,8 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		const timeSelectControl = this.form.elements.time;
 		let timeOptions = '';
 
+		//TODO: Спросить оставить ли обычным пользователям инфу о количестве свободных примерочных
+
 		for (const time in data.slots) {
 			if (Object.prototype.hasOwnProperty.call(data.slots, time)) {
 				const slot = data.slots[time];

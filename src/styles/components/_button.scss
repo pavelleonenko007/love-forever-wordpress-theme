@@ -1,7 +1,12 @@
 @use '../media' as *;
+@use '../mixins' as *;
 
 .button {
-	height: 50rem;
+	--button-height: 50rem;
+
+	$root: &;
+
+	height: var(--button-height);
 	padding-inline: 30rem;
 	border: 1rem solid var(--purple);
 	border-radius: 100rem;
@@ -17,6 +22,10 @@
 	background-color: var(--purple);
 	transition: all 0.3s ease;
 	text-decoration: none;
+
+	& svg {
+		fill: currentColor;
+	}
 
 	@include hover {
 		background-color: #fff;
@@ -78,6 +87,40 @@
 			color: var(--white);
 			opacity: 0.75;
 		}
+	}
+
+	&--whatsapp {
+		background-color: var(--green);
+		border: 1rem solid var(--green);
+
+		@include hover {
+			color: var(--green);
+		}
+
+		#{$root}__icon {
+			width: 20rem;
+			height: 20rem;
+		}
+	}
+
+	&--tg {
+		background-color: var(--color-tg);
+		border: 1rem solid var(--color-tg);
+
+		@include hover {
+			color: var(--color-tg);
+		}
+
+		#{$root}__icon {
+			width: 20rem;
+			height: 20rem;
+		}
+	}
+
+	&--square {
+		@include square(#{var(--button-height)});
+
+		padding: 0;
 	}
 
 	&:disabled {

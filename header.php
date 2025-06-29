@@ -23,6 +23,7 @@ $container_array_of_data_attributes = array_diff_key( $args, array_flip( array( 
 	</head>
 	<body class="body">
 		<?php wp_body_open(); ?>
+		<?php get_template_part( 'components/floating-cta' ); ?>
 		<?php get_template_part( 'components/custom-css' ); ?>
 		<div id="barba-wrapper" class="wrapper">
 			<?php $barba_container_classes = array_merge( array( 'barba-container' ), $barba_container_extra_classes ); ?>

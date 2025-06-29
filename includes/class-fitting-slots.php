@@ -7,6 +7,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * TODO: Переписать это нечто на singleton
+ */
+
 class Fitting_Slots {
 	private static $min_fitting_duration = 60;
 
@@ -27,7 +31,7 @@ class Fitting_Slots {
 
 	public static function get_nearest_available_date( $max_days_ahead = 60 ) {
 		$current_time = current_time( 'timestamp' );
-		$start_date   = date( 'Y-m-d', $current_time );
+		$start_date   = wp_date( 'Y-m-d', $current_time );
 		$current_date = new DateTime( $start_date );
 		$end_date     = ( new DateTime( $start_date ) )->modify( "+{$max_days_ahead} days" );
 
@@ -74,15 +78,18 @@ class Fitting_Slots {
 	}
 
 	public static function generate_all_slots( $date ) {
-		$slots      = array();
-		$start_time = strtotime( '10:00' );
-		$end_time   = strtotime( '21:00' );
-        $use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+		$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
+		$tz              = new DateTimeZone( $timezone_string );
 
-        $interval = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
+		$slots                 = array();
+		$start_time            = ( new DateTime( '10:00', $tz ) )->getTimestamp();
+		$end_time              = ( new DateTime( '21:00', $tz ) )->getTimestamp();
+		$use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+
+		$interval = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
 
 		while ( $start_time <= $end_time ) {
-				$time           = gmdate( 'H:i', $start_time );
+				$time           = wp_date( 'H:i', $start_time );
 				$slots[ $time ] = array(
 					'max_fittings' => self::get_max_fittings_for_slot( $date, $time ),
 					'available'    => 0,
@@ -102,22 +109,25 @@ class Fitting_Slots {
 	}
 
 	private static function generate_slots( $date, $current_time = null ) {
-		$slots      = array();
-		$start_time = strtotime( '10:00' );
-		$end_time   = strtotime( '21:00' );
-        $use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+		$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
+		$tz              = new DateTimeZone( $timezone_string );
 
-        $interval = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
+		$slots                 = array();
+		$start_time            = ( new DateTime( '10:00', $tz ) )->getTimestamp();
+		$end_time              = ( new DateTime( '21:00', $tz ) )->getTimestamp();
+		$use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+
+		$interval = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
 
 		// Если дата - сегодня и текущее время не указано, используем текущее время
-		if ( $current_time === null && gmdate( 'Y-m-d' ) === $date ) {
+		if ( $current_time === null && wp_date( 'Y-m-d' ) === $date ) {
 			$current_time = time();
 		} elseif ( $current_time === null ) {
-			$current_time = strtotime( '00:00', strtotime( $date ) );
+			$current_time = ( new DateTime( $date . '00:00', $tz ) )->getTimestamp();
 		}
 
 		while ( $start_time <= $end_time ) {
-			$time = gmdate( 'H:i', $start_time );
+			$time = wp_date( 'H:i', $start_time );
 			// Проверяем, не прошло ли уже это время
 			if ( strtotime( $date . ' ' . $time ) > $current_time ) {
 				$slots[ $time ] = self::get_max_fittings_for_slot( $date, $time );
@@ -129,8 +139,10 @@ class Fitting_Slots {
 	}
 
 	private static function get_max_fittings_for_slot( $date, $time ) {
+		$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
+		$tz              = new DateTimeZone( $timezone_string );
 
-		$day_of_week   = gmdate( 'w', strtotime( $date ) );
+		$day_of_week   = wp_date( 'w', ( new DateTime( $date, $tz ) )->getTimestamp() );
 		$default_slots = 2; // Значение по умолчанию
 
 		$forced_fittings_number_by_day = ! empty( get_field( 'forced_fittings_number_by_day', 'option' ) ) ? get_field( 'forced_fittings_number_by_day', 'option' ) : array();
@@ -164,13 +176,16 @@ class Fitting_Slots {
 	}
 
 	private static function get_bookings( $date, $exclude_fitting_id = null ) {
+		$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
+		$tz              = new DateTimeZone( $timezone_string );
+
 		$start_of_day = $date . ' 00:00:00';
 		$end_of_day   = $date . ' 23:59:59';
 
 		$args = array(
 			'post_type'      => 'fitting',
 			'posts_per_page' => -1,
-			// 'post_status'    => 'publish',
+			'fields'         => 'ids',
 			'meta_query'     => array(
 				array(
 					'key'     => 'fitting_step',
@@ -193,20 +208,16 @@ class Fitting_Slots {
 		$query    = new WP_Query( $args );
 		$bookings = array();
 
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$fitting_date = get_field( 'fitting_time' );
-				$fitting_type = get_field( 'fitting_type' );
-				$time         = gmdate( 'H:i', strtotime( $fitting_date ) );
-				$duration     = self::get_fitting_duration( $fitting_type );
-				$bookings[]   = array(
-					'time'     => $time,
-					'duration' => $duration,
-				);
-			}
+		foreach ( $query->posts as $fitting_id ) {
+			$fitting_date = get_field( 'fitting_time', $fitting_id );
+			$fitting_type = get_field( 'fitting_type', $fitting_id );
+			$time         = wp_date( 'H:i', ( new DateTime( $fitting_date, $tz ) )->getTimestamp() );
+			$duration     = self::get_fitting_duration( $fitting_type );
+			$bookings[]   = array(
+				'time'     => $time,
+				'duration' => $duration,
+			);
 		}
-		wp_reset_postdata();
 
 		return $bookings;
 	}
@@ -218,16 +229,25 @@ class Fitting_Slots {
 				return 'Выбранное время уже занято';
 		}
 
-		$duration     = self::get_fitting_duration( $fitting_type );
-		$end_time     = strtotime( "+{$duration} minutes", strtotime( $date . ' ' . $time ) );
-		$current_time = strtotime( $date . ' ' . $time );
+		$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
+		$datetime        = new DateTime( $date . ' ' . $time, new DateTimeZone( $timezone_string ) );
+		$current_time    = $datetime->getTimestamp();
+
+		$duration = self::get_fitting_duration( $fitting_type );
+		$datetime->modify( "+{$duration} minutes" );
+		$end_time = $datetime->getTimestamp();
+
+		$use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+		$interval              = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
 
 		while ( $current_time < $end_time ) {
-			$check_time = gmdate( 'H:i', $current_time );
+			$check_time = wp_date( 'H:i', $current_time );
+
 			if ( ! isset( $slots[ $check_time ] ) || $slots[ $check_time ] <= 0 ) {
-					return 'Недостаточно свободного времени для выбранного типа примерки' . $exclude_fitting_id;
+					return 'Недостаточно свободного времени для выбранного типа примерки';
 			}
-			$current_time = strtotime( '+30 minutes', $current_time );
+
+			$current_time += $interval;
 		}
 
 		return true;
@@ -243,17 +263,23 @@ class Fitting_Slots {
 	}
 
 	private static function apply_bookings_to_slots( $slots, $bookings ) {
+		$timezone_string       = get_option( 'timezone_string' ) ?: 'UTC';
+		$tz                    = new DateTimeZone( $timezone_string );
+		$use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+
+		$interval = $use_one_hour_interval ? 60 * 60 : 30 * 60; // 60 or 30 minutes
+
 		foreach ( $bookings as $booking ) {
-			$start_time   = strtotime( $booking['time'] );
+			$start_time   = ( new DateTime( $booking['time'], $tz ) )->getTimestamp();
 			$end_time     = $start_time + ( $booking['duration'] * 60 );
 			$current_time = $start_time;
 
 			while ( $current_time < $end_time ) {
-				$time = gmdate( 'H:i', $current_time );
+				$time = wp_date( 'H:i', $current_time );
 				if ( isset( $slots[ $time ] ) ) {
 					--$slots[ $time ];
 				}
-				$current_time += 30 * 60; // Переход к следующему получасовому слоту
+				$current_time += $interval; // Переход к следующему получасовому слоту
 			}
 		}
 

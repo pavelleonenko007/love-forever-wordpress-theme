@@ -240,10 +240,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 													</button>
 												</div>
 												<?php
-												$dress_category = get_the_terms( get_the_ID(), 'dress_category' );
+												$dress_category = loveforever_get_product_root_category( get_the_ID() );
 												if ( ! empty( $dress_category ) ) :
 													?>
-													<input type="hidden" name="fitting_type" value="<?php echo esc_attr( $dress_category[0]->term_id ); ?>">		
+													<input type="hidden" name="fitting_type" value="<?php echo esc_attr( $dress_category->slug ); ?>">		
 												<?php endif; ?>							
 											</fieldset>
 										</form>

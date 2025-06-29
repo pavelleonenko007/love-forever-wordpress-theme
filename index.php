@@ -103,5 +103,6 @@ get_header(
 		<?php get_template_part( 'components/footer' ); ?>
 		<?php wp_footer(); ?>
 		<?php get_template_part( 'template-parts/global/stories-dialog' ); ?>
+		<?php get_template_part( 'components/global-fitting-dialog-simpler' ); ?>
 	</body>
 </html>

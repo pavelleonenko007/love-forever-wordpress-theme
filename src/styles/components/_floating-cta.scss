@@ -1,0 +1,8 @@
+.floating-cta {
+	display: flex;
+	column-gap: 10rem;
+	position: fixed;
+	right: 40rem;
+	bottom: 20rem;
+	z-index: 1000;
+}

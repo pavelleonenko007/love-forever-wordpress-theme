@@ -640,7 +640,7 @@ function loveforever_get_product_root_category( int $product_id ) {
 		'evening',
 		'prom',
 	);
-	
+
 	$dress_categories = get_the_terms( $product_id, 'dress_category' );
 
 	if ( is_wp_error( $dress_categories ) || ! $dress_categories ) {
@@ -680,7 +680,7 @@ function loveforever_get_video_mime_type( $video ) {
 /**
  * Получить все используемые фильтры (термины таксономий) для платьев в категории за один SQL-запрос
  *
- * @param int $category_id ID категории платья (dress_category)
+ * @param int        $category_id ID категории платья (dress_category)
  * @param array|null $taxonomies Список таксономий (по умолчанию основные фильтры)
  * @return array Массив [taxonomy => [WP_Term, ...], ...]
  */
@@ -721,12 +721,14 @@ function loveforever_get_category_filters_fast( $category_id, $taxonomies = null
 	$filters = array();
 	if ( ! empty( $results ) ) {
 		foreach ( $results as $row ) {
-			$term = new WP_Term( (object) array(
-				'term_id'  => $row->term_id,
-				'name'     => $row->name,
-				'slug'     => $row->slug,
-				'taxonomy' => $row->taxonomy,
-			) );
+			$term                        = new WP_Term(
+				(object) array(
+					'term_id'  => $row->term_id,
+					'name'     => $row->name,
+					'slug'     => $row->slug,
+					'taxonomy' => $row->taxonomy,
+				)
+			);
 			$filters[ $row->taxonomy ][] = $term;
 		}
 	}

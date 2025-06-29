@@ -9,3 +9,8 @@
 	white-space: nowrap;
 	border-width: 0;
 }
+
+@mixin square($size) {
+	width: $size;
+	height: $size;
+}

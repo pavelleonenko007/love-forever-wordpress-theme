@@ -121,6 +121,42 @@
             "allow_in_bindings": 0
         },
         {
+            "key": "field_68610d9b8d504",
+            "label": "Ссылка на Telegram",
+            "name": "telegram_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_68610d818d503",
+            "label": "Ссылка на WhatsApp",
+            "name": "whatsapp_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": ""
+        },
+        {
             "key": "field_678a0b29b6b8d",
             "label": "Секции сайта",
             "name": "",
@@ -681,5 +717,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1749742997
+    "modified": 1751190973
 }
