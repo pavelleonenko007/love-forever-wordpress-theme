@@ -99,7 +99,7 @@ a[href]:where(:not([class])) {
 	&_close-menu {
 		@include tablet {
 			display: none;
-		}	
+		}
 	}
 }
 
@@ -158,4 +158,21 @@ picture:has(.img-cover) {
 
 .filters-form {
 	z-index: unset;
+}
+
+.logo-link {
+	& svg {
+		width: 225rem;
+		height: 141rem;
+
+		@include tablet {
+			width: 165rem;
+			height: 104rem;
+		}
+
+		@include mobile {
+			width: 165rem;
+			height: 69rem;
+		}
+	}
 }
