@@ -14,10 +14,6 @@ $favorites     = loveforever_get_favorites();
 $left_menu  = get_field( 'left_menu', 'option' );
 $right_menu = get_field( 'right_menu', 'option' );
 
-// echo '<pre>';
-// var_dump( $left_menu, $right_menu );
-// echo '</pre>';
-
 $mobile_menu_items  = array( ...$left_menu, ...$right_menu );
 $only_catalog_items = array_filter(
 	$mobile_menu_items,
