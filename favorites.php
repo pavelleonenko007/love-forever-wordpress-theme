@@ -114,7 +114,8 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 													type="text" 
 													id="favoritesContactFormPhoneField" 
 													aria-errormessage="favoritesContactFormPhoneFieldErrors"
-													data-js-input-mask="+{7} (000) 000-00-00"
+													data-js-input-mask="phone"
+													autocomplete="tel"
 													required
 												>
 												<span class="field__errors" id="favoritesContactFormPhoneFieldErrors" data-js-form-field-errors></span>

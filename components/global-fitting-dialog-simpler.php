@@ -130,7 +130,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											class="field__control" 
 											name="phone" 
 											placeholder="Телефон" 
-											data-js-input-mask="+{7} (000) 000-00-00">
+											data-js-input-mask="phone"
+											autocomplete="tel"
+											required
+										>
 									</div>
 									<?php if ( is_singular( 'dress' ) ) : ?>
 										<input type="hidden" name="target_dress" value="<?php echo esc_attr( get_the_ID() ); ?>">
