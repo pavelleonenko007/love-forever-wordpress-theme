@@ -854,7 +854,6 @@ if ( empty( $thumbnail ) ) {
 				<?php get_template_part( 'template-parts/global/personal-choice-section' ); ?>
 				<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
-				<?php get_template_part( 'template-parts/global/faq-section', null, get_field( 'faqs', 'option' ) ); ?>
 				<?php if ( ! empty( $other_filters ) ) : ?>
 					<div id="filterDialog" role="dialog" class="dialog" data-js-dialog>
 						<div class="dialog__overlay" data-js-dialog-overlay>
