@@ -260,7 +260,8 @@ function loveforever_paginate_links_data( array $args ): array {
 
 function loveforever_get_pagination_html( WP_Query $query, array $pagination_args = array() ): string {
 	$total_pages  = $query->max_num_pages;
-	$current_page = max( 1, $query->get( 'paged' ) );
+    $current_page = max(1, (int) ($_REQUEST['page'] ?? $query->get('paged') ?: 1));
+
 	$url_base     = ! empty( $pagination_args['base_url'] )
 		? $pagination_args['base_url'] . '?paged={pagenum}'
 		: get_pagenum_link( 1 ) . '?paged={pagenum}';

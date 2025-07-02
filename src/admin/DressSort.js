@@ -38,11 +38,18 @@ const initDressSorting = () => {
 						window.location.search
 					).get('dress_category');
 
+					const postType = new URLSearchParams(window.location.search).get('post_type') || 'post';
+					let actionName;
+					if (postType === 'promo_blocks') {
+						actionName = 'update_promo_order';
+					} else {
+						actionName = 'update_dress_order';
+					}
 					$.ajax({
 						url: LOVE_FOREVER_ADMIN.AJAX_URL,
 						type: 'POST',
 						data: {
-							action: 'update_dress_order',
+							action: actionName,
 							order: order,
 							page: page,
 							posts_per_page: postsPerPage,
