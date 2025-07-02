@@ -165,7 +165,10 @@ $can_edit_fittings = current_user_can( 'edit_fittings' ) || current_user_can( 'm
 											class="field__control" 
 											name="phone" 
 											placeholder="Телефон" 
-											data-js-input-mask="+{7} (000) 000-00-00">
+											data-js-input-mask="phone"
+											autocomplete="tel"
+											required
+										>
 									</div>
 									<input type="hidden" name="target_dress" value="<?php echo esc_attr( get_the_ID() ); ?>">
 									<?php if ( ! $can_edit_fittings && ! empty( $_COOKIE['favorites'] ) ) : ?>
