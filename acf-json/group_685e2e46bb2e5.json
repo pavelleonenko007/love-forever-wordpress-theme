@@ -1099,7 +1099,7 @@
                     "label": "Ссылка",
                     "name": "custom_link",
                     "aria-label": "",
-                    "type": "text",
+                    "type": "link",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -1108,12 +1108,8 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
-                    "maxlength": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": ""
+                    "return_format": "url",
+                    "allow_in_bindings": 1
                 }
             ]
         }
@@ -1136,5 +1132,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1751269429
+    "modified": 1751561534
 }

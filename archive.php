@@ -251,7 +251,26 @@ if ( empty( $thumbnail ) ) {
 						?>
 						<div class="<?php echo esc_attr( implode( ' ', $catalog_grid_classes ) ); ?>" data-js-product-filter-form-content-element>
 							<?php
-
+                            #region static test promo blocks
+//                            get_template_part( 'template-parts/promo-blocks/style1');
+//                            get_template_part( 'template-parts/promo-blocks/style2');
+//                            get_template_part( 'template-parts/promo-blocks/skip-block');
+//                            get_template_part( 'template-parts/promo-blocks/skip-block');
+//                            get_template_part( 'template-parts/promo-blocks/style3');
+//                            get_template_part( 'template-parts/promo-blocks/style4');
+//                            get_template_part( 'template-parts/promo-blocks/style5');
+//                            get_template_part( 'template-parts/promo-blocks/style6');
+//                            get_template_part( 'template-parts/promo-blocks/skip-block');
+//                            get_template_part( 'template-parts/promo-blocks/skip-block');
+//                            get_template_part( 'template-parts/promo-blocks/style7');
+//                            get_template_part( 'template-parts/promo-blocks/style8');
+//                            get_template_part( 'template-parts/promo-blocks/style9');
+//                            get_template_part( 'template-parts/promo-blocks/style10');
+//                            get_template_part( 'template-parts/promo-blocks/skip-block');
+//                            get_template_part( 'template-parts/promo-blocks/skip-block');
+//                            get_template_part( 'template-parts/promo-blocks/style11');
+//                            get_template_part( 'template-parts/promo-blocks/style12');
+                            #endregion
                             // Получаем базовые параметры
                             $current_page = max(1, $current_page);
                             $posts_per_page = intval(get_field('products_per_page', 'option'));
