@@ -1,0 +1,22 @@
+.lf-review-card {
+	&__rating {
+		display: flex;
+		column-gap: 4rem;
+	}
+}
+
+.lf-rating-heart {
+	width: 16rem;
+	height: 16rem;
+	color: var(--pink);
+	opacity: 0.2;
+	fill: currentColor;
+
+	.no-image & {
+		color: var(--purple);
+	}
+
+	&--filled {
+		opacity: 1;
+	}
+}

@@ -760,3 +760,21 @@ function loveforever_get_dress_category_root_term( $term ) {
 	}
 	return $term;
 }
+
+function loveforever_get_rating_html( $rating ) {
+	$rating_html = '';
+
+	for ( $i = 0; $i < 5; $i++ ) {
+		$class_names = array( 'lf-rating-heart' );
+
+		if ( $i < $rating ) {
+			$class_names[] = 'lf-rating-heart--filled';
+		}
+
+		$rating_html .= '<svg class="' . esc_attr( implode( ' ', $class_names ) ) . '" xmlns="http://www.w3.org/2000/svg">
+			<use href="#heartIcon" />
+		</svg>';
+	}
+
+	return $rating_html;
+}
