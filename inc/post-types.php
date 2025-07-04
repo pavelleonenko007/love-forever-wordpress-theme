@@ -532,4 +532,33 @@ function loveforever_register_post_types() {
 			'show_in_menu' => 'edit.php?post_type=dress',
 		)
 	);
+
+    register_post_type(
+        'promo_blocks',
+        array(
+            'label'               => 'Промо-блоки',
+            'labels'       => array(
+                'name'               => 'Промо блоки',
+                'singular_name'      => 'Промо блок',
+                'add_new'            => 'Добавить новый',
+                'add_new_item'       => 'Добавить новый блок',
+                'edit_item'          => 'Редактировать блок',
+                'new_item'           => 'Новый блок',
+                'view_item'          => 'Посмотреть блок',
+                'search_items'       => 'Найти блок',
+                'not_found'          => 'Блоки не найдены',
+                'not_found_in_trash' => 'Блоки не найдены в корзине',
+                'parent_item_colon'  => '',
+                'menu_name'          => 'Промо блоки',
+            ),
+            'public'              => true,
+            'exclude_from_search' => true,
+            'show_in_nav_menus'   => false,
+            'menu_icon'           => 'dashicons-layout',
+            'supports'            => array('title'), // Отключаем редактор
+            'has_archive'         => false,
+            'taxonomies'          => array('dress_category'),
+        )
+    );
+
 }

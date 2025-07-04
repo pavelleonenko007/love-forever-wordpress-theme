@@ -2133,7 +2133,7 @@ ul {
   justify-content: center;
   align-items: center;
   margin-top: 0;
-  position: fixed;
+  position: relative;
   inset: 0%;
 }
 

@@ -1,0 +1,16 @@
+.lf-promo-block {
+	&__image {
+		height: auto;
+	}
+
+	&__link {
+		display: inline-flex;
+		align-items: center;
+		column-gap: 8rem;
+	}
+
+	&__icon {
+		width: 4rem;
+		height: 6rem;
+	}
+}

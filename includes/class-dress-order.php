@@ -49,6 +49,8 @@ class Dress_Sorter {
 		// add_action( 'pending_to_publish', array( $this, 'handle_dress_publication' ), 10, 1 );
 		add_action( 'before_delete_post', array( $this, 'handle_dress_deletion' ), 10, 1 );
 		add_action( 'wp_trash_post', array( $this, 'handle_dress_deletion' ), 10, 1 );
+
+        add_action('set_object_terms', array( $this, 'add_dress_order_meta_on_term_set'), 10, 6); // для массового добавления товаров в категории (добавляет порядок в категории)
 	}
 
 	/**
@@ -60,6 +62,31 @@ class Dress_Sorter {
 	 * Prevent unserializing of the instance.
 	 */
 	public function __wakeup() {}
+
+    // Обработка единичных операций (через Quick Edit и т.д.)(нужна оптимизация)
+    function add_dress_order_meta_on_term_set($post_id, $terms, $tt_ids, $taxonomy, $append, $old_tt_ids) {
+        if ($taxonomy !== 'dress_category' || get_post_type($post_id) !== $this->post_type) {
+            return;
+        }
+
+        // Получаем удаленные термины
+        $removed_tt_ids = array_diff($old_tt_ids, $tt_ids);
+
+        // Удаляем метаполя для удаленных терминов
+        foreach ($removed_tt_ids as $term_id) {
+            $meta_key = 'dress_order_' . $term_id;
+            delete_post_meta($post_id, $meta_key);
+        }
+
+        // Добавляем метаполя для новых терминов
+        $new_tt_ids = array_diff($tt_ids, $old_tt_ids);
+        foreach ($new_tt_ids as $term_id) {
+            $meta_key = 'dress_order_' . $term_id;
+            if (!metadata_exists('post', $post_id, $meta_key)) {
+                update_post_meta($post_id, $meta_key, 0);
+            }
+        }
+    }
 
 	public function register_dress_order_fields() {
 		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
