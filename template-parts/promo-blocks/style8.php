@@ -1,21 +1,35 @@
 <?php
-$args = wp_parse_args($args, [
-    'post_id' => 0,
-    'post_object' => null
-]);
+$args = wp_parse_args(
+	$args,
+	array(
+		'post_id'     => 0,
+		'post_object' => null,
+	)
+);
 
 // Получаем пост по ID или используем объект
-if ($args['post_id']) {
-    $post = get_post($args['post_id']);
-} elseif ($args['post_object']) {
-    $post = $args['post_object'];
+if ( $args['post_id'] ) {
+	$post = get_post( $args['post_id'] );
+} elseif ( $args['post_object'] ) {
+	$post = $args['post_object'];
 } else {
-    // Фолбэк на глобальную переменную (не рекомендуется для AJAX)
-    global $post;
+	// Фолбэк на глобальную переменную (не рекомендуется для AJAX)
+	global $post;
 }
-$template_fields = get_field('template_fields', $post->ID);
-$custom_link = $template_fields['custom_link'] ?? false;
-$custom_img = $template_fields['custom_img']['sizes']['medium'] ?? false;
+
+$promo_template  = get_field( 'promo_template', $post->ID );
+$template_fields = get_field( 'template_fields', $post->ID );
+$custom_link     = $template_fields['custom_link'] ?? false;
+$custom_img      = $template_fields['custom_img'] ? wp_get_attachment_image(
+	$template_fields['custom_img'],
+	'fullhd',
+	false,
+	array(
+		'class'   => 'lf-promo-block__image img-fw',
+		'loading' => 'lazy',
+		'style'   => 'display: block',
+	)
+) : '';
 
 $template_style8_fields = $template_fields['template_style8_fields'] ?? false;
 
@@ -24,28 +38,49 @@ $field2 = $template_style8_fields['field2'] ?? false;
 $field3 = $template_style8_fields['field3'] ?? false;
 $field4 = $template_style8_fields['field4'] ?? false;
 ?>
-<div class="test-grid">
-    <div class="prod-item-tizer">
-        <div class="prod-item_top type8" style="background-color: #801F80">
-            <a href="<?php echo $custom_link ? $custom_link : '#'; ?>" class="link w-inline-block">
-                <div class="prod-item_img-mom _3">
-                    <div class="to-keeper">
-                        <img src="<?php echo $custom_img ? $custom_img : (get_template_directory_uri() . '/images/style8_img.jpg'); ?>" alt="" class="img-fw">
-                        <div class="map-dot cd2">
-                            <div class="p-36-36"><?php echo $field1 ? $field1 : 'новогодние'; ?></div>
-                        </div><div class="map-dot _2 cd3">
-                            <div class="p-36-36"><?php echo $field2 ? $field2 : 'новогодние'; ?></div>
-                        </div><div class="map-dot _3 cd3">
-                            <div class="p-36-36"><?php echo $field3 ? $field3 : 'новогодние'; ?></div>
-                        </div><div class="map-dot _4 cd4">
-                            <div class="p-36-36"><?php echo $field4 ? $field4 : 'новогодние'; ?></div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <!--<a href="#" class="btn pink-btn in-card w-inline-block">
-                <div>смотреть</div>
-            </a>-->
-        </div>
-    </div>
-</div>
+<article class="test-grid lf-promo-block lf-promo-block--<?php echo $promo_template; ?>">
+	<div class="prod-item-tizer">
+		<div class="prod-item_top type8" style="background-color: #801F80">
+		<?php
+			$link_attributes = array(
+				'title' => $custom_link['title'],
+				'href'  => $custom_link['url'],
+				'class' => 'link w-inline-block',
+			);
+
+			if ( ! empty( $custom_link['target'] ) ) {
+				$link_attributes['target'] = $custom_link['target'];
+			}
+
+			if ( ! empty( $link_attributes['target'] && '_blank' === $link_attributes['target'] ) ) {
+				$link_attributes['rel']        = 'noopener noreferrer';
+				$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
+				$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
+			}
+
+			$link_attributes = array_filter( $link_attributes );
+
+			$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
+			?>
+			<a <?php echo $link_attributes_str; ?>>
+				<div class="prod-item_img-mom _3">
+					<div class="to-keeper">
+						<?php echo $custom_img; ?>
+						<div class="map-dot cd2">
+							<div class="p-36-36"><?php echo $field1 ? $field1 : 'новогодние'; ?></div>
+						</div><div class="map-dot _2 cd3">
+							<div class="p-36-36"><?php echo $field2 ? $field2 : 'новогодние'; ?></div>
+						</div><div class="map-dot _3 cd3">
+							<div class="p-36-36"><?php echo $field3 ? $field3 : 'новогодние'; ?></div>
+						</div><div class="map-dot _4 cd4">
+							<div class="p-36-36"><?php echo $field4 ? $field4 : 'новогодние'; ?></div>
+						</div>
+					</div>
+				</div>
+			</a>
+			<!--<a href="#" class="btn pink-btn in-card w-inline-block">
+				<div>смотреть</div>
+			</a>-->
+		</div>
+	</div>
+</article>

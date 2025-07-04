@@ -11,7 +11,14 @@ const initDressSorting = () => {
 			);
 			const $table = $('.wp-list-table');
 			const $tbody = $table.find('tbody');
-			const postsPerPage = parseInt($('#edit_dress_per_page').val()) || 10;
+
+			const postType =
+				new URLSearchParams(window.location.search).get('post_type') || 'post';
+			const postsPerPageInputId =
+				postType === 'dresses'
+					? 'edit_dress_per_page'
+					: 'edit_promo_blocks_per_page';
+			const postsPerPage = parseInt($(`#${postsPerPageInputId}`).val()) || 10;
 
 			$tbody.sortable({
 				placeholder: 'ui-state-highlight',
@@ -38,7 +45,6 @@ const initDressSorting = () => {
 						window.location.search
 					).get('dress_category');
 
-					const postType = new URLSearchParams(window.location.search).get('post_type') || 'post';
 					let actionName;
 					if (postType === 'promo_blocks') {
 						actionName = 'update_promo_order';
@@ -76,9 +82,18 @@ const initDressSorting = () => {
 					const $targetElement = $(ui.item);
 					const $placeholder = $(ui.placeholder);
 
-					$placeholder
-						.find('td')
-						.attr('colspan', $targetElement.find('th:not(.hidden),td:not(.hidden)').length);
+					const $td = $placeholder.find('td');
+
+					$td.each((index, td) => {
+						if (index > 0) {
+							td.remove();
+						}
+					});
+
+					$td.attr(
+						'colspan',
+						$targetElement.find('th:not(.hidden),td:not(.hidden)').length
+					);
 				},
 				stop: function (e, ui) {
 					$tbody.css('width', '');

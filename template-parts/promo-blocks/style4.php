@@ -1,34 +1,64 @@
 <?php
-$args = wp_parse_args($args, [
-    'post_id' => 0,
-    'post_object' => null
-]);
+$args = wp_parse_args(
+	$args,
+	array(
+		'post_id'     => 0,
+		'post_object' => null,
+	)
+);
 
 // Получаем пост по ID или используем объект
-if ($args['post_id']) {
-    $post = get_post($args['post_id']);
-} elseif ($args['post_object']) {
-    $post = $args['post_object'];
+if ( $args['post_id'] ) {
+	$post = get_post( $args['post_id'] );
+} elseif ( $args['post_object'] ) {
+	$post = $args['post_object'];
 } else {
-    // Фолбэк на глобальную переменную (не рекомендуется для AJAX)
-    global $post;
+	// Фолбэк на глобальную переменную (не рекомендуется для AJAX)
+	global $post;
 }
-$template_fields = get_field('template_fields', $post->ID);
-$custom_link = $template_fields['custom_link'] ?? false;
-$custom_img = $template_fields['custom_img']['sizes']['medium'] ?? false;
+
+$promo_template  = get_field( 'promo_template', $post->ID );
+$template_fields = get_field( 'template_fields', $post->ID );
+$custom_link     = $template_fields['custom_link'] ?? false;
+$custom_img      = $template_fields['custom_img'] ? wp_get_attachment_image_url(
+	$template_fields['custom_img'],
+	'fullhd',
+	false,
+) : false;
 
 $template_style4_fields = $template_fields['template_style4_fields'] ?? false;
 
 $field1 = $template_style4_fields['field1'] ?? false;
 ?>
-<div class="test-grid">
-    <div class="prod-item-tizer">
-        <div class="prod-item_top type4">
-            <a href="<?php echo $custom_link ? $custom_link : '#'; ?>" class="link w-inline-block">
-                <div class="prod-item_img-mom _3" style="background-image: url(<?php echo $custom_img ? $custom_img : (get_template_directory_uri() . '/images/style4_img.jpg'); ?>);">
-                    <div class="promo-sale"><?php echo $field1 ? $field1 : 'ПРОСТЫЕ МОДЕЛИ'; ?></div>
-                </div>
-            </a>
-        </div>
-    </div>
-</div>
+<article class="test-grid lf-promo-block lf-promo-block--<?php echo $promo_template; ?>">
+	<div class="prod-item-tizer">
+		<div class="prod-item_top type4">
+		<?php
+			$link_attributes = array(
+				'title' => $custom_link['title'],
+				'href'  => $custom_link['url'],
+				'class' => 'link w-inline-block',
+			);
+
+			if ( ! empty( $custom_link['target'] ) ) {
+				$link_attributes['target'] = $custom_link['target'];
+			}
+
+			if ( ! empty( $link_attributes['target'] && '_blank' === $link_attributes['target'] ) ) {
+				$link_attributes['rel']        = 'noopener noreferrer';
+				$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
+				$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
+			}
+
+			$link_attributes = array_filter( $link_attributes );
+
+			$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
+			?>
+			<a <?php echo $link_attributes_str; ?>>
+				<div class="prod-item_img-mom _3" style="background-image: url(<?php echo $custom_img ? $custom_img : esc_url( TEMPLATE_PATH . '/images/style4_img.jpg' ); ?>);">
+					<div class="promo-sale"><?php echo $field1 ? $field1 : 'ПРОСТЫЕ МОДЕЛИ'; ?></div>
+				</div>
+			</a>
+		</div>
+	</div>
+</article>
