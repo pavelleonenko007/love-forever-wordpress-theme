@@ -85,10 +85,9 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 									<?php foreach ( $images as $index => $image ) : ?>
 										<li class="card-slider__list-item splide__slide">
 											<?php
-											$image_size = $args['is_paged'] ? 'fullhd' : 'qhd';
 											echo wp_get_attachment_image(
 												$image['image']['ID'],
-												$image_size,
+												'fullhd',
 												false,
 												array(
 													'loading' => 'lazy',

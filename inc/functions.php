@@ -735,3 +735,47 @@ function loveforever_get_category_filters_fast( $category_id, $taxonomies = null
 	}
 	return $filters;
 }
+
+/**
+ * Получить корневой термин таксономии dress_category, либо вернуть текущий, если термин является корневым.
+ *
+ * @param WP_Term|int $term WP_Term объект или ID термина.
+ * @return WP_Term|null
+ */
+function loveforever_get_dress_category_root_term( $term ) {
+	if ( ! $term ) {
+		return null;
+	}
+	if ( is_numeric( $term ) ) {
+		$term = get_term( $term, 'dress_category' );
+	}
+	if ( ! $term || is_wp_error( $term ) ) {
+		return null;
+	}
+	while ( $term->parent ) {
+		$parent = get_term( $term->parent, 'dress_category' );
+		if ( ! $parent || is_wp_error( $parent ) ) {
+			break;
+		}
+		$term = $parent;
+	}
+	return $term;
+}
+
+function loveforever_get_rating_html( $rating ) {
+	$rating_html = '';
+
+	for ( $i = 0; $i < 5; $i++ ) {
+		$class_names = array( 'lf-rating-heart' );
+
+		if ( $i < $rating ) {
+			$class_names[] = 'lf-rating-heart--filled';
+		}
+
+		$rating_html .= '<svg class="' . esc_attr( implode( ' ', $class_names ) ) . '" xmlns="http://www.w3.org/2000/svg">
+			<use href="#heartIcon" />
+		</svg>';
+	}
+
+	return $rating_html;
+}

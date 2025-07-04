@@ -444,8 +444,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 															name="phone" 
 															placeholder="Телефон" 
 															id="singleDressFormPhoneField" 
-															data-js-input-mask="+{7} (000) 000-00-00"
+															data-js-input-mask="phone"
 															form="singleDressForm"
+															autocomplete="tel"
+															required
 														>
 													</div>
 													<input 

@@ -969,25 +969,35 @@ if ( empty( $thumbnail ) ) {
 					</div>
 				</section>
 				<?php
-				// Сбор всех фильтров только по платьям из текущей категории
-				$category_id = isset( $queried_object->term_id ) ? (int) $queried_object->term_id : 0;
-				$all_filters = array();
-				if ( $category_id ) {
-					$all_filters = loveforever_get_category_filters_fast( $category_id, array( 'brand', 'style', 'color', 'fabric', 'silhouette' ) );
-				}
+				$root_term   = loveforever_get_dress_category_root_term( $queried_object );
+				$child_terms = get_terms(
+					array(
+						'taxonomy'   => 'dress_category',
+						'parent'     => $root_term->term_id,
+						'hide_empty' => true,
+					)
+				);
 				?>
-				<?php if ( ! empty( $all_filters ) ) : ?>
+				<?php if ( ! empty( $child_terms ) ) : ?>
 					<section class="section">
 						<div class="container">
-							<div class="cats-line">
-								<?php foreach ( $all_filters as $taxonomy => $terms ) : ?>
-									<?php foreach ( $terms as $term ) : ?>
-										<a href="<?php echo esc_url( loveforever_format_filter_link_for_tag( $term, 0 ) ); ?>" class="btn grey-border_btn w-inline-block">
-											<div class="p-12-12 uper m-12-12">
-												<?php echo esc_html( '#' . $term->name ); ?>
-											</div>
-										</a>
-									<?php endforeach; ?>
+							<div class="lf-tags">
+								<?php foreach ( $child_terms as $child_term ) : ?>
+									<a href="<?php echo esc_url( get_term_link( $child_term ) ); ?>" class="lf-tag">
+										<div class="lf-tag__text">
+											<?php
+											$terms_map = array(
+												'wedding' => array( 'Свадебные', 'свадебные', 'Платья', 'платья' ),
+												'evening' => array( 'Вечерние', 'вечерние', 'Платья', 'платья' ),
+												'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной', 'Платья', 'платья' ),
+											);
+
+											$child_term_name = str_replace( $terms_map[ $root_term->slug ], '', $child_term->name );
+
+											echo esc_html( $child_term_name );
+											?>
+										</div>
+									</a>
 								<?php endforeach; ?>
 							</div>
 						</div>
