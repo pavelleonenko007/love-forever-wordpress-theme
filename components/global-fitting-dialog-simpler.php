@@ -179,6 +179,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											placeholder="Телефон" 
 											data-js-input-mask="phone"
 											autocomplete="tel"
+											inputmode="tel"
 											required
 										>
 									</div>
