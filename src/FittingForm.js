@@ -868,6 +868,8 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 		const { data, error } = await promiseWrapper(this.getNewTimeSlots());
 
+		console.log({ data, error });
+
 		if (error) {
 			this.state.success = false;
 			this.state.error = error.message;
@@ -875,22 +877,33 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			return;
 		}
 
+		/**
+		 * @type {HTMLSelectElement}
+		 */
 		const timeSelectControl = this.form.elements.time;
-		let timeOptions = '';
 
-		//TODO: Спросить оставить ли обычным пользователям инфу о количестве свободных примерочных
+		timeSelectControl.innerHTML = '';
 
 		for (const time in data.slots) {
 			if (Object.prototype.hasOwnProperty.call(data.slots, time)) {
 				const slot = data.slots[time];
+				const option = document.createElement('option');
 
-				timeOptions += `<option value="${time}" ${
-					data.disableSlots && slot.available === 0 ? 'disabled' : ''
-				}>${time} (${slot.available} из ${slot.max_fittings})</option>`;
+				option.value = time;
+				option.disabled = data.disableSlots && slot.available === 0;
+
+				let optionContent = time;
+
+				if (!data.disableSlots) {
+					optionContent += ` (${slot.available} из ${slot.max_fittings})`;
+				}
+
+				option.textContent = optionContent;
+
+				timeSelectControl.append(option);
 			}
 		}
 
-		timeSelectControl.innerHTML = timeOptions;
 		this.state.isUpdatingSlots = false;
 	}
 
@@ -962,6 +975,8 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	updateUI() {
+		console.log({...this.state});
+		
 		if (this.prevState.date !== this.state.date) {
 			this.updateTimeSlots();
 		}
@@ -984,7 +999,6 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.errorsElement.hidden = !Boolean(this.state.error);
 
 		const allFieldChecked =
-			this.state.fitting_type &&
 			this.state.phone &&
 			this.state.name &&
 			this.state.date &&
@@ -1167,8 +1181,6 @@ class SingleFittingForm extends BaseFittingForm {
 	};
 
 	async loadTimeSlots() {
-		console.log('loadTimeSlots');
-
 		const selectedDate = this.form.elements.date.value;
 
 		if (!selectedDate) return;
@@ -1188,7 +1200,7 @@ class SingleFittingForm extends BaseFittingForm {
 
 			const body = await response.json();
 
-			// console.log(body);
+			console.log(body);
 
 			if (!body.success) {
 				console.error(body.data.debug);
@@ -1208,7 +1220,7 @@ class SingleFittingForm extends BaseFittingForm {
 				option.value = time;
 				option.textContent = time;
 				option.disabled = slot.available === 0;
-				
+
 				if (newSelectedOption === null && slot.available > 0) {
 					option.selected = true;
 					newSelectedOption = option;

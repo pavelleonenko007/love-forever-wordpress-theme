@@ -195,9 +195,8 @@ $fitting_steps_colors = array(
 								</div>
 								<?php
 							else :
-								$now      = gmdate( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
-								$today    = gmdate( 'Y-m-d', current_time( 'timestamp' ) );
-								$tomorrow = gmdate( 'Y-m-d', strtotime( '+1 day', current_time( 'timestamp' ) ) );
+								$today    = wp_date( 'Y-m-d', current_time( 'timestamp' ) );
+								$tomorrow = wp_date( 'Y-m-d', strtotime( '+1 day', current_time( 'timestamp' ) ) );
 								?>
 								<form id="filterFittingForm" class="admin-fittings__filter-form fitting-filter-form" data-js-filter-fitting-form>
 									<div class="fitting-filter-form__actions">
@@ -255,11 +254,11 @@ $fitting_steps_colors = array(
 												'post_status' => 'publish',
 												'meta_key' => 'fitting_time',
 												'orderby'  => 'meta_value',
-												'order'    => 'DESC',
+												'order'    => 'ASC',
 												'meta_query' => array(
 													array(
 														'key' => 'fitting_time',
-														'value' => $now,
+														'value' => $today,
 														'compare' => '>=',
 														'type' => 'DATETIME',
 													),

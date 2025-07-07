@@ -25,16 +25,34 @@ class CustomDatepicker {
 			? JSON.parse(this.customControl.dataset.jsDatepickerConfig)
 			: {};
 
+		$.datepicker.setDefaults($.datepicker.regional['ru']);
+
 		$(this.customControl).datepicker({
 			classes: {
 				'ui-datepicker': 'lf-datepicker',
 			},
 			showOtherMonths: true,
 			selectOtherMonths: true,
-			dateFormat: 'dd.mm.yy',
+			dateFormat: 'd MM (D)',
+			monthNames: [
+				'Января',
+				'Февраля',
+				'Марта',
+				'Апреля',
+				'Мая',
+				'Июня',
+				'Июля',
+				'Августа',
+				'Сентября',
+				'Октября',
+				'Ноября',
+				'Декабря',
+			],
 			altField: this.originalControl,
 			altFormat: 'yy-mm-dd',
 			onSelect: (dateString, instance) => {
+				console.log({ dateString });
+
 				this.originalControl.dispatchEvent(
 					new Event('change', {
 						bubbles: true,
