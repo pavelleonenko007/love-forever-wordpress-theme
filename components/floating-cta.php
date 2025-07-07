@@ -9,8 +9,15 @@ defined( 'ABSPATH' ) || exit;
 
 $telegram_url = get_field( 'telegram_url', 'option' );
 $whatsapp_url = get_field( 'whatsapp_url', 'option' );
+
+$class_names = array( 'floating-cta' );
+
+if ( is_singular( 'dress' ) ) {
+	$class_names[] = 'visible-mobile';
+}
+
 ?>
-<div class="floating-cta">
+<div class="<?php echo esc_attr( implode( ' ', $class_names ) ); ?>">
 	<?php if ( ! empty( $telegram_url ) ) : ?>
 	<a 
 		href="<?php echo esc_url( $telegram_url ); ?>" 
