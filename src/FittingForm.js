@@ -806,9 +806,9 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	 * IMask safari change event fix
 	 */
 	phoneControlBlurHandler = () => {
-		if (!isSafariBrowser()) {
-			return;
-		}
+		// if (!isSafariBrowser()) {
+		// 	return;
+		// }
 
 		this.form.dispatchEvent(
 			new Event('change', {
