@@ -805,12 +805,8 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	/**
 	 * IMask safari change event fix
 	 */
-	phoneControlBlurHandler = () => {
-		// if (!isSafariBrowser()) {
-		// 	return;
-		// }
-
-		this.form.dispatchEvent(
+	phoneControlBlurHandler = (event) => {
+		event.target.dispatchEvent(
 			new Event('change', {
 				bubbles: true,
 			})
@@ -1004,8 +1000,10 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
 			!this.state.isUpdatingSlots
 		) {
-			$(this.form.elements.time).selectmenu('refresh');
-			$(this.form.elements.time).selectmenu('enable');
+			if ($(this.form.elements.time).data('ui-selectmenu')) {
+				$(this.form.elements.time).selectmenu('refresh');
+				$(this.form.elements.time).selectmenu('enable');
+			}
 			this.form.elements.time.dispatchEvent(
 				new Event('change', {
 					bubbles: true,
