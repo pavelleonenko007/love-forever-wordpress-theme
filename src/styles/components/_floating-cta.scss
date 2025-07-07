@@ -1,3 +1,5 @@
+@use '../media' as *;
+
 .floating-cta {
 	display: flex;
 	column-gap: 10rem;
@@ -5,4 +7,10 @@
 	right: 40rem;
 	bottom: 20rem;
 	z-index: 1000;
+
+	@include mobile {
+		width: 100%;
+		justify-content: center;
+		right: 0;
+	}
 }

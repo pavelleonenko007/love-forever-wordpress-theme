@@ -26,8 +26,16 @@ a[href]:where(:not([class])) {
 	display: none !important;
 }
 
-#barba-wrapper {
-	overflow: hidden;
+// #barba-wrapper {
+// 	overflow: hidden;
+// }
+
+.section {
+	@include tablet {
+		&:has(.splide) {
+			overflow: hidden;
+		}
+	}
 }
 
 .n-menu {
