@@ -12,7 +12,7 @@ $barba_container_extra_classes      = ! empty( $args['barba-container-extra-clas
 $container_array_of_data_attributes = array_diff_key( $args, array_flip( array( 'data-wf-page', 'barba-container-extra-classes' ) ) );
 ?>
 <!DOCTYPE html>
-<html data-wf-page="<?php echo esc_attr( $data_wf_page ); ?>" data-wf-site="<?php echo esc_attr( DATA_WF_SITE ); ?>">
+<html data-wf-page="<?php echo esc_attr( $data_wf_page ); ?>" data-wf-site="<?php echo esc_attr( DATA_WF_SITE ); ?>" <?php language_attributes(); ?>>
 	<head>
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
 		<meta content="width=device-width, initial-scale=1" name="viewport">

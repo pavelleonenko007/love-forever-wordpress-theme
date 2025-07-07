@@ -188,7 +188,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 															data-js-datepicker-original-control
 														>
 														<?php
-														$min_date          = wp_date( 'd.m.Y', strtotime( $date_with_nearest_available_slots ) );
+														$min_date          = wp_date( 'd F (D)', strtotime( $date_with_nearest_available_slots ) );
 														$datepicker_config = array(
 															'minDate' => $min_date,
 														);

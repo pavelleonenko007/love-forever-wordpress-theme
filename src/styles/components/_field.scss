@@ -11,6 +11,11 @@
 	font-weight: 500;
 	line-height: 1;
 
+	// &--date,
+	// &--time {
+	// 	text-align: center;
+	// }
+
 	&__body {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -27,6 +32,7 @@
 		height: 50rem;
 		border: 1rem solid rgba(0, 0, 0, 0.1);
 		border-radius: 100rem;
+		text-align: inherit;
 		text-transform: uppercase;
 		background-color: var(--bg-color);
 

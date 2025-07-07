@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$can_edit_fittings                 = current_user_can( 'edit_fittings' ) || current_user_can( 'manage_options' );
+$can_edit_fittings                 = loveforever_is_user_has_manager_capability();
 $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date();
 ?>
 <div id="globalFittingDialog" role="dialog" class="dialog" data-js-dialog>
@@ -83,32 +83,78 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 									</div>
 								<?php endif; ?>
 								<div class="fitting-form__group-body">
-									<div class="field">
-										<div class="field__body">
-											<input 
-												type="date" 
-												name="date" 
-												class="field__control" 
-												id="globalDressFittingFormSimplerDateControl"
-												<?php echo ! $can_edit_fittings ? 'min="' . gmdate( 'Y-m-d', current_time( 'timestamp' ) ) . '"' : ''; ?>
-												value="<?php echo esc_attr( gmdate( 'Y-m-d', current_time( 'timestamp' ) ) ); ?>"
-											>
+									<div class="fitting-form__double">
+										<div class="field field--date" data-js-datepicker>
 											<?php
-											$slots           = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
-											$available_slots = array_filter(
-												$slots,
-												function ( $slot ) {
-													return $slot['available'] > 0;
-												}
+											$date_input_attributes = array(
+												'type'  => 'date',
+												'name'  => 'date',
+												'class' => 'field__control',
+												'id'    => 'globalDressFittingFormSimplerDateControl',
+												'value' => $date_with_nearest_available_slots,
+												'data-js-datepicker-original-control' => '',
+											);
+	
+											if ( ! $can_edit_fittings ) {
+												$date_input_attributes['min'] = $date_with_nearest_available_slots;
+											}
+	
+											$date_input_attributes_str = loveforever_prepare_tag_attributes_as_string( $date_input_attributes );
+											?>
+											<input <?php echo $date_input_attributes_str; ?>>
+											<?php
+											$min_date          = wp_date( 'd F (D)', strtotime( $date_with_nearest_available_slots ) );
+											$datepicker_config = array(
+												'minDate' => $min_date,
 											);
 											?>
-											<select name="time" id="globalDressFittingFormSimplerTimeControl" data-js-custom-select>
-												<?php foreach ( $available_slots as $time => $slot_data ) : ?>
-													<option 
-														value="<?php echo esc_attr( $time ); ?>" 
-														<?php echo 0 === $slot_data['available'] ? 'disabled' : ''; ?>
-													>
-														<?php echo esc_html( $time ); ?>
+											<input 
+												type="text" 
+												name="altdate" 
+												id="globalDressFittingFormSimplerCustomDateControl" 
+												class="field__control"
+												value="<?php echo esc_attr( $min_date ); ?>"
+												data-js-datepicker-custom-control
+												data-js-datepicker-config="<?php echo esc_attr( wp_json_encode( $datepicker_config ) ); ?>"
+											/>
+										</div>
+										<div class="field field--time">
+											<?php
+												$slots = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
+	
+											if ( ! $can_edit_fittings ) {
+												$slots = array_filter(
+													$slots,
+													function ( $slot ) {
+														return $slot['available'] > 0;
+													}
+												);
+											}
+											?>
+											<select 
+												class="field__control"
+												name="time" 
+												id="globalDressFittingFormSimplerTimeControl" data-js-custom-select
+											>
+												<?php
+												foreach ( $slots as $time => $slot_data ) :
+													$option_attributes = array(
+														'value' => $time,
+													);
+													$option_name       = $time;
+	
+													if ( 0 === $slot_data['available'] ) {
+														$option_attributes['disabled'] = '';
+													}
+	
+													if ( $can_edit_fittings ) {
+														$option_name .= ' (' . $slot_data['available'] . ' из ' . $slot_data['max_fittings'] . ')';
+													}
+	
+													$option_attributes_str = loveforever_prepare_tag_attributes_as_string( $option_attributes );
+													?>
+													<option <?php echo $option_attributes_str; ?>>
+														<?php echo esc_html( $option_name ); ?>
 													</option>
 												<?php endforeach; ?>
 											</select>
@@ -121,6 +167,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											name="name" 
 											placeholder="Имя" 
 											id="globalDressFittingFormSimplerNameField"
+											autocomplete="name"
 										>
 									</div>
 									<div class="field">

@@ -34,24 +34,30 @@ function loveforever_is_valid_phone( $phone ) {
 }
 
 function loveforever_is_valid_fitting_datetime( $datetime, $fitting_type, $exclude_fitting_id = null ) {
-	$timestamp = strtotime( $datetime );
+	$timezone_string  = get_option( 'timezone_string' ) ?: 'UTC';
+	$tz               = new DateTimeZone( $timezone_string );
+	$datetime         = new DateTime( $datetime, $tz );
+	$current_datetime = new DateTime( 'now', $tz );
+
+	$timestamp         = $datetime->getTimestamp();
+	$current_timestamp = $current_datetime->getTimestamp();
+	// $timestamp = strtotime( $datetime );
 	if ( $timestamp === false ) {
 			return 'Неверный формат даты и времени';
 	}
 
-	$current_time = current_time( 'timestamp' );
-	if ( $timestamp <= $current_time ) {
+	if ( $timestamp <= $current_timestamp ) {
 			return 'Время примерки не может быть в прошлом';
 	}
 
-	$hour = gmdate( 'G', $timestamp );
+	$hour = wp_date( 'G', $timestamp );
 	if ( $hour < 10 || $hour >= 21 ) {
 			return 'Время примерки должно быть между 10:00 и 21:00';
 	}
 
 	// Проверка доступности слота
-	$date              = gmdate( 'Y-m-d', $timestamp );
-	$time              = gmdate( 'H:i', $timestamp );
+	$date              = wp_date( 'Y-m-d', $timestamp );
+	$time              = wp_date( 'H:i', $timestamp );
 	$slot_availability = Fitting_Slots::check_slot_availability( $date, $time, $fitting_type, $exclude_fitting_id );
 
 	if ( $slot_availability !== true ) {
@@ -260,12 +266,12 @@ function loveforever_paginate_links_data( array $args ): array {
 
 function loveforever_get_pagination_html( WP_Query $query, array $pagination_args = array() ): string {
 	$total_pages  = $query->max_num_pages;
-    $current_page = max(1, (int) ($_REQUEST['page'] ?? $query->get('paged') ?: 1));
+	$current_page = max( 1, (int) ( $_REQUEST['page'] ?? $query->get( 'paged' ) ?: 1 ) );
 
-	$url_base     = ! empty( $pagination_args['base_url'] )
+	$url_base = ! empty( $pagination_args['base_url'] )
 		? $pagination_args['base_url'] . '?paged={pagenum}'
 		: get_pagenum_link( 1 ) . '?paged={pagenum}';
-	$args         = array(
+	$args     = array(
 		'total'        => $total_pages,
 		'current'      => $current_page,
 		'url_base'     => $url_base,
@@ -278,7 +284,7 @@ function loveforever_get_pagination_html( WP_Query $query, array $pagination_arg
 			<path fill-rule="evenodd" clip-rule="evenodd" d="M5.24977 4.28598L0.74993 0L0 0.714289L4.49984 5.00027L0.000560648 9.28571L0.750491 10L6 4.99998L5.25007 4.28569L5.24977 4.28598Z" fill="black"></path>
 		</svg>',
 	);
-	$pages        = loveforever_paginate_links_data( $args );
+	$pages    = loveforever_paginate_links_data( $args );
 
 	if ( empty( $pages ) ) {
 		return '';

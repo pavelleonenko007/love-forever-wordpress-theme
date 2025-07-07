@@ -254,8 +254,13 @@ class Fitting_Slots {
 	}
 
 	private static function get_fitting_duration( $fitting_type ) {
-		$wedding_duration = 90;
-		$default_duration = 60;
+		$wedding_duration      = 90;
+		$default_duration      = 60;
+		$use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+
+		if ( $use_one_hour_interval ) {
+			return $default_duration;
+		}
 
 		return ( is_array( $fitting_type ) && in_array( 'wedding', $fitting_type ) ) || 'wedding' === $fitting_type
 			? $wedding_duration

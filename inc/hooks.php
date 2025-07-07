@@ -89,15 +89,15 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	if ( ! isset( $_POST['fitting_type'] ) || empty( $_POST['fitting_type'] ) ) {
-		wp_send_json_error(
-			array(
-				'message' => 'Пожалуйста, укажите тип платья',
-				'debug'   => 'Не указана категория платья',
-			),
-			400
-		);
-	}
+	// if ( ! isset( $_POST['fitting_type'] ) || empty( $_POST['fitting_type'] ) ) {
+	// wp_send_json_error(
+	// array(
+	// 'message' => 'Пожалуйста, укажите тип платья',
+	// 'debug'   => 'Не указана категория платья',
+	// ),
+	// 400
+	// );
+	// }
 
 	if ( ! isset( $_POST['date'] ) || empty( $_POST['date'] ) ) {
 		wp_send_json_error(
@@ -126,7 +126,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	$fitting_id                       = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
 	$name                             = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 	$phone                            = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
-	$fitting_type                     = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
+	$fitting_type                     = 'evening';
 	$fitting_step                     = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : 'fitting';
 	$date                             = sanitize_text_field( wp_unslash( $_POST['date'] ) );
 	$time                             = sanitize_text_field( wp_unslash( $_POST['time'] ) );
@@ -136,7 +136,21 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	$client_favorite_dresses          = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
 	$has_change_fittings_capabilities = loveforever_is_user_has_manager_capability();
 
-	if ( ! $has_change_fittings_capabilities || 'delivery' !== $fitting_step ) {
+	if ( ! empty( $_POST['fitting_type'] ) ) {
+		$fitting_type = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
+	}
+
+	ob_start();
+
+	echo '<pre>';
+	var_dump( 'has_change_fittings_capabilities: ', $has_change_fittings_capabilities );
+	echo '</pre>';
+
+	$log = ob_get_clean();
+
+	error_log( $log );
+
+	if ( ! $has_change_fittings_capabilities && 'delivery' !== $fitting_step ) {
 		$is_valid_fitting_time = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $fitting_type, $fitting_id );
 
 		if ( true !== $is_valid_fitting_time ) {
@@ -267,10 +281,9 @@ function loveforever_filter_fittings_via_ajax() {
 		);
 	}
 
-	$now           = gmdate( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 	$today         = gmdate( 'Y-m-d', current_time( 'timestamp' ) );
 	$selected_date = ! empty( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
-	$start_date    = ! empty( $selected_date ) && $selected_date > $today ? $selected_date : $now;
+	$start_date    = ! empty( $selected_date ) && $selected_date > $today ? $selected_date : $today;
 	$next_date     = gmdate( 'Y-m-d', strtotime( $start_date . ' +1 day' ) );
 
 	$fittings_query_args = array(
@@ -420,12 +433,22 @@ function loveforever_get_date_fitting_time_slots_via_ajax() {
 
 	$fitting_id             = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : null;
 	$date                   = sanitize_text_field( wp_unslash( $_POST['date'] ) );
+	$can_user_edit_fittings = loveforever_is_user_has_manager_capability();
 	$fitting_slots_for_date = Fitting_Slots::get_day_slots( $date, current_time( 'timestamp' ), $fitting_id );
+
+	if ( ! $can_user_edit_fittings ) {
+		$fitting_slots_for_date = array_filter(
+			$fitting_slots_for_date,
+			function ( $slot ) {
+				return $slot['available'] > 0;
+			}
+		);
+	}
 
 	wp_send_json_success(
 		array(
 			'slots'        => $fitting_slots_for_date,
-			'disableSlots' => ! loveforever_is_user_has_manager_capability(),
+			'disableSlots' => ! $can_user_edit_fittings,
 			'message'      => "Слоты для $date успешно загружены",
 		)
 	);
