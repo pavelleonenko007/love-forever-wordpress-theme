@@ -30,6 +30,10 @@ a[href]:where(:not([class])) {
 // 	overflow: hidden;
 // }
 
+.code-embed-4 {
+	position: relative;
+}
+
 .section {
 	@include tablet {
 		&:has(.splide) {
