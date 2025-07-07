@@ -128,6 +128,7 @@ $fitting_steps_colors = array(
 													value="<?php echo esc_attr( $phone ); ?>"
 													data-js-input-mask="phone"
 													autocomplete="tel"
+													inputmode="tel"
 													required
 												>
 												<span class="field__errors" id="fittingPhoneErrors" data-js-form-field-errors></span>

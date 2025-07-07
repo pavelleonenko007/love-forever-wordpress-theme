@@ -167,6 +167,7 @@ $can_edit_fittings = current_user_can( 'edit_fittings' ) || current_user_can( 'm
 											placeholder="Телефон" 
 											data-js-input-mask="phone"
 											autocomplete="tel"
+											inputmode="tel"
 											required
 										>
 									</div>

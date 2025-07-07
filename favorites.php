@@ -116,6 +116,7 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 													aria-errormessage="favoritesContactFormPhoneFieldErrors"
 													data-js-input-mask="phone"
 													autocomplete="tel"
+													inputmode="tel"
 													required
 												>
 												<span class="field__errors" id="favoritesContactFormPhoneFieldErrors" data-js-form-field-errors></span>
