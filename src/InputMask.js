@@ -6,24 +6,34 @@ class InputMask {
 		phone: {
 			mask: [
 				{
-					mask: '+{7} (000) 000-00-00',
-					startsWith: '7',
-					lazy: false,
-					placeholderChar: '_',
-				},
-				{
 					mask: '8 (000) 000-00-00',
 					startsWith: '8',
-					lazy: false,
-					placeholderChar: '_',
+				},
+				{
+					mask: '+{7} (000) 000-00-00',
+					startsWith: '7',
+				},
+				{
+					// fallback: +7 маска, но префикс добавим вручную
+					mask: '+{7} (000) 000-00-00',
+					startsWith: '',
+					isDefault: true,
 				},
 			],
 			dispatch: function (appended, dynamicMasked) {
-				const inputValue = (dynamicMasked.value + appended).replace(/\D/g, '');
+				const rawInput = (dynamicMasked.value + appended).replace(/\D/g, '');
+				const firstDigit = rawInput.charAt(0);
 
-				return dynamicMasked.compiledMasks.find((m) =>
-					inputValue.startsWith(m.startsWith)
-				);
+				if (firstDigit === '8') {
+					return dynamicMasked.compiledMasks.find((m) => m.startsWith === '8');
+				}
+
+				if (firstDigit === '7') {
+					return dynamicMasked.compiledMasks.find((m) => m.startsWith === '7');
+				}
+
+				// Любая другая цифра → +7 маска
+				return dynamicMasked.compiledMasks.find((m) => m.isDefault);
 			},
 		},
 	};

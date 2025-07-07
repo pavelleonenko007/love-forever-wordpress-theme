@@ -1,6 +1,11 @@
 import BaseComponent from './BaseComponent';
 import DialogCollection from './Dialog';
-import { formatDateToRussian, promiseWrapper, wait } from './utils';
+import {
+	formatDateToRussian,
+	isSafariBrowser,
+	promiseWrapper,
+	wait,
+} from './utils';
 
 const ROOT_SELECTOR = '[data-js-fitting-form]';
 
@@ -756,6 +761,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	constructor(form) {
 		super(form);
 
+		this.phoneControl = this.form.querySelector('[data-js-input-mask="phone"]');
 		this.submitButton = this.form.querySelector(this.selectors.submitButton);
 		this.errorsElement = this.form.querySelector(this.selectors.errorsElement);
 		this.closestDialog = this.form.closest(this.selectors.closestDialog);
@@ -795,6 +801,21 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 		return stepNumber;
 	}
+
+	/**
+	 * IMask safari change event fix
+	 */
+	phoneControlBlurHandler = () => {
+		if (!isSafariBrowser()) {
+			return;
+		}
+
+		this.form.dispatchEvent(
+			new Event('change', {
+				bubbles: true,
+			})
+		);
+	};
 
 	/**
 	 *
@@ -975,8 +996,6 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	updateUI() {
-		console.log({...this.state});
-		
 		if (this.prevState.date !== this.state.date) {
 			this.updateTimeSlots();
 		}
@@ -999,10 +1018,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.errorsElement.hidden = !Boolean(this.state.error);
 
 		const allFieldChecked =
-			this.state.phone &&
-			this.state.name &&
-			this.state.date &&
-			this.state.time;
+			this.state.phone && this.state.name && this.state.date && this.state.time;
 
 		this.submitButton.disabled = !allFieldChecked || this.state.isSubmitting;
 
@@ -1021,6 +1037,9 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	bindEvents() {
+		if (this.phoneControl) {
+			this.phoneControl.addEventListener('blur', this.phoneControlBlurHandler);
+		}
 		this.form.addEventListener('change', this.changeFormHandler);
 		this.form.addEventListener('submit', this.submitForm);
 		document.addEventListener('dialogClose', this.closeDialogHandler);
@@ -1028,6 +1047,12 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	destroy() {
+		if (this.phoneControl) {
+			this.phoneControl.removeEventListener(
+				'blur',
+				this.phoneControlBlurHandler
+			);
+		}
 		this.form.removeEventListener('change', this.changeFormHandler);
 		this.form.removeEventListener('submit', this.submitForm);
 		document.removeEventListener('dialogClose', this.closeDialogHandler);

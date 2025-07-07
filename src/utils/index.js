@@ -158,3 +158,7 @@ export const promiseWrapper = async (promise) => {
 export const pxToRem = (pixels) => {
 	return pixels / 16;
 };
+
+export const isSafariBrowser = () => {
+	return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+};
