@@ -42,13 +42,11 @@ $field3 = $template_style6_fields['field3'] ?? false;
 		<div class="prod-item_top type6">
 		<?php
 			$link_attributes = array(
-				'title' => $custom_link['title'],
-				'href'  => $custom_link['url'],
 				'class' => 'link w-inline-block',
 			);
 
-			if ( ! empty( $custom_link['target'] ) ) {
-				$link_attributes['target'] = $custom_link['target'];
+			if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
+				$link_attributes = array_merge( $link_attributes, $custom_link );
 			}
 
 			if ( ! empty( $link_attributes['target'] && '_blank' === $link_attributes['target'] ) ) {
