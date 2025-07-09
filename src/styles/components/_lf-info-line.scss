@@ -1,0 +1,85 @@
+@use '../media' as *;
+
+.lf-info-line {
+	$root: &;
+
+	--gap: 20rem;
+
+	padding-block: 10rem;
+	display: flex;
+	overflow: hidden;
+	position: relative;
+	z-index: 1000;
+	color: var(--white);
+	background-color: var(--pink);
+	font-size: 12rem;
+	line-height: 1;
+	font-weight: 500;
+	text-decoration: none;
+	text-transform: uppercase;
+
+	&--marquee {
+		@include hover {
+			#{$root}__list {
+				animation-play-state: paused;
+			}
+		}
+	}
+
+	&__list {
+		margin: 0;
+		padding: 0 calc(var(--gap) / 2);
+		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		overflow: hidden;
+		list-style: none;
+		gap: var(--gap);
+		flex-shrink: 0;
+		justify-content: space-between;
+		align-items: center;
+
+		#{$root}--static & {
+			justify-content: center;
+		}
+
+		#{$root}--marquee & {
+			animation: marquee 20s linear infinite;
+		}
+	}
+
+	&__list-item {
+		margin: 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--gap);
+		text-align: center;
+
+		#{$root}--marquee & {
+			white-space: nowrap;
+			text-align: left;
+		}
+
+		& * {
+			margin: 0;
+		}
+
+		#{$root}--marquee & {
+			&::before {
+				content: '';
+				display: block;
+				width: 3rem;
+				height: 3rem;
+				background-color: var(--white);
+				rotate: 45deg;
+			}
+		}
+	}
+
+	@keyframes marquee {
+		to {
+			transform: translateX(-100%);
+		}
+	}
+}

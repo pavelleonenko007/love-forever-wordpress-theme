@@ -1,0 +1,177 @@
+{
+    "key": "group_686ce781dda19",
+    "title": "Инфолиния",
+    "fields": [
+        {
+            "key": "field_686ce781eb1f9",
+            "label": "Тип линии",
+            "name": "line_type",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Выберите тип линии",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "static": "Статическая",
+                "marquee": "Бегущая строка"
+            },
+            "default_value": "static",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_686ce7caeb1fa",
+            "label": "Ссылка",
+            "name": "line_link",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_686ce7f0eb1fb",
+            "label": "Даты отображения",
+            "name": "display_periods",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Добавить",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_686ce978eb1fc",
+                    "label": "Дата начала",
+                    "name": "start_date",
+                    "aria-label": "",
+                    "type": "date_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "F j, Y",
+                    "return_format": "Y-m-d",
+                    "first_day": 1,
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_686ce7f0eb1fb"
+                },
+                {
+                    "key": "field_686ce99deb1fd",
+                    "label": "Дата конца",
+                    "name": "end_date",
+                    "aria-label": "",
+                    "type": "date_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "F j, Y",
+                    "return_format": "Y-m-d",
+                    "first_day": 1,
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_686ce7f0eb1fb"
+                },
+                {
+                    "key": "field_686ce9afeb1fe",
+                    "label": "Повторять ежегодно",
+                    "name": "repeat_yearly",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Переведите переключатель в положение <strong>Да<\/strong>, если нужно, чтобы линия отображалась ежегодно в этот период времени.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "allow_in_bindings": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1,
+                    "parent_repeater": "field_686ce7f0eb1fb"
+                }
+            ]
+        },
+        {
+            "key": "field_686cea09eb1ff",
+            "label": "Принудительное отображение",
+            "name": "force_display",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Переведите и переключайте положение да, если нужно, чтобы эта линия отображалась вне зависимости от дат принудительно.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "infoline"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1751968391
+}

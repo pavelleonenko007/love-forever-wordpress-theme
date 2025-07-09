@@ -533,32 +533,72 @@ function loveforever_register_post_types() {
 		)
 	);
 
-    register_post_type(
-        'promo_blocks',
-        array(
-            'label'               => 'Промо-блоки',
-            'labels'       => array(
-                'name'               => 'Промо блоки',
-                'singular_name'      => 'Промо блок',
-                'add_new'            => 'Добавить новый',
-                'add_new_item'       => 'Добавить новый блок',
-                'edit_item'          => 'Редактировать блок',
-                'new_item'           => 'Новый блок',
-                'view_item'          => 'Посмотреть блок',
-                'search_items'       => 'Найти блок',
-                'not_found'          => 'Блоки не найдены',
-                'not_found_in_trash' => 'Блоки не найдены в корзине',
-                'parent_item_colon'  => '',
-                'menu_name'          => 'Промо блоки',
-            ),
-            'public'              => true,
-            'exclude_from_search' => true,
-            'show_in_nav_menus'   => false,
-            'menu_icon'           => 'dashicons-layout',
-            'supports'            => array('title'), // Отключаем редактор
-            'has_archive'         => false,
-            'taxonomies'          => array('dress_category'),
-        )
-    );
+	register_post_type(
+		'promo_blocks',
+		array(
+			'label'               => 'Промо-блоки',
+			'labels'              => array(
+				'name'               => 'Промо блоки',
+				'singular_name'      => 'Промо блок',
+				'add_new'            => 'Добавить новый',
+				'add_new_item'       => 'Добавить новый блок',
+				'edit_item'          => 'Редактировать блок',
+				'new_item'           => 'Новый блок',
+				'view_item'          => 'Посмотреть блок',
+				'search_items'       => 'Найти блок',
+				'not_found'          => 'Блоки не найдены',
+				'not_found_in_trash' => 'Блоки не найдены в корзине',
+				'parent_item_colon'  => '',
+				'menu_name'          => 'Промо блоки',
+			),
+			'public'              => true,
+			'exclude_from_search' => true,
+			'show_in_nav_menus'   => false,
+			'menu_icon'           => 'dashicons-layout',
+			'supports'            => array( 'title' ), // Отключаем редактор
+			'has_archive'         => false,
+			'taxonomies'          => array( 'dress_category' ),
+		)
+	);
 
+	register_post_type(
+		'infoline',
+		array(
+			'label'               => 'Инфолиния',
+			'labels'              => array(
+				'name'               => 'Инфолиния',
+				'singular_name'      => 'Инфолиния',
+				'add_new'            => 'Добавить новую',
+				'add_new_item'       => 'Добавить новую инфолинию',
+				'edit_item'          => 'Редактировать инфолинию',
+				'new_item'           => 'Новая инфолиния',
+				'view_item'          => 'Посмотреть инфолинию',
+				'search_items'       => 'Найти инфолинию',
+				'not_found'          => 'Инфолинии не найдены',
+				'not_found_in_trash' => 'Инфолинии не найдены в корзине',
+				'parent_item_colon'  => '',
+				'menu_name'          => 'Инфолиния',
+			),
+			'description'         => ' Используется как бегущая строка либо информационная строка.',
+			'public'              => false,
+			'publicly_queryable'  => false,
+			'exclude_from_search' => true,
+			'show_ui'             => true,
+			'show_in_nav_menus'   => false,
+			'show_in_menu'        => true,
+			'show_in_admin_bar'   => false,
+			'show_in_rest'        => false,
+			'rest_base'           => null,
+			'menu_position'       => null,
+			'menu_icon'           => 'dashicons-megaphone',
+			'capability_type'     => 'post',
+			'map_meta_cap'        => true,
+			'hierarchical'        => false,
+			'supports'            => array( 'title', 'editor' ),
+			'taxonomies'          => array(),
+			'has_archive'         => false,
+			'rewrite'             => false,
+			'query_var'           => false,
+		)
+	);
 }

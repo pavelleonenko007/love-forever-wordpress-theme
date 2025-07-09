@@ -15,6 +15,9 @@ get_header(
 	)
 );
 
+$infoline_id   = loveforever_get_current_infoline();
+$infoline_data = loveforever_get_infoline_data( $infoline_id );
+
 the_post();
 
 $phone            = get_field( 'phone', 'option' );
@@ -27,7 +30,7 @@ $metro_stations   = get_field( 'metro_stations', 'option' );
 ?>
 				<section class="section section_100vh">
 					<div class="container container-fw n-top">
-						<?php get_template_part( 'components/marquee' ); ?>
+						<?php get_template_part( 'components/marquee', null, $infoline_data ); ?>
 						<?php get_template_part( 'components/navbar' ); ?>
 						<div class="slider_home-slider_slide-in">
 							<div class="mom-abs">

@@ -17,6 +17,9 @@ get_header(
 	)
 );
 
+$infoline_id   = loveforever_get_current_infoline();
+$infoline_data = loveforever_get_infoline_data( $infoline_id );
+
 $availability        = get_field( 'availability' );
 $is_new              = get_field( 'is_new' );
 $images              = loveforever_get_product_images( get_the_ID() );
@@ -36,7 +39,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 ?>
 				<section class="section">
 					<div class="container container-fw n-top">
-						<?php get_template_part( 'components/marquee' ); ?>
+						<?php get_template_part( 'components/marquee', null, $infoline_data ); ?>
 						<?php get_template_part( 'components/navbar' ); ?>
 					</div>
 					<div class="container n-top single-product">

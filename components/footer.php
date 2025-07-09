@@ -6,9 +6,12 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$infoline_id   = loveforever_get_current_infoline();
+$infoline_data = loveforever_get_infoline_data( $infoline_id );
 ?>
 <footer class="footer">
-	<?php get_template_part( 'components/marquee' ); ?>
+	<?php get_template_part( 'components/marquee', null, $infoline_data ); ?>
 	<div class="container foo-container">
 		<div class="foo-top">
 			<div id="w-node-_234c1641-3300-cb43-e8da-825e992037d9-b053f56f" class="vert">
