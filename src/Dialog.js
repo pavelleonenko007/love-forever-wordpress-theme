@@ -105,9 +105,8 @@ class Dialog {
 		}
 
 		if (
-			event.target.matches(this.selectors.closeButton) ||
-			(!event.target.closest('.ui-menu-item') &&
-				!event.target.closest(this.selectors.dialogContent))
+			event.target.closest(this.selectors.closeButton) ||
+			event.target.matches(this.selectors.dialogOverlay)
 		) {
 			this.close();
 			return;
