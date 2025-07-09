@@ -19,10 +19,13 @@ get_header(
 		'namespace'                     => 'search',
 	)
 );
+
+$infoline_id   = loveforever_get_current_infoline();
+$infoline_data = loveforever_get_infoline_data( $infoline_id );
 ?>
 			<section class="section">
 				<div class="container container-fw n-top">
-					<?php get_template_part( 'components/marquee' ); ?>
+					<?php get_template_part( 'components/marquee', null, $infoline_data ); ?>
 					<?php get_template_part( 'components/navbar' ); ?>
 					<div class="page-top">
 						<div class="horiz">

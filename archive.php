@@ -20,6 +20,9 @@ get_header(
 	)
 );
 
+$infoline_id   = loveforever_get_current_infoline();
+$infoline_data = loveforever_get_infoline_data( $infoline_id );
+
 $queried_object = get_queried_object();
 
 $thumbnail = get_field( 'thumbnail', $queried_object );
@@ -32,7 +35,7 @@ if ( empty( $thumbnail ) ) {
 ?>
 				<section class="<?php echo esc_attr( implode( ' ', $hero_section_classes ) ); ?>">
 					<div class="container container-fw n-top">
-						<?php get_template_part( 'components/marquee' ); ?>
+						<?php get_template_part( 'components/marquee', null, $infoline_data ); ?>
 						<?php get_template_part( 'components/navbar' ); ?>
 						<div class="slider_home-slider_slide-in">
 							<?php if ( ! empty( $thumbnail ) ) : ?>

@@ -785,3 +785,109 @@ function loveforever_get_rating_html( $rating ) {
 
 	return $rating_html;
 }
+
+function loveforever_get_current_infoline() {
+	$cache_key = 'current_infoline';
+	$cached    = get_transient( $cache_key );
+
+	if ( ! empty( $cached ) ) {
+		return $cached;
+	}
+
+	$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
+	$tz              = new DateTimeZone( $timezone_string );
+
+	$today    = ( new DateTime( 'now', $tz ) )->format( 'Y-m-d' );
+	$today_md = ( new DateTime( 'now', $tz ) )->format( 'm-d' );
+
+	$infolines = get_posts(
+		array(
+			'post_type'        => 'infoline',
+			'numberposts'      => -1,
+			'order'            => 'DESC',
+			'suppress_filters' => false,
+			'fields'           => 'ids',
+		)
+	);
+
+	if ( empty( $infolines ) ) {
+		set_transient( $cache_key, null, MINUTE_IN_SECONDS * 10 );
+		return null;
+	}
+
+	$infolines = array_map(
+		function ( $post_id ) {
+			return array(
+				'post_id'      => $post_id,
+				'force_active' => get_field( 'force_display', $post_id ),
+				'periods'      => get_field( 'display_periods', $post_id ),
+			);
+		},
+		$infolines
+	);
+
+	foreach ( $infolines as $infoline ) {
+		if ( $infoline['force_active'] ) {
+			set_transient( $cache_key, $infoline['post_id'], MINUTE_IN_SECONDS * 10 );
+			return $infoline['post_id'];
+		}
+	}
+
+	foreach ( $infolines as $infoline ) {
+		$force_active = $infoline['force_active'];
+
+		if ( $force_active ) {
+			set_transient( $cache_key, $infoline['post_id'], MINUTE_IN_SECONDS * 10 );
+			return $infoline['post_id'];
+		}
+
+		$periods = $infoline['periods'];
+
+		if ( ! is_array( $periods ) ) {
+			continue;
+		}
+
+		foreach ( $periods as $period ) {
+			$start  = $period['start_date'] ?? null;
+			$end    = $period['end_date'] ?? null;
+			$repeat = $period['repeat_yearly'] ?? false;
+
+			if ( ! $start || ! $end ) {
+				continue;
+			}
+
+			if ( $repeat ) {
+				$start_md = ( new DateTime( $start, $tz ) )->format( 'm-d' );
+				$end_md   = ( new DateTime( $end, $tz ) )->format( 'm-d' );
+
+				if ( $start_md <= $today_md && $today_md <= $end_md ) {
+					set_transient( $cache_key, $infoline['post_id'], MINUTE_IN_SECONDS * 10 );
+					return $infoline['post_id'];
+				}
+			} elseif ( $start <= $today && $today <= $end ) {
+				set_transient( $cache_key, $infoline['post_id'], MINUTE_IN_SECONDS * 10 );
+				return $infoline['post_id'];
+			}
+		}
+	}
+
+	// Ничего не найдено
+	set_transient( $cache_key, null, MINUTE_IN_SECONDS * 10 );
+	return null;
+}
+
+function loveforever_get_infoline_data( $infoline_id ) {
+	if ( ! $infoline_id ) {
+		return null;
+	}
+
+	$line_type = get_field( 'line_type', $infoline_id );
+	$line_link = get_field( 'line_link', $infoline_id );
+	$text      = get_the_content( null, false, $infoline_id );
+
+	return array(
+		'line_type' => $line_type,
+		'line_link' => $line_link,
+		'text'      => $text,
+	);
+}

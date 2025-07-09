@@ -39,7 +39,6 @@ $fitting_steps_colors = array(
 ?>
 				<section class="section">
 					<div class="container container-fw n-top">
-						<?php get_template_part( 'components/marquee' ); ?>
 						<?php get_template_part( 'components/navbar' ); ?>
 					</div>
 				</section>

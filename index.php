@@ -17,10 +17,19 @@ get_header(
 		'namespace'                     => 'home',
 	)
 );
+
+$infoline_id   = loveforever_get_current_infoline();
+$infoline_data = loveforever_get_infoline_data( $infoline_id );
 ?>
 				<section class="section section_100vh homepagesection hero-section">
 					<div class="container container-fw n-top">
-						<?php get_template_part( 'components/marquee' ); ?>
+						<?php
+						get_template_part(
+							'components/marquee',
+							null,
+							$infoline_data
+						);
+						?>
 						<?php get_template_part( 'components/navbar' ); ?>
 						<?php
 						$hero_slider = get_field( 'hero_slider' );
