@@ -48,7 +48,9 @@ $field6 = $template_style12_fields['field6'] ?? false;
 			);
 
 			if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
-				$link_attributes = array_merge( $link_attributes, $custom_link );
+				$link_attributes         = array_merge( $link_attributes, $custom_link );
+				$link_attributes['href'] = $link_attributes['url'];
+				unset( $link_attributes['url'] );
 			}
 
 			if ( ! empty( $link_attributes['target'] && '_blank' === $link_attributes['target'] ) ) {
