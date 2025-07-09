@@ -59,6 +59,21 @@ class CustomDatepicker {
 					})
 				);
 			},
+			beforeShow: (input, inst) => {
+				var calendar = inst.dpDiv;
+
+				// Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+				setTimeout(() => {
+					$(this.root).append(calendar);
+
+					calendar.position({
+						my: 'left top',
+						at: 'left bottom+10rem',
+						collision: 'none',
+						of: input,
+					});
+				}, 0);
+			},
 			...datepickerConfig,
 		});
 
