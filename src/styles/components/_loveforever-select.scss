@@ -1,4 +1,5 @@
 @use '../media' as *;
+@use '../mixins' as *;
 
 .loveforever-select {
 	$root: &;
@@ -46,8 +47,10 @@
 	}
 
 	&__menu {
+		@include widget-box-shadow;
+
 		display: none;
-		border: 1rem solid rgba(0, 0, 0, 0.1);
+		border: var(--field-border);
 		position: absolute;
 		z-index: 1000;
 		color: #000;
@@ -55,7 +58,7 @@
 
 		&--time {
 			padding: 14rem 20rem;
-			border-radius: 30rem;
+			border-radius: 25rem;
 			display: none;
 			font-size: 16rem;
 			line-height: 1.25;

@@ -219,6 +219,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														<?php
 														$select_config = array(
 															'type' => 'time',
+															'hasBorder' => true,
 														);
 														?>
 														<select 
