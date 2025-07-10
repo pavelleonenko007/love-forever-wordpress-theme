@@ -94,11 +94,11 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 												'value' => $date_with_nearest_available_slots,
 												'data-js-datepicker-original-control' => '',
 											);
-	
+
 											if ( ! $can_edit_fittings ) {
 												$date_input_attributes['min'] = $date_with_nearest_available_slots;
 											}
-	
+
 											$date_input_attributes_str = loveforever_prepare_tag_attributes_as_string( $date_input_attributes );
 											?>
 											<input <?php echo $date_input_attributes_str; ?>>
@@ -121,7 +121,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 										<div class="field field--time">
 											<?php
 												$slots = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
-	
+
 											if ( ! $can_edit_fittings ) {
 												$slots = array_filter(
 													$slots,
@@ -131,10 +131,20 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 												);
 											}
 											?>
+											<?php
+											$select_config = array(
+												'hasBorder' => true,
+												'type'     => $can_edit_fittings ? 'select' : 'time',
+												'position' => array(
+													'my' => 'right top',
+													'at' => 'right bottom+10rem',
+												),
+											);
+											?>
 											<select 
 												class="field__control"
 												name="time" 
-												id="globalDressFittingFormSimplerTimeControl" data-js-custom-select
+												id="globalDressFittingFormSimplerTimeControl" data-js-custom-select="<?php echo esc_attr( wp_json_encode( $select_config ) ); ?>"
 											>
 												<?php
 												foreach ( $slots as $time => $slot_data ) :
@@ -142,15 +152,15 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 														'value' => $time,
 													);
 													$option_name       = $time;
-	
+
 													if ( 0 === $slot_data['available'] ) {
 														$option_attributes['disabled'] = '';
 													}
-	
+
 													if ( $can_edit_fittings ) {
 														$option_name .= ' (' . $slot_data['available'] . ' из ' . $slot_data['max_fittings'] . ')';
 													}
-	
+
 													$option_attributes_str = loveforever_prepare_tag_attributes_as_string( $option_attributes );
 													?>
 													<option <?php echo $option_attributes_str; ?>>

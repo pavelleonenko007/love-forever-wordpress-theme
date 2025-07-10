@@ -200,7 +200,21 @@ if ( empty( $thumbnail ) ) {
 											id="orderby" 
 											name="orderby" 
 											class="lf-select__control" 
-											data-js-custom-select="<?php echo esc_attr( wp_json_encode( array( 'hasBorder' => false ) ) ); ?>">
+											data-js-custom-select="
+											<?php
+											echo esc_attr(
+												wp_json_encode(
+													array(
+														'hasBorder' => false,
+														'position' => array(
+															'my' => 'left top',
+															'at' => 'left bottom',
+														),
+													)
+												)
+											);
+											?>
+											">
 											<?php
 											$orderby_options = array(
 												'views' => 'По популярности',
@@ -254,260 +268,266 @@ if ( empty( $thumbnail ) ) {
 						?>
 						<div class="<?php echo esc_attr( implode( ' ', $catalog_grid_classes ) ); ?>" data-js-product-filter-form-content-element>
 							<?php
-                            #region static test promo blocks
-//                            get_template_part( 'template-parts/promo-blocks/style1');
-//                            get_template_part( 'template-parts/promo-blocks/style2');
-//                            get_template_part( 'template-parts/promo-blocks/skip-block');
-//                            get_template_part( 'template-parts/promo-blocks/skip-block');
-//                            get_template_part( 'template-parts/promo-blocks/style3');
-//                            get_template_part( 'template-parts/promo-blocks/style4');
-//                            get_template_part( 'template-parts/promo-blocks/style5');
-//                            get_template_part( 'template-parts/promo-blocks/style6');
-//                            get_template_part( 'template-parts/promo-blocks/skip-block');
-//                            get_template_part( 'template-parts/promo-blocks/skip-block');
-//                            get_template_part( 'template-parts/promo-blocks/style7');
-//                            get_template_part( 'template-parts/promo-blocks/style8');
-//                            get_template_part( 'template-parts/promo-blocks/style9');
-//                            get_template_part( 'template-parts/promo-blocks/style10');
-//                            get_template_part( 'template-parts/promo-blocks/skip-block');
-//                            get_template_part( 'template-parts/promo-blocks/skip-block');
-//                            get_template_part( 'template-parts/promo-blocks/style11');
-//                            get_template_part( 'template-parts/promo-blocks/style12');
-                            #endregion
-                            // Получаем базовые параметры
-                            $current_page = max(1, $current_page);
-                            $posts_per_page = intval(get_field('products_per_page', 'option'));
-                            $promo_insert_positions = range(2, $posts_per_page, 6); // Позиции 2, 8, 14, 20
-                            $promo_needed = count($promo_insert_positions);
+							// region static test promo blocks
+							// get_template_part( 'template-parts/promo-blocks/style1');
+							// get_template_part( 'template-parts/promo-blocks/style2');
+							// get_template_part( 'template-parts/promo-blocks/skip-block');
+							// get_template_part( 'template-parts/promo-blocks/skip-block');
+							// get_template_part( 'template-parts/promo-blocks/style3');
+							// get_template_part( 'template-parts/promo-blocks/style4');
+							// get_template_part( 'template-parts/promo-blocks/style5');
+							// get_template_part( 'template-parts/promo-blocks/style6');
+							// get_template_part( 'template-parts/promo-blocks/skip-block');
+							// get_template_part( 'template-parts/promo-blocks/skip-block');
+							// get_template_part( 'template-parts/promo-blocks/style7');
+							// get_template_part( 'template-parts/promo-blocks/style8');
+							// get_template_part( 'template-parts/promo-blocks/style9');
+							// get_template_part( 'template-parts/promo-blocks/style10');
+							// get_template_part( 'template-parts/promo-blocks/skip-block');
+							// get_template_part( 'template-parts/promo-blocks/skip-block');
+							// get_template_part( 'template-parts/promo-blocks/style11');
+							// get_template_part( 'template-parts/promo-blocks/style12');
+							// endregion
+							// Получаем базовые параметры
+							$current_page           = max( 1, $current_page );
+							$posts_per_page         = intval( get_field( 'products_per_page', 'option' ) );
+							$promo_insert_positions = range( 2, $posts_per_page, 6 ); // Позиции 2, 8, 14, 20
+							$promo_needed           = count( $promo_insert_positions );
 
-                            // Проверка, можно ли показывать промо
-                            $can_show_promo = true;
-                            if (
-                                isset($_GET['min-price']) && intval($_GET['min-price']) !== $price_range['min_price'] ||
-                                isset($_GET['max-price']) && intval($_GET['max-price']) !== $price_range['max_price'] ||
-                                !empty($_GET['silhouette']) ||
-                                !empty($_GET['brand']) ||
-                                !empty($_GET['style']) ||
-                                !empty($_GET['color']) ||
-                                (!empty($_POST['orderby']) && $orderby != 'views')
-                            ) {
-                                $can_show_promo = false;
-                            }
+							// Проверка, можно ли показывать промо
+							$can_show_promo = true;
+							if (
+								isset( $_GET['min-price'] ) && intval( $_GET['min-price'] ) !== $price_range['min_price'] ||
+								isset( $_GET['max-price'] ) && intval( $_GET['max-price'] ) !== $price_range['max_price'] ||
+								! empty( $_GET['silhouette'] ) ||
+								! empty( $_GET['brand'] ) ||
+								! empty( $_GET['style'] ) ||
+								! empty( $_GET['color'] ) ||
+								( ! empty( $_POST['orderby'] ) && $orderby != 'views' )
+							) {
+								$can_show_promo = false;
+							}
 
-                            // Базовые аргументы для запроса товаров
-                            $products_query_args = array(
-                                'post_type'      => 'dress',
-                                'posts_per_page' => 1, // Для подсчета
-                                'fields'         => 'ids',
-                                'tax_query'      => array(
-                                    array(
-                                        'taxonomy' => $queried_object->taxonomy,
-                                        'field'    => 'term_id',
-                                        'terms'    => array($queried_object->term_id),
-                                    ),
-                                ),
-                                'meta_query'     => array(
-                                    array(
-                                        'key'   => 'availability',
-                                        'value' => '1',
-                                    ),
-                                    array(
-                                        'key'     => 'final_price',
-                                        'value'   => array(intval($min_price), intval($max_price + 1)),
-                                        'compare' => 'BETWEEN',
-                                        'type'    => 'DECIMAL',
-                                    ),
-                                ),
-                            );
+							// Базовые аргументы для запроса товаров
+							$products_query_args = array(
+								'post_type'      => 'dress',
+								'posts_per_page' => 1, // Для подсчета
+								'fields'         => 'ids',
+								'tax_query'      => array(
+									array(
+										'taxonomy' => $queried_object->taxonomy,
+										'field'    => 'term_id',
+										'terms'    => array( $queried_object->term_id ),
+									),
+								),
+								'meta_query'     => array(
+									array(
+										'key'   => 'availability',
+										'value' => '1',
+									),
+									array(
+										'key'     => 'final_price',
+										'value'   => array( intval( $min_price ), intval( $max_price + 1 ) ),
+										'compare' => 'BETWEEN',
+										'type'    => 'DECIMAL',
+									),
+								),
+							);
 
-                            // Добавляем сортировку и фильтры
-                            switch ($orderby) {
-                                case 'date':
-                                    $products_query_args['orderby'] = 'date';
-                                    $products_query_args['order']   = 'DESC';
-                                    break;
-                                case 'min-price':
-                                    $products_query_args['meta_key'] = 'final_price';
-                                    $products_query_args['orderby']  = 'meta_value_num';
-                                    $products_query_args['order']    = 'ASC';
-                                    break;
-                                case 'max-price':
-                                    $products_query_args['meta_key'] = 'final_price';
-                                    $products_query_args['orderby']  = 'meta_value_num';
-                                    $products_query_args['order']    = 'DESC';
-                                    break;
-                                default:
-                                    $products_query_args['meta_query']['product_views_count'] = array(
-                                        'key'     => 'product_views_count',
-                                        'compare' => 'EXISTS',
-                                        'type'    => 'NUMERIC',
-                                    );
-                                    $products_query_args['meta_query']['dress_order_' . $queried_object->term_id] = array(
-                                        'key'     => 'dress_order_' . $queried_object->term_id,
-                                        'compare' => 'EXISTS',
-                                        'type'    => 'NUMERIC',
-                                    );
-                                    $products_query_args['orderby'] = array(
-                                        'dress_order_' . $queried_object->term_id => 'ASC',
-                                        'product_views_count' => 'DESC',
-                                    );
-                                    break;
-                            }
+							// Добавляем сортировку и фильтры
+							switch ( $orderby ) {
+								case 'date':
+									$products_query_args['orderby'] = 'date';
+									$products_query_args['order']   = 'DESC';
+									break;
+								case 'min-price':
+									$products_query_args['meta_key'] = 'final_price';
+									$products_query_args['orderby']  = 'meta_value_num';
+									$products_query_args['order']    = 'ASC';
+									break;
+								case 'max-price':
+									$products_query_args['meta_key'] = 'final_price';
+									$products_query_args['orderby']  = 'meta_value_num';
+									$products_query_args['order']    = 'DESC';
+									break;
+								default:
+									$products_query_args['meta_query']['product_views_count']                       = array(
+										'key'     => 'product_views_count',
+										'compare' => 'EXISTS',
+										'type'    => 'NUMERIC',
+									);
+									$products_query_args['meta_query'][ 'dress_order_' . $queried_object->term_id ] = array(
+										'key'     => 'dress_order_' . $queried_object->term_id,
+										'compare' => 'EXISTS',
+										'type'    => 'NUMERIC',
+									);
+									$products_query_args['orderby'] = array(
+										'dress_order_' . $queried_object->term_id => 'ASC',
+										'product_views_count' => 'DESC',
+									);
+									break;
+							}
 
-                            if (!empty($selected_silhouette)) {
-                                $products_query_args['tax_query'][] = array(
-                                    'taxonomy' => 'silhouette',
-                                    'field'    => 'term_id',
-                                    'terms'    => array($selected_silhouette),
-                                );
-                            }
+							if ( ! empty( $selected_silhouette ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'silhouette',
+									'field'    => 'term_id',
+									'terms'    => array( $selected_silhouette ),
+								);
+							}
 
-                            if (isset($_GET['brand'])) {
-                                $products_query_args['tax_query'][] = array(
-                                    'taxonomy' => 'brand',
-                                    'field'    => 'term_id',
-                                    'terms'    => array_map('absint', wp_unslash($_GET['brand'])),
-                                );
-                            }
+							if ( isset( $_GET['brand'] ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'brand',
+									'field'    => 'term_id',
+									'terms'    => array_map( 'absint', wp_unslash( $_GET['brand'] ) ),
+								);
+							}
 
-                            if (isset($_GET['style'])) {
-                                $products_query_args['tax_query'][] = array(
-                                    'taxonomy' => 'style',
-                                    'field'    => 'term_id',
-                                    'terms'    => array_map('absint', wp_unslash($_GET['style'])),
-                                );
-                            }
+							if ( isset( $_GET['style'] ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'style',
+									'field'    => 'term_id',
+									'terms'    => array_map( 'absint', wp_unslash( $_GET['style'] ) ),
+								);
+							}
 
-                            if (isset($_GET['color'])) {
-                                $products_query_args['tax_query'][] = array(
-                                    'taxonomy' => 'color',
-                                    'field'    => 'term_id',
-                                    'terms'    => array_map('absint', wp_unslash($_GET['color'])),
-                                );
-                            }
+							if ( isset( $_GET['color'] ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'color',
+									'field'    => 'term_id',
+									'terms'    => array_map( 'absint', wp_unslash( $_GET['color'] ) ),
+								);
+							}
 
-                            // Подсчет общего количества товаров
-                            $products_count_query = new WP_Query($products_query_args);
-                            $total_products = $products_count_query->found_posts;
+							// Подсчет общего количества товаров
+							$products_count_query = new WP_Query( $products_query_args );
+							$total_products       = $products_count_query->found_posts;
 
-                            // Подсчет промо-блоков
-                            $total_promos = 0;
-                            if ($can_show_promo) {
-                                $promo_count_query = new WP_Query(
-                                    array(
-                                        'post_type'      => 'promo_blocks',
-                                        'posts_per_page' => 1,
-                                        'fields'         => 'ids',
-                                        'post_status'    => 'publish',
-                                        'meta_key'       => 'promo_order_' . $queried_object->term_id, // Указываем ключ метаполя
-                                        'orderby'        => 'meta_value_num', // Сортировка по числовому значению
-                                        'order'          => 'ASC',
-                                        'tax_query'      => array(
-                                            array(
-                                                'taxonomy' => $queried_object->taxonomy,
-                                                'field'    => 'term_id',
-                                                'terms'    => array($queried_object->term_id),
-                                            ),
-                                        ),
-                                    )
-                                );
-                                $total_promos = $promo_count_query->found_posts;
-                            }
+							// Подсчет промо-блоков
+							$total_promos = 0;
+							if ( $can_show_promo ) {
+								$promo_count_query = new WP_Query(
+									array(
+										'post_type'      => 'promo_blocks',
+										'posts_per_page' => 1,
+										'fields'         => 'ids',
+										'post_status'    => 'publish',
+										'meta_key'       => 'promo_order_' . $queried_object->term_id, // Указываем ключ метаполя
+										'orderby'        => 'meta_value_num', // Сортировка по числовому значению
+										'order'          => 'ASC',
+										'tax_query'      => array(
+											array(
+												'taxonomy' => $queried_object->taxonomy,
+												'field'    => 'term_id',
+												'terms'    => array( $queried_object->term_id ),
+											),
+										),
+									)
+								);
+								$total_promos      = $promo_count_query->found_posts;
+							}
 
-                            // Расчет доступных промо на текущей странице
-                            $promo_offset = ($current_page - 1) * $promo_needed;
-                            $promo_remaining = max(0, $total_promos - $promo_offset);
-                            $promo_available = min($promo_needed, $promo_remaining);
+							// Расчет доступных промо на текущей странице
+							$promo_offset    = ( $current_page - 1 ) * $promo_needed;
+							$promo_remaining = max( 0, $total_promos - $promo_offset );
+							$promo_available = min( $promo_needed, $promo_remaining );
 
-                            // Расчет смещения для товаров
-                            $prev_promos_inserted = min(($current_page - 1) * $promo_needed, $total_promos);
-                            $products_offset = max(0, ($current_page - 1) * $posts_per_page - $prev_promos_inserted);
+							// Расчет смещения для товаров
+							$prev_promos_inserted = min( ( $current_page - 1 ) * $promo_needed, $total_promos );
+							$products_offset      = max( 0, ( $current_page - 1 ) * $posts_per_page - $prev_promos_inserted );
 
-                            // Расчет количества товаров для выборки
-                            $products_to_fetch = $posts_per_page - $promo_available;
+							// Расчет количества товаров для выборки
+							$products_to_fetch = $posts_per_page - $promo_available;
 
 
-                            // Модифицируем аргументы для основного запроса
-                            $products_query_args['posts_per_page'] = $products_to_fetch;
-                            $products_query_args['offset'] = $products_offset;
-                            unset($products_query_args['fields']); // Убираем ограничение только на ID
+							// Модифицируем аргументы для основного запроса
+							$products_query_args['posts_per_page'] = $products_to_fetch;
+							$products_query_args['offset']         = $products_offset;
+							unset( $products_query_args['fields'] ); // Убираем ограничение только на ID
 
-                            // Основной запрос товаров
-                            $products_query = new WP_Query($products_query_args);
-                            $products = $products_query->posts;
+							// Основной запрос товаров
+							$products_query = new WP_Query( $products_query_args );
+							$products       = $products_query->posts;
 
-                            // Запрос промо-блоков
-                            $promo_posts = array();
-                            if ($can_show_promo && $promo_available > 0) {
-                                $promo_posts = get_posts(array(
-                                    'post_type' => 'promo_blocks',
-                                    'posts_per_page' => $promo_available,
-                                    'offset' => $promo_offset,
-                                    'post_status' => 'publish',
-                                    'meta_key'       => 'promo_order_' . $queried_object->term_id, // Ключ метаполя
-                                    'orderby'        => 'meta_value_num', // Сортировка по числовому значению
-                                    'order'          => 'ASC',
-                                    'tax_query' => array(
-                                        array(
-                                            'taxonomy' => $queried_object->taxonomy,
-                                            'field'    => 'term_id',
-                                            'terms'    => array($queried_object->term_id),
-                                        ),
-                                    ),
-                                ));
-                            }
+							// Запрос промо-блоков
+							$promo_posts = array();
+							if ( $can_show_promo && $promo_available > 0 ) {
+								$promo_posts = get_posts(
+									array(
+										'post_type'      => 'promo_blocks',
+										'posts_per_page' => $promo_available,
+										'offset'         => $promo_offset,
+										'post_status'    => 'publish',
+										'meta_key'       => 'promo_order_' . $queried_object->term_id, // Ключ метаполя
+										'orderby'        => 'meta_value_num', // Сортировка по числовому значению
+										'order'          => 'ASC',
+										'tax_query'      => array(
+											array(
+												'taxonomy' => $queried_object->taxonomy,
+												'field'    => 'term_id',
+												'terms'    => array( $queried_object->term_id ),
+											),
+										),
+									)
+								);
+							}
 
-                            // Формируем общий массив с фиксированными позициями
-                            $all_posts = $products; // Начинаем с товаров
-                            $positions = array_slice($promo_insert_positions, 0, $promo_available);
-                            foreach ($positions as $index => $position) {
-                                $insert_index = $position - 1;
-                                if ($insert_index <= count($all_posts)) {
-                                    array_splice($all_posts, $insert_index, 0, array($promo_posts[$index]));
-                                }
-                            }
-                            $all_posts = array_slice($all_posts, 0, $posts_per_page);
+							// Формируем общий массив с фиксированными позициями
+							$all_posts = $products; // Начинаем с товаров
+							$positions = array_slice( $promo_insert_positions, 0, $promo_available );
+							foreach ( $positions as $index => $position ) {
+								$insert_index = $position - 1;
+								if ( $insert_index <= count( $all_posts ) ) {
+									array_splice( $all_posts, $insert_index, 0, array( $promo_posts[ $index ] ) );
+								}
+							}
+							$all_posts = array_slice( $all_posts, 0, $posts_per_page );
 
-                            // Расчет пагинации
-                            $total_items = $total_products + min($total_promos, ceil(($total_products - 1) / ($posts_per_page - $promo_needed)) * $promo_needed);
-                            $max_num_pages = ceil($total_items / $posts_per_page);
+							// Расчет пагинации
+							$total_items   = $total_products + min( $total_promos, ceil( ( $total_products - 1 ) / ( $posts_per_page - $promo_needed ) ) * $promo_needed );
+							$max_num_pages = ceil( $total_items / $posts_per_page );
 
-                            // Устанавливаем глобальные параметры запроса
-                            global $wp_query;
-                            $wp_query->posts = $all_posts;
-                            $wp_query->post_count = count($all_posts);
-                            $wp_query->found_posts = $total_items;
-                            $wp_query->max_num_pages = $max_num_pages;
+							// Устанавливаем глобальные параметры запроса
+							global $wp_query;
+							$wp_query->posts         = $all_posts;
+							$wp_query->post_count    = count( $all_posts );
+							$wp_query->found_posts   = $total_items;
+							$wp_query->max_num_pages = $max_num_pages;
 
-                            // Вывод товаров и промо
-                            if (!empty($all_posts)) :
-                                $card_index = 1;
-                                foreach ($all_posts as $post) :
-                                    setup_postdata($post);
+							// Вывод товаров и промо
+							if ( ! empty( $all_posts ) ) :
+								$card_index = 1;
+								foreach ( $all_posts as $post ) :
+									setup_postdata( $post );
 
-                                    if ('promo_blocks' === $post->post_type) {
-                                        // Вывод промо-блока
-                                        $template_slug = get_post_meta($post->ID, 'promo_template', true);
-                                        if ($template_slug) {
-                                            get_template_part('template-parts/promo-blocks/' . $template_slug, null, array('post_object' => $post));
-                                        }
-                                    } else {
-                                        ?>
-                                        <div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
-                                            <?php
-                                            $position_in_block = ($card_index - 1) % 6 + 1;
-                                            $size = in_array($position_in_block, array(3, 4)) ? 'full' : 'large';
-                                            get_template_part('components/dress-card', null, array(
-                                                'size' => $size,
-                                                'is_paged' => $current_page > 1
-                                            ));
-                                            ?>
-                                        </div>
-                                        <?php
-                                    }
-                                    $card_index++;
-                                endforeach;
-                            else :
+									if ( 'promo_blocks' === $post->post_type ) {
+										// Вывод промо-блока
+										$template_slug = get_post_meta( $post->ID, 'promo_template', true );
+										if ( $template_slug ) {
+											get_template_part( 'template-parts/promo-blocks/' . $template_slug, null, array( 'post_object' => $post ) );
+										}
+									} else {
+										?>
+										<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
+											<?php
+											$position_in_block = ( $card_index - 1 ) % 6 + 1;
+											$size              = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
+											get_template_part(
+												'components/dress-card',
+												null,
+												array(
+													'size' => $size,
+													'is_paged' => $current_page > 1,
+												)
+											);
+											?>
+										</div>
+										<?php
+									}
+									++$card_index;
+								endforeach;
+							else :
 								?>
 								<div class="empty-content">
 									<p>Товары с заданными параметрами не найдены</p>
@@ -952,23 +972,23 @@ if ( empty( $thumbnail ) ) {
 								</div>
 							</div> -->
 						</div>
-                        <div data-js-product-filter-form-pagination class="paginate">
-                            <?php
-                            if ($max_num_pages > 1) {
-                                $pagination_query = new WP_Query();
-                                $pagination_query->found_posts = $total_items;
-                                $pagination_query->max_num_pages = $max_num_pages;
-                                $pagination_query->query_vars['paged'] = $current_page;
+						<div data-js-product-filter-form-pagination class="paginate">
+							<?php
+							if ( $max_num_pages > 1 ) {
+								$pagination_query                      = new WP_Query();
+								$pagination_query->found_posts         = $total_items;
+								$pagination_query->max_num_pages       = $max_num_pages;
+								$pagination_query->query_vars['paged'] = $current_page;
 
-                                echo loveforever_get_pagination_html(
-                                    $pagination_query,
-                                    array(
-                                        'is_catalog_page' => true,
-                                    )
-                                );
-                            }
-                            ?>
-                        </div>
+								echo loveforever_get_pagination_html(
+									$pagination_query,
+									array(
+										'is_catalog_page' => true,
+									)
+								);
+							}
+							?>
+						</div>
 					</div>
 				</section>
 				<?php

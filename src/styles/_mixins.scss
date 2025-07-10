@@ -14,3 +14,7 @@
 	width: $size;
 	height: $size;
 }
+
+@mixin widget-box-shadow {
+	box-shadow: 0 30rem 24rem -24rem rgba(0, 0, 0, 0.5);
+}
