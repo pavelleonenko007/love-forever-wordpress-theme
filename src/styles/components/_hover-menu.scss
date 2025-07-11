@@ -1,5 +1,7 @@
 .lf-hover-menu {
+	padding-bottom: 60rem;
 	z-index: auto;
+	
 	&.active {
 		grid-template-columns: repeat(5, auto);
 	}
