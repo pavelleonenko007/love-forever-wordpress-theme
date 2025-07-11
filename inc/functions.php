@@ -672,6 +672,33 @@ function loveforever_format_filter_link_for_tag( WP_Term $tag, int $product_id )
 		$postfix = '[]';
 	}
 
+	$categorization_rules_args = array(
+		'post_type'  => 'auto_rule',
+		'fields'     => 'ids',
+		'meta_query' => array(
+			array(
+				'key'   => 'base_dress_category',
+				'value' => $root_dress_category->term_id,
+			),
+		),
+	);
+
+	$categorization_rules_args['meta_query'][] = array(
+		'key'     => 'filters_' . $tag->taxonomy,
+		'value'   => '"' . $tag->term_id . '"',
+		'compare' => 'LIKE',
+	);
+
+	$categorization_rules = get_posts( $categorization_rules_args );
+
+	if ( ! empty( $categorization_rules ) ) {
+		$result_category = get_field( 'result_dress_category', $categorization_rules[0] );
+
+		if ( $result_category ) {
+			return get_term_link( $result_category );
+		}
+	}
+
 	return get_term_link( $root_dress_category ) . '?' . $tag->taxonomy . $postfix . '=' . $tag->term_id;
 }
 
