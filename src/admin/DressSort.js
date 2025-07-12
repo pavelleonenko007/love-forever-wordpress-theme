@@ -41,9 +41,6 @@ const initDressSorting = () => {
 						parseInt(
 							new URLSearchParams(window.location.search).get('paged')
 						) || 1;
-					const dressCategorySlug = new URLSearchParams(
-						window.location.search
-					).get('dress_category');
 
 					let actionName;
 					if (postType === 'promo_blocks') {
@@ -51,17 +48,26 @@ const initDressSorting = () => {
 					} else {
 						actionName = 'update_dress_order';
 					}
+
+					const urlParams = new URLSearchParams(window.location.search);
+					const ajaxData = {
+						action: actionName,
+						order: order,
+						page: page,
+						posts_per_page: postsPerPage,
+						nonce: LOVE_FOREVER_ADMIN.NONCE,
+					};
+					// Добавляем все GET параметры из URL (не перезаписываем уже существующие в ajaxData)
+					for (const [key, value] of urlParams.entries()) {
+						if (!(key in ajaxData)) {
+							ajaxData[key] = value;
+						}
+					}
+
 					$.ajax({
 						url: LOVE_FOREVER_ADMIN.AJAX_URL,
 						type: 'POST',
-						data: {
-							action: actionName,
-							order: order,
-							page: page,
-							posts_per_page: postsPerPage,
-							dress_category: dressCategorySlug,
-							nonce: LOVE_FOREVER_ADMIN.NONCE,
-						},
+						data: ajaxData,
 						success: function (response) {
 							if (!response.success) {
 								console.error(response.data.debug);

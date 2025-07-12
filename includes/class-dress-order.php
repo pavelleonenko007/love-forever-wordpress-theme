@@ -18,6 +18,17 @@ class Dress_Sorter {
 	private $post_type = 'dress'; // Assuming your post type is 'dress'
 	private $meta_key  = 'dress_order';
 
+	private $taxonomies = array(
+		'dress_category',
+		'dress_tag',
+		'brand',
+		'color',
+		'style',
+		'silhouette',
+		'fabric',
+		'zodiac_sign',
+	);
+
 	/**
 	 * Get singleton instance.
 	 *
@@ -50,7 +61,7 @@ class Dress_Sorter {
 		add_action( 'before_delete_post', array( $this, 'handle_dress_deletion' ), 10, 1 );
 		add_action( 'wp_trash_post', array( $this, 'handle_dress_deletion' ), 10, 1 );
 
-        add_action('set_object_terms', array( $this, 'add_dress_order_meta_on_term_set'), 10, 6); // для массового добавления товаров в категории (добавляет порядок в категории)
+		add_action( 'set_object_terms', array( $this, 'add_dress_order_meta_on_term_set' ), 10, 6 ); // для массового добавления товаров в категории (добавляет порядок в категории)
 	}
 
 	/**
@@ -63,30 +74,30 @@ class Dress_Sorter {
 	 */
 	public function __wakeup() {}
 
-    // Обработка единичных операций (через Quick Edit и т.д.)(нужна оптимизация)
-    function add_dress_order_meta_on_term_set($post_id, $terms, $tt_ids, $taxonomy, $append, $old_tt_ids) {
-        if ($taxonomy !== 'dress_category' || get_post_type($post_id) !== $this->post_type) {
-            return;
-        }
+	// Обработка единичных операций (через Quick Edit и т.д.)(нужна оптимизация)
+	function add_dress_order_meta_on_term_set( $post_id, $terms, $tt_ids, $taxonomy, $append, $old_tt_ids ) {
+		if ( get_post_type( $post_id ) !== $this->post_type ) {
+			return;
+		}
 
-        // Получаем удаленные термины
-        $removed_tt_ids = array_diff($old_tt_ids, $tt_ids);
+		// Получаем удаленные термины
+		$removed_tt_ids = array_diff( $old_tt_ids, $tt_ids );
 
-        // Удаляем метаполя для удаленных терминов
-        foreach ($removed_tt_ids as $term_id) {
-            $meta_key = 'dress_order_' . $term_id;
-            delete_post_meta($post_id, $meta_key);
-        }
+		// Удаляем метаполя для удаленных терминов
+		foreach ( $removed_tt_ids as $term_id ) {
+			$meta_key = $this->meta_key . '_' . $term_id;
+			delete_post_meta( $post_id, $meta_key );
+		}
 
-        // Добавляем метаполя для новых терминов
-        $new_tt_ids = array_diff($tt_ids, $old_tt_ids);
-        foreach ($new_tt_ids as $term_id) {
-            $meta_key = 'dress_order_' . $term_id;
-            if (!metadata_exists('post', $post_id, $meta_key)) {
-                update_post_meta($post_id, $meta_key, 0);
-            }
-        }
-    }
+		// Добавляем метаполя для новых терминов
+		$new_tt_ids = array_diff( $tt_ids, $old_tt_ids );
+		foreach ( $new_tt_ids as $term_id ) {
+			$meta_key = $this->meta_key . '_' . $term_id;
+			if ( ! metadata_exists( 'post', $post_id, $meta_key ) ) {
+				update_post_meta( $post_id, $meta_key, 0 );
+			}
+		}
+	}
 
 	public function register_dress_order_fields() {
 		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
@@ -194,12 +205,20 @@ class Dress_Sorter {
 
 		global $wpdb;
 
-		$order               = ! empty( $_POST['order'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['order'] ) ) : array();
-		$order               = ! empty( $_POST['order'] ) ? array_map( 'intval', $order ) : array();
-		$page                = ! empty( $_POST['page'] ) ? intval( $_POST['page'] ) : 1;
-		$dress_category_slug = ! empty( $_POST['dress_category'] ) ? sanitize_text_field( wp_unslash( $_POST['dress_category'] ) ) : '';
-		$posts_per_page      = ! empty( $_POST['posts_per_page'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['posts_per_page'] ) ) : 10;
-		$dress_category      = ! empty( $dress_category_slug ) ? get_term_by( 'slug', $dress_category_slug, 'dress_category' ) : null;
+		$order = ! empty( $_POST['order'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['order'] ) ) : array();
+		$order = ! empty( $_POST['order'] ) ? array_map( 'intval', $order ) : array();
+		$page  = ! empty( $_POST['page'] ) ? intval( $_POST['page'] ) : 1;
+		// $dress_category_slug = ! empty( $_POST['dress_category'] ) ? sanitize_text_field( wp_unslash( $_POST['dress_category'] ) ) : '';
+		$posts_per_page = ! empty( $_POST['posts_per_page'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['posts_per_page'] ) ) : 10;
+		// $dress_category      = ! empty( $dress_category_slug ) ? get_term_by( 'slug', $dress_category_slug, 'dress_category' ) : null;
+
+		$active_term = null;
+
+		foreach ( $this->taxonomies as $taxonomy ) {
+			if ( isset( $_POST[ $taxonomy ] ) ) {
+				$active_term = get_term_by( 'slug', sanitize_text_field( wp_unslash( $_POST[ $taxonomy ] ) ), $taxonomy );
+			}
+		}
 
 		$result  = array();
 		$result2 = array();
@@ -213,24 +232,35 @@ class Dress_Sorter {
 			'post__not_in'   => $order,
 		);
 
-		if ( $dress_category ) {
+		if ( $active_term ) {
 			$other_dresses_args['tax_query'][] = array(
-				'taxonomy' => 'dress_category',
+				'taxonomy' => $active_term->taxonomy,
 				'field'    => 'term_id',
-				'terms'    => array( $dress_category->term_id ),
+				'terms'    => array( $active_term->term_id ),
 			);
 
-			$other_dresses_args['meta_key'] = $this->meta_key . '_' . $dress_category->term_id;
+			$other_dresses_args['meta_key'] = $this->meta_key . '_' . $active_term->term_id;
 			$other_dresses_args['orderby']  = 'meta_value_num';
 		}
+
+		// if ( $dress_category ) {
+		// $other_dresses_args['tax_query'][] = array(
+		// 'taxonomy' => 'dress_category',
+		// 'field'    => 'term_id',
+		// 'terms'    => array( $dress_category->term_id ),
+		// );
+
+		// $other_dresses_args['meta_key'] = $this->meta_key . '_' . $dress_category->term_id;
+		// $other_dresses_args['orderby']  = 'meta_value_num';
+		// }
 
 		$other_dresses = ( new WP_Query( $other_dresses_args ) )->posts;
 
 		foreach ( $order as $index => $post_id ) {
 			// $position = $index + 1;
 			$position = ( $page - 1 ) * $posts_per_page + $index + 1;
-			if ( $dress_category ) {
-				update_field( $this->meta_key . '_' . $dress_category->term_id, $position, $post_id );
+			if ( $active_term ) {
+				update_field( $this->meta_key . '_' . $active_term->term_id, $position, $post_id );
 			} else {
 				$wpdb->update(
 					$wpdb->posts,
@@ -252,8 +282,8 @@ class Dress_Sorter {
 				$new_position = $posts_per_page * ( $page - 1 ) + count( $order ) + ( $index - ( $page - 1 ) * $posts_per_page ) + 1;
 			}
 
-			if ( $dress_category ) {
-				update_field( $this->meta_key . '_' . $dress_category->term_id, $new_position, $other_dress_id );
+			if ( $active_term ) {
+				update_field( $this->meta_key . '_' . $active_term->term_id, $new_position, $other_dress_id );
 			} else {
 				$wpdb->update(
 					$wpdb->posts,
@@ -280,10 +310,16 @@ class Dress_Sorter {
 			return;
 		}
 
-		$dress_category = isset( $_GET['dress_category'] ) ? get_term_by( 'slug', $_GET['dress_category'], 'dress_category' ) : null;
+		$active_term = null;
 
-		if ( $dress_category ) {
-			$query->set( 'meta_key', $this->meta_key . '_' . $dress_category->term_id );
+		foreach ( $this->taxonomies as $taxonomy ) {
+			if ( isset( $_GET[ $taxonomy ] ) ) {
+				$active_term = get_term_by( 'slug', sanitize_text_field( wp_unslash( $_GET[ $taxonomy ] ) ), $taxonomy );
+			}
+		}
+
+		if ( $active_term ) {
+			$query->set( 'meta_key', $this->meta_key . '_' . $active_term->term_id );
 			$query->set( 'orderby', 'meta_value_num' );
 			$query->set( 'order', 'ASC' );
 		} else {
@@ -293,9 +329,16 @@ class Dress_Sorter {
 	}
 
 	public function add_order_column( $columns ) {
-		if ( ! empty( $_GET['dress_category'] ) ) {
-			$dress_category        = get_term_by( 'slug', $_GET['dress_category'], 'dress_category' );
-			$columns['menu_order'] = 'Порядок (' . $dress_category->name . ')';
+		$active_term = null;
+
+		foreach ( $this->taxonomies as $taxonomy ) {
+			if ( isset( $_GET[ $taxonomy ] ) ) {
+				$active_term = get_term_by( 'slug', sanitize_text_field( wp_unslash( $_GET[ $taxonomy ] ) ), $taxonomy );
+			}
+		}
+
+		if ( $active_term ) {
+			$columns['menu_order'] = 'Порядок (' . $active_term->name . ')';
 		} else {
 			$columns['menu_order'] = 'Порядок';
 		}
@@ -304,9 +347,16 @@ class Dress_Sorter {
 
 	public function show_order_column( $column, $post_id ) {
 		if ( 'menu_order' === $column ) {
-			if ( ! empty( $_GET['dress_category'] ) ) {
-				$dress_category = get_term_by( 'slug', $_GET['dress_category'], 'dress_category' );
-				$order          = get_field( $this->meta_key . '_' . $dress_category->term_id, $post_id );
+			$active_term = null;
+
+			foreach ( $this->taxonomies as $taxonomy ) {
+				if ( isset( $_GET[ $taxonomy ] ) ) {
+					$active_term = get_term_by( 'slug', sanitize_text_field( wp_unslash( $_GET[ $taxonomy ] ) ), $taxonomy );
+				}
+			}
+
+			if ( $active_term ) {
+				$order = get_field( $this->meta_key . '_' . $active_term->term_id, $post_id );
 			} else {
 				$order = get_post( $post_id )->menu_order;
 			}
@@ -417,8 +467,8 @@ class Dress_Sorter {
 			$new_order      = (int) $_POST['acf'][ 'field_' . $this->meta_key . '_' . $category->term_id ];
 
 			// if ( 0 === $new_order ) {
-			// 	$new_order = 1;
-			// 	$_POST['acf'][ 'field_' . $this->meta_key . '_' . $category->term_id ] = $new_order;
+			// $new_order = 1;
+			// $_POST['acf'][ 'field_' . $this->meta_key . '_' . $category->term_id ] = $new_order;
 			// }
 
 			if ( $new_order > $category->count ) {
