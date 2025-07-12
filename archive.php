@@ -79,15 +79,6 @@ if ( empty( $thumbnail ) ) {
 				$other_filter_names  = array( 'brand', 'style', 'color' );
 				$other_filters       = array();
 
-				// foreach ( $other_filter_names as $other_filter_name ) {
-				// $other_filters[ $other_filter_name ] = get_terms(
-				// array(
-				// 'taxonomy'   => $other_filter_name,
-				// 'hide_empty' => false,
-				// )
-				// );
-				// }
-
 				foreach ( $other_filter_names as $other_filter_name ) {
 					$other_filters[ $other_filter_name ] = loveforever_get_filter_terms_for_dress_category( $other_filter_name );
 				}
@@ -96,11 +87,12 @@ if ( empty( $thumbnail ) ) {
 				?>
 				<section id="catalog" class="section z">
 					<div class="container n-top">
+						<?php $is_hidden = 0 !== $queried_object->parent || $queried_object->taxonomy !== 'dress_category'; ?>
 						<form 
 							id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" 
 							class="filters-form" 
 							data-js-product-filter-form
-							<?php echo 0 !== $queried_object->parent ? 'hidden' : ''; ?>
+							<?php echo $is_hidden ? 'hidden' : ''; ?>
 						>
 							<div class="vert vert-fw">
 								<div class="spleet m-vert">
@@ -268,26 +260,6 @@ if ( empty( $thumbnail ) ) {
 						?>
 						<div class="<?php echo esc_attr( implode( ' ', $catalog_grid_classes ) ); ?>" data-js-product-filter-form-content-element>
 							<?php
-							// region static test promo blocks
-							// get_template_part( 'template-parts/promo-blocks/style1');
-							// get_template_part( 'template-parts/promo-blocks/style2');
-							// get_template_part( 'template-parts/promo-blocks/skip-block');
-							// get_template_part( 'template-parts/promo-blocks/skip-block');
-							// get_template_part( 'template-parts/promo-blocks/style3');
-							// get_template_part( 'template-parts/promo-blocks/style4');
-							// get_template_part( 'template-parts/promo-blocks/style5');
-							// get_template_part( 'template-parts/promo-blocks/style6');
-							// get_template_part( 'template-parts/promo-blocks/skip-block');
-							// get_template_part( 'template-parts/promo-blocks/skip-block');
-							// get_template_part( 'template-parts/promo-blocks/style7');
-							// get_template_part( 'template-parts/promo-blocks/style8');
-							// get_template_part( 'template-parts/promo-blocks/style9');
-							// get_template_part( 'template-parts/promo-blocks/style10');
-							// get_template_part( 'template-parts/promo-blocks/skip-block');
-							// get_template_part( 'template-parts/promo-blocks/skip-block');
-							// get_template_part( 'template-parts/promo-blocks/style11');
-							// get_template_part( 'template-parts/promo-blocks/style12');
-							// endregion
 							// Получаем базовые параметры
 							$current_page           = max( 1, $current_page );
 							$posts_per_page         = intval( get_field( 'products_per_page', 'option' ) );

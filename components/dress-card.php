@@ -7,21 +7,24 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$args = wp_parse_args($args, [
-    'size' => 'large',
-    'is_paged' => false,
-    'post_id' => 0,
-    'post_object' => null
-]);
+$args = wp_parse_args(
+	$args,
+	array(
+		'size'        => 'large',
+		'is_paged'    => false,
+		'post_id'     => 0,
+		'post_object' => null,
+	)
+);
 
 // Получаем пост по ID или используем объект
-if ($args['post_id']) {
-    $post = get_post($args['post_id']);
-} elseif ($args['post_object']) {
-    $post = $args['post_object'];
+if ( $args['post_id'] ) {
+	$post = get_post( $args['post_id'] );
+} elseif ( $args['post_object'] ) {
+	$post = $args['post_object'];
 } else {
-    // Фолбэк на глобальную переменную (не рекомендуется для AJAX)
-    global $post;
+	// Фолбэк на глобальную переменную (не рекомендуется для AJAX)
+	global $post;
 }
 
 $price                      = get_field( 'price' );
