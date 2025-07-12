@@ -140,16 +140,6 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		$fitting_type = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
 	}
 
-	ob_start();
-
-	echo '<pre>';
-	var_dump( 'has_change_fittings_capabilities: ', $has_change_fittings_capabilities );
-	echo '</pre>';
-
-	$log = ob_get_clean();
-
-	error_log( $log );
-
 	if ( ! $has_change_fittings_capabilities && 'delivery' !== $fitting_step ) {
 		$is_valid_fitting_time = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $fitting_type, $fitting_id );
 
@@ -1866,26 +1856,34 @@ function acf_add_promo_preview( $field ) {
 add_filter(
 	'get_terms',
 	function ( $terms, $taxonomies, $args ) {
-		// Работаем только в админке и для конкретной таксономии
-		if ( is_admin() && in_array( 'dress_category', (array) $taxonomies ) ) {
-			global $pagenow, $post_type;
-
-			// Проверяем страницу редактирования/создания записи
-			if ( in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
-				// Для второго типа записи
-				if ( 'promo_blocks' === $post_type ) {
-					$parent_terms = array();
-					foreach ( $terms as $term ) {
-						// Отбираем только родительские термины (без родителей)
-						if ( 0 == $term->parent ) {
-							$parent_terms[] = $term;
-						}
-					}
-					return $parent_terms;
-				}
-			}
+		if ( ! is_admin() ) {
+			return $terms;
 		}
-		return $terms;
+
+		if ( ! in_array( 'dress_category', (array) $taxonomies ) ) {
+			return $terms;
+		}
+
+		global $pagenow, $post_type;
+
+		if ( ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
+			return $terms;
+		}
+
+		if ( 'promo_blocks' !== $post_type ) {
+			return $terms;
+		}
+
+		if ( 'all' !== $args['fields'] ) {
+			return $terms;
+		}
+
+		return array_filter(
+			$terms,
+			function ( $term ) {
+				return 0 === $term->parent;
+			}
+		);
 	},
 	10,
 	3
