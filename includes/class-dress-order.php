@@ -173,8 +173,6 @@ class Dress_Sorter {
 		// Only run on specific admin pages where it's needed
 		$screen = get_current_screen();
 
-		var_dump($screen);
-
 		// Only run on the dress post type edit screen or when explicitly requested
 		if ( isset( $_GET['setup_dress_order'] ) ||
 		( $screen && 'dress' === $screen->post_type && 'post' === $screen->base ) ) {
@@ -282,8 +280,6 @@ class Dress_Sorter {
 			return;
 		}
 
-		// var_dump($query);
-
 		$dress_category = isset( $_GET['dress_category'] ) ? get_term_by( 'slug', $_GET['dress_category'], 'dress_category' ) : null;
 
 		if ( $dress_category ) {
@@ -294,8 +290,6 @@ class Dress_Sorter {
 			$query->set( 'orderby', 'menu_order' );
 			$query->set( 'order', 'ASC' );
 		}
-
-		// var_dump( $query );
 	}
 
 	public function add_order_column( $columns ) {

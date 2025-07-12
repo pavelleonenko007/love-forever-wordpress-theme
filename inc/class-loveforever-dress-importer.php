@@ -208,14 +208,6 @@ class LoveForever_Dress_Importer {
 	}
 
 	private function import_images( $post_id, $product ) {
-		error_log( 'Start import images' );
-
-		ob_start();
-		var_dump( $product->picture );
-		$log = ob_get_clean();
-
-		error_log( 'Log: ' . $log );
-
 		if ( ! isset( $product->picture ) ) {
 			return;
 		}
