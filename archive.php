@@ -90,7 +90,7 @@ if ( empty( $thumbnail ) ) {
 						<?php $is_hidden = 0 !== $queried_object->parent || $queried_object->taxonomy !== 'dress_category'; ?>
 						<form 
 							id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" 
-							class="filters-form" 
+							class="filters-form lf-product-filter-form" 
 							data-js-product-filter-form
 							<?php echo $is_hidden ? 'hidden' : ''; ?>
 						>
@@ -125,7 +125,7 @@ if ( empty( $thumbnail ) ) {
 												?>
 												<?php if ( $silhouettes_index === 7 ) : ?>
 													<div class="dropdown-container">
-														<div class="more-button label loveforever-filter-radio">
+														<div class="more-button">
 																Еще
 																<svg width="6" height="4" viewBox="0 0 6 4" fill="none" xmlns="http://www.w3.org/2000/svg">
 																		<path fill-rule="evenodd" clip-rule="evenodd" d="M2.48716 3.41604L0 0.583958L0.512837 0L3 2.83208L5.48716 0L6 0.583958L3.51284 3.41604L3 4L2.48716 3.41604Z" fill="black"/>
@@ -152,6 +152,21 @@ if ( empty( $thumbnail ) ) {
 												</div>
 												<?php endif; ?>
 											<?php endforeach; ?>
+											<?php
+											$has_active_filters = loveforever_has_active_filters(
+												array(
+													'min-price' => $price_range['min_price'],
+													'max-price' => $price_range['max_price'],
+													'orderby' => 'views',
+												)
+											);
+											?>
+											<button 
+												type="reset" 
+												class="lf-product-filter-form__reset-button" 
+												data-js-product-filter-form-reset-button
+												<?php echo $has_active_filters ? '' : 'disabled'; ?>
+											>Очистить</button>
 										</div>
 									<?php endif; ?>
 									<?php
@@ -1064,8 +1079,8 @@ if ( empty( $thumbnail ) ) {
 									</div>
 									<div class="dialog-card__footer">
 										<button 
+											type="button"
 											class="button" 
-											form="<?php echo esc_attr( $catalog_filter_form_id ); ?>" 
 											data-js-dialog-close-button
 										>
 											Показать результат
@@ -1075,6 +1090,7 @@ if ( empty( $thumbnail ) ) {
 											type="reset" 
 											class="button button--link" 
 											data-js-dialog-close-button
+											data-js-product-filter-form-reset-button
 										>
 											Очистить
 										</button>
