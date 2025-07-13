@@ -18,7 +18,7 @@ if ( ! empty( $map_section['map'] ) ) :
 	$right_text  = $map_section['right_text'];
 	$button      = $map_section['button'];
 	?>
-	<section class="section">
+	<section id="map" class="section">
 		<div class="container">
 			<div class="vert vert-center m-str">
 				<div class="map-keeper lf-map">
