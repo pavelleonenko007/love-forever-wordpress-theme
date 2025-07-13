@@ -672,15 +672,53 @@ function AllPages() {
 	// доп меню при наведении
 
 	const navbar = document.querySelector('.navbar');
-	const dropdownMenus = document.querySelectorAll('.hovered-menue');
+	const dropdownMenus = Array.from(document.querySelectorAll('.hovered-menue'));
+	const hoverCloseMenus = dropdownMenus.map((dropdownMenu) =>
+		dropdownMenu.querySelector('.hovered-menue_close-menu')
+	);
+
+	console.log({ dropdownMenus, hoverCloseMenus });
+
+	const openDropdown = (navLink) => {
+		dropdownMenus.forEach((dropdown) => {
+			dropdown.classList.remove('active');
+		});
+
+		document
+			.querySelectorAll('.lf-icon-button--search')
+			.forEach((iconButton) => {
+				iconButton.classList.remove('is-active');
+			});
+
+		navLink.nextElementSibling.classList.add('active');
+
+		navbar.classList.add('dopmenuopened');
+		document.documentElement.classList.add('htmldopmenuopened');
+	};
+
+	const closeDropdown = () => {
+		dropdownMenus.forEach((dropdown) => {
+			dropdown.classList.remove('active');
+		});
+
+		navbar.classList.remove('dopmenuopened');
+
+		document.documentElement.classList.remove('htmldopmenuopened');
+
+		document
+			.querySelectorAll('.lf-icon-button--search')
+			.forEach((searchButton) => searchButton.classList.remove('is-active'));
+	};
+
+	hoverCloseMenus.forEach((hoverCloseMenu) => {
+		hoverCloseMenu?.addEventListener('mouseenter', () => {
+			closeDropdown();
+		});
+	});
 
 	Array.from(document.querySelectorAll('.lf-nav-link'))
 		.filter((navlink) => navlink.closest('.menu-link-keeper'))
 		.forEach((navLink, index) => {
-			const closeDropdownMenuElement = navLink.nextElementSibling.querySelector(
-				'.hovered-menue_close-menu'
-			);
-
 			let canBeOpened = !navLink.classList.contains('is-active');
 
 			document.body.addEventListener(
@@ -694,37 +732,6 @@ function AllPages() {
 					once: true,
 				}
 			);
-
-			const openDropdown = () => {
-				dropdownMenus.forEach((dropdown) => {
-					dropdown.classList.remove('active');
-				});
-
-				document.querySelectorAll('.lf-icon-button--search').forEach(iconButton => {
-					iconButton.classList.remove('is-active');
-				})
-
-				navLink.nextElementSibling.classList.add('active');
-
-				navbar.classList.add('dopmenuopened');
-				document.documentElement.classList.add('htmldopmenuopened');
-			};
-
-			const closeDropdown = () => {
-				dropdownMenus.forEach((dropdown) => {
-					dropdown.classList.remove('active');
-				});
-
-				navbar.classList.remove('dopmenuopened');
-
-				document.documentElement.classList.remove('htmldopmenuopened');
-
-				document
-					.querySelectorAll('.lf-icon-button--search')
-					.forEach((searchButton) =>
-						searchButton.classList.remove('is-active')
-					);
-			};
 			/**
 			 * @param {MouseEvent} event
 			 */
@@ -733,7 +740,7 @@ function AllPages() {
 					return;
 				}
 
-				openDropdown();
+				openDropdown(navLink);
 
 				navLink.parentElement.addEventListener('mouseleave', onMouseLeave, {
 					once: true,
@@ -744,8 +751,6 @@ function AllPages() {
 			 * @param {MouseEvent} event
 			 */
 			function onMouseLeave(event) {
-				console.log('leave', event);
-
 				closeDropdown();
 
 				canBeOpened = true;
@@ -754,10 +759,6 @@ function AllPages() {
 					once: true,
 				});
 			}
-
-			closeDropdownMenuElement.addEventListener('mouseenter', () => {
-				closeDropdown();
-			});
 
 			navLink.parentElement.addEventListener('mouseenter', onMouseEnter, {
 				once: true,
