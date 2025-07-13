@@ -20,7 +20,24 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 						<p class="dialog-card__subtitle"><?php echo esc_html( ADDRESS ); ?></p>
 					<?php endif; ?>
 					<?php if ( ! empty( MAP_LINK ) ) : ?>
-						<a href="<?php echo esc_url( MAP_LINK['url'] ); ?>" class="dialog-card__link menu-link active">Маршрут от метро</a>
+						<?php
+						$map_link_attributes = array(
+							'class'  => 'dialog-card__link menu-link active',
+							'href'   => MAP_LINK['url'],
+							'title'  => MAP_LINK['title'],
+							'target' => MAP_LINK['target'],
+						);
+
+						if ( ! empty( $map_link_attributes['target'] ) && '_blank' === $map_link_attributes['target'] ) {
+							$aria_label                        = MAP_LINK['title'] . ' (Открыть в новой вкладке)';
+							$map_link_attributes['rel']        = 'noopener noreferrer';
+							$map_link_attributes['aria-label'] = $aria_label;
+							$map_link_attributes['title']      = $aria_label;
+						}
+
+						$map_link_attributes_str = loveforever_prepare_tag_attributes_as_string( $map_link_attributes );
+						?>
+						<a <?php echo $map_link_attributes_str; ?>><?php echo esc_html( MAP_LINK['title'] ); ?></a>
 					<?php endif; ?>
 				</div>
 				<div class="dialog-card__body">
