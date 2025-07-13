@@ -935,8 +935,9 @@ function loveforever_has_active_filters( $default_filters = array() ) {
 	$result = false;
 
 	foreach ( $filters as $filter ) {
+		$default_value = isset( $default_filters[ $filter ] ) ? (string) $default_filters[ $filter ] : '';
 		if ( ! empty( $_GET[ $filter ] ) ) {
-			if ( $_GET[ $filter ] !== (string) $default_filters[ $filter ] ) {
+			if ( $_GET[ $filter ] !== $default_value ) {
 				$result = true;
 				break;
 			}
