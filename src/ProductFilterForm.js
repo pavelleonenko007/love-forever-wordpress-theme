@@ -1,4 +1,4 @@
-import { debounce, wait } from './utils';
+import { debounce, formDataToObject, wait } from './utils';
 
 const ROOT_SELECTOR = '[data-js-product-filter-form]';
 
@@ -8,6 +8,7 @@ class ProductFilterForm {
 		contentElement: '[data-js-product-filter-form-content-element]',
 		paginationElement: '[data-js-product-filter-form-pagination]',
 		paginationLinkElement: '[data-js-product-filter-form-paginate-link]',
+		resetButton: '[data-js-product-filter-form-reset-button]',
 	};
 
 	stateSelectors = {
@@ -21,6 +22,16 @@ class ProductFilterForm {
 			this.selectors.paginationElement
 		);
 
+		this.defaultValues = {
+			silhouette: '',
+			color: [],
+			brand: [],
+			style: [],
+			orderby: 'views',
+			'min-price': this.filterForm.querySelector('[name="min-price"]').min,
+			'max-price': this.filterForm.querySelector('[name="max-price"]').max,
+		};
+
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.debouncedOnChange = debounce(this.onChange, 200);
@@ -28,6 +39,43 @@ class ProductFilterForm {
 		this.resetForm = this.resetForm.bind(this);
 
 		this.bindEvents();
+	}
+
+	updateResetButtonVisibility() {
+		console.log('updateResetButtonVisibility');
+
+		const hasActiveFilters = this.hasActiveFilters();
+
+		console.log({ hasActiveFilters });
+
+		document.querySelectorAll(this.selectors.resetButton).forEach((button) => {
+			button.disabled = !hasActiveFilters;
+		});
+	}
+
+	/**
+	 * Проверяет, есть ли активные фильтры
+	 * @returns {boolean}
+	 */
+	hasActiveFilters() {
+		const formData = formDataToObject(new FormData(this.filterForm));
+
+		for (const key in this.defaultValues) {
+			console.log({ key, value: formData[key] });
+
+			if (Array.isArray(formData[key]) && formData[key].length > 0) {
+				return true;
+			}
+
+			if (
+				formData[key] !== undefined &&
+				formData[key] !== this.defaultValues[key]
+			) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -94,12 +142,34 @@ class ProductFilterForm {
 
 	resetForm(event) {
 		this.resetPage();
-		this.filterForm
-			.querySelector('[name="silhouette"]:checked')
-			.removeAttribute('checked');
-		this.filterForm
-			.querySelector('[name="silhouette"]')
-			.setAttribute('checked', '');
+
+		const silhouetteInputs = this.filterForm.querySelectorAll(
+			'[name="silhouette"]'
+		);
+
+		silhouetteInputs.forEach((element) => {
+			element.removeAttribute('checked');
+		});
+
+		silhouetteInputs[0].setAttribute('checked', '');
+
+		document
+			.querySelectorAll('[name="brand[]"], [name="style[]"], [name="color[]"]')
+			.forEach((element) => {
+				element.removeAttribute('checked');
+			});
+
+		$(this.filterForm.querySelector('[name="orderby"]'))
+			.find('option')
+			.removeAttr('selected');
+
+		if (
+			$(this.filterForm.querySelector('[name="orderby"]')).data('ui-selectmenu')
+		) {
+			$(this.filterForm.querySelector('[name="orderby"]')).selectmenu(
+				'refresh'
+			);
+		}
 
 		$('#slider').slider('values', [
 			parseInt(this.filterForm.elements['min-price'].min),
@@ -115,19 +185,27 @@ class ProductFilterForm {
 	}
 
 	onChange(event) {
+		if (event.target.form && event.target.form !== this.filterForm) {
+			return;
+		}
+
 		if (event.target.name && event.target.name !== 'page') {
 			this.resetPage();
 		}
 
-		if (['brand[]', 'style[]'].includes(event.target.name)) {
-			return;
-		}
+		// if (['brand[]', 'style[]', 'color[]'].includes(event.target.name)) {
+		// 	return;
+		// }
+
+		this.updateResetButtonVisibility();
 
 		this.getFilteredProducts();
 	}
 
 	onSubmit(event) {
 		event.preventDefault();
+
+		this.updateResetButtonVisibility();
 
 		this.getFilteredProducts();
 	}
@@ -198,14 +276,14 @@ class ProductFilterForm {
 	}
 
 	bindEvents() {
-		this.filterForm.addEventListener('change', this.debouncedOnChange);
+		document.addEventListener('change', this.debouncedOnChange);
 		this.filterForm.addEventListener('reset', this.resetForm);
 		this.filterForm.addEventListener('submit', this.onSubmit);
 		document.addEventListener('click', this.changePaginationLink);
 	}
 
 	destroy() {
-		this.filterForm.removeEventListener('change', this.debouncedOnChange);
+		document.removeEventListener('change', this.debouncedOnChange);
 		this.filterForm.removeEventListener('reset', this.resetForm);
 		this.filterForm.removeEventListener('submit', this.onSubmit);
 		document.removeEventListener('click', this.changePaginationLink);

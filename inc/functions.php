@@ -918,3 +918,30 @@ function loveforever_get_infoline_data( $infoline_id ) {
 		'text'      => $text,
 	);
 }
+
+function loveforever_has_active_filters( $default_filters = array() ) {
+	$filters = array(
+		'brand',
+		'style',
+		'color',
+		'fabric',
+		'silhouette',
+		'dress_tag',
+		'min-price',
+		'max-price',
+		'orderby',
+	);
+
+	$result = false;
+
+	foreach ( $filters as $filter ) {
+		if ( ! empty( $_GET[ $filter ] ) ) {
+			if ( $_GET[ $filter ] !== (string) $default_filters[ $filter ] ) {
+				$result = true;
+				break;
+			}
+		}
+	}
+
+	return $result;
+}

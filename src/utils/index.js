@@ -162,3 +162,22 @@ export const pxToRem = (pixels) => {
 export const isSafariBrowser = () => {
 	return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 };
+
+/**
+ *
+ * @param {FormData} formData
+ * @returns {Object}
+ */
+export const formDataToObject = (formData) => {
+	const formDataObject = {};
+
+	for (const [key, value] of formData) {
+		if (key.endsWith('[]')) {
+			formDataObject[key.slice(0, -2)] = formData.getAll(key);
+		} else {
+			formDataObject[key] = value;
+		}
+	}
+
+	return formDataObject;
+};

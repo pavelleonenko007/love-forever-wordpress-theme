@@ -694,9 +694,23 @@
 .dropdown-container {
 	position: relative;
 	display: inline-block;
+
+	@media screen and (max-width: 991px) {
+		display: contents;
+	}
+}
+
+.dropdown-container:has(:checked) .more-button::after {
+	content: '';
+	margin-left: 4rem;
+	width: 4rem;
+	height: 4rem;
+	background-color: var(--pink);
+	border-radius: 50%;
 }
 
 .more-button {
+	padding-bottom: 20rem;
 	display: flex;
 	align-items: center;
 	color: #000000;
@@ -704,6 +718,9 @@
 	border-radius: 25px;
 	transition: all 0.3s ease;
 	user-select: none;
+	font-size: 12rem;
+	line-height: 1;
+	font-weight: 500;
 	text-transform: uppercase;
 }
 
@@ -758,7 +775,7 @@
 		padding: 0;
 		border: none;
 		box-shadow: none;
-		display: flex;
+		display: contents;
 	}
 
 	.dropdown-menu .loveforever-filter-radio {
