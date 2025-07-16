@@ -25,11 +25,13 @@ class SmsService {
 
 		$fitting_date_time = date_i18n( 'd.m.Y в H:i', $timestamp );
 
-		$text = "Ждём в LOVE FOREVER – $fitting_date_time на примерку: м. Садовая, Вознесенский пр-кт 18 (9 мин. от метро). Тел: 8 (931) 341-20-36";
+		$text = "Ждём в LOVE FOREVER – $fitting_date_time на примерку:  м. Садовая, Вознесенский пр-кт 18 (9 мин. от метро). Тел: 8 (931) 341-20-36";
 
 		$success = $this->provider->send( $phone, $text, SmsRoute::CASCADE );
 		if ( ! $success ) {
 			Logger::log( 'SMS: Не удалось отправить SMS с приглашением', compact( 'post_id', 'phone', 'text' ) );
+		} else {
+			Logger::log( 'SMS: SMS с приглашением отправлен', compact( 'post_id', 'phone', 'text', 'success' ) );
 		}
 	}
 

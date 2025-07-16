@@ -13,7 +13,7 @@ class RedSmsProvider implements SmsProviderInterface {
 	private $api_url         = 'https://cp.redsms.ru/api/message';
 	private $api_key         = 'OFzbDDihLEhzmdqUznhuMmnc';
 	private $login           = 'loveforever';
-	private $sender          = 'Салон LoveForever';
+	private $sender          = 'LoveForever';
 
 	private function __construct() {}
 
@@ -44,7 +44,7 @@ class RedSmsProvider implements SmsProviderInterface {
 			array(
 				'route' => $route,
 				'from'  => $this->sender,
-				'to'    => $phone,
+				'to'    => str_replace( '+', '', $phone ),
 				'text'  => $text,
 			)
 		);
