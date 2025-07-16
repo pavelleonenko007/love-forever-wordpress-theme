@@ -206,10 +206,17 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		update_field( 'client_favorite_dresses', $client_favorite_dresses, $fitting_post_id );
 	}
 
+	do_action( 'acf/save_post', $fitting_post_id );
+
+	$sended_email = loveforever_send_fitting_email_notification( $fitting_post_id );
+
 	wp_send_json_success(
 		array(
 			'fitting_type' => $fitting_type,
 			'message'      => 0 === $fitting_id ? 'Вы успешно записались на примерку' : 'Запись на примерку успешно обновлена',
+			'debug'        => array(
+				'sended_email' => $sended_email,
+			),
 		),
 		201
 	);

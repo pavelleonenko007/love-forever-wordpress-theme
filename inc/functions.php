@@ -946,3 +946,78 @@ function loveforever_has_active_filters( $default_filters = array() ) {
 
 	return $result;
 }
+
+function loveforever_get_application_email() {
+	return get_field( 'email', 'option' ) ?: get_option( 'admin_email' );
+}
+
+function loveforever_get_fitting_type_name( $fitting_type ) {
+	$fitting_types = array(
+		'wedding' => 'Свадебная',
+		'evening' => 'Вечерняя',
+		'prom'    => 'Промо',
+	);
+
+	// Проверяем на null или пустые значения
+	if ( empty( $fitting_type ) ) {
+		return '';
+	}
+
+	// Обработка массива
+	if ( is_array( $fitting_type ) ) {
+		$result = array();
+		foreach ( $fitting_type as $type ) {
+			$type_name = loveforever_get_fitting_type_name( $type );
+			if ( ! empty( $type_name ) ) {
+				$result[] = $type_name;
+			}
+		}
+		return implode( ', ', $result );
+	}
+
+	// Обработка строки
+	if ( is_string( $fitting_type ) ) {
+		return $fitting_types[ $fitting_type ] ?? '';
+	}
+
+	// Для других типов данных возвращаем пустую строку
+	return '';
+}
+
+function loveforever_get_fitting_step_name( $step ) {
+	$steps = array(
+		'fitting'    => 'Подгонка',
+		're-fitting' => 'Повтор',
+		'delivery'   => 'Выдача',
+	);
+
+	return $steps[ $step ] ?? '';
+}
+
+function loveforever_send_fitting_email_notification( $post_id, $updated = false ) {
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$email = loveforever_get_application_email();
+
+	if ( ! $email ) {
+		return;
+	}
+
+	$date_time = get_field( 'fitting_time', $post_id );
+
+	$subject = $updated ? 'Обновлена примерка в ' . $date_time : 'Новая примерка в ' . $date_time;
+
+	$message = '
+		<p><strong>Имя:</strong> ' . get_field( 'name', $post_id ) . '</p>
+		<p><strong>Телефон:</strong> ' . get_field( 'phone', $post_id ) . '</p>
+		<p><strong>Email:</strong> ' . get_field( 'email', $post_id ) . '</p>
+		<p><strong>Комментарий:</strong> ' . get_field( 'comment', $post_id ) . '</p>
+		<p><strong>Тип примерки:</strong> ' . loveforever_get_fitting_type_name( get_field( 'fitting_type', $post_id ) ) . '</p>
+		<p><strong>Этап:</strong> ' . loveforever_get_fitting_step_name( get_field( 'fitting_step', $post_id ) ) . '</p>
+		<p><strong>Ссылка на примерку:</strong> ' . get_home_url() . '/fittings-admin-panel/' . $post_id . '</p>
+	';
+
+	return wp_mail( $email, $subject, $message );
+}
