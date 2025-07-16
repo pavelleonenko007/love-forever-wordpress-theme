@@ -945,7 +945,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 			const body = await response.json();
 
-			// console.log(body);
+			console.log({ body });
 
 			this.state.success = body.success;
 
