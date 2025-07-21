@@ -34,6 +34,7 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 		</div>
 		<?php get_template_part( 'components/global-fitting-dialog-simpler' ); ?>
+		<?php get_template_part( 'components/callback-dialog' ); ?>
 		<?php wp_footer(); ?>
 	</body>
 </html>

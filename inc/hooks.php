@@ -1895,3 +1895,65 @@ add_filter(
 	10,
 	3
 );
+
+add_action( 'wp_ajax_loveforever_request_callback', 'loveforever_request_callback' );
+add_action( 'wp_ajax_nopriv_loveforever_request_callback', 'loveforever_request_callback' );
+function loveforever_request_callback() {
+	if ( ! isset( $_POST['submit_callback_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['submit_callback_form_nonce'] ) ), 'submit_callback_form' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Невалидный nonce',
+			),
+			400
+		);
+	}
+
+	$errors = array();
+
+	if ( empty( $_POST['phone'] ) ) {
+		$errors[] = 'Пожалуйста, заполните номер телефона';
+	}
+
+	if ( ! empty( $errors ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Некорректные данные',
+				'errors'  => $errors,
+			),
+			400
+		);
+	}
+
+	$name  = ! empty( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : 'Неизвестно';
+	$phone = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
+
+	$email   = loveforever_get_application_email();
+	$subject = 'Новая заявка с сайта ' . get_bloginfo( 'name' );
+
+	$message = '
+		<p>Имя: ' . $name . '</p>
+		<p>Телефон: ' . $phone . '</p>
+	';
+
+	$sent = wp_mail( $email, $subject, $message, array( 'Content-Type: text/html; charset=UTF-8' ) );
+
+	if ( ! $sent ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Не удалось отправить письмо',
+				'errors'  => array(
+					'Не удалось отправить письмо. Попробуйте чуть позже!',
+				),
+			)
+		);
+	}
+
+	wp_send_json_success(
+		array(
+			'message' => 'Заявка успешно отправлена',
+		)
+	);
+}

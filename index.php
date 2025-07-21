@@ -113,5 +113,6 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 		<?php wp_footer(); ?>
 		<?php get_template_part( 'template-parts/global/stories-dialog' ); ?>
 		<?php get_template_part( 'components/global-fitting-dialog-simpler' ); ?>
+		<?php get_template_part( 'components/callback-dialog' ); ?>
 	</body>
 </html>
