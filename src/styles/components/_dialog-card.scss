@@ -4,7 +4,7 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	padding: 54rem 20rem;
+	padding: 54rem 20rem 10rem;
 	width: 100%;
 	max-width: calc(362rem + 16px);
 	height: 100dvh;
@@ -40,7 +40,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		row-gap: 20rem;
-		overflow: hidden;
+		overflow: hidden auto;
 
 		&-button {
 			flex-shrink: 0;
@@ -48,6 +48,7 @@
 	}
 
 	&__footer {
+		margin-top: auto;
 		display: flex;
 		flex-direction: column;
 	}
