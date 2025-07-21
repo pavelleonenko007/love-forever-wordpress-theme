@@ -1,4 +1,6 @@
 export function lockFocus(element) {
+	element.setAttribute('data-focus-trap', 'true');
+
 	const focusableElements = element.querySelectorAll(
 		'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex^="-"])'
 	);
@@ -9,6 +11,8 @@ export function lockFocus(element) {
 
 	function handleKeyDown(event) {
 		if (event.key === 'Tab') {
+			element.removeAttribute('data-focus-trap');
+
 			if (event.shiftKey) {
 				if (document.activeElement === firstFocusableElement) {
 					lastFocusableElement.focus();
@@ -25,7 +29,10 @@ export function lockFocus(element) {
 
 	document.addEventListener('keydown', handleKeyDown);
 
-	return () => document.removeEventListener('keydown', handleKeyDown);
+	return () => {
+		element.removeAttribute('data-focus-trap');
+		document.removeEventListener('keydown', handleKeyDown);
+	};
 }
 
 export function getCookie(name) {
