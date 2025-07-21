@@ -24,6 +24,7 @@ import { SaleTimerCollection } from './SaleTimer';
 import CustomDatepickerCollection from './CustomDatePicker';
 import Stories from './Stories';
 import './styles/index.scss';
+import { CallbackFormCollection } from './CallbackForm';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -251,6 +252,7 @@ function initPage() {
 	FilterFittingFormCollection.init();
 	SaleTimerCollection.init();
 	CustomDatepickerCollection.init();
+	CallbackFormCollection.init();
 }
 
 function initCatalogPage() {

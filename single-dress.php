@@ -254,7 +254,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 									</div>
 									<div class="w-richtext single-product__content-fitting-text flow">
 										<p class="p-16-20">Примерить и купить платье можно в нашем салоне: г. Санкт-Петербург, Вознесенский проспект 18 (м. Садовая) ежедневно с 10 до 22:00 по предварительной записи</p>
-										<p class="p-16-20">Для доставки в регионы <a href="#" class="btn-call-reqest">закажите обратный звонок</a></p>
+										<p class="p-16-20">Для доставки в регионы <a href="#" class="btn-call-reqest" data-js-dialog-open-button="globalCallbackDialog">закажите обратный звонок</a></p>
 									</div>
 									<div class="single-product__actions">
 										<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
