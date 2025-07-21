@@ -26,6 +26,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 							'href'   => MAP_LINK['url'],
 							'title'  => MAP_LINK['title'],
 							'target' => MAP_LINK['target'],
+							'data-js-dialog-close-button' => '',
 						);
 
 						if ( ! empty( $map_link_attributes['target'] ) && '_blank' === $map_link_attributes['target'] ) {
