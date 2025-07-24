@@ -636,14 +636,14 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 					<!-- Desktop rigth menu end -->
 			</div>
 			<div class="spleet m-none">
-				<div class="menu-line p-12-12 white uper">
+				<a href="<?php echo esc_url( get_the_permalink( CONTACT_PAGE_ID ) . '#contacts' ); ?>" class="menu-line p-12-12 white uper" style="text-decoration: none;">
 					<?php if ( ! empty( ADDRESS ) ) : ?>
 						<div><?php echo esc_html( $address ); ?></div>
 					<?php endif; ?>
 					<?php if ( ! empty( WORKING_HOURS ) ) : ?>
 						<div><?php echo esc_html( WORKING_HOURS ); ?></div>
 					<?php endif; ?>
-				</div>
+				</a>
 				<div class="l-spacer"></div>
 				<div class="menu-line p-12-12 white uper rev">
 					<?php if ( ! empty( PHONE ) ) : ?>
