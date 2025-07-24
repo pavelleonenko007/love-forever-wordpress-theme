@@ -61,4 +61,28 @@ $field1 = $template_style4_fields['field1'] ?? false;
 			</a>
 		</div>
 	</div>
+	<?php
+	$link_attributes = array(
+		'class' => 'lf-promo-block__button',
+	);
+
+	if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
+		$link_attributes         = array_merge( $link_attributes, $custom_link );
+		$link_attributes['href'] = $link_attributes['url'];
+		unset( $link_attributes['url'] );
+	}
+
+	if ( ! empty( $link_attributes['target'] && '_blank' === $link_attributes['target'] ) ) {
+		$link_attributes['rel']        = 'noopener noreferrer';
+		$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
+		$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
+	}
+
+	$link_attributes = array_filter( $link_attributes );
+
+	$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
+	?>
+	<a <?php echo $link_attributes_str; ?>>
+		<span class="lf-promo-block__button-text">Смотреть</span>
+	</a>
 </article>
