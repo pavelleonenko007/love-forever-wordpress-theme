@@ -698,7 +698,7 @@ function loveforever_get_filtered_products_via_ajax() {
 			wp_reset_postdata();
 		}
 	} else {
-		echo '<div class="empty-content"><p>Товары с заданными параметрами не найдены</p></div>';
+		echo '<div class="empty-content"><p>Товары с заданными параметрами не найдены</p><button type="reset" class="button" form="catalogFilterForm">Очистить фильтры</button></div>';
 	}
 	$feed = ob_get_clean();
 
