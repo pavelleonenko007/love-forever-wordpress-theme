@@ -45,7 +45,7 @@ $metro_stations   = get_field( 'metro_stations', 'option' );
 						</div>
 					</div>
 				</section>
-				<section class="section">
+				<section id="contacts" class="section">
 					<div class="container">
 						<div class="flex-about n-rev">
 							<div class="div-block-3 cont-grid">

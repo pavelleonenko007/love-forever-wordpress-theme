@@ -9,6 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 define( 'TEMPLATE_PATH', get_template_directory_uri() );
 define( 'DATA_WF_SITE', '6720c60d7d5faf3e7ea1ac86' );
+define( 'CONTACT_PAGE_ID', 214 );
 
 // Инициализируем константы позже с помощью хука acf/init.
 add_action( 'acf/init', 'loveforever_define_acf_constants' );
