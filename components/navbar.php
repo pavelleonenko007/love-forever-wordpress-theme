@@ -707,7 +707,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 			</div>
 		</div>
 	</header>
-	<div class="fixed-navbar menuline">
+	<div class="fixed-navbar menuline lf-fixed-navbar">
 		<div class="vert-menu">
 			<div class="spleet m-none">
 				<?php if ( ! empty( $left_menu ) ) : ?>
@@ -942,7 +942,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 						<div data-js-favorites-button-counter class="lf-icon-button__counter"><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 					</a>
 				</div>
-				<div class="l-spacer">
+				<div class="l-spacer lf-fixed-navbar__spacer">
 					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="w-inline-block">
 						<div class="code-embed-4 pink-svg w-embed">
 							<svg width="100%" height="100%" viewbox="0 0 203 40" fill="none" xmlns="http://www.w3.org/2000/svg">
