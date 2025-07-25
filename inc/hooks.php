@@ -7,6 +7,76 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Безопасная обработка HTML с WebP Express.
+ *
+ * @param string $html HTML контент для обработки.
+ * @return string Обработанный HTML контент.
+ */
+function loveforever_process_html_with_webp( $html ) {
+	// Проверяем, что плагин WebP Express активирован.
+	if ( ! function_exists( 'is_plugin_active' ) ) {
+		// Если функция недоступна, проверяем наличие файла плагина.
+		if ( ! file_exists( ABSPATH . 'wp-content/plugins/webp-express/webp-express.php' ) ) {
+			return $html;
+		}
+	} elseif ( ! is_plugin_active( 'webp-express/webp-express.php' ) ) {
+		return $html;
+	}
+
+	// Проверяем, что функция alter HTML включена.
+	if ( ! get_option( 'webp-express-alter-html', false ) ) {
+		return $html;
+	}
+
+	// Подключаем основной файл плагина для инициализации автозагрузчика.
+	$plugin_file = ABSPATH . 'wp-content/plugins/webp-express/webp-express.php';
+	if ( ! file_exists( $plugin_file ) ) {
+		return $html;
+	}
+
+	// Подключаем основной файл плагина для инициализации автозагрузчика.
+	require_once $plugin_file;
+
+	// Подключаем Composer автозагрузчик для vendor классов.
+	$vendor_autoload = ABSPATH . 'wp-content/plugins/webp-express/vendor/autoload.php';
+	if ( file_exists( $vendor_autoload ) ) {
+		require_once $vendor_autoload;
+	}
+
+	// Подключаем необходимые классы.
+	$alter_html_picture_file = ABSPATH . 'wp-content/plugins/webp-express/lib/classes/AlterHtmlPicture.php';
+	$alter_html_image_urls_file = ABSPATH . 'wp-content/plugins/webp-express/lib/classes/AlterHtmlImageUrls.php';
+
+	if ( ! file_exists( $alter_html_picture_file ) || ! file_exists( $alter_html_image_urls_file ) ) {
+		return $html;
+	}
+
+	require_once $alter_html_picture_file;
+	require_once $alter_html_image_urls_file;
+
+	// Проверяем, что необходимые классы загружены.
+	if ( ! class_exists( 'DOMUtilForWebP\\PictureTags' ) || ! class_exists( 'DOMUtilForWebP\\ImageUrlReplacer' ) ) {
+		return $html;
+	}
+
+	// Обрабатываем HTML с обработкой ошибок.
+	try {
+		if ( get_option( 'webp-express-alter-html-replacement' ) == 'picture' ) {
+			if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+				// Для AMP страниц тег <picture> не разрешен.
+				return $html;
+			}
+			return \WebPExpress\AlterHtmlPicture::replace( $html );
+		} else {
+			return \WebPExpress\AlterHtmlImageUrls::replace( $html );
+		}
+	} catch ( Exception $e ) {
+		// В случае ошибки возвращаем исходный контент.
+		return $html;
+	}
+}
+
 add_filter( 'wp_mail_from_name', 'loveforever_wp_mail_from_name' );
 function loveforever_wp_mail_from_name( $from_name ) {
 	$site_name = get_bloginfo( 'name' );
@@ -719,11 +789,14 @@ function loveforever_get_filtered_products_via_ajax() {
 	);
 	$pagination = ob_get_clean();
 
+	// Безопасная обработка HTML с WebP Express
+	$processed_feed = loveforever_process_html_with_webp( $feed );
+
 	// Возврат результата
 	wp_send_json_success(
 		array(
 			'message'    => 'Товары получены успешно!',
-			'feed'       => $feed,
+			'feed'       => $processed_feed,
 			'pagination' => $pagination,
 		),
 		200
