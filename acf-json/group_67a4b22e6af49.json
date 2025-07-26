@@ -162,6 +162,131 @@
                     "min": "",
                     "max": ""
                 },
+                "layout_6884a5de8cac3": {
+                    "key": "layout_6884a5de8cac3",
+                    "name": "dress-category-with-images",
+                    "label": "Категория товаров (с картинками)",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_6884a5de8cac5",
+                            "label": "Категория",
+                            "name": "category",
+                            "aria-label": "",
+                            "type": "taxonomy",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "taxonomy": "dress_category",
+                            "add_term": 0,
+                            "save_terms": 0,
+                            "load_terms": 0,
+                            "return_format": "id",
+                            "field_type": "select",
+                            "allow_null": 1,
+                            "allow_in_bindings": 0,
+                            "bidirectional": 0,
+                            "multiple": 0,
+                            "bidirectional_target": []
+                        },
+                        {
+                            "key": "field_6884a5de8cac6",
+                            "label": "Зеленый бейджик",
+                            "name": "green_badge",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Если написать текст в этом поле, он будет добавлен в зеленый бейдж рядом с ссылкой.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": 7,
+                            "allow_in_bindings": 0,
+                            "placeholder": "-30%",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_6884a6058cacb",
+                            "label": "Карточки",
+                            "name": "cards",
+                            "aria-label": "",
+                            "type": "repeater",
+                            "instructions": "Добавьте карточки, которые будут отображаться в выпадающем меню.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "table",
+                            "min": 0,
+                            "max": 8,
+                            "collapsed": "",
+                            "button_label": "Добавить карточку",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_6884a6338cacc",
+                                    "label": "Ссылка на страницу",
+                                    "name": "page_link",
+                                    "aria-label": "",
+                                    "type": "link",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "array",
+                                    "allow_in_bindings": 0,
+                                    "parent_repeater": "field_6884a6058cacb"
+                                },
+                                {
+                                    "key": "field_6884a65d8cacd",
+                                    "label": "Картинка",
+                                    "name": "image",
+                                    "aria-label": "",
+                                    "type": "image",
+                                    "instructions": "Укажите картинку, которая будет отображаться в карточке.",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "id",
+                                    "library": "all",
+                                    "min_width": "",
+                                    "min_height": "",
+                                    "min_size": "",
+                                    "max_width": "",
+                                    "max_height": "",
+                                    "max_size": "",
+                                    "mime_types": "",
+                                    "allow_in_bindings": 0,
+                                    "preview_size": "medium",
+                                    "parent_repeater": "field_6884a6058cacb"
+                                }
+                            ]
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
                 "layout_67a5c5a027d63": {
                     "key": "layout_67a5c5a027d63",
                     "name": "simple-link",
@@ -447,5 +572,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1741716056
+    "modified": 1753523934
 }

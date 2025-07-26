@@ -18,7 +18,7 @@ $mobile_menu_items  = array( ...$left_menu, ...$right_menu );
 $only_catalog_items = array_filter(
 	$mobile_menu_items,
 	function ( $item ) {
-		return 'dress-category' === $item['acf_fc_layout'];
+		return 'dress-category' === $item['acf_fc_layout'] || 'dress-category-with-images' === $item['acf_fc_layout'];
 	}
 );
 $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
@@ -287,7 +287,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 										<div class="m-nav-top">
 											<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
 												<?php
-												if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] ) :
+												if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
 													$dress_category = get_term( $mobile_menu_item['category'] );
 													?>
 													<a href="#" class="m-nav-drop w-inline-block">
@@ -405,6 +405,22 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 																</div>
 															<?php endforeach; ?>
 														</div>
+													<?php endif; ?>
+													<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
+														<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
+														<?php if ( ! empty( $submenu_items ) ) : ?>
+															<div class="m-nav-cats">
+																<?php foreach ( $submenu_items as $submenu_item ) : ?>
+																	<div class="m-nav-drops">
+																		<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
+																			<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
+																			<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
+																			style="transform: rotate(-90deg);">
+																		</a>
+																	</div>
+																<?php endforeach; ?>
+															</div>
+														<?php endif; ?>
 													<?php endif; ?>
 												</div>
 											<?php endforeach; ?>
@@ -1200,7 +1216,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 											<div class="m-nav-top">
 												<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
 													<?php
-													if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] ) :
+													if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
 														$dress_category = get_term( $mobile_menu_item['category'] );
 														?>
 														<a href="#" class="m-nav-drop w-inline-block">
@@ -1364,6 +1380,22 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 																<?php endforeach; ?>
 															</div>
 														<?php endif; ?>
+														<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
+															<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
+															<?php if ( ! empty( $submenu_items ) ) : ?>
+															<div class="m-nav-cats">
+																<?php foreach ( $submenu_items as $submenu_item ) : ?>
+																	<div class="m-nav-drops">
+																		<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
+																			<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
+																			<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
+																			style="transform: rotate(-90deg);">
+																		</a>
+																	</div>
+																<?php endforeach; ?>
+															</div>
+														<?php endif; ?>
+													<?php endif; ?>
 													</div>
 												<?php endforeach; ?>
 											</div>

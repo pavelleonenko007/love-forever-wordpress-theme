@@ -6,7 +6,7 @@
 	position: fixed;
 	right: 40rem;
 	bottom: 20rem;
-	z-index: 1000;
+	z-index: 10;
 
 	@include mobile {
 		width: 100%;
