@@ -14,7 +14,7 @@
 
 	&.active {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		grid-template-rows: repeat(2, 356rem);
+		grid-template-rows: 356rem;
 		grid-auto-flow: dense;
 		gap: 20rem 10rem;
 
