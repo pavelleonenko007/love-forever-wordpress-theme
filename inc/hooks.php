@@ -45,7 +45,7 @@ function loveforever_process_html_with_webp( $html ) {
 	}
 
 	// Подключаем необходимые классы.
-	$alter_html_picture_file = ABSPATH . 'wp-content/plugins/webp-express/lib/classes/AlterHtmlPicture.php';
+	$alter_html_picture_file    = ABSPATH . 'wp-content/plugins/webp-express/lib/classes/AlterHtmlPicture.php';
 	$alter_html_image_urls_file = ABSPATH . 'wp-content/plugins/webp-express/lib/classes/AlterHtmlImageUrls.php';
 
 	if ( ! file_exists( $alter_html_picture_file ) || ! file_exists( $alter_html_image_urls_file ) ) {
@@ -348,10 +348,10 @@ function loveforever_filter_fittings_via_ajax() {
 		);
 	}
 
-	$today         = gmdate( 'Y-m-d', current_time( 'timestamp' ) );
+	$today         = wp_date( 'Y-m-d', current_time( 'timestamp' ) );
 	$selected_date = ! empty( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
-	$start_date    = ! empty( $selected_date ) && $selected_date > $today ? $selected_date : $today;
-	$next_date     = gmdate( 'Y-m-d', strtotime( $start_date . ' +1 day' ) );
+	$start_date    = ! empty( $selected_date ) && strtotime( $selected_date ) > strtotime( $today ) ? $selected_date : $today;
+	$next_date     = wp_date( 'Y-m-d', strtotime( $start_date . ' +1 day' ) );
 
 	$fittings_query_args = array(
 		'post_type'      => 'fitting',
@@ -404,6 +404,11 @@ function loveforever_filter_fittings_via_ajax() {
 		array(
 			'message' => "Примерки на $start_date успешно получены!",
 			'html'    => ob_get_clean(),
+			'debug'   => array(
+				'body'                => $_POST,
+				'fittings_query_args' => $fittings_query_args,
+				'fittings_query'      => $fittings_query,
+			),
 		)
 	);
 }
