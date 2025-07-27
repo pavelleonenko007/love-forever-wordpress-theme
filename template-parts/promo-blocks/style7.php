@@ -51,7 +51,7 @@ $field3 = $template_style7_fields['field3'] ?? false;
 				unset( $link_attributes['url'] );
 			}
 
-			if ( ! empty( $link_attributes['target'] && '_blank' === $link_attributes['target'] ) ) {
+			if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
 				$link_attributes['rel']        = 'noopener noreferrer';
 				$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
 				$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
@@ -88,7 +88,7 @@ $field3 = $template_style7_fields['field3'] ?? false;
 		unset( $link_attributes['url'] );
 	}
 
-	if ( ! empty( $link_attributes['target'] && '_blank' === $link_attributes['target'] ) ) {
+	if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
 		$link_attributes['rel']        = 'noopener noreferrer';
 		$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
 		$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
