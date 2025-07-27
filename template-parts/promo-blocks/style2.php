@@ -2,8 +2,9 @@
 $args = wp_parse_args(
 	$args,
 	array(
-		'post_id'     => 0,
-		'post_object' => null,
+		'post_id'       => 0,
+		'post_object'   => null,
+		'image_loading' => 'lazy',
 	)
 );
 
