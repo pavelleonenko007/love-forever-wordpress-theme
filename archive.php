@@ -511,7 +511,6 @@ if ( empty( $thumbnail ) ) {
 												'components/dress-card',
 												null,
 												array(
-													'size' => $size,
 													'is_paged' => $current_page > 1,
 													'image_loading' => $image_loading,
 												)
