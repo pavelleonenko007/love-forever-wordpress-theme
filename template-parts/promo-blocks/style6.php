@@ -2,8 +2,9 @@
 $args = wp_parse_args(
 	$args,
 	array(
-		'post_id'     => 0,
-		'post_object' => null,
+		'post_id'       => 0,
+		'post_object'   => null,
+		'image_loading' => 'lazy',
 	)
 );
 
@@ -20,15 +21,21 @@ if ( $args['post_id'] ) {
 $promo_template  = get_field( 'promo_template', $post->ID );
 $template_fields = get_field( 'template_fields', $post->ID );
 $custom_link     = $template_fields['custom_link'] ?? false;
-$custom_img      = $template_fields['custom_img'] ? wp_get_attachment_image(
+
+$img_attributes = array(
+	'loading' => $args['image_loading'],
+	'class'   => 'lf-promo-block__image img-fw',
+);
+
+if ( 'eager' === $args['image_loading'] ) {
+	$img_attributes['fetchpriority'] = 'high';
+}
+
+$custom_img = $template_fields['custom_img'] ? wp_get_attachment_image(
 	$template_fields['custom_img'],
 	'fullhd',
 	false,
-	array(
-		'class'   => 'lf-promo-block__image img-fw',
-		'loading' => 'lazy',
-		'style'   => 'display: block',
-	)
+	$img_attributes
 ) : '';
 
 $template_style6_fields = $template_fields['template_style6_fields'] ?? false;

@@ -10,10 +10,11 @@ defined( 'ABSPATH' ) || exit;
 $args = wp_parse_args(
 	$args,
 	array(
-		'size'        => 'large',
-		'is_paged'    => false,
-		'post_id'     => 0,
-		'post_object' => null,
+		'size'          => 'large',
+		'is_paged'      => false,
+		'post_id'       => 0,
+		'post_object'   => null,
+		'image_loading' => 'lazy',
 	)
 );
 
@@ -62,7 +63,7 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 							'perMove'      => 1,
 							'speed'        => 0,
 							'arrows'       => false,
-							'lazyLoad'     => 'nearby',
+							// 'lazyLoad'     => 'nearby',
 							'preloadPages' => 1,
 							'classes'      => array(
 								'pagination' => 'card-slider__pagination splide__pagination your-class-pagination',
@@ -88,14 +89,21 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 									<?php foreach ( $images as $index => $image ) : ?>
 										<li class="card-slider__list-item splide__slide">
 											<?php
+											$image_loading    = ( 0 === $index && 'eager' === $args['image_loading'] ) ? 'eager' : 'lazy';
+											$image_attributes = array(
+												'loading' => $image_loading,
+												'class'   => 'img-cover',
+											);
+
+											if ( 'eager' === $image_loading ) {
+												$image_attributes['fetchpriority'] = 'high';
+											}
+
 											echo wp_get_attachment_image(
 												$image['image']['ID'],
 												'fullhd',
 												false,
-												array(
-													'loading' => 'lazy',
-													'class'   => 'img-cover',
-												)
+												$image_attributes
 											);
 											?>
 										</li>
@@ -108,8 +116,8 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 						the_post_thumbnail(
 							'fullhd',
 							array(
-								'loading' => 'lazy',
 								'class'   => 'img-cover',
+								'loading' => $args['image_loading'],
 							)
 						);
 						?>

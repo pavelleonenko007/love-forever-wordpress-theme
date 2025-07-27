@@ -488,24 +488,32 @@ if ( empty( $thumbnail ) ) {
 								foreach ( $all_posts as $post ) :
 									setup_postdata( $post );
 
+									$image_loading = $card_index < 4 ? 'eager' : 'lazy';
+
 									if ( 'promo_blocks' === $post->post_type ) {
 										// Вывод промо-блока
 										$template_slug = get_post_meta( $post->ID, 'promo_template', true );
 										if ( $template_slug ) {
-											get_template_part( 'template-parts/promo-blocks/' . $template_slug, null, array( 'post_object' => $post ) );
+											get_template_part(
+												'template-parts/promo-blocks/' . $template_slug,
+												null,
+												array(
+													'post_object' => $post,
+													'image_loading' => $image_loading,
+												)
+											);
 										}
 									} else {
 										?>
 										<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
 											<?php
-											$position_in_block = ( $card_index - 1 ) % 6 + 1;
-											$size              = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
 											get_template_part(
 												'components/dress-card',
 												null,
 												array(
 													'size' => $size,
 													'is_paged' => $current_page > 1,
+													'image_loading' => $image_loading,
 												)
 											);
 											?>
