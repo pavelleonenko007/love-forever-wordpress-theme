@@ -157,6 +157,42 @@
             "placeholder": ""
         },
         {
+            "key": "field_688b5b945f3a7",
+            "label": "Ссылка на VK",
+            "name": "vk_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_688b5ba55f3a8",
+            "label": "Ссылка на Instagram",
+            "name": "instagram_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": ""
+        },
+        {
             "key": "field_678a0b29b6b8d",
             "label": "Секции сайта",
             "name": "",
@@ -717,5 +753,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1751190973
+    "modified": 1753963447
 }

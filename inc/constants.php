@@ -10,6 +10,7 @@ defined( 'ABSPATH' ) || exit;
 define( 'TEMPLATE_PATH', get_template_directory_uri() );
 define( 'DATA_WF_SITE', '6720c60d7d5faf3e7ea1ac86' );
 define( 'CONTACT_PAGE_ID', 214 );
+define( 'FAVORITES_PAGE_ID', 388 );
 
 // Инициализируем константы позже с помощью хука acf/init.
 add_action( 'acf/init', 'loveforever_define_acf_constants' );
@@ -20,16 +21,16 @@ add_action( 'acf/init', 'loveforever_define_acf_constants' );
 function loveforever_define_acf_constants() {
 	// Социальные сети.
 	if ( ! defined( 'VK_LINK' ) ) {
-		define( 'VK_LINK', get_field( 'vk', 'option' ) );
+		define( 'VK_LINK', get_field( 'vk_url', 'option' ) );
 	}
 	if ( ! defined( 'TELEGRAM_LINK' ) ) {
-		define( 'TELEGRAM_LINK', get_field( 'telegram', 'option' ) );
+		define( 'TELEGRAM_LINK', get_field( 'telegram_url', 'option' ) );
 	}
 	if ( ! defined( 'WHATSAPP_LINK' ) ) {
-		define( 'WHATSAPP_LINK', get_field( 'whatsapp', 'option' ) );
+		define( 'WHATSAPP_LINK', get_field( 'whatsapp_url', 'option' ) );
 	}
 	if ( ! defined( 'INSTAGRAM_LINK' ) ) {
-		define( 'INSTAGRAM_LINK', get_field( 'instagram', 'option' ) );
+		define( 'INSTAGRAM_LINK', get_field( 'instagram_url', 'option' ) );
 	}
 	if ( ! defined( 'YOUTUBE_LINK' ) ) {
 		define( 'YOUTUBE_LINK', get_field( 'youtube', 'option' ) );

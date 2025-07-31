@@ -1,0 +1,14 @@
+@use '../media' as *;
+
+.lf-content {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+	font-size: 16rem;
+	line-height: 1.4;
+
+	@include mobile {
+		padding: 0;
+	}
+}
