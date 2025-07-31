@@ -403,3 +403,21 @@ function loveforever_prepare_tag_attributes_as_string( $attributes ) {
 		''
 	);
 }
+
+function loveforever_prepare_link_attributes( $attributes, $acf_link_data ) {
+	if ( ! empty( $acf_link_data ) && is_array( $acf_link_data ) ) {
+		$attributes         = array_merge( $attributes, $acf_link_data );
+		$attributes['href'] = $acf_link_data['url'];
+		unset( $attributes['url'] );
+	}
+
+	if ( ! empty( $acf_link_data['target'] ) && '_blank' === $attributes['target'] ) {
+		$attributes['rel']        = 'noopener noreferrer';
+		$attributes['title']      = $attributes['title'] . ' (открывается в новой вкладке)';
+		$attributes['aria-label'] = $attributes['title'] . ' (открывается в новой вкладке)';
+	}
+
+	$attributes = array_filter( $attributes );
+
+	return loveforever_prepare_tag_attributes_as_string( $attributes );
+}

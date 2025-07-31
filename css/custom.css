@@ -655,6 +655,10 @@
 		bottom: -5px;
 	}
 
+	.footer div.a-12-12::after {
+		content: none;
+	}
+
 	.n-menu:hover:after,	
 	.navbar .a-12-12:hover:after,
 	.btn.btn-with-arrow:hover:after,й
@@ -1099,3 +1103,8 @@
 	font-weight: 500;
 }
 
+@media (max-width: 479px) {
+	.footer div.a-12-12 {
+		display: none;
+	}
+}

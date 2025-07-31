@@ -196,3 +196,14 @@ picture:has(.img-cover) {
 		}
 	}
 }
+
+.lf-h1 {
+	font-size: 48rem;
+	line-height: 1.2;
+	font-weight: 500;
+	margin-bottom: 24rem;
+
+	@include mobile {
+		font-size: 32rem;
+	}
+}
