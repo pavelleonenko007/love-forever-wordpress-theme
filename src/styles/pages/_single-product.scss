@@ -85,9 +85,14 @@
 			}
 		}
 
-		&-socials.shere-line {
-			margin: 0;
+		&-socials {
+			gap: 20rem;
+
+			&.shere-line {
+				margin: 0;
+			}
 		}
+		
 
 		&-tags {
 			margin: 0;

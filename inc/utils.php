@@ -421,3 +421,55 @@ function loveforever_prepare_link_attributes( $attributes, $acf_link_data ) {
 
 	return loveforever_prepare_tag_attributes_as_string( $attributes );
 }
+
+function loveforever_get_socials() {
+	$socials = array();
+	if ( ! empty( VK_LINK ) ) {
+		$socials[] = array(
+			'url'  => VK_LINK,
+			'icon' => 'vkIcon',
+		);
+	}
+
+	if ( ! empty( TELEGRAM_LINK ) ) {
+		$socials[] = array(
+			'url'  => TELEGRAM_LINK,
+			'icon' => 'telegramIcon',
+		);
+	}
+
+	if ( ! empty( WHATSAPP_LINK ) ) {
+		$socials[] = array(
+			'url'  => WHATSAPP_LINK,
+			'icon' => 'whatsappIcon',
+		);
+	}
+
+	if ( ! empty( INSTAGRAM_LINK ) ) {
+		$socials[] = array(
+			'url'  => INSTAGRAM_LINK,
+			'icon' => 'instagramIcon',
+		);
+	}
+
+	return $socials;
+}
+
+function loveforever_get_share_buttons( $url = '#', $title = '' ) {
+	$share_buttons = array(
+		array(
+			'url'  => "https://vk.com/share.php?url=$url",
+			'icon' => 'vkIcon',
+		),
+		array(
+			'url'  => "https://t.me/share/url?url=$url&text=$title",
+			'icon' => 'telegramIcon',
+		),
+		array(
+			'url'  => "https://api.whatsapp.com/send?text=$url",
+			'icon' => 'whatsappIcon',
+		),
+	);
+
+	return $share_buttons;
+}

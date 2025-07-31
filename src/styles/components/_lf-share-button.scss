@@ -1,0 +1,38 @@
+@use '../media' as *;
+
+.lf-share-buttons {
+	display: flex;
+	gap: 20rem;
+}
+
+.lf-share-button {
+	padding-inline: 8rem;
+	height: 60rem;
+	border: var(--white-border);
+	border-radius: 100rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--white);
+	background-color: transparent;
+	transition: all 0.3s ease-in;
+
+	@include hover {
+		background-color: var(--pink);
+		border-color: var(--pink);
+	}
+
+	&--dark {
+		border: var(--field-border);
+		color: var(--black);
+
+		@include hover {
+			color: var(--white);
+		}
+	}
+
+	&__icon {
+		width: 24rem;
+		height: 24rem;
+	}
+}
