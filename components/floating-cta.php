@@ -28,7 +28,7 @@ if ( is_singular( 'dress' ) ) {
 	>
 		<svg 
 			class="button__icon" 
-			viewBox="0 0 16 16" 
+			viewBox="0 0 24 24" 
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<use href="#telegramIcon"/>
@@ -45,7 +45,7 @@ if ( is_singular( 'dress' ) ) {
 	>
 		<svg 
 			class="button__icon" 
-			viewBox="0 0 16 16" 
+			viewBox="0 0 24 24" 
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<use href="#whatsappIcon"/>
