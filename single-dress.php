@@ -316,7 +316,7 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											<path d="M13.0718 20C4.87196 20 0.194878 13.994 0 4H4.10743C4.24235 11.3353 7.27046 14.4424 9.66896 15.0831V4H13.5365V10.3263C15.9051 10.0541 18.3935 7.17117 19.233 4H23.1006C22.7842 5.64466 22.1537 7.20189 21.2483 8.57429C20.3429 9.94668 19.1823 11.1047 17.8389 11.976C19.3384 12.7721 20.6629 13.8989 21.7249 15.282C22.7869 16.6651 23.5624 18.2732 24 20H19.7427C19.3498 18.5001 18.5513 17.1575 17.4473 16.1404C16.3433 15.1232 14.9829 14.4769 13.5365 14.2823V20H13.0718Z" fill="white"/>
 										</symbol>
 									</svg>
-									<?php $share_buttons = loveforever_get_share_buttons(); ?>
+									<?php $share_buttons = loveforever_get_share_buttons( get_the_permalink() ); ?>
 									<div class="horiz shere-line single-product__content-socials">
 										<div class="p-12-12 uper m-12-12">Поделиться</div>
 										<div class="lf-share-buttons">
