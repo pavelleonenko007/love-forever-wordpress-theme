@@ -29,6 +29,27 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_688cb872b7a64",
+            "label": "SEO текст",
+            "name": "seo_text",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "Добавьте текст. Он будет отображен сразу под выдачей товаров.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
             "key": "field_67e1b09f464f3",
             "label": "Силуэты",
             "name": "silhouette",
@@ -177,5 +198,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1742845487
+    "modified": 1754052798
 }
