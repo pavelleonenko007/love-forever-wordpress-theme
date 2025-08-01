@@ -32,6 +32,8 @@ $hero_section_classes = array( 'section', 'section_100vh', 'hero-section' );
 if ( empty( $thumbnail ) ) {
 	$hero_section_classes[] = 'hero-section--no-image';
 }
+
+$seo_text = get_field( 'seo_text', $queried_object );
 ?>
 				<section class="<?php echo esc_attr( implode( ' ', $hero_section_classes ) ); ?>">
 					<div class="container container-fw n-top">
@@ -1021,6 +1023,15 @@ if ( empty( $thumbnail ) ) {
 										</div>
 									</a>
 								<?php endforeach; ?>
+							</div>
+						</div>
+					</section>
+				<?php endif; ?>
+				<?php if ( ! empty( $seo_text ) ) : ?>
+					<section class="section">
+						<div class="container">
+							<div class="lf-content flow">
+								<?php echo wp_kses_post( $seo_text ); ?>
 							</div>
 						</div>
 					</section>
