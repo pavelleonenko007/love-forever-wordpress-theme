@@ -474,9 +474,10 @@ function loveforever_get_product_title( $product_id ) {
 		'prom'    => 'Выпускное платье',
 	);
 	$categories     = get_the_terms( $product_id, 'dress_category' );
+	$product_title  = get_the_title( $product_id );
 
 	if ( is_wp_error( $categories ) || empty( $categories ) ) {
-		return get_the_title( $product_id );
+		return $product_title;
 	}
 
 	$categories = array_values(
@@ -487,6 +488,10 @@ function loveforever_get_product_title( $product_id ) {
 			}
 		)
 	);
+
+	if ( empty( $categories ) ) {
+		return $product_title;
+	}
 
 	if ( count( $categories ) > 1 ) {
 		foreach ( $categories as $category ) {
