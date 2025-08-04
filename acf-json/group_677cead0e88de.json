@@ -377,12 +377,12 @@
                                     "rows_per_page": 20,
                                     "sub_fields": [
                                         {
-                                            "key": "field_6784f2ae1cd47",
-                                            "label": "Текст",
-                                            "name": "text",
+                                            "key": "field_68907893006fc",
+                                            "label": "Ссылка",
+                                            "name": "bullet_link",
                                             "aria-label": "",
-                                            "type": "text",
-                                            "instructions": "Добавьте текст к буллету.",
+                                            "type": "link",
+                                            "instructions": "",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -390,12 +390,8 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "default_value": "",
-                                            "maxlength": "",
+                                            "return_format": "",
                                             "allow_in_bindings": 0,
-                                            "placeholder": "",
-                                            "prepend": "",
-                                            "append": "",
                                             "parent_repeater": "field_6784f28c1cd46"
                                         }
                                     ]
@@ -504,7 +500,7 @@
                                     "append": ""
                                 },
                                 {
-                                    "key": "field_6784f2e71cd4d",
+                                    "key": "field_689078c4006fd",
                                     "label": "Буллеты (элементы списка)",
                                     "name": "bullets",
                                     "aria-label": "",
@@ -517,7 +513,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "layout": "",
+                                    "layout": "table",
                                     "pagination": 0,
                                     "min": 0,
                                     "max": 0,
@@ -526,12 +522,12 @@
                                     "rows_per_page": 20,
                                     "sub_fields": [
                                         {
-                                            "key": "field_6784f2e71cd4e",
-                                            "label": "Текст",
-                                            "name": "text",
+                                            "key": "field_689078c4006fe",
+                                            "label": "Ссылка",
+                                            "name": "bullet_link",
                                             "aria-label": "",
-                                            "type": "text",
-                                            "instructions": "Добавьте текст к буллету.",
+                                            "type": "link",
+                                            "instructions": "",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -539,13 +535,9 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "default_value": "",
-                                            "maxlength": "",
+                                            "return_format": "",
                                             "allow_in_bindings": 0,
-                                            "placeholder": "",
-                                            "prepend": "",
-                                            "append": "",
-                                            "parent_repeater": "field_6784f2e71cd4d"
+                                            "parent_repeater": "field_689078c4006fd"
                                         }
                                     ]
                                 },
@@ -653,7 +645,7 @@
                                     "append": ""
                                 },
                                 {
-                                    "key": "field_6784f2f91cd54",
+                                    "key": "field_689078d9006ff",
                                     "label": "Буллеты (элементы списка)",
                                     "name": "bullets",
                                     "aria-label": "",
@@ -675,12 +667,12 @@
                                     "rows_per_page": 20,
                                     "sub_fields": [
                                         {
-                                            "key": "field_6784f2f91cd55",
-                                            "label": "Текст",
-                                            "name": "text",
+                                            "key": "field_689078d900700",
+                                            "label": "Ссылка",
+                                            "name": "bullet_link",
                                             "aria-label": "",
-                                            "type": "text",
-                                            "instructions": "Добавьте текст к буллету.",
+                                            "type": "link",
+                                            "instructions": "",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -688,13 +680,9 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "default_value": "",
-                                            "maxlength": "",
+                                            "return_format": "array",
                                             "allow_in_bindings": 0,
-                                            "placeholder": "",
-                                            "prepend": "",
-                                            "append": "",
-                                            "parent_repeater": "field_6784f2f91cd54"
+                                            "parent_repeater": "field_689078d9006ff"
                                         }
                                     ]
                                 },
@@ -784,5 +772,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1738321160
+    "modified": 1754298607
 }

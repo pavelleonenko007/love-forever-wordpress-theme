@@ -47,11 +47,22 @@ if ( ! empty( $card['image'] ) && ! empty( $card['heading'] ) ) : ?>
 				<?php endif; ?>
 				<?php
 				$bullets = $card['bullets'];
+				$bullets = array_filter(
+					$bullets,
+					function ( $bullet ) {
+						return ! empty( $bullet['bullet_link'] );
+					}
+				);
 				if ( ! empty( $bullets ) ) :
 					?>
 					<div class="horiz center-horiz">
-						<?php foreach ( $bullets as $bullets_index => $bullet ) : ?>
-							<div class="a-12-12"><?php echo esc_html( $bullet['text'] ); ?></div>
+						<?php
+						foreach ( $bullets as $bullets_index => $bullet ) :
+							$link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12' ), $bullet['bullet_link'] );
+							?>
+							<a <?php echo $link_attributes_str; ?>>
+								<?php echo esc_html( $bullet['bullet_link']['title'] ); ?>
+							</a>
 							<?php if ( $bullets_index < count( $bullets ) - 1 ) : ?>
 								<div class="_2px_romb"></div>
 							<?php endif; ?>
