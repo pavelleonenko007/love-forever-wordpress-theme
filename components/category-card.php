@@ -46,7 +46,7 @@ if ( ! empty( $card['image'] ) && ! empty( $card['heading'] ) ) : ?>
 					<p class="p-64-64"><?php echo esc_html( $card['heading'] ); ?></p>
 				<?php endif; ?>
 				<?php
-				$bullets = $card['bullets'];
+				$bullets = $card['bullets'] ?: array();
 				$bullets = array_filter(
 					$bullets,
 					function ( $bullet ) {
