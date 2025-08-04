@@ -11,8 +11,9 @@ $address       = get_field( 'address', 'option' );
 $working_hours = get_field( 'working_hours', 'option' );
 $favorites     = loveforever_get_favorites();
 
-$left_menu  = get_field( 'left_menu', 'option' );
-$right_menu = get_field( 'right_menu', 'option' );
+$left_menu    = get_field( 'left_menu', 'option' );
+$right_menu   = get_field( 'right_menu', 'option' );
+$search_links = get_field( 'search_links', 'option' );
 
 $mobile_menu_items  = array( ...$left_menu, ...$right_menu );
 $only_catalog_items = array_filter(
@@ -73,53 +74,40 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
 								</div>
-								<div class="serch-mob">
-									<div class="m-nav-cats">
-										<?php
-										foreach ( $filter_taxonomies as $filter_taxonomy ) :
-											$tax_object = get_taxonomy( $filter_taxonomy );
-											if ( ! empty( $tax_object ) ) :
-												?>
+								<?php if ( ! empty( $search_links ) ) : ?>
+									<div class="serch-mob">
+										<div class="m-nav-cats">
+											<?php foreach ( $search_links as $search_column ) : ?>
 												<div class="m-nav-drops">
 													<a href="#" class="m-nav-drop-btn w-inline-block">
-														<div><?php echo esc_html( $tax_object->labels->singular_name ); ?></div>
+														<div><?php echo esc_html( $search_column['column_name'] ); ?></div>
 														<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
 													</a>
 													<div class="m-nav-drop-contant">
 														<?php
-														$terms = get_terms(
-															array(
-																'taxonomy' => $filter_taxonomy,
-																'hide_empty' => false, // TODO: set to true!
-															)
-														);
-														if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) :
+														$column_links = $search_column['column_links'];
+														if ( ! empty( $column_links ) ) :
 															?>
 															<div class="div-block-11">
 																<?php
-																foreach ( $terms as $term ) :
+																foreach ( $column_links as $column_link ) :
+																	$column_link_attributes_str = loveforever_prepare_link_attributes(
+																		array(
+																			'class' => 'a-12-12 in-drop',
+																		),
+																		$column_link['link']
+																	);
 																	?>
-																	<a href="#" class="a-12-12 in-drop"><?php echo esc_html( $term->name ); ?></a>
+																	<a <?php echo $column_link_attributes_str; ?>><?php echo esc_html( $column_link['link']['title'] ); ?></a>
 																<?php endforeach; ?>
 															</div>
 														<?php endif; ?>
 													</div>
 												</div>
-												<?php
-											endif;
-										endforeach;
-										?>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>стоимость</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
+											<?php endforeach; ?>
 										</div>
 									</div>
-								</div>
+								<?php endif; ?>
 								<div class="vert m-none">
 									<div id="w-node-_3c45bc09-5b3c-1a4e-f526-aea5e4cb6a05-be61d3ef" class="m-h-vert">
 										<div class="p-16-16">силуэт 2</div>
@@ -463,7 +451,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 										</svg>
 									</div>
 								</a>
-								<div class="hovered-menue search-m">
+								<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 									<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
 										<div class="div-block-7">
 											<form id="searchForm2" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
@@ -484,156 +472,37 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 											<div class="search-ajaxed" data-js-search-form-results></div>
 										</div>
 									</div>
-									<div id="w-node-_144563be-6001-1af8-6446-1240953daa3d-be61d3ef" class="m-h-vert">
-										<div class="p-16-16">силуэт 2</div>
-										<div id="w-node-_144563be-6001-1af8-6446-1240953daa40-be61d3ef" class="m-h-vert">
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>а-силуэт</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>греческий стиль</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>пышные</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>короткие</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>со шлейфом</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>трансформеры</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>прямые</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>комбинизон / костюм</div>
-											</a>
+									<?php foreach ( $search_links as $search_column ) : ?>
+										<div id="w-node-_144563be-6001-1af8-6446-1240953daa3d-be61d3ef" class="m-h-vert">
+											<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
+											<?php
+											$column_links = $search_column['column_links'] ?: array();
+
+											if ( ! empty( $column_links ) ) :
+												?>
+												<div id="w-node-_144563be-6001-1af8-6446-1240953daa40-be61d3ef" class="m-h-vert">
+													<?php
+													foreach ( $column_links as $column_link ) :
+														$column_link_attributes_str = loveforever_prepare_link_attributes(
+															array(
+																'class' => 'a-12-12 w-inline-block',
+															),
+															$column_link['link']
+														);
+														?>
+													<a <?php echo $column_link_attributes_str; ?>>
+														<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
+													</a>
+													<?php endforeach; ?>
+												</div>
+											<?php endif; ?>
 										</div>
-									</div>
-									<div id="w-node-_144563be-6001-1af8-6446-1240953daa59-be61d3ef" class="m-h-vert">
-										<div class="p-16-16">стиль</div>
-										<div id="w-node-_144563be-6001-1af8-6446-1240953daa5c-be61d3ef" class="m-h-vert">
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>открытые</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>закрытые</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>с рукавами</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>с открытой спиной</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>пляжные / на море</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>минимализм / простые</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>блестящие</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>бохо / рустик</div>
-											</a>
-										</div>
-									</div>
-									<div id="w-node-_144563be-6001-1af8-6446-1240953daa75-be61d3ef" class="m-h-vert">
-										<div class="p-16-16">ткань</div>
-										<div id="w-node-_144563be-6001-1af8-6446-1240953daa78-be61d3ef" class="m-h-vert">
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>Фатин</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>Атлас / Сатин</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>Шифон</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>кружевные</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>креп</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>шелк</div>
-											</a>
-										</div>
-									</div>
-									<div id="w-node-_144563be-6001-1af8-6446-1240953daa8b-be61d3ef" class="m-h-vert">
-										<div class="p-16-16">топ бренды</div>
-										<div id="w-node-_144563be-6001-1af8-6446-1240953daa8e-be61d3ef" class="m-h-vert grider">
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>AVE</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>paulain</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>tatiana Kaplun</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>love forever</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>Divino Rose</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>Rima Lav</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>paulain</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>Divino Rose</div>
-											</a>
-											<a id="w-node-_144563be-6001-1af8-6446-1240953daaa7-be61d3ef" href="#" class="a-12-12 w-inline-block">
-												<div>Kookla</div>
-											</a>
-											<a id="w-node-_144563be-6001-1af8-6446-1240953daaaa-be61d3ef" href="#" class="a-12-12 w-inline-block">
-												<div>S. markelova</div>
-											</a>
-											<a id="w-node-_144563be-6001-1af8-6446-1240953daaad-be61d3ef" href="#" class="a-12-12 w-inline-block">
-												<div>milva</div>
-											</a>
-											<a id="w-node-_144563be-6001-1af8-6446-1240953daab0-be61d3ef" href="#" class="a-12-12 w-inline-block">
-												<div>Divino Rose</div>
-											</a>
-											<a id="w-node-_144563be-6001-1af8-6446-1240953daab3-be61d3ef" href="#" class="a-12-12 w-inline-block">
-												<div>S. markelova</div>
-											</a>
-										</div>
-									</div>
-									<div id="w-node-_144563be-6001-1af8-6446-1240953daab6-be61d3ef" class="m-h-vert">
-										<div class="p-16-16">стоимость</div>
-										<div id="w-node-_144563be-6001-1af8-6446-1240953daab9-be61d3ef" class="m-h-vert">
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>10 000 ₽ - 20 000 ₽</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>20 000 ₽ - 30 000 ₽</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>30 000 ₽ - 40 000 ₽</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>40 000 ₽ - 50 000 ₽</div>
-											</a>
-											<a href="#" class="a-12-12 w-inline-block">
-												<div>50 000 ₽ - 100 000 ₽</div>
-											</a>
-										</div>
-									</div>
-									<div id="w-node-_144563be-6001-1af8-6446-1240953daac9-be61d3ef" class="div-block-6 _3">
+									<?php endforeach; ?>
+									<!-- <div id="w-node-_144563be-6001-1af8-6446-1240953daac9-be61d3ef" class="div-block-6 _3">
 										<a href="#" class="btn in-single-btn _3 w-inline-block">
 											<div>перейти в каталог</div>
 										</a>
-									</div>
+									</div> -->
 									<div id="w-node-_144563be-6001-1af8-6446-1240953daacd-be61d3ef" class="hovered-menue_close-menu"></div>
 								</div>
 							</div>
@@ -761,7 +630,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 									</svg>
 								</div>
 							</a>
-							<div class="hovered-menue search-m">
+							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b87a-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
 										<form id="searchForm3" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
@@ -781,156 +650,31 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
 								</div>
-								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c4-be61d3ef" class="m-h-vert">
-									<div class="p-16-16">силуэт 2</div>
-									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c7-be61d3ef" class="m-h-vert">
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>а-силуэт</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>греческий стиль</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>пышные</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>короткие</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>со шлейфом</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>трансформеры</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>прямые</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>комбинизон / костюм</div>
-										</a>
+								<?php foreach ( $search_links as $search_column ) : ?>
+									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c4-be61d3ef" class="m-h-vert">
+										<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
+										<?php
+										$column_links = $search_column['column_links'];
+										if ( ! empty( $column_links ) ) :
+											?>
+											<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c7-be61d3ef" class="m-h-vert">
+												<?php
+												foreach ( $column_links as $column_link ) :
+													$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 w-inline-block' ), $column_link['link'] );
+													?>
+													<a <?php echo $column_link_attributes_str; ?>>
+														<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
+													</a>
+												<?php endforeach; ?>
+											</div>
+										<?php endif; ?>
 									</div>
-								</div>
-								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8e0-be61d3ef" class="m-h-vert">
-									<div class="p-16-16">стиль</div>
-									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8e3-be61d3ef" class="m-h-vert">
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>открытые</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>закрытые</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>с рукавами</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>с открытой спиной</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>пляжные / на море</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>минимализм / простые</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>блестящие</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>бохо / рустик</div>
-										</a>
-									</div>
-								</div>
-								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8fc-be61d3ef" class="m-h-vert">
-									<div class="p-16-16">ткань</div>
-									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8ff-be61d3ef" class="m-h-vert">
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>Фатин</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>Атлас / Сатин</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>Шифон</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>кружевные</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>креп</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>шелк</div>
-										</a>
-									</div>
-								</div>
-								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b912-be61d3ef" class="m-h-vert">
-									<div class="p-16-16">топ бренды</div>
-									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b915-be61d3ef" class="m-h-vert grider">
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>AVE</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>paulain</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>tatiana Kaplun</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>love forever</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>Divino Rose</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>Rima Lav</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>paulain</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>Divino Rose</div>
-										</a>
-										<a id="w-node-_1716cbec-a8d5-9533-681b-95848935b92e-be61d3ef" href="#" class="a-12-12 w-inline-block">
-											<div>Kookla</div>
-										</a>
-										<a id="w-node-_1716cbec-a8d5-9533-681b-95848935b931-be61d3ef" href="#" class="a-12-12 w-inline-block">
-											<div>S. markelova</div>
-										</a>
-										<a id="w-node-_1716cbec-a8d5-9533-681b-95848935b934-be61d3ef" href="#" class="a-12-12 w-inline-block">
-											<div>milva</div>
-										</a>
-										<a id="w-node-_1716cbec-a8d5-9533-681b-95848935b937-be61d3ef" href="#" class="a-12-12 w-inline-block">
-											<div>Divino Rose</div>
-										</a>
-										<a id="w-node-_1716cbec-a8d5-9533-681b-95848935b93a-be61d3ef" href="#" class="a-12-12 w-inline-block">
-											<div>S. markelova</div>
-										</a>
-									</div>
-								</div>
-								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b93d-be61d3ef" class="m-h-vert">
-									<div class="p-16-16">стоимость</div>
-									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b940-be61d3ef" class="m-h-vert">
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>10 000 ₽ - 20 000 ₽</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>20 000 ₽ - 30 000 ₽</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>30 000 ₽ - 40 000 ₽</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>40 000 ₽ - 50 000 ₽</div>
-										</a>
-										<a href="#" class="a-12-12 w-inline-block">
-											<div>50 000 ₽ - 100 000 ₽</div>
-										</a>
-									</div>
-								</div>
-								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b950-be61d3ef" class="div-block-6 _3">
+								<?php endforeach; ?>
+								<!-- <div id="w-node-_1716cbec-a8d5-9533-681b-95848935b950-be61d3ef" class="div-block-6 _3">
 									<a href="#" class="btn in-single-btn _3 w-inline-block">
 										<div>перейти в каталог</div>
 									</a>
-								</div>
+								</div> -->
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b954-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
@@ -997,55 +741,35 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
 								</div>
-								<div class="serch-mob">
-									<div class="m-nav-cats">
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>силуэт</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>стиль</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>ткань</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>топ бренды</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
-										</div>
-										<div class="m-nav-drops">
-											<a href="#" class="m-nav-drop-btn w-inline-block">
-												<div>стоимость</div>
-												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-											</a>
-											<div class="m-nav-drop-contant">
-												<div class="div-block-11"><a href="#" class="a-12-12 in-drop">Фатин</a><a href="#" class="a-12-12 in-drop">Атлас / Сатин</a><a href="#" class="a-12-12 in-drop">Шифон</a><a href="#" class="a-12-12 in-drop">кружевные</a></div>
-											</div>
+								<?php if ( ! empty( $search_links ) ) : ?>
+									<div class="serch-mob">
+										<div class="m-nav-cats">
+											<?php foreach ( $search_links as $search_column ) : ?>
+												<div class="m-nav-drops">
+													<a href="#" class="m-nav-drop-btn w-inline-block">
+														<div><?php echo esc_html( $search_column['column_name'] ); ?></div>
+														<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
+													</a>
+													<?php $column_links = $search_column['column_links']; ?>
+													<div class="m-nav-drop-contant">
+														<?php if ( ! empty( $column_links ) ) : ?>
+															<div class="div-block-11">
+																<?php
+																foreach ( $column_links as $column_link ) :
+																	$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 in-drop' ), $column_link['link'] );
+																	?>
+																	<a <?php echo $column_link_attributes_str; ?>>
+																		<?php echo esc_html( $column_link['link']['title'] ); ?>
+																	</a>
+																<?php endforeach; ?>
+															</div>
+														<?php endif; ?>
+													</div>
+												</div>
+											<?php endforeach; ?>
 										</div>
 									</div>
-								</div>
+								<?php endif; ?>
 								<div class="vert m-none">
 									<div id="w-node-_7814220d-338f-0ab7-0d3b-7d1e447cc128-be61d3ef" class="m-h-vert">
 										<div class="p-16-16">силуэт 2</div>
