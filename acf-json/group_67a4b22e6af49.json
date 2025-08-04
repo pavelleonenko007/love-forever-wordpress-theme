@@ -552,6 +552,95 @@
             "min": "",
             "max": 4,
             "button_label": "Добавить"
+        },
+        {
+            "key": "field_68909744b00d5",
+            "label": "Ссылки в поиске",
+            "name": "search_links",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 5,
+            "collapsed": "",
+            "button_label": "Добавить",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_6890976cb00d6",
+                    "label": "Название столбца",
+                    "name": "column_name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_68909744b00d5"
+                },
+                {
+                    "key": "field_6890978eb00d7",
+                    "label": "Ссылки",
+                    "name": "column_links",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Добавить",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_689097aab00d8",
+                            "label": "Ссылка",
+                            "name": "link",
+                            "aria-label": "",
+                            "type": "link",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "allow_in_bindings": 0,
+                            "parent_repeater": "field_6890978eb00d7"
+                        }
+                    ],
+                    "parent_repeater": "field_68909744b00d5"
+                }
+            ]
         }
     ],
     "location": [
@@ -572,5 +661,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1753523934
+    "modified": 1754306525
 }
