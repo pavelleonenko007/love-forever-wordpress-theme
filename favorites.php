@@ -39,10 +39,10 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 							<?php endif; ?>
 							<?php if ( ! empty( $favorites ) ) : ?>
 								<button type="button" data-js-copy-button="<?php echo $favorites_link; ?>" class="btn pink-btn p-t-30 w-inline-block">
-                <div 
-                  data-js-copy-button-text 
-                  data-js-copy-button-copied-text="Ссылка скопирована"
-                >Поделиться избранным</div>
+				<div 
+					data-js-copy-button-text 
+					data-js-copy-button-copied-text="Ссылка скопирована"
+				>Поделиться избранным</div>
 								</button>
 							<?php endif; ?>
 						</div>
@@ -142,7 +142,13 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 				<?php endif; ?>
 				<?php
 				if ( ! $is_from_link ) :
-					get_template_part( 'template-parts/home/recently-viewed-section' );
+					get_template_part(
+						'template-parts/home/recently-viewed-section',
+						null,
+						array(
+							'view_all_link' => false,
+						)
+					);
 				endif;
 				?>
 				<?php

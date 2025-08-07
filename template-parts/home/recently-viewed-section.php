@@ -7,6 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+$view_all_link   = isset($args['view_all_link']) ? $args['view_all_link'] : true;
+$id              = $args['id'] ?: 'recentlyViewed';
 $recently_viewed = loveforever_get_viewed_products();
 
 if ( ! empty( $recently_viewed ) ) :
@@ -18,15 +20,23 @@ if ( ! empty( $recently_viewed ) ) :
 	$query      = new WP_Query( $query_args );
 
 	if ( $query->have_posts() ) : ?>
-<section class="section">
+<section id="<?php echo esc_attr( $id ); ?>" class="section">
 	<div class="container">
 		<div class="spleet">
 			<h2 class="h-36-36">Недавно смотрели</h2>
-			<?php // TODO: Добавить кнопку "Смотреть все"! ?>
-			<a id="w-node-a389feaf-b8e5-ed2e-7aa7-ad522ad62349-7ea1ac8d" href="#" class="btn btn-with-arrow w-inline-block">
+		<?php
+		// TODO: Добавить кнопку "Смотреть все"!
+		if ( $view_all_link ) :
+			?>
+			<a 
+				id="w-node-a389feaf-b8e5-ed2e-7aa7-ad522ad62349-7ea1ac8d" 
+				href="<?php echo esc_url( get_the_permalink( FAVORITES_PAGE_ID ) . '#recentlyViewed' ); ?>" 
+				class="btn btn-with-arrow w-inline-block"
+			>
 				<div>Смотреть все</div>
 				<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/6720d17cfb5622b535a21354_Arrow20Down.svg' ); ?>" loading="eager" alt class="img-arrow">
 			</a>
+		<?php endif; ?>
 		</div>
 		<div class="splide no-pc">
 			<div class="splide__track">
