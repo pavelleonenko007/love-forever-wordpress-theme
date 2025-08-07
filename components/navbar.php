@@ -57,9 +57,9 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							<div class="hovered-menue search-m">
 								<div id="w-node-_29763d6b-4a4a-4ba9-96d9-354223034cf4-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form id="searchForm1" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+										<form id="searchForm1" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="lf-search-form search" data-js-search-form>
 											<input
-												type="search" 
+												type="lf-search-form__search-input search" 
 												name="s" 
 												maxlength="256" 
 												placeholder="Напишите, что вы ищите..." 
@@ -69,7 +69,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 												data-js-search-form-search-input
 											>
 											<input type="submit" class="search-button w-button" value="Search">
-											<button type="reset" class="clear-search">Очистить</button>
+											<button type="reset" class="lf-search-form__reset clear-search">Очистить</button>
 										</form>
 										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
@@ -454,9 +454,9 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 								<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 									<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
 										<div class="div-block-7">
-											<form id="searchForm2" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+											<form id="searchForm2" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="lf-search-form search" data-js-search-form>
 												<input 
-													class="search-input w-input" 
+													class="lf-search-form__search-input search-input w-input" 
 													maxlength="256" 
 													name="s" 
 													placeholder="Напишите, что вы ищите..." 
@@ -467,7 +467,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 												>
 												<input type="hidden" name="posts_per_page" value="12">
 												<input type="submit" class="search-button w-button" value="Search">
-												<button type="reset" class="clear-search">Очистить</button>
+												<button type="reset" class="lf-search-form__reset clear-search">Очистить</button>
 											</form>
 											<div class="search-ajaxed" data-js-search-form-results></div>
 										</div>
@@ -633,9 +633,9 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b87a-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form id="searchForm3" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+										<form id="searchForm3" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="lf-search-form search" data-js-search-form>
 											<input 
-												class="search-input w-input" 
+												class="lf-search-form__search-input search-input w-input" 
 												maxlength="256" 
 												name="s" 
 												placeholder="Напишите, что вы ищите..." 
@@ -645,7 +645,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 												data-js-search-form-search-input
 											>
 											<input type="submit" class="search-button w-button" value="Search">
-											<button type="reset" class="clear-search">Очистить</button>
+											<button type="reset" class="ls-search-form__reset clear-search">Очистить</button>
 										</form>
 										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>

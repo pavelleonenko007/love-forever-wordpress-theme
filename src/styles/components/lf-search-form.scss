@@ -1,0 +1,13 @@
+.lf-search-form {
+  &__search-input {
+    height: auto;
+    font-size: 12rem;
+    line-height: 1;
+  }
+
+  &__reset {
+    padding: 0;
+    right: 0;
+    bottom: 22rem;
+  }
+}
