@@ -19,7 +19,8 @@ class CopyToClipboardButton extends BaseComponent {
 			this.button.querySelector(this.selectors.buttonText) ?? this.button;
 
 		this.textToCopy = this.button.dataset.jsCopyButton;
-		this.buttonText = this.buttonTextElement.textContent;
+    this.buttonText = this.buttonTextElement.textContent;
+    this.copiedText = this.buttonTextElement.dataset.jsCopyButtonCopiedText ?? 'Скопировано';
 
 		this.state = this._getProxyState({
 			isCopied: false,
@@ -36,7 +37,7 @@ class CopyToClipboardButton extends BaseComponent {
 
 		if (!this.state.hasError) {
 			this.buttonTextElement.textContent = this.state.isCopied
-				? 'Скопировано'
+				? this.copiedText
 				: this.buttonText;
 		} else {
 			this.buttonTextElement.textContent = 'Ошибка при копировании';
