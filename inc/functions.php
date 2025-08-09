@@ -50,8 +50,9 @@ function loveforever_is_valid_fitting_datetime( $datetime, $fitting_type, $exclu
 			return 'Время примерки не может быть в прошлом';
 	}
 
-	$hour = wp_date( 'G', $timestamp );
-	if ( $hour < 10 || $hour >= 21 ) {
+	$hour = absint( wp_date( 'G', $timestamp ) );
+
+	if ( $hour < 10 || $hour > 21 ) {
 			return 'Время примерки должно быть между 10:00 и 21:00';
 	}
 
