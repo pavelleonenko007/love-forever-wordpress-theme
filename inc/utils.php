@@ -426,29 +426,33 @@ function loveforever_get_socials() {
 	$socials = array();
 	if ( ! empty( VK_LINK ) ) {
 		$socials[] = array(
-			'url'  => VK_LINK,
-			'icon' => 'vkIcon',
+			'url'        => VK_LINK,
+			'icon'       => 'vkIcon',
+			'aria-label' => 'Ссылка на группy VK',
 		);
 	}
 
 	if ( ! empty( TELEGRAM_LINK ) ) {
 		$socials[] = array(
-			'url'  => TELEGRAM_LINK,
-			'icon' => 'telegramIcon',
+			'url'        => TELEGRAM_LINK,
+			'icon'       => 'telegramIcon',
+			'aria-label' => 'Ссылка на чат Telegram',
 		);
 	}
 
 	if ( ! empty( WHATSAPP_LINK ) ) {
 		$socials[] = array(
-			'url'  => WHATSAPP_LINK,
-			'icon' => 'whatsappIcon',
+			'url'        => WHATSAPP_LINK,
+			'icon'       => 'whatsappIcon',
+			'aria-label' => 'Ссылка на чат WhatsApp',
 		);
 	}
 
 	if ( ! empty( INSTAGRAM_LINK ) ) {
 		$socials[] = array(
-			'url'  => INSTAGRAM_LINK,
-			'icon' => 'instagramIcon',
+			'url'        => INSTAGRAM_LINK,
+			'icon'       => 'instagramIcon',
+			'aria-label' => 'Ссылка на аккаунт Instagram',
 		);
 	}
 
