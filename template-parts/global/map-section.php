@@ -135,7 +135,8 @@ if ( ! empty( $map_section['map'] ) ) :
 				element
 			);
 
-			this.addChild(this._marker);
+          this.addChild(this._marker);
+          this._openPopup();
 		}
 
 		_closePopupBodyClickHandler(event) {
@@ -181,13 +182,29 @@ if ( ! empty( $map_section['map'] ) ) :
 			bodyElement.className = 'lf-popup__body';
 			bodyElement.innerHTML = this._props.address;
 
-			if (this._props.phone) {
-				const phoneLinkElement = document.createElement('a');
+          if (this._props.phone) {
+            const phoneWrapperElement = document.createElement('div');
+            phoneWrapperElement.style.display = 'flex';
+            bodyElement.append(phoneWrapperElement);
+
+            const phoneElementId = 'yaMapPhoneNumber';
+        const phoneLinkElement = document.createElement('a');
+            phoneLinkElement.setAttribute('id', phoneElementId);
+            phoneLinkElement.setAttribute('data-js-phone-number', this._props.phone);
 				phoneLinkElement.setAttribute('href', `tel:${this._props.phone.replace(/[^\d+]/g, '')}`);
 				phoneLinkElement.className = 'lf-popup__phone';
-				phoneLinkElement.textContent = this._props.phone;
+				phoneLinkElement.textContent = this._props.phone.substring(0, 9) + '...';
 
-				bodyElement.append(phoneLinkElement);
+            phoneWrapperElement.append(phoneLinkElement);
+
+            const showPhoneButton = document.createElement('button');
+            showPhoneButton.type = 'button';
+            showPhoneButton.className = 'phone-button uppercase';
+            showPhoneButton.setAttribute('data-js-phone-number-button', phoneElementId);
+
+            showPhoneButton.innerHTML = '&nbsp;Показать';
+
+            phoneWrapperElement.append(showPhoneButton);
 			}
 
 			const workingHoursElement = document.createElement('div');
@@ -199,13 +216,10 @@ if ( ! empty( $map_section['map'] ) ) :
 			element.append(headerElement);
 			element.append(bodyElement);
 
-			console.log({element});
-			
-
-			document.body.addEventListener(
-				'click',
-				this._closePopupBodyClickHandler
-			);
+			// document.body.addEventListener(
+			// 	'click',
+			// 	this._closePopupBodyClickHandler
+			// );
 
 			const zIndex =
 				(this._props.zIndex ?? YMapMarker.defaultProps.zIndex) + 1_000;
@@ -250,7 +264,7 @@ if ( ! empty( $map_section['map'] ) ) :
 		coordinates: [30.308628, 59.929353],
 		title: 'Свадебный салон Love Forever',
 		address: 'Санкт-Петербург, м. Садовая, Вознесенский проспект, 18',
-		phone: '+7 812 425-67-82',
+		phone: '8 812 425-67-82',
 		workingHours: '10:00 - 22:00'
 	}));
 	map.addChild(new CustomMarkerWithPopup({
