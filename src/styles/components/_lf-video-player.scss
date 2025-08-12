@@ -1,0 +1,10 @@
+.lf-video-player {
+  &__video {
+    z-index: auto !important;
+  }
+  &__button {
+    .is-playing & {
+      display: none;
+    }
+  }
+}
