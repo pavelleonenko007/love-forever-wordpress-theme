@@ -83,6 +83,52 @@
             "append": ""
         },
         {
+            "key": "field_689ae456f6477",
+            "label": "Станции метро",
+            "name": "metro_stations",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 4,
+            "collapsed": "",
+            "button_label": "Добавить",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_689ae465f6478",
+                    "label": "Станция метро",
+                    "name": "metro_station",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_689ae456f6477"
+                }
+            ]
+        },
+        {
             "key": "field_67a1d59ec3b4f",
             "label": "Время работы",
             "name": "working_hours",
@@ -102,6 +148,27 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_689ae403f6476",
+            "label": "Реквизиты",
+            "name": "requisites",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": "br"
         },
         {
             "key": "field_67a1d5d6c3b50",
@@ -753,5 +820,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1753963447
+    "modified": 1754981574
 }
