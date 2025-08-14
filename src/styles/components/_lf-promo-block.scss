@@ -48,6 +48,10 @@
 	&__image {
 		height: 100%;
 		object-fit: cover;
+
+    picture:has(&) {
+      display: contents;
+    }
 	}
 
 	&__link {
