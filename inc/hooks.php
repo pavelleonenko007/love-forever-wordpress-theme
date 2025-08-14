@@ -1205,8 +1205,37 @@ function loveforever_query_products_via_ajax() {
 		'post_type'      => 'dress',
 		'posts_per_page' => isset( $_POST['posts_per_page'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['posts_per_page'] ) ) ) : 6,
 		's'              => $query_string,
-	);
-	$query        = new WP_Query( $query_args );
+  );
+
+  function loveforever_smart_search_sort( $clauses, $query ) {
+    global $wpdb;
+
+    $search_term = $query->get('s');
+    if ( $search_term ) {
+      $like = $wpdb->esc_like( $search_term ) . '%'; // начало строки
+      $clauses['orderby'] = $wpdb->prepare(
+        "CASE 
+          WHEN {$wpdb->posts}.post_title LIKE %s THEN 0 
+          ELSE 1 
+          END, " . $clauses['orderby'],
+        $like
+      );
+    }
+    return $clauses;
+  }
+
+  add_filter( 'posts_clauses', 'loveforever_smart_search_sort', 20, 2 );
+
+  /* // Хук для изменения сортировки */
+  /* add_filter('posts_orderby', function($orderby) use ($query_string) { */
+  /*     global $wpdb; */
+  /*     $search_term = esc_sql($query_string); */
+  /*     return "({$wpdb->posts}.post_title LIKE '{$search_term}%') DESC, {$wpdb->posts}.post_title ASC"; */
+  /* }); */
+
+  $query        = new WP_Query( $query_args );
+
+  remove_filter('posts_clauses', 'loveforever_smart_search_sort');
 
 	ob_start();
 
@@ -2035,3 +2064,20 @@ function loveforever_request_callback() {
 		)
 	);
 }
+
+function simple_search_priority($orderby, $wp_query) {
+    global $wpdb;
+    
+    if (!is_search() || empty($wp_query->query_vars['s'])) {
+        return $orderby;
+    }
+    
+    $search_term = esc_sql($wp_query->query_vars['s']);
+    
+    return "
+        ({$wpdb->posts}.post_title LIKE '{$search_term}%') DESC,
+        {$wpdb->posts}.post_title ASC
+    ";
+}
+
+add_filter('posts_orderby', 'simple_search_priority', 10, 2);
