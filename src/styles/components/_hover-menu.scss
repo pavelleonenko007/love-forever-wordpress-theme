@@ -18,6 +18,10 @@
 		grid-auto-flow: dense;
 		gap: 20rem 10rem;
 
+		&#{$root}--4-items {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
 		&#{$root}--5-items,
 		&#{$root}--6-items,
 		&#{$root}--7-items,
