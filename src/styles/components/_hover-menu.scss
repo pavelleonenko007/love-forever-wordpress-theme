@@ -18,11 +18,8 @@
 		grid-auto-flow: dense;
 		gap: 20rem 10rem;
 
-		&#{$root}--4-items {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-		&#{$root}--5-items,
+		&#{$root}--4-items,		
+    &#{$root}--5-items,
 		&#{$root}--6-items,
 		&#{$root}--7-items,
 		&#{$root}--8-items {
@@ -35,6 +32,10 @@
 		margin: 0;
 		padding: 0;
 		overflow: hidden;
+
+    #{$root}--4-items & {
+      grid-row: span 2;
+    }
 
 		#{$root}--5-items & {
 			&:nth-child(1),
