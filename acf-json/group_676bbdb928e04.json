@@ -470,27 +470,6 @@
             "bidirectional": 0,
             "multiple": 0,
             "bidirectional_target": []
-        },
-        {
-            "key": "field_683fea901a29a",
-            "label": "Интервал слотов на примерку",
-            "name": "dress_fitting_slots_interval",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "allow_in_bindings": 1,
-            "ui_on_text": "60 минут",
-            "ui_off_text": "30 минут",
-            "ui": 1
         }
     ],
     "location": [
@@ -511,5 +490,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1749019685
+    "modified": 1755338197
 }
