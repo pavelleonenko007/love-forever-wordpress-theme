@@ -382,7 +382,10 @@ function loveforever_get_product_price_range( $category_term_id = null ) {
 			);
 	}
 
-	return false;
+	return array(
+		'min_price' => 0,
+		'max_price' => 0,
+	);
 }
 
 function loveforever_get_product_price_range_without_category() {
@@ -412,7 +415,10 @@ function loveforever_get_product_price_range_without_category() {
 			);
 	}
 
-	return false;
+	return array(
+		'min_price' => 0,
+		'max_price' => 0,
+	);
 }
 
 function loveforever_get_dress_tags_by_category( $category_term_id ) {

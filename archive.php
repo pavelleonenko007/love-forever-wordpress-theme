@@ -526,12 +526,14 @@ $seo_text = get_field( 'seo_text', $queried_object );
 							else :
 								?>
 								<div class="empty-content">
-									<p>Товары с заданными параметрами не найдены</p>
+                <p>Товары с заданными параметрами не найдены</p>
+                <?php if (!empty($_GET['color']) || !empty($_GET['silhouette']) || !empty($_GET['brand']) || !empty($_GET['fabric']) || !empty($_GET['min-price']) || !empty($_GET['max-price'])): ?>
 									<button 
 										type="reset" 
 										class="button"
 										form="catalogFilterForm"
-									>Очистить фильтры</button>
+                >Очистить фильтры</button>
+                <?php endif; ?>
 								</div>
 							<?php endif; ?>
 							<!-- <div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
