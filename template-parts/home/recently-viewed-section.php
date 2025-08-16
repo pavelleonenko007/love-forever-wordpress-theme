@@ -7,8 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$view_all_link   = isset($args['view_all_link']) ? $args['view_all_link'] : true;
-$id              = $args['id'] ?: 'recentlyViewed';
+$view_all_link   = isset( $args['view_all_link'] ) ? $args['view_all_link'] : true;
+$id              = ! empty( $args['id'] ) ? $args['id'] : 'recentlyViewed';
 $recently_viewed = loveforever_get_viewed_products();
 
 if ( ! empty( $recently_viewed ) ) :
@@ -25,7 +25,6 @@ if ( ! empty( $recently_viewed ) ) :
 		<div class="spleet">
 			<h2 class="h-36-36">Недавно смотрели</h2>
 		<?php
-		// TODO: Добавить кнопку "Смотреть все"!
 		if ( $view_all_link ) :
 			?>
 			<a 
