@@ -1013,7 +1013,8 @@ $seo_text = get_field( 'seo_text', $queried_object );
 											$terms_map = array(
 												'wedding' => array( 'Свадебные', 'свадебные', 'Платья', 'платья' ),
 												'evening' => array( 'Вечерние', 'вечерние', 'Платья', 'платья' ),
-												'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной', 'Платья', 'платья' ),
+                        'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной', 'Платья', 'платья' ),
+                        'sale'    => array(),
 											);
 
 											$child_term_name = str_replace( $terms_map[ $root_term->slug ], '', $child_term->name );
