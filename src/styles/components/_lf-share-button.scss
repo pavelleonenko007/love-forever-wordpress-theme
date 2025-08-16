@@ -45,7 +45,8 @@
   align-items: center;
   color: var(--white);
 
-  .htmldopmenuopened & {
+  .htmldopmenuopened &,
+  .white-top & {
     color: var(--black);
   }
 
