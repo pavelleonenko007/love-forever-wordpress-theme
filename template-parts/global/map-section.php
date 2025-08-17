@@ -66,7 +66,8 @@ if ( ! empty( $map_section['map'] ) ) :
 		constructor(options) {
 			super(options);
 			this._marker = null;
-			this._popup = null;
+          this._popup = null;
+          this.isOpened = false;
 
 			this._closePopupBodyClickHandler =
 			this._closePopupBodyClickHandler.bind(this);
@@ -118,12 +119,13 @@ if ( ! empty( $map_section['map'] ) ) :
 				imgElement.className = 'marker__icon';
 				imgElement.width = 27;
 				imgElement.height = 46;
-	imgElement.style.pointerEvents = 'none';
+            imgElement.style.pointerEvents = 'none';
 				element.append(imgElement);
 			}
 			
-			element.onclick = () => {
-				this._openPopup();
+          element.onclick = () => {
+            !this.isOpened ? 
+				this._openPopup() : this._closePopup();
 				map.setLocation({
 					center: this._props.coordinates,
 					duration: 800,
@@ -156,7 +158,9 @@ if ( ! empty( $map_section['map'] ) ) :
 
 			if (this._popup) {
 				return;
-			}
+          }
+
+          this.isOpened = true;
 
 			this._marker.element.classList.add('marker--selected');
 
@@ -238,7 +242,9 @@ if ( ! empty( $map_section['map'] ) ) :
 		_closePopup() {
 			if (!this._popup) {
 				return;
-			}
+          }
+
+          this.isOpened = false;
 
 			this.removeChild(this._popup);
 			this._popup = null;
@@ -249,7 +255,7 @@ if ( ! empty( $map_section['map'] ) ) :
 	const map = new YMap(
 		document.getElementById('yandexMapSpbVoz'),
 		{
-			behaviors: ['drag', 'pinchZoom', 'mouseTilt', 'dblClick'],
+			behaviors: ['drag', 'pinchZoom', 'mouseTilt'],
 			location: {
 				center: [30.308628, 59.929353], // Центр СПб
 				zoom: 15
