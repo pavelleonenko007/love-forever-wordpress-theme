@@ -135,8 +135,8 @@ if ( ! empty( $map_section['map'] ) ) :
 				element
 			);
 
-          this.addChild(this._marker);
-          this._openPopup();
+			this.addChild(this._marker);
+			this._openPopup();
 		}
 
 		_closePopupBodyClickHandler(event) {
@@ -182,29 +182,29 @@ if ( ! empty( $map_section['map'] ) ) :
 			bodyElement.className = 'lf-popup__body';
 			bodyElement.innerHTML = this._props.address;
 
-          if (this._props.phone) {
-            const phoneWrapperElement = document.createElement('div');
-            phoneWrapperElement.style.display = 'flex';
-            bodyElement.append(phoneWrapperElement);
+			if (this._props.phone) {
+			const phoneWrapperElement = document.createElement('div');
+			phoneWrapperElement.style.display = 'flex';
+			bodyElement.append(phoneWrapperElement);
 
-            const phoneElementId = 'yaMapPhoneNumber';
-        const phoneLinkElement = document.createElement('a');
-            phoneLinkElement.setAttribute('id', phoneElementId);
-            phoneLinkElement.setAttribute('data-js-phone-number', this._props.phone);
+			const phoneElementId = 'yaMapPhoneNumber';
+		const phoneLinkElement = document.createElement('a');
+			phoneLinkElement.setAttribute('id', phoneElementId);
+			phoneLinkElement.setAttribute('data-js-phone-number', this._props.phone);
 				phoneLinkElement.setAttribute('href', `tel:${this._props.phone.replace(/[^\d+]/g, '')}`);
 				phoneLinkElement.className = 'lf-popup__phone';
 				phoneLinkElement.textContent = this._props.phone.substring(0, 9) + '...';
 
-            phoneWrapperElement.append(phoneLinkElement);
+			phoneWrapperElement.append(phoneLinkElement);
 
-            const showPhoneButton = document.createElement('button');
-            showPhoneButton.type = 'button';
-            showPhoneButton.className = 'phone-button uppercase';
-            showPhoneButton.setAttribute('data-js-phone-number-button', phoneElementId);
+			const showPhoneButton = document.createElement('button');
+			showPhoneButton.type = 'button';
+			showPhoneButton.className = 'phone-button uppercase';
+			showPhoneButton.setAttribute('data-js-phone-number-button', phoneElementId);
 
-            showPhoneButton.innerHTML = '&nbsp;Показать';
+			showPhoneButton.innerHTML = '&nbsp;Показать';
 
-            phoneWrapperElement.append(showPhoneButton);
+			phoneWrapperElement.append(showPhoneButton);
 			}
 
 			const workingHoursElement = document.createElement('div');
@@ -252,7 +252,7 @@ if ( ! empty( $map_section['map'] ) ) :
 			behaviors: ['drag', 'pinchZoom', 'mouseTilt', 'dblClick'],
 			location: {
 				center: [30.308628, 59.929353], // Центр СПб
-				zoom: 14
+				zoom: 15
 			}
 		}
 	);
@@ -272,9 +272,14 @@ if ( ! empty( $map_section['map'] ) ) :
 		textMarker: true,
 		title: 'м. САДОВАЯ'
 	}));
+	map.addChild(new CustomMarkerWithPopup({
+		coordinates: [30.31509599999979,59.935973615955675],
+		textMarker: true,
+		title: 'м. АДМИРАЛТЕЙСКАЯ'
+	}));
 
 		// Добавим маршрут (линия)
-		const routeCoords = [
+		const sadovayaRouteCoords = [
 			[ 30.317154, 59.927101],
 			[ 30.315797, 59.928504],
 			[ 30.315459, 59.928896],
@@ -296,293 +301,32 @@ if ( ! empty( $map_section['map'] ) ) :
 			[ 30.308405, 59.929382]
 		];
 
-		const polyline = new ymaps3.YMapFeature({
+		const admiralteyskayaRouteCoords = [[30.31509599999979,59.935973615955675],[30.316297629638417,59.93528447101205],[30.316115239425418,59.935182174838815],[30.316340544982655,59.93508526238268],[30.3098817856748,59.932764662604704],[30.30913760272961,59.93258836839017],[30.309513111991688,59.93212530331308],[30.309448738975345,59.93186146100795],[30.310049553794684,59.93156530897351],[30.310264130515865,59.931339154724334],[30.308365126533324,59.93097299694558],[30.308374156158166,59.93041274388374]];
+
+		const sadovayaRoute = new ymaps3.YMapFeature({
 		geometry: {
 			type: 'LineString',
-			coordinates: routeCoords
+			coordinates: sadovayaRouteCoords
 		},
 		style: {
 			stroke: [{ color: '#F22EA9', width: 4 }]
 		}
 		});
 
-		map.addChild(polyline);
+		const admiralteyskayaRoute = new ymaps3.YMapFeature({
+		geometry: {
+			type: 'LineString',
+			coordinates: admiralteyskayaRouteCoords
+		},
+		style: {
+			stroke: [{ color: '#F22EA9', width: 4 }]
+		}
+		});
 
-	// map.addChild(new YMapDefaultSchemeLayer());
+		map.addChild(sadovayaRoute);
+		map.addChild(admiralteyskayaRoute);
 }
 
-initMap()
-	// 	ymaps3.ready.then(() => {
-	// 	const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapControls, YMapMarker } = ymaps3;
-
-	// 	// Создаем карту
-	// 	const map = new YMap(document.getElementById('yandexMapSpbVoz'), {
-	// 		location: {
-	// 			center: [30.3185, 59.9307], // Центр СПб
-	// 			zoom: 14
-	// 		}
-	// 	});
-
-	// 	// Добавляем тёмную тему
-	// 	map.addChild(new YMapDefaultSchemeLayer({ theme: 'dark' }));
-	// 	map.addChild(new YMapDefaultFeaturesLayer());
-
-	// 	// Добавим маршрут (линия)
-	// 	const routeCoords = [
-	// 	[30.3122, 59.9357], // м. Адмиралтейская
-	// 	[30.3136, 59.9334],
-	// 	[30.3165, 59.9307],
-	// 	[30.3227, 59.9274]  // м. Садовая
-	// 	];
-
-	// 	const polyline = new ymaps3.YMapFeature({
-	// 	geometry: {
-	// 		type: 'LineString',
-	// 		coordinates: routeCoords
-	// 	},
-	// 	style: {
-	// 		stroke: [{ color: '#f03bfc', width: 4 }]
-	// 	}
-	// 	});
-
-	// 	map.addChild(polyline);
-
-	// 	// Метка: Адмиралтейская
-	// 	const admiralteyskaya = new YMapMarker({
-	// 	coordinates: [30.3122, 59.9357],
-	// 	title: 'м. Адмиралтейская'
-	// 	});
-	// 	admiralteyskaya.setContent(() => {
-	// 	const el = document.createElement('div');
-	// 	el.style = 'background:#f03bfc;color:white;padding:4px 6px;border-radius:8px;font-size:12px;';
-	// 	el.textContent = 'м. Адмиралтейская';
-	// 	return el;
-	// 	});
-	// 	map.addChild(admiralteyskaya);
-
-	// 	// Метка: Садовая
-	// 	const sadovaya = new YMapMarker({
-	// 	coordinates: [30.3227, 59.9274],
-	// 	title: 'м. Садовая'
-	// 	});
-	// 	sadovaya.setContent(() => {
-	// 	const el = document.createElement('div');
-	// 	el.style = 'background:#f03bfc;color:white;padding:4px 6px;border-radius:8px;font-size:12px;';
-	// 	el.textContent = 'м. Садовая';
-	// 	return el;
-	// 	});
-	// 	map.addChild(sadovaya);
-	// });
-// 		ymaps.ready(init);
-// function init () {
-
-// 	// Москва. Якиманка
-// 	if ($('#yandexMapYa').length > 0) {
-
-// 		var map = new ymaps.Map("yandexMapYa", {
-// 				center: [55.730706,37.612023],
-// 				zoom: 16
-// 			}),
-// 			balloon = new ymaps.Placemark([55.73218,37.611167], {
-// 				balloonContentHeader: "Свадебный салон Love Forever",
-// 				balloonContentBody: "Москва, ул. Большая Якиманка, 50<br /><br /><table><tr><td><img src='/images/icon-phone.png' alingn= width='14px' height='14px' /></td><td>&nbsp;<address class='ancillary_item ancillary_phone'><span class='phone_alloka'>8 812 425-69-36</span></address></td></tr><tr><td><img src='/images/icon-clock.png' width='14px' height='14px' /></td><td>&nbsp;10:00 - 22:00</td></tr></table>",
-// 				balloonContentFooter: "<a href='/upload/yakimanka-route.pdf' target='_blank'>Посмотреть подробный маршрут</a>",
-// 				hintContent: "Посмотреть контактные данные"
-// 			}, {
-// 				iconLayout: 'default#image',
-// 				iconImageHref: '/images/place-marker.png',
-// 				iconImageSize: [42, 44],
-// 				iconImageOffset: [-14, -42]
-// 			});
-
-// 			var path1 = new ymaps.Polyline([
-// 				[55.7293, 37.611565],
-// 				[55.729625, 37.611522],
-// 				[55.729885, 37.611768],
-// 				[55.732361, 37.611849],
-// 				[55.732346, 37.611355]
-// 			], {
-// 				balloonContent: "Путь от метро Октябрьская"
-// 			}, {
-// 				balloonCloseButton: false,
-// 				strokeColor: "#f366c4",
-// 				strokeWidth: 3
-// 			});   
-// 			var path2 = new ymaps.Polyline([
-// 				[55.731234, 37.612509],
-// 				[55.730834, 37.612433],
-// 				[55.730610, 37.612433],
-// 				[55.730622, 37.611854],
-// 				[55.732368, 37.611865],
-// 				[55.732371, 37.611253]
-// 			], {
-// 				balloonContent: "Путь от метро Октябрьская"
-// 			}, {
-// 				balloonCloseButton: false,
-// 				strokeColor: "#b73bf1",
-// 				strokeWidth: 3
-// 			});   
-
-// 		map.controls.add('zoomControl', { left: 5, top: 5 });
-// 		map.geoObjects.add(balloon).add(path1).add(path2);
-// 		map.behaviors.disable('scrollZoom');
-// 		balloon.balloon.open();
-// 		// map.setCenter('55.623535, 37.857816');
-// 	}
-
-// 	// Москва. Мастервкова
-// 	if ($('#yandexMapAv').length > 0) {
-
-// 		map = new ymaps.Map("yandexMapAv", {
-// 				center: [55.709169, 37.658721],
-// 				zoom: 17
-// 			}),
-// 			balloon = new ymaps.Placemark([55.709757, 37.659043], {
-// 				balloonContentHeader: "Свадебный салон Love Forever",
-// 				balloonContentBody: "Москва, ул. Мастеркова 1<br /><table><tr><td><img src='/images/icon-phone.png' alingn= width='14px' height='14px' /></td><td>&nbsp;<address class='ancillary_item ancillary_phone'><span class='phone_alloka'>8 812 425-69-36</span></address></td></tr><tr><td><img src='/images/icon-clock.png' width='14px' height='14px' /></td><td>&nbsp;10:00 - 22:00</td></tr></table>",
-// 				balloonContentFooter: "",
-// 				hintContent: "Посмотреть контактные данные"
-// 			}, {
-// 				iconLayout: 'default#image',
-// 				iconImageHref: '/images/place-marker.png',
-// 				iconImageSize: [42, 44],
-// 				iconImageOffset: [-14, -42]            
-// 			});
-
-// 			var path = new ymaps.Polyline([
-// 				[55.708527, 37.658142],
-// 				[55.709375, 37.658270],
-// 				[55.709533, 37.658667]
-// 			], {
-// 				balloonContent: "Путь от метро Автозаводская"
-// 			}, {
-// 				balloonCloseButton: false,
-// 				strokeColor: "#f366c4",
-// 				strokeWidth: 3
-// 			});        
-
-// 		map.controls.add('zoomControl', { left: 5, top: 5 });
-// 		map.geoObjects.add(balloon).add(path);
-// 		map.behaviors.disable('scrollZoom');
-// 		balloon.balloon.open();
-// 	}
-
-// 	// Санкт-Петербург. Вознесенский проспект
-
-// 			if ($('#yandexMapSpbVoz').length > 0) {
-
-// 				var map = new ymaps.Map("yandexMapSpbVoz", {
-// 						center: [59.929353, 30.308628],
-// 						zoom: 15
-// 					}),
-// 					balloon = new ymaps.Placemark([59.929353, 30.308628], {
-// 						balloonContentHeader: "Свадебный салон Love Forever",
-// 						balloonContentBody: "Санкт-Петербург, м. Садовая, Вознесенский проспект, 18<br /><br /><table><tr><td><img src='/images/icon-phone.png' alingn= width='14px' height='14px' /></td><td>&nbsp;<address class='ancillary_item ancillary_phone'><span class='phone_alloka'>8 812 425-67-82</span></address></td></tr><tr><td><img src='/images/icon-clock.png' width='14px' height='14px' /></td><td>&nbsp;10:00 - 22:00</td></tr></table>",
-// 						balloonContentFooter: "",
-// 						hintContent: "Посмотреть контактные данные"
-// 					}, {
-// 						iconLayout: 'default#image',
-// 						iconImageHref: '<?php echo esc_url( get_template_directory_uri() . '/images/map-marker.svg' ); ?>',
-// 						iconImageSize: [26.83, 46.39],
-// 						iconImageOffset: [-14, -42]         
-// 					});
-
-// 					var path = new ymaps.Polyline([
-// 						[59.927101, 30.317154],
-// 						[59.928504, 30.315797],
-// 						[59.928896, 30.315459],
-// 						[59.928966, 30.315505],
-// 						[59.929083, 30.315224],
-// 						[59.929748, 30.314595],
-// 						[59.929766, 30.314638],
-// 						[59.929871, 30.314519],
-// 						[59.929867, 30.314473],
-// 						[59.929887, 30.314448],
-// 						[59.929842, 30.314274],
-// 						[59.929809, 30.314281],
-// 						[59.929290, 30.312342],
-// 						[59.929302, 30.312309],
-// 						[59.929269, 30.312161],
-// 						[59.929223, 30.312114],
-// 						[59.929223, 30.312114],
-// 						[59.928272, 30.308360],
-// 						[59.929382, 30.308405]
-// 					], {
-// 						balloonContent: "Путь от метро Садовая"
-// 					}, {
-// 						balloonCloseButton: false,
-// 						strokeColor: "#f366c4",
-// 						strokeWidth: 3
-// 					});
-
-// 				map.controls.add('zoomControl', { left: 5, top: 5 });
-// 				map.geoObjects.add(balloon).add(path);
-// 				map.behaviors.disable('scrollZoom');
-// 				// map.setType('yandex#dark');
-// 				balloon.balloon.open();
-// 			}
-
-
-
-
-
-
-// 	/*
-// 		var map = new ymaps.Map("yandexMapKr", {
-// 				center: [55.732984, 37.666569],
-// 				zoom: 17
-// 			}),
-// 			balloon = new ymaps.Placemark([55.733647, 37.666569], {
-// 				balloonContentHeader: "Свадебный салон Love Forever",
-// 				balloonContentBody: "<br />Москва, ул. Марксистская, 38<br /><table><tr><td><img src='/images/icon-phone.png' alingn= width='14px' height='14px' /></td><td>&nbsp;<address class='ancillary_item ancillary_phone'><span class='phone_alloka'>8 812 425-69-36</span></address></td></tr><tr><td><img src='/images/icon-clock.png' width='14px' height='14px' /></td><td>&nbsp;10:00 - 22:00</td></tr></table>",
-// 				balloonContentFooter: "",
-// 				hintContent: "Посмотреть контактные данные"
-// 			}, {
-// 				iconLayout: 'default#image',
-// 				iconImageHref: '/images/place-marker.png',
-// 				iconImageSize: [42, 44],
-// 				iconImageOffset: [-14, -42]            
-// 			});
-
-// 			var path = new ymaps.Polyline([
-// 				[55.732252, 37.665657],
-// 				[55.732948, 37.666944],
-// 				[55.733287, 37.666483],
-// 				[55.733590, 37.667062]
-// 			], {
-// 				balloonContent: "Путь от метро Крестьянская Застава"
-// 			}, {
-// 				balloonCloseButton: false,
-// 				strokeColor: "#f366c4",
-// 				strokeWidth: 3
-// 			});        
-
-// 		map.controls.add('zoomControl', { left: 5, top: 5 });
-// 		map.geoObjects.add(balloon).add(path);
-// 		balloon.balloon.open();
-// 	*/
-
-// 	/*
-// 		var map = new ymaps.Map("yandexMapTs", {
-// 				center: [55.61875,37.506266],
-// 				zoom: 17
-// 			}),
-// 			balloon = new ymaps.Placemark([55.61813,37.507484], {
-// 				balloonContentHeader: "Свадебный салон Love Forever",
-// 				balloonContentBody: "<br />Москва, ул. Профсоюзная, 129а<br />ТРК «ПРИНЦ ПЛАЗА» (4 этаж)<br /><table><tr><td><img src='/images/icon-phone.png' alingn= width='14px' height='14px' /></td><td>&nbsp;<address class='ancillary_item ancillary_phone'><span class='phone_alloka'>8 812 425-69-36</span></address></td></tr><tr><td><img src='/images/icon-clock.png' width='14px' height='14px' /></td><td>&nbsp;10:00 - 22:00</td></tr></table>",
-// 				balloonContentFooter: "<a href='/upload/ts-route.pdf' target='_blank'>Посмотреть подробный маршрут</a>",
-// 				hintContent: "Посмотреть контактные данные"
-// 			}, {
-// 				iconLayout: 'default#image',
-// 				iconImageHref: '/images/place-marker.png',
-// 				iconImageSize: [42, 44],
-// 				iconImageOffset: [-14, -42]            
-// 			});
-
-// 		map.controls.add('zoomControl', { left: 5, top: 5 });
-// 		map.geoObjects.add(balloon);
-// 		balloon.balloon.open();
-// 	*/
-// }
+initMap();
 	</script>
 <?php endif; ?>
