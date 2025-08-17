@@ -33,14 +33,11 @@
 		}
 
 		&-badges {
+      gap: 20rem;
+
 			@include tablet {
 				justify-content: start;
 				font-size: 8rem;
-
-				& > * {
-					font-size: inherit;
-					line-height: 1;
-				}
 			}
 		}
 

@@ -21,7 +21,7 @@ $infoline_id   = loveforever_get_current_infoline();
 $infoline_data = loveforever_get_infoline_data( $infoline_id );
 
 $availability        = get_field( 'availability' );
-$is_new              = get_field( 'is_new' );
+$badge               = loveforever_get_product_badge_text( get_the_ID() );
 $images              = loveforever_get_product_images( get_the_ID() );
 $video               = get_field( 'video' );
 $colors              = get_field( 'colors' );
@@ -126,10 +126,10 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 								<div class="single-styk single-product__content">
 									<div class="single-right-block single-product__content-badges">
 										<div class="p-12-12 single-right-highl m-12-12"><?php echo ! empty( $availability ) ? 'Есть в наличии' : 'Нет в наличии'; ?></div>
-										<?php if ( ! empty( $is_new ) ) : ?>
-											<div class="_2px_cube"></div>
-											<div class="p-12-12 uper m-12-12">Новинка</div>
-										<?php endif; ?>
+											<?php if ( ! empty( $badge ) ) : ?>
+                        <div class="_2px_cube" style="margin: 0; width: 2rem; height: 2rem;"></div>
+                        <div class="p-12-12 uper m-12-12"><?php echo esc_html( $badge ); ?></div>
+											<?php endif; ?>
 									</div>
 									<div class="single-product__info">
 										<?php if ( ! empty( $brand ) ) : ?>
@@ -208,12 +208,6 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 													</div>
 													<?php
 													$available_slots = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
-													// $available_slots = array_filter(
-													// $slots,
-													// function ( $slot ) {
-													// return $slot['available'] > 0;
-													// }
-													// );
 													?>
 													<div class="single-dress-form__field-wrapper field ui-front">
 														<?php
@@ -285,27 +279,6 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 											<span class="button__text">Сохранить в vk</span>
 										</div>
 									</div>
-									<!-- <div class="horiz m-vert single-product__content-actions">
-										<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
-										<button type="button" id="singleDressPageAddToFavoriteButton" class="btn in-single-btn line w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
-											<div class="svg-share lik w-embed">
-												<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<use href="#addToFavoritesIcon"></use>
-												</svg>
-											</div>
-											<div data-js-add-to-favorite-button-text><?php echo $is_in_favorites ? 'Удалить из избранного' : 'Добавить в избранное'; ?></div>
-										</button>
-										<div class="vk-widget" style="overflow: hidden">
-											<a href="#" class="btn in-single-btn _2 w-inline-block" onclick="document.getElementById('vk_bookmarks').click();">
-												<div class="svg-share lik w-embed">
-													<svg width="24" height="16" viewbox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M13.0718 16C4.87196 16 0.194878 9.99399 0 0H4.10743C4.24235 7.33533 7.27046 10.4424 9.66896 11.0831V0H13.5365V6.32633C15.9051 6.05405 18.3935 3.17117 19.233 0H23.1006C22.7842 1.64466 22.1537 3.20189 21.2483 4.57429C20.3429 5.94668 19.1823 7.10472 17.8389 7.97597C19.3384 8.77206 20.6629 9.89886 21.7249 11.282C22.7869 12.6651 23.5624 14.2732 24 16H19.7427C19.3498 14.5001 18.5513 13.1575 17.4473 12.1404C16.3433 11.1233 14.9829 10.4769 13.5365 10.2823V16H13.0718Z" fill="white"></path>
-													</svg>
-												</div>
-												<div>сохранить в vk</div>
-											</a>
-										</div>
-									</div> -->
 									<svg style="display: none">
 										<symbol id="addToFavoritesIcon" viewBox="0 0 24 24">
 											<path fill-rule="evenodd" clip-rule="evenodd" d="M1.3118 8.62865C-0.437267 10.4011 -0.437267 13.2747 1.3118 15.0472L8.1727 21.9998L14.5066 15.5813L14.5043 15.579L15.029 15.0472C16.7781 13.2747 16.7781 10.4011 15.029 8.62865C13.2799 6.8562 10.4442 6.8562 8.69509 8.62865L8.1704 9.16036L7.64572 8.62865C5.89665 6.8562 3.06087 6.8562 1.3118 8.62865Z" fill="white"/>
