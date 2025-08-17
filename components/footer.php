@@ -106,11 +106,11 @@ $socials       = loveforever_get_socials();
 					</a>
 				</div>
 			<?php endif; ?>
-			<div id="w-node-b25aa748-36cb-7692-2710-65768ffd5ea7-b053f56f" class="vert">
+			<!--<div id="w-node-b25aa748-36cb-7692-2710-65768ffd5ea7-b053f56f" class="vert">
 				<a href="#" class="a-12-12 w-inline-block">
 					<div>публичная офферта</div>
 				</a>
-			</div>
+			</div>-->
 			<div id="w-node-b25aa748-36cb-7692-2710-65768ffd5ebd-b053f56f" class="vert m-none">
 				<a href="#" class="a-12-12 to-top w-inline-block" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">
 					<div>Вернуться к началу</div>
