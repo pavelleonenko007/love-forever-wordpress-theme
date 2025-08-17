@@ -266,13 +266,13 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 												data-js-add-to-favorite-button-text
 											><?php echo $is_in_favorites ? 'Удалить из избранного' : 'Добавить в избранное'; ?></span>
 										</button>
-										<div class="button button--vk">
-											<div id="vk_bookmarks" style="position: absolute; top: 50%; left: 50%; translate: -50% -50%; scale: 1.6; opacity: 0.001;"></div>
-											<script type="text/javascript">
-												VK.Widgets.Bookmarks("vk_bookmarks", {
-													height: '50rem'
-												});
-											</script>
+                    <div class="button button--vk">
+                      <div style="position: absolute; top: 50%; left: 50%; translate: -50% -50%; scale: 5; opacity: 0;">
+                        <div id="vk_bookmarks"></div>
+                        <script type="text/javascript">
+                          VK.Widgets.Bookmarks("vk_bookmarks");
+                        </script>
+                      </div>
 											<svg class="button__icon" viewBox="0 0 24 24">
 												<use href="#vkButton"></use>
 											</svg>
