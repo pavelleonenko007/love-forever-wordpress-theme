@@ -89,42 +89,42 @@ function loveforever_remove_comments_admin_menu() {
 	remove_menu_page( 'edit-comments.php' );
 }
 
-add_action( 'init', 'loveforever_create_manager_role' );
-function loveforever_create_manager_role() {
-	remove_role( 'manager' );
+/* add_action( 'init', 'loveforever_create_manager_role' ); */
+/* function loveforever_create_manager_role() { */
+/* 	remove_role( 'manager' ); */
+/**/
+/* 	add_role( */
+/* 		'manager', */
+/* 		'Менеджер', */
+/* 		array( */
+/* 			'read'         => true, */
+/* 			'edit_posts'   => false, */
+/* 			'upload_files' => false, */
+/* 		) */
+/* 	); */
+/* } */
 
-	add_role(
-		'manager',
-		'Менеджер',
-		array(
-			'read'         => true,
-			'edit_posts'   => false,
-			'upload_files' => false,
-		)
-	);
-}
-
-add_action( 'init', 'loveforever_register_fitting_capabilities' );
-function loveforever_register_fitting_capabilities() {
-	$roles = array( 'manager', 'administrator' );
-
-	foreach ( $roles as $role_name ) {
-		$role = get_role( $role_name );
-		if ( $role ) {
-			$role->add_cap( 'read' );
-			$role->add_cap( 'publish_fittings' );
-			$role->add_cap( 'edit_fittings' );
-			$role->add_cap( 'edit_others_fittings' );
-			$role->add_cap( 'edit_published_fittings' );
-			$role->add_cap( 'read_private_fittings' );
-			$role->add_cap( 'edit_private_fittings' );
-			$role->add_cap( 'delete_fittings' );
-			$role->add_cap( 'delete_published_fittings' );
-			$role->add_cap( 'delete_private_fittings' );
-			$role->add_cap( 'delete_others_fittings' );
-		}
-	}
-}
+/* add_action( 'init', 'loveforever_register_fitting_capabilities' ); */
+/* function loveforever_register_fitting_capabilities() { */
+/* 	$roles = array( 'manager', 'administrator' ); */
+/**/
+/* 	foreach ( $roles as $role_name ) { */
+/* 		$role = get_role( $role_name ); */
+/* 		if ( $role ) { */
+/* 			$role->add_cap( 'read' ); */
+/* 			$role->add_cap( 'publish_fittings' ); */
+/* 			$role->add_cap( 'edit_fittings' ); */
+/* 			$role->add_cap( 'edit_others_fittings' ); */
+/* 			$role->add_cap( 'edit_published_fittings' ); */
+/* 			$role->add_cap( 'read_private_fittings' ); */
+/* 			$role->add_cap( 'edit_private_fittings' ); */
+/* 			$role->add_cap( 'delete_fittings' ); */
+/* 			$role->add_cap( 'delete_published_fittings' ); */
+/* 			$role->add_cap( 'delete_private_fittings' ); */
+/* 			$role->add_cap( 'delete_others_fittings' ); */
+/* 		} */
+/* 	} */
+/* } */
 
 add_action( 'wp_ajax_create_new_fitting_record', 'loveforever_create_new_fitting_record_via_ajax' );
 add_action( 'wp_ajax_nopriv_create_new_fitting_record', 'loveforever_create_new_fitting_record_via_ajax' );
