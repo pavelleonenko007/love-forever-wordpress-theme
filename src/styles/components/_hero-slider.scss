@@ -10,10 +10,11 @@
     }
   }
 
-  // &__bottom-content {
-  //   position: absolute;
-  //   bottom: 0;
-  //   left: 50%;
-  //   translate: -50% 0;
-  // }
+  &__bottom-content {
+    max-width: 930rem;
+
+    & .p-16-20 {
+      max-width: 695rem;
+    }
+  }
 }
