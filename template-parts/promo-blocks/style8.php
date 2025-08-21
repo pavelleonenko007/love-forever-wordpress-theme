@@ -45,71 +45,26 @@ $field1 = $template_style8_fields['field1'] ?? false;
 $field2 = $template_style8_fields['field2'] ?? false;
 $field3 = $template_style8_fields['field3'] ?? false;
 $field4 = $template_style8_fields['field4'] ?? false;
+
+$link_attributes = loveforever_prepare_link_attributes( array(), $custom_link );
 ?>
-<article class="test-grid lf-promo-block lf-promo-block--<?php echo $promo_template; ?>">
-	<div class="prod-item-tizer">
-		<div class="prod-item_top type8" style="background-color: #801F80">
-		<?php
-			$link_attributes = array(
-				'class' => 'link w-inline-block',
-			);
-
-			if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
-				$link_attributes         = array_merge( $link_attributes, $custom_link );
-				$link_attributes['href'] = $link_attributes['url'];
-				unset( $link_attributes['url'] );
-			}
-
-			if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
-				$link_attributes['rel']        = 'noopener noreferrer';
-				$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
-				$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
-			}
-
-			$link_attributes = array_filter( $link_attributes );
-
-			$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
-			?>
-			<a <?php echo $link_attributes_str; ?>>
-				<div class="prod-item_img-mom _3">
-					<div class="to-keeper">
-						<?php echo $custom_img; ?>
-						<div class="map-dot cd2">
-							<div class="p-36-36"><?php echo $field1 ? $field1 : 'новогодние'; ?></div>
-						</div><div class="map-dot _2 cd3">
-							<div class="p-36-36"><?php echo $field2 ? $field2 : 'новогодние'; ?></div>
-						</div><div class="map-dot _3 cd3">
-							<div class="p-36-36"><?php echo $field3 ? $field3 : 'новогодние'; ?></div>
-						</div><div class="map-dot _4 cd4">
-							<div class="p-36-36"><?php echo $field4 ? $field4 : 'новогодние'; ?></div>
-						</div>
-					</div>
+<article class="test-grid lf-promo-block lf-promo-block-8">
+	<div class="lf-promo-block__wrapper lf-promo-block-8__wrapper">
+		<a <?php echo $link_attributes; ?> class="lf-promo-block-8__link">
+			<div class="lf-promo-block-8__header">
+				<div class="lf-promo-block-8__image">
+					<?php echo $custom_img; ?>
 				</div>
-			</a>
-		</div>
+				<h3 class="lf-promo-block-8__title lf-promo-block-8__title">
+					<span class="lf-promo-block-8__span lf-promo-block-8__span--1"><?php echo $field1; ?></span>
+					<span class="lf-promo-block-8__span lf-promo-block-8__span--2" aria-hidden="true"><?php echo $field2; ?></span>
+					<span class="lf-promo-block-8__span lf-promo-block-8__span--3" aria-hidden="true"><?php echo $field3; ?></span>
+					<span class="lf-promo-block-8__span lf-promo-block-8__span--4" aria-hidden="true"><?php echo $field4; ?></span>
+				</h3>
+			</div>
+		</a>
 	</div>
-	<?php
-	$link_attributes = array(
-		'class' => 'lf-promo-block__button',
-	);
-
-	if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
-		$link_attributes         = array_merge( $link_attributes, $custom_link );
-		$link_attributes['href'] = $link_attributes['url'];
-		unset( $link_attributes['url'] );
-	}
-
-	if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
-		$link_attributes['rel']        = 'noopener noreferrer';
-		$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
-		$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
-	}
-
-	$link_attributes = array_filter( $link_attributes );
-
-	$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
-	?>
-	<a <?php echo $link_attributes_str; ?>>
+	<a <?php echo $link_attributes; ?> class="lf-promo-block__button">
 		<span class="lf-promo-block__button-text">Смотреть</span>
 	</a>
 </article>

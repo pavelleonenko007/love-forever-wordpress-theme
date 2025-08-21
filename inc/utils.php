@@ -414,7 +414,7 @@ function loveforever_prepare_link_attributes( $attributes, $acf_link_data ) {
 	if ( ! empty( $acf_link_data['target'] ) && '_blank' === $attributes['target'] ) {
 		$attributes['rel']        = 'noopener noreferrer';
 		$attributes['title']      = $attributes['title'] . ' (открывается в новой вкладке)';
-		$attributes['aria-label'] = $attributes['title'] . ' (открывается в новой вкладке)';
+		$attributes['aria-label'] = $attributes['title'];
 	}
 
 	$attributes = array_filter( $attributes );

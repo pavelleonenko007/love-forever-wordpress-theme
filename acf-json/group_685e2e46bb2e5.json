@@ -37,7 +37,9 @@
             "allow_in_bindings": 1,
             "ui": 1,
             "ajax": 0,
-            "placeholder": ""
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
         },
         {
             "key": "field_685e62f3e0830",
@@ -162,6 +164,27 @@
                             "placeholder": "",
                             "prepend": "",
                             "append": ""
+                        },
+                        {
+                            "key": "field_68a49054a6c7d",
+                            "label": "Текст под картинкой",
+                            "name": "text_under_image",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "rows": "",
+                            "placeholder": "",
+                            "new_lines": "br"
                         }
                     ]
                 },
@@ -194,7 +217,7 @@
                             "label": "Основной текст",
                             "name": "field1",
                             "aria-label": "",
-                            "type": "text",
+                            "type": "textarea",
                             "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
@@ -203,12 +226,12 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "рас<br>про<br>да<br>жа",
+                            "default_value": "Рас\r\nпро\r\nда\r\nжа",
                             "maxlength": "",
                             "allow_in_bindings": 0,
+                            "rows": "",
                             "placeholder": "",
-                            "prepend": "",
-                            "append": ""
+                            "new_lines": "br"
                         },
                         {
                             "key": "field_685fe640e2824",
@@ -398,7 +421,7 @@
                             "label": "Подпись",
                             "name": "field2",
                             "aria-label": "",
-                            "type": "text",
+                            "type": "textarea",
                             "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
@@ -407,12 +430,12 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "совершенство<br> в каждой детали",
+                            "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
+                            "rows": "",
                             "placeholder": "",
-                            "prepend": "",
-                            "append": ""
+                            "new_lines": "br"
                         }
                     ]
                 },
@@ -487,7 +510,7 @@
                             "label": "Подпись снизу",
                             "name": "field3",
                             "aria-label": "",
-                            "type": "text",
+                            "type": "textarea",
                             "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
@@ -496,12 +519,12 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "безупречность <br>вне времени",
+                            "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
+                            "rows": "",
                             "placeholder": "",
-                            "prepend": "",
-                            "append": ""
+                            "new_lines": "br"
                         }
                     ]
                 },
@@ -576,7 +599,7 @@
                             "label": "Подпись снизу",
                             "name": "field3",
                             "aria-label": "",
-                            "type": "text",
+                            "type": "textarea",
                             "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
@@ -585,12 +608,12 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "легкость <br>в каждой линии",
+                            "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
+                            "rows": "",
                             "placeholder": "",
-                            "prepend": "",
-                            "append": ""
+                            "new_lines": "br"
                         }
                     ]
                 },
@@ -1132,5 +1155,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1751625929
+    "modified": 1755692924
 }

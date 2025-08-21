@@ -46,90 +46,46 @@ $field3 = $template_style12_fields['field3'] ?? false;
 $field4 = $template_style12_fields['field4'] ?? false;
 $field5 = $template_style12_fields['field5'] ?? false;
 $field6 = $template_style12_fields['field6'] ?? false;
+
+$link_attributes = loveforever_prepare_link_attributes( array(), $custom_link );
 ?>
-<article class="test-grid lf-promo-block lf-promo-block--<?php echo $promo_template; ?>">
-	<div class="prod-item-tizer type12 promo-gradient lf-promo-block__inner" style="">
-		<div class="prod-item_top lf-promo-block__top">
-		<?php
-			$link_attributes = array(
-				'class' => 'link w-inline-block',
-			);
-
-			if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
-				$link_attributes         = array_merge( $link_attributes, $custom_link );
-				$link_attributes['href'] = $link_attributes['url'];
-				unset( $link_attributes['url'] );
-			}
-
-			if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
-				$link_attributes['rel']        = 'noopener noreferrer';
-				$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
-				$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
-			}
-
-			$link_attributes = array_filter( $link_attributes );
-
-			$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
-			?>
-			<a <?php echo $link_attributes_str; ?>>
-				<div class="prod-item_img-mom _3 lf-promo-block__wrapper">
-					<div class="to-keeper lf-promo-block__content">
-						<div class="promo-image">
-							<?php echo $custom_img; ?>
-							<div class="map-dot cd2">
-								<div class="p-36-36"><?php echo $field1 ? $field1 : 'совет'; ?></div>
-							</div>
-							<div class="map-dot _2 cd3">
-								<div class="p-36-36"><?php echo $field2 ? $field2 : 'совет'; ?></div>
-							</div>
-							<div class="map-dot _3 cd3">
-								<div class="p-36-36"><?php echo $field3 ? $field3 : 'совет'; ?></div>
-							</div>
-							<div class="map-dot _4 cd4">
-								<div class="p-36-36"><?php echo $field4 ? $field4 : 'совет'; ?></div>
-							</div>
-						</div>
-						<div class="promo-discount lf-promo-block__description" style="color: white;"><?php echo $field5 ? $field5 : 'Короткое свадебное платье стройным девушкам. Хорошо сочетается с высоким  каблуком и с обувью на плоской подошве, если позволяет рост. Часто  дополняется шлейфом или юбкой из прозрачного кружева'; ?></div>
-						<div class="promo-link lf-promo-block__link lf-promo-block__link--advice" style="color: white;">
-							<?php echo $field6 ? $field6 : 'больше полезных советов '; ?>
-							<svg 
-								width="4" 
-								height="6" 
-								viewBox="0 0 4 6" 
-								fill="none" 
-								xmlns="http://www.w3.org/2000/svg"
-								class="lf-promo-block__icon"
-							>
-								<path fill-rule="evenodd" clip-rule="evenodd" d="M3.41604 3.51284L0.583958 6L0 5.48716L2.83208 3L0 0.512837L0.583958 0L3.41604 2.48716L4 3L3.41604 3.51284Z" fill="white"/>
-							</svg>
-						</div>
-					</div>
+<article class="test-grid lf-promo-block lf-promo-block-12">
+	<div class="lf-promo-block__wrapper lf-promo-block-12__wrapper">
+		<a <?php echo $link_attributes; ?> class="lf-promo-block-12__link">
+			<div class="lf-promo-block-12__header">
+				<div class="lf-promo-block-12__image">
+					<?php echo $custom_img; ?>
 				</div>
-			</a>
-		</div>
+				<h3 class="lf-promo-block-12__title">
+					<span class="lf-promo-block-12__span lf-promo-block-12__span--1">
+						<?php echo $field1; ?>
+					</span>
+					<span class="lf-promo-block-12__span lf-promo-block-12__span--2">
+						<?php echo $field2; ?>
+					</span>
+					<span class="lf-promo-block-12__span lf-promo-block-12__span--3">
+						<?php echo $field3; ?>
+					</span>
+					<span class="lf-promo-block-12__span lf-promo-block-12__span--4">
+						<?php echo $field4; ?>
+					</span>
+				</h3>
+			</div>
+			<div class="lf-promo-block-12__content">
+				<p class="lf-promo-block-12__description">
+					<?php echo $field5; ?>
+				</p>
+				<?php if ( ! empty( $custom_link ) ) : ?>
+				<p class="lf-promo-block-12__cta">
+					<span class="lf-promo-block-12__cta-text">
+						<?php echo $custom_link['title']; ?>
+					</span>
+					<svg width="4" height="6" viewBox="0 0 4 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M3.41604 3.51284L0.583958 6L0 5.48716L2.83208 3L0 0.512837L0.583958 0L3.41604 2.48716L4 3L3.41604 3.51284Z" fill="white"/>
+					</svg>
+				</p>
+				<?php endif; ?>
+			</div>
+		</a>
 	</div>
-	<?php
-	$link_attributes = array(
-		'class' => 'lf-promo-block__button',
-	);
-
-	if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
-		$link_attributes         = array_merge( $link_attributes, $custom_link );
-		$link_attributes['href'] = $link_attributes['url'];
-		unset( $link_attributes['url'] );
-	}
-
-	if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
-		$link_attributes['rel']        = 'noopener noreferrer';
-		$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
-		$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
-	}
-
-	$link_attributes = array_filter( $link_attributes );
-
-	$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
-	?>
-	<a <?php echo $link_attributes_str; ?>>
-		<span class="lf-promo-block__button-text">Смотреть</span>
-	</a>
 </article>

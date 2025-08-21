@@ -48,7 +48,18 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 							</div>
 						</div>
 					</div>
-				</section>
+        </section>
+        <section class="section">
+          <div class="container n-top" style="padding-block: 20rem;">
+            <script type="text/javascript">
+              window.dgReviewsWidgetData = {
+                apiUrl: 'https://app.daily-grow.com/r/review-widget',
+              };
+            </script>
+            <script type="text/javascript" src="https://app.daily-grow.com/reviews-widget/init.js" defer></script>
+            <div class="dg__widget-start" data-widget-id="df7bde5b-7deb-41b1-8300-55495e10b05f"></div>
+          </div>
+        </section>
 				<section class="section">
 					<div class="container n-top">
 						<?php if ( have_posts() ) : ?>

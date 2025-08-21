@@ -28,61 +28,23 @@ $custom_img      = $template_fields['custom_img'] ? wp_get_attachment_image_url(
 
 $template_style4_fields = $template_fields['template_style4_fields'] ?? false;
 
-$field1 = $template_style4_fields['field1'] ?? false;
+$field1          = $template_style4_fields['field1'] ?? false;
+$link_attributes = loveforever_prepare_link_attributes( array(), $custom_link );
 ?>
-<article class="test-grid lf-promo-block lf-promo-block--<?php echo $promo_template; ?>">
-	<div class="prod-item-tizer">
-		<div class="prod-item_top type4">
-		<?php
-			$link_attributes = array(
-				'class' => 'link w-inline-block',
-			);
-
-			if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
-				$link_attributes         = array_merge( $link_attributes, $custom_link );
-				$link_attributes['href'] = $link_attributes['url'];
-				unset( $link_attributes['url'] );
-			}
-
-			if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
-				$link_attributes['rel']        = 'noopener noreferrer';
-				$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
-				$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
-			}
-
-			$link_attributes = array_filter( $link_attributes );
-
-			$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
-			?>
-			<a <?php echo $link_attributes_str; ?>>
-				<div class="prod-item_img-mom _3" style="background-image: url(<?php echo $custom_img ? $custom_img : esc_url( TEMPLATE_PATH . '/images/style4_img.jpg' ); ?>);">
-					<div class="promo-sale"><?php echo $field1 ? $field1 : 'ПРОСТЫЕ МОДЕЛИ'; ?></div>
-				</div>
-			</a>
-		</div>
+<article class="test-grid lf-promo-block lf-promo-block-4">
+	<div class="lf-promo-block__wrapper lf-promo-block-4__wrapper">
+		<a <?php echo $link_attributes; ?> class="lf-promo-block-4__link">
+			<div class="lf-promo-block-4__image">
+				<?php echo wp_get_attachment_image( $template_fields['custom_img'], 'fullhd' ); ?>
+			</div>
+			<div class="lf-promo-block-4__content">
+				<h3 class="lf-promo-block-4__title">
+					<?php echo wp_kses_post( $field1 ); ?>
+				</h3>
+			</div>
+		</a>
 	</div>
-	<?php
-	$link_attributes = array(
-		'class' => 'lf-promo-block__button',
-	);
-
-	if ( ! empty( $custom_link ) && is_array( $custom_link ) ) {
-		$link_attributes         = array_merge( $link_attributes, $custom_link );
-		$link_attributes['href'] = $link_attributes['url'];
-		unset( $link_attributes['url'] );
-	}
-
-	if ( ! empty( $link_attributes['target'] ) && '_blank' === $link_attributes['target'] ) {
-		$link_attributes['rel']        = 'noopener noreferrer';
-		$link_attributes['title']      = $link_attributes['title'] . ' (открывается в новой вкладке)';
-		$link_attributes['aria-label'] = $link_attributes['title'] . ' (открывается в новой вкладке)';
-	}
-
-	$link_attributes = array_filter( $link_attributes );
-
-	$link_attributes_str = loveforever_prepare_tag_attributes_as_string( $link_attributes );
-	?>
-	<a <?php echo $link_attributes_str; ?>>
+	<a <?php echo $link_attributes; ?> class="lf-promo-block__button">
 		<span class="lf-promo-block__button-text">Смотреть</span>
 	</a>
 </article>
