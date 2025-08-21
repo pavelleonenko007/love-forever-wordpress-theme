@@ -23,7 +23,12 @@ $can_edit_fittings = current_user_can( 'edit_fittings' ) || current_user_can( 'm
 					<?php endif; ?>
 				</div>
 				<div class="dialog-card__body">
-					<form id="globalDressFittingForm" class="fitting-form" data-js-fitting-form>
+					<form 
+						id="globalDressFittingForm" 
+						class="fitting-form" 
+						data-js-fitting-form
+						data-js-input-zoom-prevention
+					>
 						<button type="button" class="fitting-form__back" data-js-fitting-form-back-button disabled>
 							<svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path fill-rule="evenodd" clip-rule="evenodd" d="M0.707107 7.14201L0.00075584 7.84914L0.707862 8.55621L7.77817 15.6273L8.48528 14.9202L1.41421 7.84912L8.48528 0.778053L7.77818 0.070946L0.707107 7.14201Z" fill="black"/>

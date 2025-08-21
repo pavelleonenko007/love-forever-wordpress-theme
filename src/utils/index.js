@@ -114,8 +114,6 @@ export const copyTextToClipboard = (text) => {
 export const wait = (ms) => new Promise((res) => setTimeout(() => res(), ms));
 
 export function formatDateToRussian(dateString) {
-	console.log({ dateString });
-
 	const date = new Date(
 		dateString.replace(
 			/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/,
