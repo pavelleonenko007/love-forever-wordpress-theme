@@ -25,6 +25,7 @@ import CustomDatepickerCollection from './CustomDatePicker';
 import Stories from './Stories';
 import './styles/index.scss';
 import { CallbackFormCollection } from './CallbackForm';
+import InputZoomPrevention from './InputZoomPrevention';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -447,6 +448,10 @@ function AllPages() {
 	// 	}
 	// });
 
+	document.querySelectorAll('[data-js-input-zoom-prevention]').forEach((inputZoomPrevention) => {
+		new InputZoomPrevention(inputZoomPrevention);
+	});
+
 	const blogSplides = document.querySelectorAll('.splide.blog');
 
 	blogSplides.forEach((splideBlogSlider) => {
@@ -679,8 +684,6 @@ function AllPages() {
 		dropdownMenu.querySelector('.hovered-menue_close-menu')
 	);
 
-	console.log({ dropdownMenus, hoverCloseMenus });
-
 	const openDropdown = (navLink) => {
 		dropdownMenus.forEach((dropdown) => {
 			dropdown.classList.remove('active');
@@ -874,6 +877,5 @@ function singleblogpage() {
 	$('.slider-oyziv_nav').each(function () {
 		var nums = $(this).find('div').length;
 		$(this).append('<div class="slider-oyziv-last">&nbsp;/ ' + nums + '</div>');
-		console.log(nums);
 	});
 }
