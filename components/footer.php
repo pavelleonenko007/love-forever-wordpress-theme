@@ -62,9 +62,12 @@ $socials       = loveforever_get_socials();
 			<div id="w-node-e462508c-6438-de3d-e96e-4e0519948197-b053f56f" class="vert">
 				<div class="p-12-12 uper op05">Контакты</div>
 				<div class="vert-foo">
-					<a href="<?php echo esc_url( loveforever_format_phone_to_link( loveforever_get_phone() ) ); ?>" class="a-12-12 w-inline-block">
-						<div><?php echo esc_html( loveforever_get_phone() ); ?></div>
-					</a>
+					<div style="display: flex">
+						<a id="footerPhoneNumber" data-js-phone-number="<?php echo esc_attr( loveforever_get_phone() ); ?>" href="<?php echo esc_url( loveforever_format_phone_to_link( loveforever_get_phone() ) ); ?>" class="a-12-12 w-inline-block">
+							<div><?php echo esc_html( loveforever_mask_phone( loveforever_get_phone() ) ); ?></div>
+						</a>
+						<button type="button" data-js-phone-number-button="footerPhoneNumber" class="show-all-btn phone-button2 uppercase" style="padding: 0 4rem; background: none; border: none; color: inherit; font-size: 12rem; line-height: 1; font-weight: 400; text-transform: uppercase; cursor: pointer;">Показать</button>
+					</div>
 					<a href="<?php echo esc_url( loveforever_format_email_to_link( loveforever_get_email() ) ); ?>" class="a-12-12 w-inline-block">
 						<div><?php echo esc_html( loveforever_get_email() ); ?></div>
 					</a>
