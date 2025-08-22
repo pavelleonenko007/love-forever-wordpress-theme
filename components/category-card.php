@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 $card         = $args['card'];
 $size         = $args['size'] ?? 'normal';
 $side         = $args['side'] ?? 'top';
-$card_classes = array( 'bigcard-item' );
+$card_classes = array( 'bigcard-item', 'lf-category-card' );
 
 if ( 'big' === $size ) {
 	$card_classes[] = '_2cols';
