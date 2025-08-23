@@ -1,0 +1,20 @@
+.lf-scroll-navbar-logo {
+	$root: &;
+
+	color: var(--pink);
+
+	.fixed-navbar &.w--current {
+		color: var(--pink);
+	}
+
+	&__icon {
+		width: 203rem;
+		height: 40rem;
+		fill: currentColor;
+		
+		#{$root}--mobile & {
+			width: 177rem;
+			height: 36rem;
+		}
+	}
+}
