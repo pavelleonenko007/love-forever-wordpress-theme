@@ -7,21 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$stories = get_posts(
-	array(
-		'post_type'   => 'story',
-		'numberposts' => -1,
-		'meta_query'  => array(
-			array(
-				'key'     => 'slides',
-				'value'   => 0,
-				'compare' => '>',
-			),
-		),
-	)
-);
-
-if ( ! empty( $stories ) ) :
+if ( ! empty( $args['stories'] ) ) :
 	?>
 <div
 	id="storiesDialog"
@@ -45,7 +31,7 @@ if ( ! empty( $stories ) ) :
 			>
 				<div class="stories-slider__track splide__track">
 					<ul class="stories-slider__list splide__list">
-						<?php foreach ( $stories as $story ) : ?>
+						<?php foreach ( $args['stories'] as $story ) : ?>
 							<li class="stories-slider__slide splide__slide">
 								<div
 									class="story-slider splide"

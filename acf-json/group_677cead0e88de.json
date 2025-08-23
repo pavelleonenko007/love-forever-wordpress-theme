@@ -157,7 +157,38 @@
                     "name": "stories-section",
                     "label": "Секция \"Истории\"",
                     "display": "block",
-                    "sub_fields": [],
+                    "sub_fields": [
+                        {
+                            "key": "field_68a9c4430aab6",
+                            "label": "Истории",
+                            "name": "stories",
+                            "aria-label": "",
+                            "type": "relationship",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "post_type": [
+                                "story"
+                            ],
+                            "post_status": "",
+                            "taxonomy": "",
+                            "filters": [
+                                "search"
+                            ],
+                            "return_format": "object",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "elements": "",
+                            "bidirectional": 0,
+                            "bidirectional_target": []
+                        }
+                    ],
                     "min": "",
                     "max": ""
                 },
@@ -184,7 +215,8 @@
                             "display_format": "d.m.Y H:i:s",
                             "return_format": "U",
                             "first_day": 1,
-                            "allow_in_bindings": 0
+                            "allow_in_bindings": 0,
+                            "default_to_current_date": 0
                         },
                         {
                             "key": "field_677cebc73fd90",
@@ -772,5 +804,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1754298607
+    "modified": 1755956360
 }

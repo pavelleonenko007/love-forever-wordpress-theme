@@ -34,6 +34,19 @@ if ( empty( $thumbnail ) ) {
 }
 
 $seo_text = get_field( 'seo_text', $queried_object );
+$stories  = get_posts(
+	array(
+		'post_type'   => 'story',
+		'numberposts' => -1,
+		'tax_query'   => array(
+			array(
+				'taxonomy' => 'dress_category',
+				'field'    => 'term_id',
+				'terms'    => array( $queried_object->term_id ),
+			),
+		),
+	)
+);
 ?>
 				<section class="<?php echo esc_attr( implode( ' ', $hero_section_classes ) ); ?>">
 					<div class="container container-fw n-top">
@@ -70,7 +83,7 @@ $seo_text = get_field( 'seo_text', $queried_object );
 						</div>
 					</div>
 				</section>
-				<?php get_template_part( 'template-parts/home/stories-section' ); ?>
+				<?php get_template_part( 'template-parts/home/stories-section', null, array( 'stories' => $stories ) ); ?>
 				<?php
 				$price_range         = loveforever_get_product_price_range( $queried_object->term_id );
 				$min_price           = ! empty( $_GET['min-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['min-price'] ) ) : $price_range['min_price'];
@@ -526,14 +539,14 @@ $seo_text = get_field( 'seo_text', $queried_object );
 							else :
 								?>
 								<div class="empty-content">
-                <p>Товары с заданными параметрами не найдены</p>
-                <?php if (!empty($_GET['color']) || !empty($_GET['silhouette']) || !empty($_GET['brand']) || !empty($_GET['fabric']) || !empty($_GET['min-price']) || !empty($_GET['max-price'])): ?>
+				<p>Товары с заданными параметрами не найдены</p>
+								<?php if ( ! empty( $_GET['color'] ) || ! empty( $_GET['silhouette'] ) || ! empty( $_GET['brand'] ) || ! empty( $_GET['fabric'] ) || ! empty( $_GET['min-price'] ) || ! empty( $_GET['max-price'] ) ) : ?>
 									<button 
 										type="reset" 
 										class="button"
 										form="catalogFilterForm"
-                >Очистить фильтры</button>
-                <?php endif; ?>
+				>Очистить фильтры</button>
+				<?php endif; ?>
 								</div>
 							<?php endif; ?>
 							<!-- <div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
@@ -1015,8 +1028,8 @@ $seo_text = get_field( 'seo_text', $queried_object );
 											$terms_map = array(
 												'wedding' => array( 'Свадебные', 'свадебные', 'Платья', 'платья' ),
 												'evening' => array( 'Вечерние', 'вечерние', 'Платья', 'платья' ),
-                        'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной', 'Платья', 'платья' ),
-                        'sale'    => array(),
+												'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной', 'Платья', 'платья' ),
+												'sale'    => array(),
 											);
 
 											$child_term_name = str_replace( $terms_map[ $root_term->slug ], '', $child_term->name );
@@ -1139,6 +1152,6 @@ $seo_text = get_field( 'seo_text', $queried_object );
 			</div>
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>
-		<?php get_template_part( 'template-parts/global/stories-dialog' ); ?>
+		<?php get_template_part( 'template-parts/global/stories-dialog', null, array( 'stories' => $stories ) ); ?>
 		<?php get_footer(); ?>
 <?php
