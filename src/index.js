@@ -408,8 +408,8 @@ window.addEventListener('dialogOpen', (event) => {
 	if (dialogId === 'storiesDialog') {
 		const storiesDialog = DialogCollection.getDialogsById('storiesDialog');
 		const trigger = event.detail.trigger;
-		const storyNumber = trigger.dataset.jsStoryButton
-			? parseInt(trigger.dataset.jsStoryButton)
+		const storyNumber = trigger.dataset.jsStoryItem
+			? parseInt(trigger.dataset.jsStoryItem)
 			: 0;
 
 		const storiesElement =
@@ -448,9 +448,11 @@ function AllPages() {
 	// 	}
 	// });
 
-	document.querySelectorAll('[data-js-input-zoom-prevention]').forEach((inputZoomPrevention) => {
-		new InputZoomPrevention(inputZoomPrevention);
-	});
+	document
+		.querySelectorAll('[data-js-input-zoom-prevention]')
+		.forEach((inputZoomPrevention) => {
+			new InputZoomPrevention(inputZoomPrevention);
+		});
 
 	const blogSplides = document.querySelectorAll('.splide.blog');
 

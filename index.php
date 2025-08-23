@@ -97,7 +97,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 
 				if ( ! empty( $sections ) ) :
 					?>
-					<div data-acf-flexible="sections" class="flexible-content">
+					<div class="flexible-content">
 						<?php
 						foreach ( $sections as $section ) {
 							get_template_part( 'template-parts/home/' . $section['acf_fc_layout'], null, $section );
@@ -111,7 +111,22 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>
 		<?php wp_footer(); ?>
-		<?php get_template_part( 'template-parts/global/stories-dialog' ); ?>
+		<?php
+			$stories_sections = array_filter(
+				$sections,
+				function ( $section ) {
+					return 'stories-section' === $section['acf_fc_layout'];
+				}
+			);
+			$stories          = array_reduce(
+				$stories_sections,
+				function ( $acc, $section ) {
+					return array_merge( $acc, $section['stories'] );
+				},
+				array()
+			);
+			?>
+		<?php get_template_part( 'template-parts/global/stories-dialog', null, array( 'stories' => $stories ) ); ?>
 		<?php get_template_part( 'components/global-fitting-dialog-simpler' ); ?>
 		<?php get_template_part( 'components/callback-dialog' ); ?>
 	</body>

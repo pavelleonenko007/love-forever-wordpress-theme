@@ -1984,7 +1984,7 @@ add_filter(
 			return $terms;
 		}
 
-		if ( 'promo_blocks' !== $post_type ) {
+		if ( 'promo_blocks' !== $post_type && 'story' !== $post_type ) {
 			return $terms;
 		}
 

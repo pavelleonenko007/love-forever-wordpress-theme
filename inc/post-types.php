@@ -432,7 +432,7 @@ function loveforever_register_post_types() {
 			'menu_position' => null,
 			'hierarchical'  => false,
 			'supports'      => array( 'title', 'thumbnail' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
-			'taxonomies'    => array(),
+			'taxonomies'    => array( 'dress_category' ),
 			'has_archive'   => false,
 			'rewrite'       => true,
 			'query_var'     => true,
