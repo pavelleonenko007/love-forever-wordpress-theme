@@ -42,6 +42,8 @@
 		}
 
 		&:is(select) {
+			text-align: center;
+			text-align-last: center;
 			appearance: none;
 		}
 
