@@ -33,7 +33,7 @@ jobs:
           # server-dir: /domains/thevogne.ru/public_html/loveforever/wp-content/themes/loveforever/
           server-dir: /wordpress_db/public_html/wp-content/themes/loveforever/
           log-level: verbose
-          timeout: 100000
+          timeout: 1000000
           exclude: |
             **/.git*
             **/.git*/**
