@@ -30,7 +30,8 @@ jobs:
           server: ${{ secrets.SFTP_SERVER_IP }}
           username: ${{ secrets.SFTP_LOGIN }}
           password: ${{ secrets.SFTP_PASSWORD }}
-          server-dir: /domains/thevogne.ru/public_html/loveforever/wp-content/themes/loveforever/
+          # server-dir: /domains/thevogne.ru/public_html/loveforever/wp-content/themes/loveforever/
+          server-dir: /wordpress_db/public_html/wp-content/themes/loveforever/
           log-level: verbose
           exclude: |
             **/.git*
