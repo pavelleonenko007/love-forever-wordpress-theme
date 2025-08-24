@@ -1,0 +1,121 @@
+{
+    "key": "group_price_rules",
+    "title": "Правила цен",
+    "fields": [
+        {
+            "key": "field_price_base_category",
+            "label": "Базовая категория",
+            "name": "base_dress_category",
+            "aria-label": "",
+            "type": "taxonomy",
+            "instructions": "Базовая категория платьев, к которой применяется правило. Оставьте пустым, чтобы применять ко всем категориям.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "dress_category",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "allow_in_bindings": 0,
+            "bidirectional": 0,
+            "multiple": 0,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_price_min",
+            "label": "Минимальная цена",
+            "name": "min_price",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Минимальная цена в рублях. Оставьте пустым, если нужна только максимальная цена.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": "",
+            "max": "",
+            "step": "",
+            "placeholder": "80000",
+            "prepend": "",
+            "append": "₽"
+        },
+        {
+            "key": "field_price_max",
+            "label": "Максимальная цена",
+            "name": "max_price",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Максимальная цена в рублях. Оставьте пустым, если нужна только минимальная цена.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": "",
+            "max": "",
+            "step": "",
+            "placeholder": "120000",
+            "prepend": "",
+            "append": "₽"
+        },
+        {
+            "key": "field_price_target_category",
+            "label": "Целевая категория",
+            "name": "target_category",
+            "aria-label": "",
+            "type": "taxonomy",
+            "instructions": "Категория платьев, к которой будут привязываться товары, соответствующие ценовому диапазону.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "dress_category",
+            "add_term": 1,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "bidirectional": 0,
+            "multiple": 0,
+            "bidirectional_target": []
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "price_rule"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Настройка правил автоматической категоризации платьев по цене",
+    "show_in_rest": 0,
+    "modified": 1756037897
+}

@@ -534,6 +534,32 @@ function loveforever_register_post_types() {
 	);
 
 	register_post_type(
+		'price_rule',
+		array(
+			'label'        => '',
+			'labels'       => array(
+				'name'               => 'Правила цен',
+				'singular_name'      => 'Правило цен',
+				'add_new'            => 'Добавить новое',
+				'add_new_item'       => 'Добавить новое правило цен',
+				'edit_item'          => 'Редактировать правило цен',
+				'new_item'           => 'Новое правило цен',
+				'view_item'          => 'Посмотреть правило цен',
+				'search_items'       => 'Найти правило цен',
+				'not_found'          => 'Правила цен не найдены',
+				'not_found_in_trash' => 'Правила цен не найдены в корзине',
+				'parent_item_colon'  => '',
+				'menu_name'          => 'Правила цен',
+			),
+			'public'       => false,
+			'show_ui'      => true,
+			'menu_icon'    => 'dashicons-money-alt',
+			'supports'     => array( 'title' ),
+			'show_in_menu' => 'edit.php?post_type=dress',
+		)
+	);
+
+	register_post_type(
 		'promo_blocks',
 		array(
 			'label'               => 'Промо-блоки',
