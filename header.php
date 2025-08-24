@@ -24,7 +24,8 @@ $container_array_of_data_attributes = array_diff_key( $args, array_flip( array( 
 	<body class="body">
 		<?php wp_body_open(); ?>
 		<?php
-		if ( ! is_page_template( 'admin-fittings.php' ) ) {
+		global $template;
+		if ( strpos( $template, 'admin-fittings.php' ) === false ) {
 			get_template_part( 'components/floating-cta' );
 		}
 		?>
