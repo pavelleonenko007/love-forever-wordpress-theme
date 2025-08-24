@@ -121,7 +121,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 			$stories          = array_reduce(
 				$stories_sections,
 				function ( $acc, $section ) {
-					return array_merge( $acc, $section['stories'] ?? array() );
+					return array_merge( $acc, ! empty( $section['stories'] ) ? $section['stories'] : array() );
 				},
 				array()
 			);
