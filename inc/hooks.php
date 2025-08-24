@@ -1727,7 +1727,13 @@ add_action( 'admin_footer-edit.php', 'custom_admin_bar_js_for_dress' );
 function custom_admin_bar_js_for_dress() {
 	global $typenow;
 
-	if ( $typenow !== 'dress' && $typenow !== 'promo_blocks' ) {
+	$allowed_post_types = array(
+		'dress',
+		'promo_blocks',
+		'story',
+	);
+
+	if ( ! in_array( $typenow, $allowed_post_types, true ) ) {
 		return;
 	}
 

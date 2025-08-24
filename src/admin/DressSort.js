@@ -14,10 +14,17 @@ const initDressSorting = () => {
 
 			const postType =
 				new URLSearchParams(window.location.search).get('post_type') || 'post';
-			const postsPerPageInputId =
-				postType === 'dresses'
-					? 'edit_dress_per_page'
-					: 'edit_promo_blocks_per_page';
+			const postTypesMap = {
+				dress: 'update_dress_order',
+				promo_blocks: 'update_promo_order',
+				story: 'update_story_order',
+			};
+
+			if (!postTypesMap[postType]) {
+				return;
+			}
+
+			const postsPerPageInputId = `edit_${postType}_per_page`;
 			const postsPerPage = parseInt($(`#${postsPerPageInputId}`).val()) || 10;
 
 			$tbody.sortable({
@@ -42,12 +49,7 @@ const initDressSorting = () => {
 							new URLSearchParams(window.location.search).get('paged')
 						) || 1;
 
-					let actionName;
-					if (postType === 'promo_blocks') {
-						actionName = 'update_promo_order';
-					} else {
-						actionName = 'update_dress_order';
-					}
+					const actionName = postTypesMap[postType];
 
 					const urlParams = new URLSearchParams(window.location.search);
 					const ajaxData = {
