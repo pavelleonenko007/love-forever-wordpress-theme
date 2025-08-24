@@ -82,41 +82,41 @@ function loveforever_register_post_types() {
 		)
 	);
 
-	register_taxonomy(
-		'dress_tag',
-		null,
-		array(
-			'label'              => '',
-			'labels'             => array(
-				'name'              => 'Теги',
-				'singular_name'     => 'Тег',
-				'search_items'      => 'Поиск тегов',
-				'all_items'         => 'Все теги',
-				'view_item '        => 'Просмотр тега',
-				'parent_item'       => 'Родитель тега',
-				'parent_item_colon' => 'Родитель тега:',
-				'edit_item'         => 'Редактировать тег',
-				'update_item'       => 'Обновить тег',
-				'add_new_item'      => 'Добавить новый тег',
-				'new_item_name'     => 'Название нового тега',
-				'menu_name'         => 'Теги',
-				'back_to_items'     => '← Назад к тегам',
-			),
-			'description'        => '',
-			'public'             => true,
-			'show_ui'            => true,
-			'show_in_quick_edit' => true,
-			'hierarchical'       => false,
+	// register_taxonomy(
+	// 	'dress_tag',
+	// 	null,
+	// 	array(
+	// 		'label'              => '',
+	// 		'labels'             => array(
+	// 			'name'              => 'Теги',
+	// 			'singular_name'     => 'Тег',
+	// 			'search_items'      => 'Поиск тегов',
+	// 			'all_items'         => 'Все теги',
+	// 			'view_item '        => 'Просмотр тега',
+	// 			'parent_item'       => 'Родитель тега',
+	// 			'parent_item_colon' => 'Родитель тега:',
+	// 			'edit_item'         => 'Редактировать тег',
+	// 			'update_item'       => 'Обновить тег',
+	// 			'add_new_item'      => 'Добавить новый тег',
+	// 			'new_item_name'     => 'Название нового тега',
+	// 			'menu_name'         => 'Теги',
+	// 			'back_to_items'     => '← Назад к тегам',
+	// 		),
+	// 		'description'        => '',
+	// 		'public'             => true,
+	// 		'show_ui'            => true,
+	// 		'show_in_quick_edit' => true,
+	// 		'hierarchical'       => false,
 
-			'rewrite'            => true,
-			// 'query_var'             => taxonomy, // название параметра запроса
-			'capabilities'       => array(),
-			'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
-			'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
-			'show_in_rest'       => null, // добавить в REST API
-			'rest_base'          => null, // taxonomy
-		)
-	);
+	// 		'rewrite'            => true,
+	// 		// 'query_var'             => taxonomy, // название параметра запроса
+	// 		'capabilities'       => array(),
+	// 		'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+	// 		'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+	// 		'show_in_rest'       => null, // добавить в REST API
+	// 		'rest_base'          => null, // taxonomy
+	// 	)
+	// );
 
 	register_taxonomy(
 		'silhouette',
@@ -401,7 +401,7 @@ function loveforever_register_post_types() {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-			'taxonomies'          => array( 'dress_category', 'dress_tag', 'silhouette', 'style', 'brand', 'fabric', 'color', 'zodiac_sign' ),
+			'taxonomies'          => array( 'dress_category', 'silhouette', 'style', 'brand', 'fabric', 'color', 'zodiac_sign' ),
 		)
 	);
 
