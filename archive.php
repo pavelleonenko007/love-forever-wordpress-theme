@@ -38,6 +38,10 @@ $stories  = get_posts(
 	array(
 		'post_type'   => 'story',
 		'numberposts' => -1,
+		'orderby'     => array(
+			'story_order_' . $queried_object->term_id => 'ASC',
+		),
+		'meta_key'    => 'story_order_' . $queried_object->term_id,
 		'tax_query'   => array(
 			array(
 				'taxonomy' => 'dress_category',
