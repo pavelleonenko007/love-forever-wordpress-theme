@@ -280,7 +280,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "taxonomy": "dress_tag",
+                            "taxonomy": "dress_category",
                             "add_term": 0,
                             "save_terms": 0,
                             "load_terms": 0,
@@ -291,6 +291,27 @@
                             "bidirectional": 0,
                             "multiple": 0,
                             "bidirectional_target": []
+                        },
+                        {
+                            "key": "field_68ab3b788b358",
+                            "label": "Альтернативное название",
+                            "name": "alt_name",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
                         }
                     ],
                     "min": "",
@@ -804,5 +825,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1755956360
+    "modified": 1756052373
 }
