@@ -48,7 +48,9 @@
             "allow_in_bindings": 0,
             "ui": 0,
             "ajax": 0,
-            "placeholder": ""
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
         },
         {
             "key": "field_676bbdb9c8d0d",
@@ -444,32 +446,6 @@
             "bidirectional": 0,
             "multiple": 0,
             "bidirectional_target": []
-        },
-        {
-            "key": "field_67d8020a498e8",
-            "label": "Теги",
-            "name": "dress_tag",
-            "aria-label": "",
-            "type": "taxonomy",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "taxonomy": "dress_tag",
-            "add_term": 1,
-            "save_terms": 1,
-            "load_terms": 1,
-            "return_format": "id",
-            "field_type": "multi_select",
-            "allow_null": 1,
-            "allow_in_bindings": 0,
-            "bidirectional": 0,
-            "multiple": 0,
-            "bidirectional_target": []
         }
     ],
     "location": [
@@ -490,5 +466,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1755338197
+    "modified": 1756036047
 }
