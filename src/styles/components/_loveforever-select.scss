@@ -110,6 +110,11 @@
 			line-height: 1;
 			font-weight: 500;
 
+			ul {
+				height: 300rem;
+				overflow-y: auto;
+			}
+
 			.ui-menu.ui-widget {
 				padding: 0;
 				margin: 0;
