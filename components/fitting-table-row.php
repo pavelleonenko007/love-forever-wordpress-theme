@@ -56,7 +56,10 @@ $fitting_steps           = array(
 			<?php if ( ! empty( $client_favorite_dresses ) ) : ?>
 				<p>
 					<a 
-						href="<?php echo esc_url( home_url( '/' ) . 'favorites?favorites=' . implode( ',', $client_favorite_dresses ) ); ?>" 	class="loveforever-link"
+						href="<?php echo esc_url( home_url( '/' ) . 'favorites?favorites=' . implode( ',', $client_favorite_dresses ) ); ?>" 
+						class="loveforever-link"
+						target="_blank"
+						rel="noopener noreferrer"
 					>Избранное пользователя</a>
 				</p>
 			<?php endif; ?>
