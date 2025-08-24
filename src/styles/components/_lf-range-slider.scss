@@ -4,6 +4,10 @@
 	border-radius: 1000px;
 	background-color: rgba(0, 0, 0, 0.1);
 
+	.code-embed-7:has(&) {
+		padding-block: 20rem;
+	}
+
 	&__range {
 		background-color: var(--pink);
 	}
