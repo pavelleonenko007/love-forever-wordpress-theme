@@ -1500,6 +1500,7 @@ function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
 
 add_filter( 'acf/fields/taxonomy/query/key=field_67fbc6524cab9', 'loveforever_filter_base_dress_category_field' );
 add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', 'loveforever_filter_base_dress_category_field' );
+add_filter( 'acf/fields/taxonomy/query/key=field_price_base_category', 'loveforever_filter_base_dress_category_field' );
 function loveforever_filter_base_dress_category_field( $args ) {
 	$args['parent'] = 0;
 	return $args;
@@ -1539,6 +1540,21 @@ add_action(
 			}
 		}
 
+		// Добавляем бейдж в заголовок, если он установлен
+		if ( ! empty( $filters['badge'] ) ) {
+			$badge_labels = array(
+				'new'      => 'Новинка',
+				'popular'  => 'Популярное',
+				'sale'     => 'Распродажа',
+			);
+			
+			$badge_label = isset( $badge_labels[ $filters['badge'] ] ) 
+				? $badge_labels[ $filters['badge'] ] 
+				: $filters['badge'];
+				
+			$filter_parts[] = $badge_label;
+		}
+
 		$base_term   = get_term_by( 'term_id', $base, 'dress_category' );
 		$target_term = get_term_by( 'term_id', $target, 'dress_category' );
 
@@ -1576,6 +1592,7 @@ add_action(
 		}
 
 		loveforever_apply_auto_rules_to_post( $post_id );
+		loveforever_apply_price_rules_to_post( $post_id );
 	},
 	20
 );
@@ -1602,6 +1619,7 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 		'silhouette' => get_field( 'silhouette', $post_id ),
 		'color'      => get_field( 'color', $post_id ),
 		'fabric'     => get_field( 'fabric', $post_id ),
+		'badge'      => get_field( 'badge', $post_id ),
 	);
 
 	if ( empty( array_filter( array_values( $filters ) ) ) ) {
@@ -1638,14 +1656,25 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 					continue;
 			}
 
-			$common = array_intersect( $filters[ $taxonomy ], $rule_terms );
-
-			if ( empty( $common ) ) {
+			// Специальная обработка для поля badge (не таксономия)
+			if ( 'badge' === $taxonomy ) {
+				if ( $filters[ $taxonomy ] === $rule_terms ) {
+					$matched = true;
+				} else {
 					$matched = false;
 					break;
-			}
+				}
+			} else {
+				// Обычная обработка для таксономий
+				$common = array_intersect( $filters[ $taxonomy ], $rule_terms );
 
-			$matched = true;
+				if ( empty( $common ) ) {
+						$matched = false;
+						break;
+				}
+
+				$matched = true;
+			}
 		}
 
 		if ( $matched ) {
@@ -2087,3 +2116,146 @@ function simple_search_priority($orderby, $wp_query) {
 }
 
 add_filter('posts_orderby', 'simple_search_priority', 10, 2);
+
+/**
+ * Применяет ценовые правила к платью
+ *
+ * @param int $post_id ID платья
+ */
+function loveforever_apply_price_rules_to_post( $post_id ) {
+	// Получаем финальную цену платья
+	$final_price = get_field( 'final_price', $post_id );
+	
+	if ( empty( $final_price ) || ! is_numeric( $final_price ) ) {
+		return;
+	}
+
+	// Получаем текущие категории платья
+	$dress_categories = get_field( 'dress_category', $post_id );
+	$dress_categories = is_array( $dress_categories ) ? $dress_categories : array();
+
+	if ( empty( $dress_categories ) ) {
+		return;
+	}
+
+	// Получаем родительские категории платьев (корневые)
+	$dress_categories_objects  = array_map( 'get_term', $dress_categories );
+	$parent_dress_categories   = array_filter( $dress_categories_objects, fn( $cat ) => 0 === $cat->parent );
+	$parent_dress_category_ids = array_map( fn( $cat ) => $cat->term_id, $parent_dress_categories );
+
+	if ( empty( $parent_dress_category_ids ) ) {
+		return;
+	}
+
+	// Получаем все активные ценовые правила
+	$price_rules = get_posts(
+		array(
+			'post_type'   => 'price_rule',
+			'numberposts' => -1,
+			'post_status' => 'publish',
+		)
+	);
+
+	$matched_categories = array();
+
+	foreach ( $price_rules as $rule ) {
+		$min_price = get_field( 'min_price', $rule->ID );
+		$max_price = get_field( 'max_price', $rule->ID );
+		$base_category = get_field( 'base_dress_category', $rule->ID ); // Базовая категория
+		$target_category = get_field( 'target_category', $rule->ID );
+
+		if ( empty( $target_category ) ) {
+			continue;
+		}
+
+		// Проверяем, что платье принадлежит к базовой категории правила
+		if ( ! empty( $base_category ) && ! in_array( $base_category, $parent_dress_category_ids, true ) ) {
+			continue;
+		}
+
+		// Проверяем соответствие цены правилу
+		$matches = false;
+
+		if ( ! empty( $min_price ) && ! empty( $max_price ) ) {
+			// Диапазон цен
+			$matches = ( $final_price >= $min_price && $final_price <= $max_price );
+		} elseif ( ! empty( $min_price ) ) {
+			// Минимальная цена
+			$matches = ( $final_price >= $min_price );
+		} elseif ( ! empty( $max_price ) ) {
+			// Максимальная цена
+			$matches = ( $final_price <= $max_price );
+		}
+
+		if ( $matches ) {
+			$matched_categories[] = $target_category;
+		}
+	}
+
+	// Применяем найденные категории
+	if ( ! empty( $matched_categories ) ) {
+		$new_categories = array_unique( array_merge( $dress_categories, $matched_categories ) );
+		
+		update_field( 'dress_category', $new_categories, $post_id );
+		wp_set_post_terms( $post_id, $new_categories, 'dress_category' );
+	}
+}
+
+/**
+ * Автоматически обновляет заголовок ценового правила
+ */
+add_action(
+	'acf/save_post',
+	function ( $post_id ) {
+		if ( get_post_type( $post_id ) !== 'price_rule' ) {
+			return;
+		}
+
+		$base_category = get_field( 'base_dress_category', $post_id );
+		$min_price = get_field( 'min_price', $post_id );
+		$max_price = get_field( 'max_price', $post_id );
+		$target_category = get_field( 'target_category', $post_id );
+
+		if ( empty( $target_category ) ) {
+			return;
+		}
+
+		$target_term = get_term_by( 'term_id', $target_category, 'dress_category' );
+		if ( ! $target_term ) {
+			return;
+		}
+
+		// Формируем заголовок правила
+		$title_parts = array();
+
+		// Добавляем базовую категорию, если она указана
+		if ( ! empty( $base_category ) ) {
+			$base_term = get_term_by( 'term_id', $base_category, 'dress_category' );
+			if ( $base_term ) {
+				$title_parts[] = $base_term->name;
+			}
+		}
+
+		// Добавляем ценовой диапазон
+		if ( ! empty( $min_price ) && ! empty( $max_price ) ) {
+			$title_parts[] = number_format( $min_price, 0, '.', ' ' ) . ' - ' . number_format( $max_price, 0, '.', ' ' ) . ' ₽';
+		} elseif ( ! empty( $min_price ) ) {
+			$title_parts[] = 'от ' . number_format( $min_price, 0, '.', ' ' ) . ' ₽';
+		} elseif ( ! empty( $max_price ) ) {
+			$title_parts[] = 'до ' . number_format( $max_price, 0, '.', ' ' ) . ' ₽';
+		}
+
+		$title_parts[] = '→ ' . $target_term->name;
+
+		$title = implode( ' ', $title_parts );
+
+		// Обновляем заголовок
+		wp_update_post(
+			array(
+				'ID'         => $post_id,
+				'post_title' => $title,
+			)
+		);
+	},
+	20
+);

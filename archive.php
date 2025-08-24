@@ -51,6 +51,33 @@ $stories  = get_posts(
 		),
 	)
 );
+
+$dresses_without_order = get_posts(
+	array(
+		'post_type' => 'dress',
+		'numberposts' => -1,
+		'fields' => 'ids',
+		'meta_query' => array(
+			array(
+				'key' => 'dress_order_' . $queried_object->term_id,
+				'compare' => 'NOT EXISTS',
+			),
+		),
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'dress_category',
+				'field' => 'term_id',
+				'terms' => array( $queried_object->term_id ),
+			),
+		),
+	)
+);
+
+if ( ! empty( $dresses_without_order ) ) {
+	foreach ( $dresses_without_order as $dress ) {
+		update_field( 'dress_order_' . $queried_object->term_id, 0, $dress );
+	}
+}
 ?>
 				<section class="<?php echo esc_attr( implode( ' ', $hero_section_classes ) ); ?>">
 					<div class="container container-fw n-top">

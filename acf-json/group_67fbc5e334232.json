@@ -173,6 +173,35 @@
                     "bidirectional": 0,
                     "multiple": 0,
                     "bidirectional_target": []
+                },
+                {
+                    "key": "field_68ab02bcfd540",
+                    "label": "Бейдж",
+                    "name": "badge",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "new": "Новинка",
+                        "popular": "Популярное"
+                    },
+                    "default_value": false,
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 1,
+                    "allow_in_bindings": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0
                 }
             ]
         },
@@ -221,5 +250,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1744565718
+    "modified": 1756038376
 }
