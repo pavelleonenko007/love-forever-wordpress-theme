@@ -84,13 +84,11 @@ export default class DeleteFittingButton {
 		deleteButton.classList.add(this.stateSelectors.isLoading);
 		deleteButton.textContent = 'Удаление...';
 
-		await wait(2_000);
+		// await wait(2_000);
 
 		const { data, error } = await promiseWrapper(
 			this.deleteFitting(deleteButton)
 		);
-
-		console.log({ data, error });
 
 		if (error) {
 			console.error(error);
@@ -99,7 +97,9 @@ export default class DeleteFittingButton {
 			return;
 		}
 
-		deleteButton.closest('.fitting-table__row').remove();
+		document.dispatchEvent(new Event('updateFittings'));
+
+		// deleteButton.closest('.fittings-table__row').remove();
 	};
 
 	bindEvents() {

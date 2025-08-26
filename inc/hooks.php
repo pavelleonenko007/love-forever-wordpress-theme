@@ -221,7 +221,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	}
 
 	if ( ! class_exists( 'AppointmentManager' ) ) {
-		require_once get_template_directory() . '/includes/bootstrap.php';
+		// require_once get_template_directory() . '/includes/bootstrap.php';
 	}
 
 	$fitting_id                       = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
@@ -313,7 +313,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		update_field( 'client_favorite_dresses', $client_favorite_dresses, $fitting_post_id );
 	}
 
-	do_action( 'acf/save_post', $fitting_post_id );
+	// do_action( 'acf/save_post', $fitting_post_id );
 
 	$sended_email = loveforever_send_fitting_email_notification( $fitting_post_id );
 
