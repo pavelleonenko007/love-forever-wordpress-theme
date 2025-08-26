@@ -280,7 +280,13 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	}
 
 	update_field( 'fitting_time', $date . ' ' . $time, $fitting_post_id );
+
 	update_field( 'phone', $phone, $fitting_post_id );
+	$phone_formatted = substr( preg_replace( '/[^0-9]/', '', $phone ), 1 );
+
+	update_post_meta( $fitting_post_id, 'phone_formatted_7', '7' . $phone_formatted );
+	update_post_meta( $fitting_post_id, 'phone_formatted_8', '8' . $phone_formatted );
+
 	update_field( 'name', $name, $fitting_post_id );
 
 	if ( ! empty( $comment ) ) {
