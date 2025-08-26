@@ -296,31 +296,43 @@ class Fitting_Slots {
 			$current_time = $start_time;
 
 			while ( $current_time < $end_time ) {
-				$time             = wp_date( 'H:i', $current_time );
+				$time = wp_date( 'H:i', $current_time );
+
+				if ( isset( $slots[ $time ] ) ) {
+					--$slots[ $time ];
+					$current_time += $interval;
+					continue;
+				}
+
 				$slot_times       = array_keys( $slots );
 				$count_slot_times = count( $slot_times );
 				$time_index       = array_search( $time, $slot_times, true );
 				$in_range         = false;
+				$previous_slot    = null;
 				$greater_slot     = null;
 
 				if ( false === $time_index ) {
 					// Check if $time is between any two slot times.
 					for ( $i = 0; $i < $count_slot_times - 1; $i++ ) {
+						if ( empty( $slot_times[ $i ] ) || empty( $slot_times[ $i + 1 ] ) ) {
+							break;
+						}
+
 						$t1 = ( new DateTime( $slot_times[ $i ], $tz ) )->getTimestamp();
 						$t2 = ( new DateTime( $slot_times[ $i + 1 ], $tz ) )->getTimestamp();
 						$tt = ( new DateTime( $time, $tz ) )->getTimestamp();
 
 						if ( $tt > $t1 && $tt < $t2 ) {
-							$greater_slot = $slot_times[ $i + 1 ];
-							$in_range     = true;
+							$previous_slot = $slot_times[ $i ];
+							$greater_slot  = $slot_times[ $i + 1 ];
+							$in_range      = true;
 							break;
 						}
 					}
 				}
 
-				if ( isset( $slots[ $time ] ) ) {
-					--$slots[ $time ];
-				} elseif ( $in_range && isset( $slots[ $greater_slot ] ) ) {
+				if ( $in_range ) {
+					--$slots[ $previous_slot ];
 					--$slots[ $greater_slot ];
 				}
 

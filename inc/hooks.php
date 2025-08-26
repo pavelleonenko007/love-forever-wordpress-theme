@@ -89,41 +89,72 @@ function loveforever_remove_comments_admin_menu() {
 	remove_menu_page( 'edit-comments.php' );
 }
 
-/* add_action( 'init', 'loveforever_create_manager_role' ); */
-/* function loveforever_create_manager_role() { */
-/* 	remove_role( 'manager' ); */
-/**/
-/* 	add_role( */
-/* 		'manager', */
-/* 		'Менеджер', */
-/* 		array( */
-/* 			'read'         => true, */
-/* 			'edit_posts'   => false, */
-/* 			'upload_files' => false, */
-/* 		) */
-/* 	); */
+/*
+add_action( 'init', 'loveforever_create_manager_role' ); */
+/*
+function loveforever_create_manager_role() { */
+/*  remove_role( 'manager' ); */
+/**
+
+/
+/*  add_role( */
+/*
+		'manager', */
+/*
+		'Менеджер', */
+/*
+		array( */
+/*
+			'read'         => true, */
+/*
+			'edit_posts'   => false, */
+/*
+			'upload_files' => false, */
+/*
+		) */
+/*
+	); */
 /* } */
 
-/* add_action( 'init', 'loveforever_register_fitting_capabilities' ); */
-/* function loveforever_register_fitting_capabilities() { */
-/* 	$roles = array( 'manager', 'administrator' ); */
-/**/
-/* 	foreach ( $roles as $role_name ) { */
-/* 		$role = get_role( $role_name ); */
-/* 		if ( $role ) { */
-/* 			$role->add_cap( 'read' ); */
-/* 			$role->add_cap( 'publish_fittings' ); */
-/* 			$role->add_cap( 'edit_fittings' ); */
-/* 			$role->add_cap( 'edit_others_fittings' ); */
-/* 			$role->add_cap( 'edit_published_fittings' ); */
-/* 			$role->add_cap( 'read_private_fittings' ); */
-/* 			$role->add_cap( 'edit_private_fittings' ); */
-/* 			$role->add_cap( 'delete_fittings' ); */
-/* 			$role->add_cap( 'delete_published_fittings' ); */
-/* 			$role->add_cap( 'delete_private_fittings' ); */
-/* 			$role->add_cap( 'delete_others_fittings' ); */
-/* 		} */
-/* 	} */
+/*
+add_action( 'init', 'loveforever_register_fitting_capabilities' ); */
+/*
+function loveforever_register_fitting_capabilities() { */
+/*  $roles = array( 'manager', 'administrator' ); */
+/**
+
+/
+/*  foreach ( $roles as $role_name ) { */
+/*
+		$role = get_role( $role_name ); */
+/*
+		if ( $role ) { */
+/*
+			$role->add_cap( 'read' ); */
+/*
+			$role->add_cap( 'publish_fittings' ); */
+/*
+			$role->add_cap( 'edit_fittings' ); */
+/*
+			$role->add_cap( 'edit_others_fittings' ); */
+/*
+			$role->add_cap( 'edit_published_fittings' ); */
+/*
+			$role->add_cap( 'read_private_fittings' ); */
+/*
+			$role->add_cap( 'edit_private_fittings' ); */
+/*
+			$role->add_cap( 'delete_fittings' ); */
+/*
+			$role->add_cap( 'delete_published_fittings' ); */
+/*
+			$role->add_cap( 'delete_private_fittings' ); */
+/*
+			$role->add_cap( 'delete_others_fittings' ); */
+/*
+		} */
+/*
+	} */
 /* } */
 
 add_action( 'wp_ajax_create_new_fitting_record', 'loveforever_create_new_fitting_record_via_ajax' );
@@ -1205,37 +1236,42 @@ function loveforever_query_products_via_ajax() {
 		'post_type'      => 'dress',
 		'posts_per_page' => isset( $_POST['posts_per_page'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['posts_per_page'] ) ) ) : 6,
 		's'              => $query_string,
-  );
+	);
 
-  function loveforever_smart_search_sort( $clauses, $query ) {
-    global $wpdb;
+	function loveforever_smart_search_sort( $clauses, $query ) {
+		global $wpdb;
 
-    $search_term = $query->get('s');
-    if ( $search_term ) {
-      $like = $wpdb->esc_like( $search_term ) . '%'; // начало строки
-      $clauses['orderby'] = $wpdb->prepare(
-        "CASE 
+		$search_term = $query->get( 's' );
+		if ( $search_term ) {
+			$like               = $wpdb->esc_like( $search_term ) . '%'; // начало строки
+			$clauses['orderby'] = $wpdb->prepare(
+				"CASE 
           WHEN {$wpdb->posts}.post_title LIKE %s THEN 0 
           ELSE 1 
           END, " . $clauses['orderby'],
-        $like
-      );
-    }
-    return $clauses;
-  }
+				$like
+			);
+		}
+		return $clauses;
+	}
 
-  add_filter( 'posts_clauses', 'loveforever_smart_search_sort', 20, 2 );
+	add_filter( 'posts_clauses', 'loveforever_smart_search_sort', 20, 2 );
 
-  /* // Хук для изменения сортировки */
-  /* add_filter('posts_orderby', function($orderby) use ($query_string) { */
-  /*     global $wpdb; */
-  /*     $search_term = esc_sql($query_string); */
-  /*     return "({$wpdb->posts}.post_title LIKE '{$search_term}%') DESC, {$wpdb->posts}.post_title ASC"; */
-  /* }); */
+	/*
+	// Хук для изменения сортировки */
+	/*
+	add_filter('posts_orderby', function($orderby) use ($query_string) { */
+	/*
+		global $wpdb; */
+	/*
+		$search_term = esc_sql($query_string); */
+	/*
+		return "({$wpdb->posts}.post_title LIKE '{$search_term}%') DESC, {$wpdb->posts}.post_title ASC"; */
+	/* }); */
 
-  $query        = new WP_Query( $query_args );
+	$query = new WP_Query( $query_args );
 
-  remove_filter('posts_clauses', 'loveforever_smart_search_sort');
+	remove_filter( 'posts_clauses', 'loveforever_smart_search_sort' );
 
 	ob_start();
 
@@ -1543,15 +1579,15 @@ add_action(
 		// Добавляем бейдж в заголовок, если он установлен
 		if ( ! empty( $filters['badge'] ) ) {
 			$badge_labels = array(
-				'new'      => 'Новинка',
-				'popular'  => 'Популярное',
-				'sale'     => 'Распродажа',
+				'new'     => 'Новинка',
+				'popular' => 'Популярное',
+				'sale'    => 'Распродажа',
 			);
-			
-			$badge_label = isset( $badge_labels[ $filters['badge'] ] ) 
-				? $badge_labels[ $filters['badge'] ] 
+
+			$badge_label = isset( $badge_labels[ $filters['badge'] ] )
+				? $badge_labels[ $filters['badge'] ]
 				: $filters['badge'];
-				
+
 			$filter_parts[] = $badge_label;
 		}
 
@@ -2100,22 +2136,22 @@ function loveforever_request_callback() {
 	);
 }
 
-function simple_search_priority($orderby, $wp_query) {
-    global $wpdb;
-    
-    if (!is_search() || empty($wp_query->query_vars['s'])) {
-        return $orderby;
-    }
-    
-    $search_term = esc_sql($wp_query->query_vars['s']);
-    
-    return "
+function simple_search_priority( $orderby, $wp_query ) {
+	global $wpdb;
+
+	if ( ! is_search() || empty( $wp_query->query_vars['s'] ) ) {
+		return $orderby;
+	}
+
+	$search_term = esc_sql( $wp_query->query_vars['s'] );
+
+	return "
         ({$wpdb->posts}.post_title LIKE '{$search_term}%') DESC,
         {$wpdb->posts}.post_title ASC
     ";
 }
 
-add_filter('posts_orderby', 'simple_search_priority', 10, 2);
+add_filter( 'posts_orderby', 'simple_search_priority', 10, 2 );
 
 /**
  * Применяет ценовые правила к платью
@@ -2125,7 +2161,7 @@ add_filter('posts_orderby', 'simple_search_priority', 10, 2);
 function loveforever_apply_price_rules_to_post( $post_id ) {
 	// Получаем финальную цену платья
 	$final_price = get_field( 'final_price', $post_id );
-	
+
 	if ( empty( $final_price ) || ! is_numeric( $final_price ) ) {
 		return;
 	}
@@ -2159,9 +2195,9 @@ function loveforever_apply_price_rules_to_post( $post_id ) {
 	$matched_categories = array();
 
 	foreach ( $price_rules as $rule ) {
-		$min_price = get_field( 'min_price', $rule->ID );
-		$max_price = get_field( 'max_price', $rule->ID );
-		$base_category = get_field( 'base_dress_category', $rule->ID ); // Базовая категория
+		$min_price       = get_field( 'min_price', $rule->ID );
+		$max_price       = get_field( 'max_price', $rule->ID );
+		$base_category   = get_field( 'base_dress_category', $rule->ID ); // Базовая категория
 		$target_category = get_field( 'target_category', $rule->ID );
 
 		if ( empty( $target_category ) ) {
@@ -2195,7 +2231,7 @@ function loveforever_apply_price_rules_to_post( $post_id ) {
 	// Применяем найденные категории
 	if ( ! empty( $matched_categories ) ) {
 		$new_categories = array_unique( array_merge( $dress_categories, $matched_categories ) );
-		
+
 		update_field( 'dress_category', $new_categories, $post_id );
 		wp_set_post_terms( $post_id, $new_categories, 'dress_category' );
 	}
@@ -2211,9 +2247,9 @@ add_action(
 			return;
 		}
 
-		$base_category = get_field( 'base_dress_category', $post_id );
-		$min_price = get_field( 'min_price', $post_id );
-		$max_price = get_field( 'max_price', $post_id );
+		$base_category   = get_field( 'base_dress_category', $post_id );
+		$min_price       = get_field( 'min_price', $post_id );
+		$max_price       = get_field( 'max_price', $post_id );
 		$target_category = get_field( 'target_category', $post_id );
 
 		if ( empty( $target_category ) ) {
