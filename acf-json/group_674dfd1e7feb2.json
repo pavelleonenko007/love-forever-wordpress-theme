@@ -19,7 +19,8 @@
             "display_format": "d.m.Y H:i:s",
             "return_format": "d.m.Y H:i:s",
             "first_day": 1,
-            "allow_in_bindings": 0
+            "allow_in_bindings": 0,
+            "default_to_current_date": 0
         },
         {
             "key": "field_674dfdd1729af",
@@ -40,9 +41,7 @@
                 "evening": "Вечернее",
                 "prom": "Выпускное"
             },
-            "default_value": [
-                "wedding"
-            ],
+            "default_value": [],
             "return_format": "value",
             "allow_custom": 0,
             "allow_in_bindings": 0,
@@ -98,7 +97,7 @@
             "label": "Этап примерки",
             "name": "fitting_step",
             "aria-label": "",
-            "type": "radio",
+            "type": "select",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -112,13 +111,16 @@
                 "re-fitting": "Повтор",
                 "delivery": "Выдача"
             },
-            "default_value": "fitting",
+            "default_value": false,
             "return_format": "value",
-            "allow_null": 0,
-            "other_choice": 0,
+            "multiple": 0,
+            "allow_null": 1,
             "allow_in_bindings": 0,
-            "layout": "vertical",
-            "save_other_choice": 0
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
         },
         {
             "key": "field_674dfe9e729b1",
@@ -244,5 +246,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1746185619
+    "modified": 1756141694
 }

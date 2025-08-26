@@ -105,6 +105,11 @@ class Fitting_Slots {
 		$slots               = self::generate_slots( $date, $current_time );
 		$bookings            = self::get_bookings( $date, $exclude_fitting_id );
 		$slots_with_bookings = self::apply_bookings_to_slots( $slots, $bookings );
+
+		// echo '<pre>';
+		// var_dump( $slots, $bookings, $slots_with_bookings );
+		// echo '</pre>';
+
 		return self::apply_minimum_duration_rule( $slots_with_bookings );
 	}
 
@@ -188,9 +193,16 @@ class Fitting_Slots {
 			'fields'         => 'ids',
 			'meta_query'     => array(
 				array(
-					'key'     => 'fitting_step',
-					'value'   => 'delivery',
-					'compare' => '!=',
+					'relation' => 'OR',
+					array(
+						'key'     => 'fitting_step',
+						'value'   => 'delivery',
+						'compare' => '!=',
+					),
+					array(
+						'key'     => 'fitting_step',
+						'compare' => 'NOT EXISTS',
+					),
 				),
 				array(
 					'key'     => 'fitting_time',
@@ -227,6 +239,10 @@ class Fitting_Slots {
 
 		if ( ! isset( $slots[ $time ] ) || $slots[ $time ] <= 0 ) {
 				return 'Выбранное время уже занято';
+		}
+
+		if ( '21:00' === $time && $slots[ $time ] > 0 ) {
+			return true;
 		}
 
 		$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
@@ -280,10 +296,34 @@ class Fitting_Slots {
 			$current_time = $start_time;
 
 			while ( $current_time < $end_time ) {
-				$time = wp_date( 'H:i', $current_time );
+				$time             = wp_date( 'H:i', $current_time );
+				$slot_times       = array_keys( $slots );
+				$count_slot_times = count( $slot_times );
+				$time_index       = array_search( $time, $slot_times, true );
+				$in_range         = false;
+				$greater_slot     = null;
+
+				if ( false === $time_index ) {
+					// Check if $time is between any two slot times.
+					for ( $i = 0; $i < $count_slot_times - 1; $i++ ) {
+						$t1 = ( new DateTime( $slot_times[ $i ], $tz ) )->getTimestamp();
+						$t2 = ( new DateTime( $slot_times[ $i + 1 ], $tz ) )->getTimestamp();
+						$tt = ( new DateTime( $time, $tz ) )->getTimestamp();
+
+						if ( $tt > $t1 && $tt < $t2 ) {
+							$greater_slot = $slot_times[ $i + 1 ];
+							$in_range     = true;
+							break;
+						}
+					}
+				}
+
 				if ( isset( $slots[ $time ] ) ) {
 					--$slots[ $time ];
+				} elseif ( $in_range && isset( $slots[ $greater_slot ] ) ) {
+					--$slots[ $greater_slot ];
 				}
+
 				$current_time += $interval; // Переход к следующему получасовому слоту
 			}
 		}
@@ -292,9 +332,10 @@ class Fitting_Slots {
 	}
 
 	private static function apply_minimum_duration_rule( $slots ) {
-		$min_slots_needed = self::$min_fitting_duration / 30;
-		$formatted_slots  = array();
-		$slot_times       = array_keys( $slots );
+		$use_one_hour_interval = get_field( 'fitting_slots_interval', 'option' );
+		$min_slots_needed      = $use_one_hour_interval ? self::$min_fitting_duration / 60 : self::$min_fitting_duration / 30;
+		$formatted_slots       = array();
+		$slot_times            = array_keys( $slots );
 
 		foreach ( $slot_times as $index => $time ) {
 			$current_count = $slots[ $time ];
@@ -310,7 +351,13 @@ class Fitting_Slots {
 			}
 
 			// Check next slot availability
-			$next_count               = isset( $slot_times[ $index + 1 ] ) && isset( $slots[ $slot_times[ $index + 1 ] ] ) ? $slots[ $slot_times[ $index + 1 ] ] : 0;
+			$next_count = isset( $slot_times[ $index + 1 ] ) && isset( $slots[ $slot_times[ $index + 1 ] ] ) ? $slots[ $slot_times[ $index + 1 ] ] : 0;
+
+			if ( '21:00' === $time && $next_count === 0 ) {
+				$formatted_slots[ $time ] = $current_count;
+				continue;
+			}
+
 			$formatted_slots[ $time ] = ( $current_count + $next_count >= $min_slots_needed ) ? $current_count : 0;
 		}
 
