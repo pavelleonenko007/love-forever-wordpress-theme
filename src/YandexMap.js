@@ -139,11 +139,11 @@ export default async function initMap() {
 			 *
 			 * @param {PointerEvent} event
 			 */
-			element.onclick = (event) => {
-				event.preventDefault();
+			// element.onclick = (event) => {
+			// 	event.preventDefault();
 
-				document.getElementById(element.dataset.popupTrigger)?.click();
-			};
+			// 	document.getElementById(element.dataset.popupTrigger)?.click();
+			// };
 
 			const headerElement = document.createElement('header');
 			headerElement.className = 'lf-popup__header';

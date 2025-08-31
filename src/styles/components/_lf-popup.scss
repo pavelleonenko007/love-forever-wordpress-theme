@@ -11,6 +11,7 @@
 	font-size: 16rem;
 	background-color: var(--white);
 	translate: 10% -110%;
+	user-select: none;
 
 	@include mobile {
 		translate: -50% -140%;
