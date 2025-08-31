@@ -186,3 +186,15 @@ export const formDataToObject = (formData) => {
 
 	return formDataObject;
 };
+
+export const isValidRussianPhone = (phone) => {
+	const cleaned = phone.replace(/[^\d+]/g, '');
+	if (cleaned.startsWith('+7')) {
+		return /^\+7\d{10}$/.test(cleaned);
+	}
+	if (cleaned.startsWith('8')) {
+		return /^8\d{10}$/.test(cleaned);
+	}
+	return false;
+};
+
