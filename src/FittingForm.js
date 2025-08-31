@@ -3,6 +3,7 @@ import DialogCollection from './Dialog';
 import {
 	formatDateToRussian,
 	isSafariBrowser,
+	isValidRussianPhone,
 	promiseWrapper,
 	wait,
 } from './utils';
@@ -1016,7 +1017,10 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.errorsElement.hidden = !Boolean(this.state.error);
 
 		const allFieldChecked =
-			this.state.phone && this.state.name && this.state.date && this.state.time;
+			isValidRussianPhone(this.state.phone) &&
+			this.state.name &&
+			this.state.date &&
+			this.state.time;
 
 		this.submitButton.disabled = !allFieldChecked || this.state.isSubmitting;
 
@@ -1040,6 +1044,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		}
 		this.form.addEventListener('change', this.changeFormHandler);
 		this.form.addEventListener('submit', this.submitForm);
+		this.form.addEventListener('input', this.changeFormHandler);
 		document.addEventListener('dialogClose', this.closeDialogHandler);
 		document.addEventListener('dialogOpen', this.openDialogHandler);
 	}
