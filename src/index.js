@@ -26,6 +26,7 @@ import Stories from './Stories';
 import './styles/index.scss';
 import { CallbackFormCollection } from './CallbackForm';
 import InputZoomPrevention from './InputZoomPrevention';
+import initMap from './YandexMap';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -436,6 +437,7 @@ function FFFafterLoad() {
 }
 
 function AllPages() {
+	initMap();
 	// $('.playvideobtn').on('click', function () {
 	// 	if ($(this).hasClass('videoplaing')) {
 	// 		$(this).removeClass('videoplaing');

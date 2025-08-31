@@ -24,6 +24,9 @@ module.exports = (env) => {
 			path: path.resolve(__dirname, 'build'),
 			clean: true,
 		},
+		externals: {
+			ymaps3: 'ymaps3',
+		},
 		plugins: [
 			...defaultConfig.plugins.filter(
 				(plugin) =>

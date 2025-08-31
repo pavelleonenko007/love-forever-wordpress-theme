@@ -53,8 +53,9 @@ function loveforever_add_site_scripts() {
 		'bundle',
 		'LOVE_FOREVER',
 		array(
-			'AJAX_URL' => admin_url( 'admin-ajax.php' ),
-			'NONCE'    => wp_create_nonce( 'loveforever_nonce' ),
+			'AJAX_URL'          => admin_url( 'admin-ajax.php' ),
+			'NONCE'             => wp_create_nonce( 'loveforever_nonce' ),
+			'MAP_CUSTOMIZATION' => esc_url( TEMPLATE_PATH . '/assets/yandex-map.json' ),
 		)
 	);
 }

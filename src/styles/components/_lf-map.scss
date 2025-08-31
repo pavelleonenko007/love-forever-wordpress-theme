@@ -1,3 +1,5 @@
+@use '../media' as *;
+
 .lf-map {
 	&__container {
 		width: 100%;
@@ -5,5 +7,13 @@
 		max-width: 1165rem;
 		max-height: 515.5rem;
 		overflow: hidden;
+	}
+
+	&__text {
+		&--1 {
+			@include mobile {
+				top: -12rem;
+			}
+		}
 	}
 }
