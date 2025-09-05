@@ -1541,12 +1541,69 @@ function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
 }
 
 add_filter( 'acf/fields/taxonomy/query/key=field_67fbc6524cab9', 'loveforever_filter_base_dress_category_field' );
-add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', 'loveforever_filter_base_dress_category_field' );
+// add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', 'loveforever_filter_base_dress_category_field' );
 add_filter( 'acf/fields/taxonomy/query/key=field_price_base_category', 'loveforever_filter_base_dress_category_field' );
 function loveforever_filter_base_dress_category_field( $args ) {
-	$args['parent'] = 0;
+	$args['parent'] = 0;	
 	return $args;
 }
+
+add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', function ($args) {
+	// Если есть поисковый запрос, сортируем результаты так, чтобы точные совпадения были первыми
+	if ( ! empty( $args['search'] ) ) {
+		$taxonomy = $args['taxonomy'] ?? 'dress_category';
+		$search_term = $args['search'];
+		
+		// Получаем все родительские категории с поиском
+		$parent_terms = get_terms( array(
+			'taxonomy' => $taxonomy,
+			'parent' => 0,
+			'hide_empty' => false,
+			'search' => $search_term,
+		) );
+		
+		// Если найдены родительские категории, сортируем их по релевантности
+		if ( ! empty( $parent_terms ) && ! is_wp_error( $parent_terms ) ) {
+			// Сортируем по точности совпадения
+			usort( $parent_terms, function( $a, $b ) use ( $search_term ) {
+				$a_name = strtolower( $a->name );
+				$b_name = strtolower( $b->name );
+				$search_lower = strtolower( $search_term );
+				
+				// Точное совпадение имеет приоритет
+				if ( $a_name === $search_lower && $b_name !== $search_lower ) {
+					return -1;
+				}
+				if ( $b_name === $search_lower && $a_name !== $search_lower ) {
+					return 1;
+				}
+				
+				// Совпадение в начале названия имеет приоритет
+				$a_starts = strpos( $a_name, $search_lower ) === 0;
+				$b_starts = strpos( $b_name, $search_lower ) === 0;
+				
+				if ( $a_starts && ! $b_starts ) {
+					return -1;
+				}
+				if ( $b_starts && ! $a_starts ) {
+					return 1;
+				}
+				
+				// Остальные сортируем по алфавиту
+				return strcmp( $a_name, $b_name );
+			} );
+			
+			// Устанавливаем отсортированные ID терминов
+			$args['include'] = wp_list_pluck( $parent_terms, 'term_id' );
+		}
+	} else {
+		// Если нет поиска, сортируем по алфавиту
+		$args['orderby'] = 'name';
+		$args['order'] = 'ASC';
+	}
+
+	return $args;
+} );
 
 add_action(
 	'acf/save_post',
@@ -1641,7 +1698,7 @@ add_action(
 
 
 function loveforever_apply_auto_rules_to_post( $post_id ) {
-	$dress_categories = get_field( 'dress_category', $post_id );
+	$dress_categories           = ! empty( get_field( 'dress_category', $post_id ) ) ? get_field( 'dress_category', $post_id ) : array();
 
 	if ( empty( $dress_categories ) ) {
 		return;
@@ -1726,9 +1783,11 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 
 	// 4. Сохраняем термы в ACF-поле таксономии
 	if ( ! empty( $matched_terms ) ) {
-		update_field( 'dress_category', array_unique( array_merge( $dress_categories, $matched_terms ) ), $post_id );
-		wp_set_post_terms( $post_id, array_unique( array_merge( $dress_categories, $matched_terms ) ), 'dress_category' );
+		$dress_categories = array_unique( array_merge( $dress_categories, $matched_terms ) );
 	}
+
+	update_field( 'dress_category', $dress_categories, $post_id );
+	wp_set_post_terms( $post_id, $dress_categories, 'dress_category' );
 }
 
 add_filter( 'big_image_size_threshold', '__return_false' );
