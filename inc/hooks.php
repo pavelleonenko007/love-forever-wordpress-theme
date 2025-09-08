@@ -190,16 +190,6 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	// if ( ! isset( $_POST['fitting_type'] ) || empty( $_POST['fitting_type'] ) ) {
-	// wp_send_json_error(
-	// array(
-	// 'message' => 'Пожалуйста, укажите тип платья',
-	// 'debug'   => 'Не указана категория платья',
-	// ),
-	// 400
-	// );
-	// }
-
 	if ( ! isset( $_POST['date'] ) || empty( $_POST['date'] ) ) {
 		wp_send_json_error(
 			array(
@@ -221,33 +211,34 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	}
 
 	if ( ! class_exists( 'AppointmentManager' ) ) {
-		// require_once get_template_directory() . '/includes/bootstrap.php';
+		require_once get_template_directory() . '/includes/bootstrap.php';
 	}
 
-	$fitting_id                       = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
+	$fitting_id                       = ! empty( $_POST['fitting-id'] ) ? absint( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
 	$name                             = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 	$phone                            = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
-	$fitting_type                     = '';
+	$fitting_type                     = 'evening'; // Default fitting type
 	$fitting_step                     = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : '';
 	$date                             = sanitize_text_field( wp_unslash( $_POST['date'] ) );
 	$time                             = sanitize_text_field( wp_unslash( $_POST['time'] ) );
 	$comment                          = ! empty( $_POST['comment'] ) ? sanitize_textarea_field( wp_unslash( $_POST['comment'] ) ) : '';
-	$ip_address                       = ! empty( $_POST['ip-address'] ) ? sanitize_text_field( wp_unslash( $_POST['ip-address'] ) ) : '';
+	$ip_address                       = loveforever_get_client_ip_address();
 	$target_dress                     = ! empty( $_POST['target_dress'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['target_dress'] ) ) : 0;
 	$client_favorite_dresses          = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
 	$has_change_fittings_capabilities = loveforever_is_user_has_manager_capability();
 
+	// Override default fitting_type if provided
 	if ( ! empty( $_POST['fitting_type'] ) ) {
 		$fitting_type = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
 	}
 
 	if ( ! $has_change_fittings_capabilities && 'delivery' !== $fitting_step ) {
-		$is_valid_fitting_time = loveforever_is_valid_fitting_datetime( $date . ' ' . $time, $fitting_type, $fitting_id );
+		$is_valid_fitting_time = Fitting_Slots_Manager::validate_fitting_datetime_static( $date . ' ' . $time, $fitting_type, $fitting_id );
 
-		if ( true !== $is_valid_fitting_time ) {
+		if ( is_wp_error( $is_valid_fitting_time ) ) {
 			wp_send_json_error(
 				array(
-					'message' => $is_valid_fitting_time,
+					'message' => $is_valid_fitting_time->get_error_message(),
 					'debug'   => 'Невалидное время примерки',
 				),
 				400
@@ -256,7 +247,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	}
 
 	$fitting_post_data = array(
-		'post_title'  => 'Новая примерка для ' . $name,
+		'post_title'  => 'Примерка для ' . $name . ' ' . $date . ' в ' . $time,
 		'post_status' => 'publish',
 		'post_type'   => 'fitting',
 	);
@@ -270,10 +261,11 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	);
 
 	if ( is_wp_error( $fitting_post_id ) ) {
+		error_log( 'Fitting creation error: ' . $fitting_post_id->get_error_message() );
 		wp_send_json_error(
 			array(
 				'message' => 'Ошибка при создании заявки. Обновите страницу и попробуйте еще раз',
-				'debug'   => $fitting_post_id,
+				'debug'   => 'Ошибка создания поста',
 			),
 			400
 		);
@@ -313,7 +305,20 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		update_field( 'client_favorite_dresses', $client_favorite_dresses, $fitting_post_id );
 	}
 
-	// do_action( 'acf/save_post', $fitting_post_id );
+	do_action( 'acf/save_post', $fitting_post_id );
+
+	// Log successful booking creation
+	error_log(
+		sprintf(
+			'Fitting booking created: ID=%d, Name=%s, Phone=%s, Date=%s, Time=%s, IP=%s',
+			$fitting_post_id,
+			$name,
+			$phone,
+			$date,
+			$time,
+			$ip_address
+		)
+	);
 
 	$sended_email = loveforever_send_fitting_email_notification( $fitting_post_id );
 
@@ -323,6 +328,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 			'message'      => 0 === $fitting_id ? 'Вы успешно записались на примерку' : 'Запись на примерку успешно обновлена',
 			'debug'        => array(
 				'sended_email' => $sended_email,
+				'ip_address'   => $ip_address,
 			),
 		),
 		201
@@ -520,6 +526,7 @@ function loveforever_get_date_time_slots_via_ajax() {
 add_action( 'wp_ajax_get_fitting_time_slots', 'loveforever_get_date_fitting_time_slots_via_ajax' );
 add_action( 'wp_ajax_nopriv_get_fitting_time_slots', 'loveforever_get_date_fitting_time_slots_via_ajax' );
 function loveforever_get_date_fitting_time_slots_via_ajax() {
+	error_log( print_r( $_POST, true ) );
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
 		wp_send_json_error(
 			array(
@@ -542,14 +549,20 @@ function loveforever_get_date_fitting_time_slots_via_ajax() {
 
 	$fitting_id             = ! empty( $_POST['fitting-id'] ) ? intval( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : null;
 	$date                   = sanitize_text_field( wp_unslash( $_POST['date'] ) );
+	$fitting_type           = ! empty( $_POST['fitting_type'] )
+		? ( is_array( $_POST['fitting_type'] )
+			? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) )
+			: array( sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) ) ) )
+		: null;
 	$can_user_edit_fittings = loveforever_is_user_has_manager_capability();
-	$fitting_slots_for_date = Fitting_Slots::get_day_slots( $date, current_time( 'timestamp' ), $fitting_id );
+	$booking_manager        = Fitting_Slots_Manager::get_instance();
+	$fitting_slots_for_date = $booking_manager->get_available_slots( $date, is_array( $fitting_type ) ? $fitting_type[0] : $fitting_type, $fitting_id );
 
 	if ( ! $can_user_edit_fittings ) {
 		$fitting_slots_for_date = array_filter(
 			$fitting_slots_for_date,
 			function ( $slot ) {
-				return $slot['available'] > 0;
+				return $slot['available_for_booking'] > 0;
 			}
 		);
 	}
@@ -1544,66 +1557,74 @@ add_filter( 'acf/fields/taxonomy/query/key=field_67fbc6524cab9', 'loveforever_fi
 // add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', 'loveforever_filter_base_dress_category_field' );
 add_filter( 'acf/fields/taxonomy/query/key=field_price_base_category', 'loveforever_filter_base_dress_category_field' );
 function loveforever_filter_base_dress_category_field( $args ) {
-	$args['parent'] = 0;	
+	$args['parent'] = 0;
 	return $args;
 }
 
-add_filter( 'acf/fields/taxonomy/query/key=field_67d6fec761d73', function ($args) {
-	// Если есть поисковый запрос, сортируем результаты так, чтобы точные совпадения были первыми
-	if ( ! empty( $args['search'] ) ) {
-		$taxonomy = $args['taxonomy'] ?? 'dress_category';
-		$search_term = $args['search'];
-		
-		// Получаем все родительские категории с поиском
-		$parent_terms = get_terms( array(
-			'taxonomy' => $taxonomy,
-			'parent' => 0,
-			'hide_empty' => false,
-			'search' => $search_term,
-		) );
-		
-		// Если найдены родительские категории, сортируем их по релевантности
-		if ( ! empty( $parent_terms ) && ! is_wp_error( $parent_terms ) ) {
-			// Сортируем по точности совпадения
-			usort( $parent_terms, function( $a, $b ) use ( $search_term ) {
-				$a_name = strtolower( $a->name );
-				$b_name = strtolower( $b->name );
-				$search_lower = strtolower( $search_term );
-				
-				// Точное совпадение имеет приоритет
-				if ( $a_name === $search_lower && $b_name !== $search_lower ) {
-					return -1;
-				}
-				if ( $b_name === $search_lower && $a_name !== $search_lower ) {
-					return 1;
-				}
-				
-				// Совпадение в начале названия имеет приоритет
-				$a_starts = strpos( $a_name, $search_lower ) === 0;
-				$b_starts = strpos( $b_name, $search_lower ) === 0;
-				
-				if ( $a_starts && ! $b_starts ) {
-					return -1;
-				}
-				if ( $b_starts && ! $a_starts ) {
-					return 1;
-				}
-				
-				// Остальные сортируем по алфавиту
-				return strcmp( $a_name, $b_name );
-			} );
-			
-			// Устанавливаем отсортированные ID терминов
-			$args['include'] = wp_list_pluck( $parent_terms, 'term_id' );
-		}
-	} else {
-		// Если нет поиска, сортируем по алфавиту
-		$args['orderby'] = 'name';
-		$args['order'] = 'ASC';
-	}
+add_filter(
+	'acf/fields/taxonomy/query/key=field_67d6fec761d73',
+	function ( $args ) {
+		// Если есть поисковый запрос, сортируем результаты так, чтобы точные совпадения были первыми
+		if ( ! empty( $args['search'] ) ) {
+			$taxonomy    = $args['taxonomy'] ?? 'dress_category';
+			$search_term = $args['search'];
 
-	return $args;
-} );
+			// Получаем все родительские категории с поиском
+			$parent_terms = get_terms(
+				array(
+					'taxonomy'   => $taxonomy,
+					'parent'     => 0,
+					'hide_empty' => false,
+					'search'     => $search_term,
+				)
+			);
+
+			// Если найдены родительские категории, сортируем их по релевантности
+			if ( ! empty( $parent_terms ) && ! is_wp_error( $parent_terms ) ) {
+				// Сортируем по точности совпадения
+				usort(
+					$parent_terms,
+					function ( $a, $b ) use ( $search_term ) {
+						$a_name       = strtolower( $a->name );
+						$b_name       = strtolower( $b->name );
+						$search_lower = strtolower( $search_term );
+
+						// Точное совпадение имеет приоритет
+						if ( $a_name === $search_lower && $b_name !== $search_lower ) {
+							return -1;
+						}
+						if ( $b_name === $search_lower && $a_name !== $search_lower ) {
+							return 1;
+						}
+
+						// Совпадение в начале названия имеет приоритет
+						$a_starts = strpos( $a_name, $search_lower ) === 0;
+						$b_starts = strpos( $b_name, $search_lower ) === 0;
+
+						if ( $a_starts && ! $b_starts ) {
+							return -1;
+						}
+						if ( $b_starts && ! $a_starts ) {
+							return 1;
+						}
+
+						// Остальные сортируем по алфавиту
+						return strcmp( $a_name, $b_name );
+					}
+				);
+
+				// Устанавливаем отсортированные ID терминов
+				$args['include'] = wp_list_pluck( $parent_terms, 'term_id' );
+			}
+		} else {
+			// Если нет поиска, сортируем по алфавиту
+			$args['orderby'] = 'name';
+			$args['order']   = 'ASC';
+		}
+
+		return $args;
+	}
+);
 
 add_action(
 	'acf/save_post',
@@ -1698,7 +1719,7 @@ add_action(
 
 
 function loveforever_apply_auto_rules_to_post( $post_id ) {
-	$dress_categories           = ! empty( get_field( 'dress_category', $post_id ) ) ? get_field( 'dress_category', $post_id ) : array();
+	$dress_categories = ! empty( get_field( 'dress_category', $post_id ) ) ? get_field( 'dress_category', $post_id ) : array();
 
 	if ( empty( $dress_categories ) ) {
 		return;

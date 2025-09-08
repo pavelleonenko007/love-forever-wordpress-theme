@@ -8,7 +8,8 @@
 defined( 'ABSPATH' ) || exit;
 
 $can_edit_fittings                 = loveforever_is_user_has_manager_capability();
-$date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date();
+$booking_manager                   = Fitting_Slots_Manager::get_instance();
+$date_with_nearest_available_slots = $booking_manager->get_nearest_available_date();
 ?>
 <div id="globalFittingDialog" role="dialog" class="dialog" data-js-dialog>
 	<div class="dialog__overlay" data-js-dialog-overlay>
@@ -143,13 +144,13 @@ $date_with_nearest_available_slots = Fitting_Slots::get_nearest_available_date()
 										</div>
 										<div class="field field--time">
 											<?php
-												$slots = Fitting_Slots::get_day_slots( $date_with_nearest_available_slots, current_time( 'timestamp' ) );
+											$slots = $booking_manager->get_available_slots( $date_with_nearest_available_slots );
 
 											if ( ! $can_edit_fittings ) {
 												$slots = array_filter(
 													$slots,
 													function ( $slot ) {
-														return $slot['available'] > 0;
+														return $slot['available_for_booking'] > 0;
 													}
 												);
 											}

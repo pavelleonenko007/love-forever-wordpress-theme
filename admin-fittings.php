@@ -22,9 +22,10 @@ $favorites      = ! empty( $_COOKIE['favorites'] ) ? sanitize_text_field( wp_uns
 $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 
 $post            = get_post( 471 );
-$fitting_id      = get_query_var( 'fitting_id' );
+$booking_id      = get_query_var( 'fitting_id' );
+$booking_manager = Fitting_Slots_Manager::get_instance();
 $admin_page_link = get_the_permalink();
-$page_title      = ! empty( $fitting_id ) ? 'Редактировать примерку' : get_the_title();
+$page_title      = ! empty( $booking_id ) ? 'Редактировать примерку' : str_replace( 'Защищено:', '', get_the_title() );
 
 $fitting_steps        = array(
 	'delivery'   => 'Выдача',
@@ -53,16 +54,19 @@ $fitting_steps_colors = array(
 							<?php echo get_the_password_form(); ?>
 						<?php else : ?>
 							<?php
-							if ( ! empty( $fitting_id ) ) :
-								$fitting_time = get_field( 'fitting_time', $fitting_id );
-								$fitting_type = get_field( 'fitting_type', $fitting_id );
-								$name         = get_field( 'name', $fitting_id );
-								$phone        = get_field( 'phone', $fitting_id );
-								$comment      = get_field( 'comment', $fitting_id );
+							if ( ! empty( $booking_id ) ) :
+								$timezone     = wp_timezone();
+								$booking_time = get_field( 'fitting_time', $booking_id );
+								$fitting_type = get_field( 'fitting_type', $booking_id );
+								$name         = get_field( 'name', $booking_id );
+								$phone        = get_field( 'phone', $booking_id );
+								$comment      = get_field( 'comment', $booking_id );
 
-								$fitting_date  = gmdate( 'Y-m-d', strtotime( $fitting_time ) );
-								$fitting_hours = gmdate( 'H:i', strtotime( $fitting_time ) );
-								$fitting_step  = get_field( 'fitting_step', $fitting_id );
+								$booking_datetime = new DateTime( $booking_time, $timezone );
+
+								$fitting_date  = $booking_datetime->format( 'Y-m-d' );
+								$fitting_hours = $booking_datetime->format( 'H:i' );
+								$fitting_step  = get_field( 'fitting_step', $booking_id );
 								?>
 								<div class="edit-fitting">
 									<a href="<?php echo esc_url( $admin_page_link ); ?>" class="edit-fitting__button button">← Назад к примеркам</a>
@@ -75,7 +79,7 @@ $fitting_steps_colors = array(
 													<p>Примерка успешно обновлена</p>
 												</div>
 											<?php endif; ?>
-											<h2 class="edit-fitting-form__title h2 ff-tt-norms-pro"><?php echo wp_kses_post( get_the_title( $fitting_id ) ); ?></h2>
+											<h2 class="edit-fitting-form__title h2 ff-tt-norms-pro"><?php echo wp_kses_post( get_the_title( $booking_id ) ); ?></h2>
 											<div class="field">
 												<label for="fittingDate" class="field__label">Дата</label>
 												<input 
@@ -85,12 +89,12 @@ $fitting_steps_colors = array(
 													class="field__control" 
 													value="<?php echo esc_attr( $fitting_date ); ?>"
 													required
-													min="<?php echo esc_attr( gmdate( 'Y-m-d' ) ); ?>"
+													min="<?php echo esc_attr( $fitting_date ); ?>"
 												>
 												<span class="field__errors" id="fittingDateErrors" data-js-form-field-errors></span>
 											</div>
 											<?php
-											$slots = Fitting_Slots::get_day_slots( $fitting_date, current_time( 'timestamp' ), $fitting_id );
+											$slots = $booking_manager->get_slots_for_date( $fitting_date, in_array( 'wedding', $fitting_type ) ? 'wedding' : 'evening', $booking_id );
 											?>
 											<div class="field">
 												<label for="fittingTime" class="field__label">Время</label>
@@ -189,7 +193,7 @@ $fitting_steps_colors = array(
 											<div class="edit-fitting-form__error" data-js-fitting-form-error></div>
 										</div>
 										<input type="hidden" name="action" value="create_new_fitting_record">
-										<input type="hidden" name="fitting-id" value="<?php echo esc_attr( $fitting_id ); ?>">
+										<input type="hidden" name="fitting-id" value="<?php echo esc_attr( $booking_id ); ?>">
 										<?php wp_nonce_field( 'submit_fitting_form', 'submit_fitting_form_nonce', false ); ?>
 									</form>
 								</div>
@@ -217,14 +221,20 @@ $fitting_steps_colors = array(
 												<input type="search" name="s" id="filterFittingFormSearchField" placeholder="Поиск" value="" class="field__control">
 											</div>
 											<div class="fitting-filter-form__field field">
-												<input type="date" name="date" id="filterFittingFormDateField" class="field__control">
+												<input 
+													type="date" 
+													name="date" 
+													id="filterFittingFormDateField" 
+													class="field__control"
+													value="<?php echo esc_attr( $today ); ?>"
+												>
 											</div>
 											<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $today ); ?>">Сегодня</button>
 											<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $tomorrow ); ?>">Завтра</button>
 											<button type="reset" class="button button--link">Сбросить фильтры</button>
 											<input type="hidden" name="action" value="filter_fittings">
 											<?php wp_nonce_field( 'filter_fittings', '_filter_fitting_nonce', false ); ?>
-											<input type='hidden' value='474' name='wpessid' />
+											<input type="hidden" value="474" name="wpessid">
 										</div>
 										<button 
 											type="button" 

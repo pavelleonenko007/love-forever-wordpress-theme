@@ -302,22 +302,45 @@ function loveforever_format_price( $amount, $decimals = 0, $decimal_separator = 
 	return number_format( $amount, $decimals, $decimal_separator, $thousands_separator ) . ' ₽';
 }
 
+/**
+ * Get client IP address with fallback for various proxy configurations.
+ *
+ * @return string Client IP address or 'unknown' if not found.
+ */
 function loveforever_get_client_ip_address() {
-	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
-	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			$ip = current( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
-	} elseif ( ! empty( $_SERVER['HTTP_X_REAL_IP'] ) ) {
-			$ip = $_SERVER['HTTP_X_REAL_IP'];
-	} else {
-			$ip = $_SERVER['REMOTE_ADDR'];
+	// Check for IP in various headers (in order of preference)
+	$ip_headers = array(
+		'HTTP_CF_CONNECTING_IP',     // Cloudflare
+		'HTTP_X_FORWARDED_FOR',      // Load balancers/proxies
+		'HTTP_X_FORWARDED',          // Proxy
+		'HTTP_X_CLUSTER_CLIENT_IP',  // Cluster
+		'HTTP_FORWARDED_FOR',        // Proxy
+		'HTTP_FORWARDED',            // Proxy
+		'REMOTE_ADDR',               // Standard
+	);
+
+	foreach ( $ip_headers as $header ) {
+		if ( ! empty( $_SERVER[ $header ] ) ) {
+			$ip = $_SERVER[ $header ];
+
+			// Handle comma-separated IPs (take the first one)
+			if ( strpos( $ip, ',' ) !== false ) {
+				$ip = trim( explode( ',', $ip )[0] );
+			}
+
+			// Validate IP address
+			if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+				return $ip;
+			}
+		}
 	}
 
-	if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-			return $ip;
+	// Fallback to REMOTE_ADDR even if it's private
+	if ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
+		return sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
 	}
 
-	return '';
+	return 'unknown';
 }
 
 function loveforever_has_product_in_favorites( $id ) {

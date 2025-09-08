@@ -520,7 +520,9 @@
             "allow_in_bindings": 1,
             "ui": 0,
             "ajax": 0,
-            "placeholder": ""
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
         },
         {
             "key": "field_67974d4b3cbec",
@@ -568,7 +570,7 @@
             "label": "Интервал слотов на примерку",
             "name": "fitting_slots_interval",
             "aria-label": "",
-            "type": "true_false",
+            "type": "select",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -577,12 +579,41 @@
                 "class": "",
                 "id": ""
             },
-            "message": "",
-            "default_value": 0,
-            "allow_in_bindings": 1,
-            "ui_on_text": "60 мин.",
-            "ui_off_text": "30 мин.",
-            "ui": 1
+            "choices": {
+                "60": "60 минут",
+                "30": "30 минут"
+            },
+            "default_value": 60,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_68ac81e13aca9",
+            "label": "Количество примерочных по умолчанию",
+            "name": "default_fitting_number",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 2,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_67b32579c7d6f",
@@ -624,7 +655,8 @@
                     "return_format": "Y-m-d H:i:s",
                     "first_day": 1,
                     "allow_in_bindings": 0,
-                    "parent_repeater": "field_67b32579c7d6f"
+                    "parent_repeater": "field_67b32579c7d6f",
+                    "default_to_current_date": 0
                 },
                 {
                     "key": "field_67b325f4c7d71",
@@ -705,7 +737,9 @@
                     "ui": 0,
                     "ajax": 0,
                     "placeholder": "",
-                    "parent_repeater": "field_67b320b62cf6b"
+                    "parent_repeater": "field_67b320b62cf6b",
+                    "create_options": 0,
+                    "save_options": 0
                 },
                 {
                     "key": "field_67b321b42cf6d",
@@ -820,5 +854,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1754981574
+    "modified": 1756991236
 }

@@ -773,13 +773,10 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			this.selectors.dialogSelectedTime
 		);
 
-		this.state = this._getProxyState({
-			...this.state,
-			dialogMessage: 'Запись на примерку',
-			dress_category: null,
-			isUpdatingSlots: false,
-			isSubmitting: false,
-		});
+		this.fields = this.findFields();
+		this.state = this.setupFormState();
+
+		console.log({ ...this.state });
 
 		this.prevState = { ...this.state };
 
@@ -803,6 +800,49 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		return stepNumber;
 	}
 
+	findFields() {
+		return Array.from(this.form.elements).filter((element) => element.name);
+	}
+
+	setupFormState() {
+		const state = {
+			dialogMessage: 'Запись на примерку',
+			dress_category: null,
+			isUpdatingSlots: false,
+			isSubmitting: false,
+		};
+
+		for (const element of this.fields) {
+			const { name, value, type } = element;
+
+			if (name.endsWith('[]')) {
+				const elementName = name.slice(0, -2);
+				state[elementName] = [];
+
+				if (type === 'checkbox') {
+					if (element.checked) {
+						state[elementName].push(value);
+					}
+					continue;
+				}
+			} else {
+				if (['checkbox', 'radio'].includes(type)) {
+					if (element.checked) {
+						state[name] = value ?? true;
+						continue;
+					} else {
+						state[name] = null;
+						continue;
+					}
+				}
+
+				state[name] = value;
+			}
+		}
+
+		return this._getProxyState(state);
+	}
+
 	/**
 	 * IMask safari change event fix
 	 */
@@ -814,51 +854,70 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		);
 	};
 
-	/**
-	 *
-	 * @param {ChangeEvent} event
-	 */
-	changeFormHandler(event) {
+	checkboxChangeHandler(event) {
 		const { target } = event;
+		const { name, value, checked } = target;
 
-		if (target.dataset?.jsFittingFormDateValue) {
-			this.form.querySelector(this.selectors.dateInput).value =
-				target.dataset.jsFittingFormDateValue;
-		}
+		if (name.endsWith('[]')) {
+			const fieldName = name.slice(0, -2);
 
-		const formData = new FormData(this.form);
-		const formState = {};
-
-		for (const [key, value] of formData.entries()) {
-			if (key.endsWith('[]')) {
-				const arrayKey = key.slice(0, -2);
-				if (!formState[arrayKey]) {
-					formState[arrayKey] = [];
-				}
-				formState[arrayKey].push(value);
+			if (checked) {
+				this.state[fieldName] = [...this.state[fieldName], value];
 			} else {
-				formState[key] = value;
+				this.state[fieldName] = this.state[fieldName].filter(
+					(item) => item !== value
+				);
 			}
-		}
-
-		// const formState = Object.fromEntries(new FormData(this.form));
-
-		for (const key in formState) {
-			if (Object.prototype.hasOwnProperty.call(formState, key)) {
-				const value = formState[key];
-				this.state[key] = value;
+		} else {
+			if (checked) {
+				this.state[name] = value?.trim() ?? true;
+			} else {
+				this.state[name] = false;
 			}
 		}
 	}
 
+	/**
+	 *
+	 * @param {ChangeEvent} event
+	 */
+	changeFormHandler = (event) => {
+		const { target } = event;
+		const { name, value, type } = target;
+
+		if (type === 'checkbox') {
+			this.checkboxChangeHandler(event);
+			return;
+		}
+
+		this.state[name] = value?.trim();
+	};
+
+	inputFormHandler = (event) => {
+		const { target } = event;
+		const { name, value, type } = target;
+
+		if (['checkbox', 'radio'].includes(type)) {
+			return;
+		}
+
+		this.state[name] = value.trim();
+	};
+
 	async getNewTimeSlots() {
 		try {
-			const formData = new FormData();
+			const neededFields = ['date', 'fitting_type[]'];
+			const formData = new FormData(this.form);
+			const keys = Array.from(formData.keys());
+
+			for (const key of keys) {
+				if (!neededFields.includes(key)) {
+					formData.delete(key);
+				}
+			}
 
 			formData.append('action', 'get_fitting_time_slots');
 			formData.append('nonce', LOVE_FOREVER.NONCE);
-			formData.append('date', this.state.date);
-			formData.append('fitting-id', this.form.elements['fitting-id']);
 
 			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
 				method: 'POST',
@@ -908,12 +967,12 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 				const option = document.createElement('option');
 
 				option.value = time;
-				option.disabled = data.disableSlots && slot.available === 0;
+				option.disabled = data.disableSlots && slot.available_for_booking === 0;
 
 				let optionContent = time;
 
 				if (!data.disableSlots) {
-					optionContent += ` (${slot.available} из ${slot.max_fittings})`;
+					optionContent += ` (${slot.available_for_booking} из ${slot.max_fittings})`;
 				}
 
 				option.textContent = optionContent;
@@ -985,15 +1044,17 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 	reset() {
 		this.form.reset();
-		this.state.success = false;
-		this.state.dialogMessage = 'Запись на примерку';
-		this.state.step = 0;
-		this.state.dateIncrementRatio = 0;
+		this.state = this.setupFormState();
 		this.form.dispatchEvent(new Event('change'));
 	}
 
 	updateUI() {
-		if (this.prevState.date !== this.state.date) {
+		console.log({ ...this.state });
+
+		if (
+			this.prevState.date !== this.state.date ||
+			this.prevState.fitting_type !== this.state.fitting_type
+		) {
 			this.updateTimeSlots();
 		}
 
@@ -1044,7 +1105,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		}
 		this.form.addEventListener('change', this.changeFormHandler);
 		this.form.addEventListener('submit', this.submitForm);
-		this.form.addEventListener('input', this.changeFormHandler);
+		this.form.addEventListener('input', this.inputFormHandler);
 		document.addEventListener('dialogClose', this.closeDialogHandler);
 		document.addEventListener('dialogOpen', this.openDialogHandler);
 	}

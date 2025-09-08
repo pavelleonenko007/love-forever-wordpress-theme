@@ -22,6 +22,8 @@ require_once __DIR__ . '/includes/class-dress-order.php';
 require_once __DIR__ . '/includes/class-promo-order.php';
 require_once __DIR__ . '/includes/class-story-order.php';
 require_once __DIR__ . '/includes/class-fitting-slots.php';
+require_once __DIR__ . '/includes/class-booking-manager-pavel.php';
+
 require_once __DIR__ . '/inc/class-loveforever-dress-importer.php';
 require_once __DIR__ . '/inc/cli/reupdate-posts.php';
 require_once __DIR__ . '/inc/class-loveforever-review-importer.php';

@@ -149,8 +149,6 @@ class FilterFittingForm {
 				input.removeAttribute('selected');
 			});
 
-		console.log(Object.fromEntries(new FormData(this.root)));
-
 		this.filterFittings();
 	};
 
