@@ -76,8 +76,6 @@ window.addEventListener('fitting:datetimechange', (event) => {
 		);
 
 		if (dialogTimeElement) {
-			console.log({ dialogTimeElement });
-
 			dialogTimeElement.textContent = formatDateToRussian(
 				event.detail.datetime
 			);
@@ -175,8 +173,6 @@ class FittingForm {
 	}
 
 	async updateTimeSlots() {
-		console.log('updateTimeSlots');
-
 		/**
 		 * @type {HTMLSelectElement}
 		 */
@@ -776,8 +772,6 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.fields = this.findFields();
 		this.state = this.setupFormState();
 
-		console.log({ ...this.state });
-
 		this.prevState = { ...this.state };
 
 		this.changeFormHandler = this.changeFormHandler.bind(this);
@@ -945,8 +939,6 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 		const { data, error } = await promiseWrapper(this.getNewTimeSlots());
 
-		console.log({ data, error });
-
 		if (error) {
 			this.state.success = false;
 			this.state.error = error.message;
@@ -1005,8 +997,6 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 			const body = await response.json();
 
-			console.log({ body });
-
 			this.state.success = body.success;
 
 			if (!body.success) {
@@ -1049,8 +1039,6 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	updateUI() {
-		console.log({ ...this.state });
-
 		if (
 			this.prevState.date !== this.state.date ||
 			this.prevState.fitting_type !== this.state.fitting_type
@@ -1157,22 +1145,29 @@ class SingleFittingForm extends BaseFittingForm {
 		this.submitButton = this.dialog.querySelector(
 			`button[type="submit"][form="${this.form.id}"]`
 		);
+		this.phoneControl = document.querySelector(
+			`input[data-js-input-mask="phone"][form="${this.form.id}"]`
+		);
+
 		this.dialogFormWrapper = this.dialog.querySelector(
 			this.selectors.dialogFormWrapper
 		);
 		this.successCloseDialogButton = this.dialogFormWrapper.nextElementSibling;
 
-		this.state = this._getProxyState({
-			...this.state,
-			target_dress: this.form.elements.target_dress.value,
-			client_favorite_dresses:
-				this.form.elements.client_favorite_dresses?.value,
-			submit_fitting_form_nonce:
-				this.form.elements.submit_fitting_form_nonce.value,
-			dialogMessage: 'Запись на примерку',
-			isUpdatingSlots: false,
-			isSubmitted: false,
-		});
+		// this.state = this._getProxyState({
+		// 	...this.state,
+		// 	target_dress: this.form.elements.target_dress.value,
+		// 	client_favorite_dresses:
+		// 		this.form.elements.client_favorite_dresses?.value,
+		// 	submit_fitting_form_nonce:
+		// 		this.form.elements.submit_fitting_form_nonce.value,
+		// 	dialogMessage: 'Запись на примерку',
+		// 	isUpdatingSlots: false,
+		// 	isSubmitted: false,
+		// });
+
+		this.fields = this.findFields();
+		this.state = this.setupFormState();
 
 		this.prevState = { ...this.state };
 
@@ -1181,6 +1176,51 @@ class SingleFittingForm extends BaseFittingForm {
 		);
 
 		this.bindEvents();
+
+		this.updateUI();
+	}
+
+	findFields() {
+		return Array.from(this.form.elements).filter((element) => element.name);
+	}
+
+	setupFormState() {
+		const state = {
+			dialogMessage: 'Запись на примерку',
+			dress_category: null,
+			isUpdatingSlots: false,
+			isSubmitting: false,
+		};
+
+		for (const element of this.fields) {
+			const { name, value, type } = element;
+
+			if (name.endsWith('[]')) {
+				const elementName = name.slice(0, -2);
+				state[elementName] = [];
+
+				if (type === 'checkbox') {
+					if (element.checked) {
+						state[elementName].push(value);
+					}
+					continue;
+				}
+			} else {
+				if (['checkbox', 'radio'].includes(type)) {
+					if (element.checked) {
+						state[name] = value ?? true;
+						continue;
+					} else {
+						state[name] = null;
+						continue;
+					}
+				}
+
+				state[name] = value;
+			}
+		}
+
+		return this._getProxyState(state);
 	}
 
 	reset() {
@@ -1190,7 +1230,7 @@ class SingleFittingForm extends BaseFittingForm {
 		this.state.step = 0;
 		this.state.dateIncrementRatio = 0;
 		this.state.isSubmitted = false;
-		this.form.dispatchEvent(new Event('change'));
+		this.form.elements.date.dispatchEvent(new Event('change'));
 	}
 
 	/**
@@ -1198,8 +1238,6 @@ class SingleFittingForm extends BaseFittingForm {
 	 * @param {ChangeEvent} event
 	 */
 	onChange = (event) => {
-		console.log({ event });
-
 		this.state.error = null;
 
 		const formData = Object.fromEntries(new FormData(this.form));
@@ -1250,13 +1288,26 @@ class SingleFittingForm extends BaseFittingForm {
 			this.state.dialogMessage = body.data.message;
 			this.state.dateIncrementRatio = 1;
 			this.state.isSubmitted = true;
-			this.loadTimeSlots();
+			this.updateTimeSlots();
 		} catch (error) {
 			console.error(error);
 			this.state.error = error.message;
 		} finally {
 			this.state.isSubmitting = false;
 		}
+	};
+
+	onInputHandler = (event) => {
+		const { name, value } = event.target;
+		this.state[name] = value;
+	};
+
+	phoneControlBlurHandler = (event) => {
+		event.target.dispatchEvent(
+			new Event('change', {
+				bubbles: true,
+			})
+		);
 	};
 
 	/**
@@ -1269,7 +1320,7 @@ class SingleFittingForm extends BaseFittingForm {
 		}
 	};
 
-	async loadTimeSlots() {
+	async updateTimeSlots() {
 		const selectedDate = this.form.elements.date.value;
 
 		if (!selectedDate) return;
@@ -1289,7 +1340,7 @@ class SingleFittingForm extends BaseFittingForm {
 
 			const body = await response.json();
 
-			console.log(body);
+			// console.log(body);
 
 			if (!body.success) {
 				console.error(body.data.debug);
@@ -1332,37 +1383,27 @@ class SingleFittingForm extends BaseFittingForm {
 	}
 
 	updateUI() {
-		this.timeControlWrapper.classList.toggle(
-			this.stateSelectors.isLoading,
-			this.state.isUpdatingSlots
-		);
-
-		if ($(this.form.elements.time).selectmenu('instance') !== undefined) {
-			if (this.state.isUpdatingSlots) {
-				$(this.form.elements.time).selectmenu('disable');
-			}
-
-			if (
-				this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
-				!this.state.isUpdatingSlots
-			) {
-				$(this.form.elements.time).selectmenu('enable');
-				$(this.form.elements.time).selectmenu('refresh');
-				this.form.elements.time.dispatchEvent(
-					new Event('change', {
-						bubbles: true,
-						cancelable: true,
-					})
-				);
-			}
+		if (
+			this.prevState.date !== this.state.date ||
+			this.prevState.fitting_type !== this.state.fitting_type
+		) {
+			this.updateTimeSlots();
 		}
 
 		if (
-			this.state.date !== this.prevState.date &&
+			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
 			!this.state.isUpdatingSlots
 		) {
-			this.state.isUpdatingSlots = true;
-			this.loadTimeSlots();
+			if ($(this.form.elements.time).data('ui-selectmenu')) {
+				$(this.form.elements.time).selectmenu('refresh');
+				$(this.form.elements.time).selectmenu('enable');
+			}
+			this.form.elements.time.dispatchEvent(
+				new Event('change', {
+					bubbles: true,
+					cancelable: true,
+				})
+			);
 		}
 
 		if (this.state.date && this.state.time) {
@@ -1376,7 +1417,13 @@ class SingleFittingForm extends BaseFittingForm {
 		this.errorsElement.innerHTML = `<p>${this.state.error}</p>`;
 		this.errorsElement.hidden = !Boolean(this.state.error);
 
-		this.submitButton.disabled = this.state.isSubmitting;
+		const allFieldChecked =
+			isValidRussianPhone(this.state.phone) &&
+			this.state.name &&
+			this.state.date &&
+			this.state.time;
+
+		this.submitButton.disabled = !allFieldChecked || this.state.isSubmitting;
 
 		if (this.dialogTitle) {
 			this.dialogTitle.textContent = this.state.dialogMessage;
@@ -1386,17 +1433,96 @@ class SingleFittingForm extends BaseFittingForm {
 		this.successCloseDialogButton.hidden = !this.state.success;
 		this.successCloseDialogButton.disabled = !this.state.success;
 
+		// this.timeControlWrapper.classList.toggle(
+		// 	this.stateSelectors.isLoading,
+		// 	this.state.isUpdatingSlots
+		// );
+
+		// if ($(this.form.elements.time).selectmenu('instance') !== undefined) {
+		// 	if (this.state.isUpdatingSlots) {
+		// 		$(this.form.elements.time).selectmenu('disable');
+		// 	}
+
+		// 	if (
+		// 		this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
+		// 		!this.state.isUpdatingSlots
+		// 	) {
+		// 		$(this.form.elements.time).selectmenu('enable');
+		// 		$(this.form.elements.time).selectmenu('refresh');
+		// 		this.form.elements.time.dispatchEvent(
+		// 			new Event('change', {
+		// 				bubbles: true,
+		// 				cancelable: true,
+		// 			})
+		// 		);
+		// 	}
+		// }
+
+		// if (
+		// 	this.state.date !== this.prevState.date &&
+		// 	!this.state.isUpdatingSlots
+		// ) {
+		// 	this.state.isUpdatingSlots = true;
+		// 	this.loadTimeSlots();
+		// }
+
+		// if (this.state.date && this.state.time) {
+		// 	this.dialogSelectedTime.textContent = formatDateToRussian(
+		// 		`${this.state.date} ${this.state.time}`
+		// 	);
+		// } else {
+		// 	this.dialogSelectedTime.textContent = '';
+		// }
+
+		// const allFieldChecked =
+		// 	isValidRussianPhone(this.state.phone) &&
+		// 	this.state.name &&
+		// 	this.state.date &&
+		// 	this.state.time;
+
+		// this.submitButton.disabled = !allFieldChecked || this.state.isSubmitting;
+
+		// this.errorsElement.innerHTML = `<p>${this.state.error}</p>`;
+		// this.errorsElement.hidden = !Boolean(this.state.error);
+
+		// this.submitButton.disabled = this.state.isSubmitting;
+
+		// if (this.dialogTitle) {
+		// 	this.dialogTitle.textContent = this.state.dialogMessage;
+		// }
+
+		// this.dialogFormWrapper.hidden = this.state.success;
+		// this.successCloseDialogButton.hidden = !this.state.success;
+		// this.successCloseDialogButton.disabled = !this.state.success;
+
 		this.prevState = { ...this.state };
 	}
 
 	bindEvents() {
-		this.form.addEventListener('change', this.onChange);
+		if (this.phoneControl) {
+			this.phoneControl.addEventListener('blur', this.phoneControlBlurHandler);
+		}
+
+		this.fields.forEach((field) => {
+			field.addEventListener('change', this.onChange);
+			field.addEventListener('input', this.onInputHandler);
+		});
+		// document.addEventListener('change', this.onChange);
 		this.form.addEventListener('submit', this.submitForm);
 		document.addEventListener('dialogClose', this.onCloseDialog);
 	}
 
 	destroy() {
-		this.form.removeEventListener('change', this.onChange);
+		if (this.phoneControl) {
+			this.phoneControl.removeEventListener(
+				'blur',
+				this.phoneControlBlurHandler
+			);
+		}
+		this.fields.forEach((field) => {
+			field.removeEventListener('change', this.onChange);
+		});
+		// this.form.removeEventListener('change', this.onChange);
 		this.form.removeEventListener('submit', this.submitForm);
 		document.removeEventListener('dialogClose', this.onCloseDialog);
 	}

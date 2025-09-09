@@ -51,7 +51,7 @@ class Fitting_Slots_Manager {
 		return $slots;
 	}
 
-	public function get_nearest_available_date( $max_days_ahead = 60 ) {
+	public function get_nearest_available_date( $max_days_ahead = 60, $fitting_type = 'evening' ) {
 		$current_time = current_time( 'timestamp' );
 		$start_date   = wp_date( 'Y-m-d', $current_time );
 		$current_date = new DateTime( $start_date );
@@ -59,7 +59,7 @@ class Fitting_Slots_Manager {
 
 		while ( $current_date <= $end_date ) {
 			$date      = $current_date->format( 'Y-m-d' );
-			$day_slots = $this->get_slots_for_date( $date );
+			$day_slots = $this->get_slots_for_date( $date, $fitting_type );
 
 			// Check if there are any available slots for this day
 			foreach ( $day_slots as $time => $slot ) {
@@ -235,7 +235,7 @@ class Fitting_Slots_Manager {
 	}
 
 	public function is_slot_available( $date, $time, $fitting_type, $exclude_booking_id = null ) {
-		$slots = $this->get_slots_for_date( $date, $fitting_type, $exclude_booking_id );
+		$slots = $this->get_available_slots( $date, $fitting_type, $exclude_booking_id );
 
 		if ( ! isset( $slots[ $time ] ) || $slots[ $time ]['available_for_booking'] < 1 ) {
 				return new WP_Error( 'slot_not_available', 'Выбранное время недоступно для записи' );
@@ -514,3 +514,10 @@ class Fitting_Slots_Manager {
 }
 
 $booking_manager = Fitting_Slots_Manager::get_instance();
+
+// if ( ! is_admin() ) {
+// echo '<pre>';
+// var_dump( Fitting_Slots_Manager::validate_fitting_datetime_static( '2025-09-09 16:00', 'wedding' ) );
+// var_dump( $booking_manager->is_slot_available( '2025-09-09', '16:00', 'wedding' ) );
+// echo '</pre>';
+// }

@@ -8,8 +8,6 @@ export default async function initMap() {
 		await fetch(LOVE_FOREVER.MAP_CUSTOMIZATION)
 	).json();
 
-	console.log({ customization });
-
 	const {
 		YMap,
 		YMapDefaultSchemeLayer,

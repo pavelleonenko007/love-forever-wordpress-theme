@@ -12,10 +12,10 @@ class CustomSelect {
 		const parsedConfig = element.dataset.jsCustomSelect
 			? JSON.parse(element.dataset.jsCustomSelect)
 			: {};
-		
+
 		this.configAttr = {
 			type: 'select',
-			...parsedConfig
+			...parsedConfig,
 		};
 
 		this.config = {

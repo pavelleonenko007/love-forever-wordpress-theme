@@ -1,4 +1,9 @@
 @use 'media' as *;
+@use 'mixins' as *;
+
+.sr-only {
+	@include sr-only;
+}
 
 .flow {
 	& > :first-child {
