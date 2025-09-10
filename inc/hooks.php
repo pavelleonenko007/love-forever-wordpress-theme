@@ -1564,67 +1564,274 @@ function loveforever_filter_base_dress_category_field( $args ) {
 add_filter(
 	'acf/fields/taxonomy/query/key=field_67d6fec761d73',
 	function ( $args ) {
-		// Если есть поисковый запрос, сортируем результаты так, чтобы точные совпадения были первыми
-		if ( ! empty( $args['search'] ) ) {
-			$taxonomy    = $args['taxonomy'] ?? 'dress_category';
-			$search_term = $args['search'];
-
-			// Получаем все родительские категории с поиском
-			$parent_terms = get_terms(
-				array(
-					'taxonomy'   => $taxonomy,
-					'parent'     => 0,
-					'hide_empty' => false,
-					'search'     => $search_term,
-				)
-			);
-
-			// Если найдены родительские категории, сортируем их по релевантности
-			if ( ! empty( $parent_terms ) && ! is_wp_error( $parent_terms ) ) {
-				// Сортируем по точности совпадения
-				usort(
-					$parent_terms,
-					function ( $a, $b ) use ( $search_term ) {
-						$a_name       = strtolower( $a->name );
-						$b_name       = strtolower( $b->name );
-						$search_lower = strtolower( $search_term );
-
-						// Точное совпадение имеет приоритет
-						if ( $a_name === $search_lower && $b_name !== $search_lower ) {
-							return -1;
-						}
-						if ( $b_name === $search_lower && $a_name !== $search_lower ) {
-							return 1;
-						}
-
-						// Совпадение в начале названия имеет приоритет
-						$a_starts = strpos( $a_name, $search_lower ) === 0;
-						$b_starts = strpos( $b_name, $search_lower ) === 0;
-
-						if ( $a_starts && ! $b_starts ) {
-							return -1;
-						}
-						if ( $b_starts && ! $a_starts ) {
-							return 1;
-						}
-
-						// Остальные сортируем по алфавиту
-						return strcmp( $a_name, $b_name );
-					}
-				);
-
-				// Устанавливаем отсортированные ID терминов
-				$args['include'] = wp_list_pluck( $parent_terms, 'term_id' );
-			}
-		} else {
-			// Если нет поиска, сортируем по алфавиту
-			$args['orderby'] = 'name';
-			$args['order']   = 'ASC';
+		if ( empty( $args['search'] ) ) {
+			$args['parent'] = 0;
 		}
 
 		return $args;
 	}
 );
+
+// Добавляем префикс для подкатегорий в ACF поле
+add_filter(
+	'acf/fields/taxonomy/result/key=field_67d6fec761d73',
+	function ( $text, $term, $field, $post_id ) {
+		$parent_terms = get_terms(
+			array(
+				'taxonomy'   => 'dress_category',
+				'parent'     => 0,
+				'hide_empty' => false,
+				'fields'     => 'names',
+			)
+		);
+
+		if ( ! is_wp_error( $parent_terms ) && 0 !== $term->parent ) {
+			$parent_term = get_term( $term->parent );
+
+			if ( $parent_term && ! is_wp_error( $parent_term ) && in_array( str_replace( '- ', '', $text ), $parent_terms, true ) ) {
+				$text = $text . ' (' . $parent_term->name . ')';
+			}
+		}
+
+		return $text;
+	},
+	10,
+	4
+);
+
+// Добавляем данные для быстрых ссылок категорий
+add_action( 'admin_enqueue_scripts', 'loveforever_add_quick_links_data' );
+function loveforever_add_quick_links_data() {
+	// Получаем часто используемые категории
+	$quick_categories = get_quick_categories_for_admin();
+
+	wp_localize_script(
+		'dress-acf-filter',
+		'LOVE_FOREVER_QUICK_LINKS',
+		array(
+			'categories' => $quick_categories,
+		)
+	);
+}
+
+/**
+ * Получает список часто используемых категорий для быстрых ссылок
+ *
+ * @return array
+ */
+function get_quick_categories_for_admin() {
+	// Структурированные категории с ID терминов
+	$quick_categories = array(
+		'Основные'   => array(
+			'color' => '#ffffff',
+			'icon'  => '👗',
+			'items' => array(
+				array(
+					'id'   => 311,
+					'name' => 'Свадебные платья',
+					'icon' => '💒',
+				),
+				array(
+					'id'   => 199,
+					'name' => 'Вечерние платья',
+					'icon' => '🌙',
+				),
+				array(
+					'id'   => 282,
+					'name' => 'Выпускные платья',
+					'icon' => '🎓',
+				),
+			),
+		),
+		'Распродажа' => array(
+			'color' => '#ffefac',
+			'icon'  => '🏷️',
+			'items' => array(
+				array(
+					'id'                    => 542,
+					'name'                  => 'Свадебные платья',
+					'icon'                  => '💒',
+					'additional_categories' => array(
+						array(
+							'id'   => 379,
+							'name' => 'Распродажа',
+						),
+					),
+				),
+				array(
+					'id'   => 543,
+					'name' => 'Вечерние платья',
+					'icon' => '🌙',
+					'additional_categories' => array(
+						array(
+							'id'   => 379,
+							'name' => 'Распродажа',
+						),
+					),
+				),
+				array(
+					'id'   => 544,
+					'name' => 'Выпускные платья',
+					'icon' => '🎓',
+					'additional_categories' => array(
+						array(
+							'id'   => 379,
+							'name' => 'Распродажа',
+						),
+					),
+				),
+			),
+		),
+		'Аксессуары' => array(
+			'color' => '#add8e6',
+			'icon'  => '✨',
+			'items' => array(
+				array(
+					'id'                    => 376,
+					'name'                  => 'Белье',
+					'icon'                  => '👙',
+					'additional_categories' => array(
+						array(
+							'id'   => 375,
+							'name' => 'Аксессуары',
+						),
+					),
+				),
+				array(
+					'id'   => 377,
+					'name' => 'Верхняя одежда',
+					'icon' => '🧥',
+					'additional_categories' => array(
+						array(
+							'id'   => 375,
+							'name' => 'Аксессуары',
+						),
+					),
+				),
+				array(
+					'id'   => 580,
+					'name' => 'Клатчи',
+					'icon' => '👜',
+					'additional_categories' => array(
+						array(
+							'id'   => 375,
+							'name' => 'Аксессуары',
+						),
+					),
+				),
+				array(
+					'id'   => 378,
+					'name' => 'Туфли',
+					'icon' => '👠',
+					'additional_categories' => array(
+						array(
+							'id'   => 375,
+							'name' => 'Аксессуары',
+						),
+					),
+				),
+				array(
+					'id'   => 581,
+					'name' => 'Украшения',
+					'icon' => '💎',
+					'additional_categories' => array(
+						array(
+							'id'   => 375,
+							'name' => 'Аксессуары',
+						),
+					),
+				),
+				array(
+					'id'   => 579,
+					'name' => 'Фаты',
+					'icon' => '👰',
+					'additional_categories' => array(
+						array(
+							'id'   => 375,
+							'name' => 'Аксессуары',
+						),
+					),
+				),
+			),
+		),
+	);
+
+	// Можно добавить фильтр для кастомизации
+	return apply_filters( 'loveforever_quick_categories', $quick_categories );
+}
+
+// AJAX обработчик для получения ID категории по названию
+add_action( 'wp_ajax_get_category_id_by_name', 'loveforever_get_category_id_by_name' );
+function loveforever_get_category_id_by_name() {
+	// Проверяем nonce для безопасности
+	if ( ! wp_verify_nonce( $_POST['nonce'], 'loveforever-admin-nonce' ) ) {
+		wp_die( 'Security check failed' );
+	}
+
+	$category_name = sanitize_text_field( $_POST['category_name'] );
+	$taxonomy      = sanitize_text_field( $_POST['taxonomy'] ) ?: 'dress_category';
+
+	// Ищем категорию по названию
+	$terms = get_terms(
+		array(
+			'taxonomy'   => $taxonomy,
+			'name'       => $category_name,
+			'hide_empty' => false,
+		)
+	);
+
+	if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+		// Возвращаем первый найденный термин
+		$term = $terms[0];
+		wp_send_json_success(
+			array(
+				'id'   => $term->term_id,
+				'name' => $term->name,
+				'slug' => $term->slug,
+			)
+		);
+	}
+
+	// Если точное совпадение не найдено, ищем частичное
+	$terms = get_terms(
+		array(
+			'taxonomy'   => $taxonomy,
+			'search'     => $category_name,
+			'hide_empty' => false,
+		)
+	);
+
+	if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+		// Ищем лучшее совпадение
+		foreach ( $terms as $term ) {
+			if ( strpos( strtolower( $term->name ), strtolower( $category_name ) ) === 0 ) {
+				wp_send_json_success(
+					array(
+						'id'   => $term->term_id,
+						'name' => $term->name,
+						'slug' => $term->slug,
+					)
+				);
+			}
+		}
+
+		// Если не найдено совпадение в начале, возвращаем первое найденное
+		$term = $terms[0];
+		wp_send_json_success(
+			array(
+				'id'   => $term->term_id,
+				'name' => $term->name,
+				'slug' => $term->slug,
+			)
+		);
+	}
+
+	wp_send_json_error(
+		array(
+			'message' => 'Категория не найдена',
+		)
+	);
+}
 
 add_action(
 	'acf/save_post',

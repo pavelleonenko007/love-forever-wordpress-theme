@@ -1,0 +1,246 @@
+/* Стили для быстрых ссылок категорий в ACF поле */
+
+.quick-links-container {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+}
+
+.quick-links-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.quick-links-wrapper {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.quick-links-column {
+    flex: 1;
+    min-width: 200px;
+}
+
+.quick-links-column-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    padding: 6px 0;
+    border-bottom: 2px solid currentColor;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.column-icon {
+    font-size: 16px;
+}
+
+.column-title {
+    flex: 1;
+}
+
+.quick-links-column-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.quick-link-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2c3e50;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.quick-link-icon {
+    font-size: 14px;
+    line-height: 1;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+}
+
+.quick-link-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
+}
+
+.quick-link-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.quick-link-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.quick-link-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.quick-link-btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.quick-link-btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: quick-link-spin 1s linear infinite;
+}
+
+@keyframes quick-link-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .quick-links-wrapper {
+        gap: 15px;
+        flex-direction: column;
+    }
+    
+    .quick-links-column {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    
+    .quick-links-column-header {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    
+    .quick-link-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .quick-link-icon {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-links-container {
+        padding: 8px;
+    }
+    
+    .quick-links-title {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    
+    .quick-links-wrapper {
+        gap: 12px;
+    }
+    
+    .quick-links-column-header {
+        font-size: 11px;
+        padding: 4px 0;
+    }
+    
+    .quick-link-btn {
+        padding: 5px 8px;
+        font-size: 10px;
+    }
+}
+
+/* Стили для темной темы админки */
+.admin-color-sunrise .quick-links-container {
+    background: #2c3e50;
+    border-color: #34495e;
+}
+
+.admin-color-sunrise .quick-links-title {
+    color: #ecf0f1;
+}
+
+.admin-color-ocean .quick-links-container {
+    background: #1e3a8a;
+    border-color: #1e40af;
+}
+
+.admin-color-ocean .quick-links-title {
+    color: #e0e7ff;
+}
+
+.admin-color-eighties .quick-links-container {
+    background: #2d1b69;
+    border-color: #3b2a7a;
+}
+
+.admin-color-eighties .quick-links-title {
+    color: #e0d6ff;
+}
+
+.admin-color-midnight .quick-links-container {
+    background: #1a1a1a;
+    border-color: #333333;
+}
+
+.admin-color-midnight .quick-links-title {
+    color: #cccccc;
+}
+
+.admin-color-coffee .quick-links-container {
+    background: #4a3728;
+    border-color: #5d4037;
+}
+
+.admin-color-coffee .quick-links-title {
+    color: #d7ccc8;
+}
+
+.admin-color-ectoplasm .quick-links-container {
+    background: #523f6d;
+    border-color: #6a4c93;
+}
+
+.admin-color-ectoplasm .quick-links-title {
+    color: #e1bee7;
+}
+
+.admin-color-light .quick-links-container {
+    background: #ffffff;
+    border-color: #e0e0e0;
+}
+
+.admin-color-light .quick-links-title {
+    color: #333333;
+}
