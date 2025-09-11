@@ -35,7 +35,7 @@ $fitting_steps           = array(
 			<p class="dress-types">
 				<?php foreach ( $fitting_type as $fitting_type_value ) : ?>
 					<?php if ( isset( $fitting_types[ $fitting_type_value ] ) ) : ?>
-						<span class="dress-type-tag"><?php echo esc_html( $fitting_types[ $fitting_type_value ] ); ?></span>
+						<span class="dress-type-tag dress-type-tag--<?php echo esc_attr( $fitting_type_value ); ?>"><?php echo esc_html( $fitting_types[ $fitting_type_value ] ); ?></span>
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</p>
@@ -72,10 +72,10 @@ $fitting_steps           = array(
 		</div>
 	</td>
 	<td class="fittings-table__row-action">
-		<a href="<?php echo esc_url( home_url( '/' ) . 'fittings-admin-panel/' . get_the_ID() ); ?>" class="fittings-table__row-action-button">Изменить</a>
+		<a href="<?php echo esc_url( home_url( '/' ) . 'fittings-admin-panel/' . get_the_ID() ); ?>" class="fitting-action-button fitting-action-button--change">Изменить</a>
 		<button
 			type="button"
-			class="fittings-table__row-action-button fittings-table__row-action-button--delete"
+			class="fitting-action-button fitting-action-button--delete"
 			data-js-delete-fitting-button="<?php echo esc_attr( get_the_ID() ); ?>"
 			data-nonce="<?php echo esc_attr( wp_create_nonce( 'delete_fitting_' . get_the_ID() ) ); ?>"
 		>

@@ -57,7 +57,7 @@ $fitting_steps_colors = array(
 							if ( ! empty( $booking_id ) ) :
 								$timezone     = wp_timezone();
 								$booking_time = get_field( 'fitting_time', $booking_id );
-								$fitting_type = get_field( 'fitting_type', $booking_id );
+								$fitting_type = get_field( 'fitting_type', $booking_id ) ?? array();
 								$name         = get_field( 'name', $booking_id );
 								$phone        = get_field( 'phone', $booking_id );
 								$comment      = get_field( 'comment', $booking_id );

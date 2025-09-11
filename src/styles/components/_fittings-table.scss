@@ -53,28 +53,35 @@
 		text-align: left;
 	}
 
-	&__row {
-		&-action {
-			&-button {
-				display: inline-flex;
-				column-gap: 6rem;
-				padding: 4rem 12rem;
-				border-radius: 2rem;
-				background-color: #61c0ed;
-				font-weight: 500;
-				color: #fff;
-				text-decoration: none;
-
-				&--delete {
-					background-color: #d95550;
-				}
-			}
-		}
-	}
-
 	&__cell {
 		display: flex;
 		flex-direction: column;
 		gap: 10rem;
+	}
+}
+
+.fitting-action-button {
+	height: 30rem;
+	border-radius: 100rem;
+	padding: 0;
+	padding-inline: 20rem;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10rem;
+	font-size: 16rem;
+	font-weight: 500;
+	text-decoration: none;
+	color: var(--black);
+	background-color: lightgray;
+
+	&--change {
+		background-color: #61c0ed;
+		color: var(--white);
+	}
+
+	&--delete {
+		background-color: #d95550;
+		color: var(--white);
 	}
 }

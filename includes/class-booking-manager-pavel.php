@@ -451,15 +451,15 @@ class Fitting_Slots_Manager {
 	 * @param int|null     $exclude_booking_id ID of booking to exclude from validation.
 	 * @return true|WP_Error Returns true if valid, WP_Error if invalid.
 	 */
-	public function validate_fitting_datetime( $datetime, $fitting_type, $exclude_booking_id = null ) {
+	public function validate_fitting_datetime( $datetime, $fitting_type = 'evening', $exclude_booking_id = null ) {
 		// Validate input parameters.
 		if ( empty( $datetime ) ) {
 			return new WP_Error( 'empty_datetime', 'Дата и время не могут быть пустыми' );
 		}
 
-		if ( empty( $fitting_type ) ) {
-			return new WP_Error( 'empty_fitting_type', 'Тип примерки не может быть пустым' );
-		}
+		// if ( empty( $fitting_type ) ) {
+		// 	return new WP_Error( 'empty_fitting_type', 'Тип примерки не может быть пустым' );
+		// }
 
 		// Parse datetime with timezone.
 		try {
@@ -507,7 +507,7 @@ class Fitting_Slots_Manager {
 	 * @param int|null     $exclude_booking_id ID of fitting to exclude from validation.
 	 * @return true|WP_Error Returns true if valid, WP_Error if invalid.
 	 */
-	public static function validate_fitting_datetime_static( $datetime, $fitting_type, $exclude_booking_id = null ) {
+	public static function validate_fitting_datetime_static( $datetime, $fitting_type = 'evening', $exclude_booking_id = null ) {
 		$instance = self::get_instance();
 		return $instance->validate_fitting_datetime( $datetime, $fitting_type, $exclude_booking_id );
 	}

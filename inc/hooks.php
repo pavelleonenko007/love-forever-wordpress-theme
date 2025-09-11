@@ -217,7 +217,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	$fitting_id                       = ! empty( $_POST['fitting-id'] ) ? absint( sanitize_text_field( wp_unslash( $_POST['fitting-id'] ) ) ) : 0;
 	$name                             = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 	$phone                            = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
-	$fitting_type                     = 'evening'; // Default fitting type
+	$fitting_type                     = '';
 	$fitting_step                     = ! empty( $_POST['fitting_step'] ) ? sanitize_text_field( wp_unslash( $_POST['fitting_step'] ) ) : '';
 	$date                             = sanitize_text_field( wp_unslash( $_POST['date'] ) );
 	$time                             = sanitize_text_field( wp_unslash( $_POST['time'] ) );
@@ -227,7 +227,6 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	$client_favorite_dresses          = ! empty( $_POST['client_favorite_dresses'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_POST['client_favorite_dresses'] ) ) ) : array();
 	$has_change_fittings_capabilities = loveforever_is_user_has_manager_capability();
 
-	// Override default fitting_type if provided
 	if ( ! empty( $_POST['fitting_type'] ) ) {
 		$fitting_type = is_array( $_POST['fitting_type'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fitting_type'] ) ) : sanitize_text_field( wp_unslash( $_POST['fitting_type'] ) );
 	}
@@ -305,7 +304,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		update_field( 'client_favorite_dresses', $client_favorite_dresses, $fitting_post_id );
 	}
 
-	do_action( 'acf/save_post', $fitting_post_id );
+	// do_action( 'acf/save_post', $fitting_post_id );
 
 	// Log successful booking creation
 	error_log(
