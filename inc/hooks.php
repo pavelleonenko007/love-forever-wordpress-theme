@@ -602,7 +602,7 @@ function loveforever_get_filtered_products_via_ajax() {
 	if ( '3' === $catalog_grid ) {
 		$promo_insert_positions = array( 8, 19 ); // Для 3-колоночной сетки.
 	} else {
-		$promo_insert_positions = array( 5, 14 ); // Для других сеток.
+		$promo_insert_positions = array( 5, 13 ); // Для других сеток.
 	}
 	$promo_needed = 2; // Всегда показываем 2 промо-блока.
 
