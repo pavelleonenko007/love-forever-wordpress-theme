@@ -135,7 +135,7 @@ function loveforever_paginate_links_data( array $args ): array {
 		'current'      => 0,
 		'url_base'     => '/{pagenum}',
 		'first_url'    => '',
-		'mid_size'     => 2,
+		'mid_size'     => 1,
 		'end_size'     => 1,
 		'show_all'     => false,
 		'a_text_patt'  => '%s',
@@ -276,7 +276,8 @@ function loveforever_get_pagination_html( WP_Query $query, array $pagination_arg
 		'total'        => $total_pages,
 		'current'      => $current_page,
 		'url_base'     => $url_base,
-		'mid_size'     => 2,
+		'mid_size'     => 1,
+		'end_size'     => 1,
 		'is_prev_next' => true,
 		'prev_text'    => '<svg width="6" height="10" viewbox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path fill-rule="evenodd" clip-rule="evenodd" d="M0.750232 4.28598L5.25007 0L6 0.714289L1.50016 5.00027L5.99944 9.28571L5.24951 10L0 4.99998L0.74993 4.28569L0.750232 4.28598Z" fill="black"></path>
