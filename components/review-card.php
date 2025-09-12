@@ -28,15 +28,21 @@ if ( empty( $image_carousel ) && ! has_post_thumbnail() ) {
 	<?php if ( ! empty( $image_carousel ) ) : ?>
 		<div data-delay="4000" data-animation="slide" class="slider-oyziv w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
 			<div class="slider-oyziv_mask w-slider-mask">
-				<?php foreach ( $image_carousel as $image_carousel_item ) : ?>
+				<?php
+				if ( has_post_thumbnail() ) :
+					?>
 					<div class="w-slide">
 						<div class="slider-oyziv_img-mom">
-							<img 
-								src="<?php echo esc_url( wp_get_attachment_image_url( $image_carousel_item['image'], 'fullhd' ) ); ?>" 
-								loading="lazy" 
-								alt="<?php echo esc_attr( get_post_meta( $image_carousel_item['image'], '_wp_attachment_image_alt', true ) ); ?>" 
-								class="img-cover"
-							>
+							<?php the_post_thumbnail( 'fullhd', array( 'class' => 'img-cover' ) ); ?>
+						</div>
+					</div>
+				<?php endif; ?>
+				<?php
+				foreach ( $image_carousel as $image_carousel_item ) :
+					?>
+					<div class="w-slide">
+						<div class="slider-oyziv_img-mom">
+							<?php echo wp_get_attachment_image( $image_carousel_item['image'], 'fullhd', false, array( 'class' => 'img-cover' ) ); ?>
 						</div>
 					</div>
 				<?php endforeach; ?>

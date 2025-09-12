@@ -1080,16 +1080,13 @@ function loveforever_add_product_to_favorites_via_ajax() {
 		200
 	);
 }
-// add_action( 'pre_get_posts', 'loveforever_modify_dress_category_query' );
-// function loveforever_modify_dress_category_query( $query ) {
-// if ( $query->is_tax( 'dress_category' ) ) {
-// $query->set( 'posts_per_page', 3 );
-// }
 
-// if ( $query->is_post_type_archive( 'review' ) && ! is_admin() ) {
-// $query->set( 'posts_per_page', 3 );
-// }
-// }
+add_action('pre_get_posts', 'loveforever_modify_review_query');
+function loveforever_modify_review_query( $query ) {
+	if ( is_archive( 'review' ) && ! is_admin() ) {
+		$query->set( 'posts_per_page', 12 );
+	}
+}
 
 function loveforever_breadcrumbs_attribute_filter( $li_attributes, $type, $id ) {
 	$pattern               = '/class="([^"]*)"/';
