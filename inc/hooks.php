@@ -2596,3 +2596,41 @@ add_action(
 	},
 	20
 );
+
+/**
+ * Удаляет все привязанные изображения при удалении отзыва
+ *
+ * @param int $post_id ID удаляемого поста
+ */
+function loveforever_delete_review_attachments( $post_id ) {
+	// Проверяем, что это отзыв
+	if ( 'review' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	// Получаем ID изображения-миниатюры
+	$thumbnail_id = get_post_thumbnail_id( $post_id );
+	if ( $thumbnail_id ) {
+		wp_delete_attachment( $thumbnail_id, true );
+		error_log( "Deleted thumbnail attachment ID: $thumbnail_id for review ID: $post_id" );
+	}
+
+	// Получаем изображения из ACF поля image_carousel
+	$carousel_images = get_field( 'image_carousel', $post_id );
+	if ( ! empty( $carousel_images ) && is_array( $carousel_images ) ) {
+		foreach ( $carousel_images as $carousel_item ) {
+			if ( isset( $carousel_item['image'] ) && ! empty( $carousel_item['image'] ) ) {
+				$image_id = is_array( $carousel_item['image'] ) ? $carousel_item['image']['ID'] : $carousel_item['image'];
+				if ( $image_id ) {
+					wp_delete_attachment( $image_id, true );
+					error_log( "Deleted carousel attachment ID: $image_id for review ID: $post_id" );
+				}
+			}
+		}
+	}
+
+	error_log( "Successfully deleted all attachments for review ID: $post_id" );
+}
+
+// Хук на удаление поста
+add_action( 'before_delete_post', 'loveforever_delete_review_attachments' );
