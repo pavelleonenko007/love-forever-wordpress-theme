@@ -593,9 +593,18 @@ function loveforever_get_filtered_products_via_ajax() {
 	$page        = ! empty( $_POST['page'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['page'] ) ) : 1;
 	$orderby     = ! empty( $_POST['orderby'] ) ? sanitize_text_field( wp_unslash( $_POST['orderby'] ) ) : 'views';
 
-	$posts_per_page         = intval( get_field( 'products_per_page', 'option' ) );
-	$promo_insert_positions = range( 2, $posts_per_page, 6 ); // Позиции 2, 8, 14, 20
-	$promo_needed           = count( $promo_insert_positions );
+	$posts_per_page = intval( get_field( 'products_per_page', 'option' ) );
+
+	// Получаем настройку сетки каталога.
+	$catalog_grid = get_field( 'catalog_grid', 'option' );
+
+	// Определяем позиции промо-блоков в зависимости от сетки каталога.
+	if ( '3' === $catalog_grid ) {
+		$promo_insert_positions = array( 8, 19 ); // Для 3-колоночной сетки.
+	} else {
+		$promo_insert_positions = array( 5, 14 ); // Для других сеток.
+	}
+	$promo_needed = 2; // Всегда показываем 2 промо-блока.
 
 	// Проверка возможности показа промо
 	$can_show_promo = true;

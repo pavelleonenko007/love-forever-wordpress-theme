@@ -31,6 +31,10 @@
 		&--prev,
 		&--next {
 			border: 1rem solid rgb(229 229 229);
+
+			@include mobile {
+				display: none;
+			}
 		}
 
 		@include hover {
