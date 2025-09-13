@@ -29,11 +29,12 @@ class AppointmentManager {
 
 		Logger::log( 'Попытка отправки SMS ', compact( 'post_id' ) );
 
-		$timezone_string = get_option( 'timezone_string' ) ?: 'UTC';
-		$tz              = new DateTimeZone( $timezone_string );
+		$timezone = wp_timezone();
 
-		$timestamp = ( new DateTime( get_field( 'fitting_time', $post_id ), $tz ) )->getTimestamp();
-		$phone     = get_field( 'phone', $post_id );
+		$fitting_datetime = new DateTime( get_field( 'fitting_time', $post_id ), $timezone );
+		$timestamp        = $fitting_datetime->getTimestamp();
+
+		$phone = get_field( 'phone', $post_id );
 		if ( ! $timestamp || ! $phone ) {
 			return;
 		}
@@ -46,8 +47,28 @@ class AppointmentManager {
 		update_post_meta( $post_id, '_previous_fitting_time', $timestamp );
 
 		$this->sms->send_appointment_sms( $post_id );
-		SmsScheduler::schedule_sms( $timestamp - 2 * HOUR_IN_SECONDS, 'send_reminder_sms', array( $post_id ) );
-		SmsScheduler::schedule_sms( $timestamp + 2 * HOUR_IN_SECONDS, 'send_feedback_sms', array( $post_id ) );
+
+		$current_datetime  = new DateTime( 'now', $timezone );
+		$reminder_datetime = clone $fitting_datetime;
+		$reminder_datetime->modify( '-2 hours' );
+
+		if ( $reminder_datetime > $current_datetime ) {
+			SmsScheduler::schedule_sms( $reminder_datetime->getTimestamp(), 'send_reminder_sms', array( $post_id ) );
+		} else {
+			Logger::log(
+				'SMS: Напоминание не планируется - примерка менее чем через 2 часа',
+				array(
+					'post_id'      => $post_id,
+					'fitting_time' => $fitting_datetime->format( 'd.m.Y H:i' ),
+					'current_time' => $current_datetime->format( 'd.m.Y H:i' ),
+					'timezone'     => $timezone->getName(),
+				)
+			);
+		}
+
+		$feedback_datetime = clone $fitting_datetime;
+		$feedback_datetime->modify( '+2 hours' );
+		SmsScheduler::schedule_sms( $feedback_datetime->getTimestamp(), 'send_feedback_sms', array( $post_id ) );
 	}
 
 	public function handle_reminder_sms( $post_id ): void {

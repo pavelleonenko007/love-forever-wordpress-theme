@@ -52,27 +52,19 @@ class Fitting_Slots_Manager {
 	}
 
 	public function get_nearest_available_date( $max_days_ahead = 60, $fitting_type = 'evening' ) {
-		$current_time = current_time( 'timestamp' );
-		$start_date   = wp_date( 'Y-m-d', $current_time );
-		$current_date = new DateTime( $start_date );
-		$end_date     = ( new DateTime( $start_date ) )->modify( "+{$max_days_ahead} days" );
+		$timezone     = wp_timezone();
+		$current_date = new DateTime( 'today', $timezone );
+		$end_date     = ( new DateTime( 'today' ) )->modify( "+{$max_days_ahead} days" );
 
 		while ( $current_date <= $end_date ) {
 			$date      = $current_date->format( 'Y-m-d' );
-			$day_slots = $this->get_slots_for_date( $date, $fitting_type );
+			$day_slots = $this->get_available_slots( $date, $fitting_type );
 
 			// Check if there are any available slots for this day
 			foreach ( $day_slots as $time => $slot ) {
 				if ( $slot['available_for_booking'] > 0 ) {
 					// Check if the slot is not in the past for today
-					if ( $date === $start_date ) {
-						$slot_time = ( new DateTime( $date . ' ' . $time, $this->timezone ) )->getTimestamp();
-						if ( $slot_time > $current_time ) {
-							return $date;
-						}
-					} else {
-						return $date;
-					}
+					return $date;
 				}
 			}
 
@@ -259,7 +251,17 @@ class Fitting_Slots_Manager {
 		while ( $current_time < $end_time ) {
 			$check_time = wp_date( 'H:i', $current_time );
 
-			if ( ! isset( $slots[ $check_time ] ) || $slots[ $check_time ]['available'] < 1 ) {
+			if ( ! isset( $slots[ $check_time ] ) ) {
+				$is_slot_out_of_close_hour = ( new DateTime( $date . ' ' . $check_time, $this->timezone ) ) > new DateTime( $date . ' ' . self::SALON_CLOSE_HOUR . ':00', $this->timezone );
+
+				if ( $is_slot_out_of_close_hour ) {
+					return true;
+				} else {
+					return new WP_Error( 'slot_not_available', 'Выбранное время недоступно для записи' );
+				}
+			}
+
+			if ( $slots[ $check_time ]['available'] < 1 ) {
 					return new WP_Error( 'not_enough_time', 'Недостаточно свободного времени для выбранного типа примерки' );
 			}
 
@@ -458,7 +460,7 @@ class Fitting_Slots_Manager {
 		}
 
 		// if ( empty( $fitting_type ) ) {
-		// 	return new WP_Error( 'empty_fitting_type', 'Тип примерки не может быть пустым' );
+		// return new WP_Error( 'empty_fitting_type', 'Тип примерки не может быть пустым' );
 		// }
 
 		// Parse datetime with timezone.
