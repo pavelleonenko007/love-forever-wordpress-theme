@@ -381,12 +381,10 @@
 					<?php endif; ?>
 				</div>
 				<div class="dialog-card__body">
+					<p class="fitting-form__group-heading" data-js-fitting-form-selected-date></p>
 					<div class="fitting-form" data-js-fitting-form-wrapper="singleDressForm">
 						<fieldset class="fitting-form__step" form="singleDressForm">
 							<fieldset class="fitting-form__group" form="singleDressForm">
-								<div class="fitting-form__group-header">
-									<p class="fitting-form__group-heading" data-js-fitting-form-selected-date></p>
-								</div>
 								<div class="fitting-form__group-body">
 									<div class="field">
 										<label for="singleDressFormNameField" class="field__label sr-only">Имя</label>

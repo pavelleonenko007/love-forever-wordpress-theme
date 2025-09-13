@@ -750,6 +750,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		closestDialog: '[data-js-dialog]',
 		dialogTitle: '[data-js-dialog-title]',
 		dialogSelectedTime: '[data-js-fitting-form-selected-date]',
+		successButton: '[data-js-fitting-form-success-button]',
 	};
 
 	stateSelectors = {
@@ -769,7 +770,9 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.dialogSelectedTime = this.closestDialog.querySelector(
 			this.selectors.dialogSelectedTime
 		);
-
+		this.successButton = this.closestDialog.querySelector(
+			this.selectors.successButton
+		);
 		this.fields = this.findFields();
 		this.state = this.setupFormState();
 
@@ -1175,13 +1178,19 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	updateUI() {
-		console.log({ ...this.state });
-
 		if (
 			this.prevState.date !== this.state.date ||
 			this.prevState.fitting_type !== this.state.fitting_type
 		) {
 			this.updateTimeSlots();
+		}
+
+		if (this.state.date && this.state.time) {
+			this.dialogSelectedTime.textContent = formatDateToRussian(
+				`${this.state.date} ${this.state.time}`
+			);
+		} else {
+			this.dialogSelectedTime.textContent = '';
 		}
 
 		if (
@@ -1216,11 +1225,10 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		}
 
 		this.form.hidden = this.state.success;
+		this.dialogSelectedTime.hidden = !this.state.success;
 
-		if (this.closestDialog) {
-			this.form.nextElementSibling.hidden = !this.state.success;
-			this.form.nextElementSibling.disabled = !this.state.success;
-		}
+		this.successButton.hidden = !this.state.success;
+		this.successButton.disabled = !this.state.success;
 
 		this.prevState = { ...this.state };
 	}
@@ -1375,12 +1383,8 @@ class SingleFittingForm extends BaseFittingForm {
 
 	reset() {
 		this.form.reset();
-		this.state.success = false;
-		this.state.dialogMessage = 'Запись на примерку';
-		this.state.step = 0;
-		this.state.dateIncrementRatio = 0;
-		this.state.isSubmitted = false;
-		this.form.elements.date.dispatchEvent(new Event('change'));
+		this.state = this.setupFormState();
+		this.form.dispatchEvent(new Event('change'));
 	}
 
 	/**
@@ -1438,7 +1442,7 @@ class SingleFittingForm extends BaseFittingForm {
 			this.state.dialogMessage = body.data.message;
 			this.state.dateIncrementRatio = 1;
 			this.state.isSubmitted = true;
-			this.updateTimeSlots();
+			// this.updateTimeSlots();
 		} catch (error) {
 			console.error(error);
 			this.state.error = error.message;

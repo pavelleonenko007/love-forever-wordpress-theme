@@ -1,5 +1,11 @@
 @use '../media' as *;
 
+@mixin fitting-form-capitalize-text {
+	font-size: 16rem;
+	line-height: 1;
+	text-transform: uppercase;
+}
+
 .fitting-form {
 	display: flex;
 	flex-direction: column;
@@ -61,9 +67,7 @@
 		}
 
 		&-heading {
-			font-size: 16rem;
-			line-height: 1;
-			text-transform: uppercase;
+			@include fitting-form-capitalize-text;
 		}
 
 		&-body {
@@ -80,6 +84,10 @@
 			color: rgba(0, 0, 0, 0.3);
 			text-align: center;
 		}
+	}
+
+	&__selected-date {
+		@include fitting-form-capitalize-text;
 	}
 
 	&__double {

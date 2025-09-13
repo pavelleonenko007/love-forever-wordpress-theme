@@ -23,10 +23,10 @@ $date_with_nearest_available_slots = $booking_manager->get_nearest_available_dat
 					<?php if ( ! empty( MAP_LINK ) ) : ?>
 						<?php
 						$map_link_attributes = array(
-							'class'  => 'dialog-card__link menu-link active',
-							'href'   => MAP_LINK['url'],
-							'title'  => MAP_LINK['title'],
-							'target' => MAP_LINK['target'],
+							'class'                       => 'dialog-card__link menu-link active',
+							'href'                        => MAP_LINK['url'],
+							'title'                       => MAP_LINK['title'],
+							'target'                      => MAP_LINK['target'],
 							'data-js-dialog-close-button' => '',
 						);
 
@@ -230,7 +230,21 @@ $date_with_nearest_available_slots = $booking_manager->get_nearest_available_dat
 						<div class="fitting-form__errors" data-js-fitting-form-errors hidden></div>
 						<?php wp_nonce_field( 'submit_fitting_form', 'submit_fitting_form_nonce' ); ?>
 					</form>
-					<button type="dialog-card__body-button button" class="button" disabled hidden data-js-dialog-close-button>Хорошо</button>
+					<div 
+						class="fitting-form__selected-date"
+						data-js-fitting-form-selected-date
+						hidden
+					></div>
+					<button 
+						type="button" 
+						class="dialog-card__body-button button" 
+						disabled 
+						hidden 
+						data-js-dialog-close-button
+						data-js-fitting-form-success-button
+					>
+						Хорошо
+					</button>
 				</div>
 			</div>
 		</div>
