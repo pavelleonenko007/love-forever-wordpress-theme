@@ -304,7 +304,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		update_field( 'client_favorite_dresses', $client_favorite_dresses, $fitting_post_id );
 	}
 
-	// do_action( 'acf/save_post', $fitting_post_id );
+	do_action( 'acf/save_post', $fitting_post_id );
 
 	// Log successful booking creation
 	error_log(
