@@ -1,5 +1,6 @@
 import BaseComponent from './BaseComponent';
 import DialogCollection from './Dialog';
+import MatchMedia from './MatchMedia';
 import {
 	formatDateToRussian,
 	isSafariBrowser,
@@ -804,6 +805,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			dress_category: null,
 			isUpdatingSlots: false,
 			isSubmitting: false,
+			errors: [], // Массив ошибок разных типов
 		};
 
 		for (const element of this.fields) {
@@ -835,6 +837,55 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		}
 
 		return this._getProxyState(state);
+	}
+
+	/**
+	 * Методы управления ошибками
+	 */
+	addError(type, message) {
+		this.state.errors = [...this.state.errors, { type, message }];
+	}
+
+	removeError(type) {
+		this.state.errors = this.state.errors.filter(
+			(error) => error.type !== type
+		);
+	}
+
+	getErrorByType(type) {
+		return this.state.errors.find((error) => error.type === type);
+	}
+
+	/**
+	 * Валидация доступности времени
+	 */
+	validateTimeAvailability(selectedTime, newSlots) {
+		if (!selectedTime) return true;
+
+		// Проверяем, есть ли выбранное время в новых слотах
+		const timeExists = Object.keys(newSlots.slots).includes(selectedTime);
+
+		if (!timeExists) return false;
+
+		// Если слоты не отключены (администратор), любое время доступно
+		if (!newSlots.disableSlots) {
+			return true;
+		}
+
+		// Для обычных пользователей проверяем доступность
+		return newSlots.slots[selectedTime].available_for_booking > 0;
+	}
+
+	/**
+	 * Получение отображаемого названия типа платья
+	 */
+	getFittingTypeDisplayName(fittingType) {
+		const typeNames = {
+			wedding: 'свадебного',
+			evening: 'вечернего',
+			prom: 'выпускного',
+		};
+		return typeNames[fittingType] || fittingType;
 	}
 
 	/**
@@ -910,6 +961,14 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 				}
 			}
 
+			// Если ни один тип платья не выбран, используем вечерние платья по умолчанию
+			if (
+				!formData.has('fitting_type[]') ||
+				formData.getAll('fitting_type[]').length === 0
+			) {
+				formData.append('fitting_type[]', 'evening');
+			}
+
 			formData.append('action', 'get_fitting_time_slots');
 			formData.append('nonce', LOVE_FOREVER.NONCE);
 
@@ -937,19 +996,88 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 		this.state.isUpdatingSlots = true;
 
+		// Сохраняем текущее выбранное время
+		const currentSelectedTime = this.state.time;
+
 		const { data, error } = await promiseWrapper(this.getNewTimeSlots());
 
 		if (error) {
 			this.state.success = false;
-			this.state.error = error.message;
+			this.addError('general', error.message);
 			this.state.isUpdatingSlots = false;
 			return;
 		}
 
+		// Валидируем текущее время
+		const isCurrentTimeAvailable = this.validateTimeAvailability(
+			currentSelectedTime,
+			data
+		);
+
+		if (!isCurrentTimeAvailable && currentSelectedTime) {
+			// Удаляем предыдущую ошибку времени
+			this.removeError('time');
+
+			const selectedFittingType = this.state.fitting_type?.[0];
+
+			if (selectedFittingType) {
+				// Добавляем новую ошибку времени с конкретным типом платья
+				const fittingTypeName =
+					this.getFittingTypeDisplayName(selectedFittingType);
+				this.addError(
+					'time',
+					`Выбранное время не доступно для примерки ${fittingTypeName} платья, выберите другое время`
+				);
+
+				// Фокусируемся на select с временными слотами
+				setTimeout(() => {
+					if (MatchMedia.mobile.matches) {
+						// На мобилке фокусируемся на нативном select
+						this.form.elements.time.focus();
+					} else {
+						// На десктопе фокусируемся на кастомном jQuery selectmenu
+						if ($(this.form.elements.time).data('ui-selectmenu')) {
+							$(this.form.elements.time).selectmenu('open');
+						} else {
+							// Fallback на нативный select, если jQuery selectmenu не инициализирован
+							this.form.elements.time.focus();
+						}
+					}
+				}, 100);
+			}
+
+			// Сбрасываем время на первое доступное
+			const firstAvailableTime = Object.keys(data.slots).find((time) => {
+				// Если слоты не отключены (администратор), любое время доступно
+				if (!data.disableSlots) {
+					return true;
+				}
+				// Для обычных пользователей проверяем доступность
+				return data.slots[time].available_for_booking > 0;
+			});
+			this.state.time = firstAvailableTime || '';
+		} else {
+			// Очищаем ошибку времени, если время доступно
+			this.removeError('time');
+		}
+
+		// Обновляем select
+		this.updateTimeSelect(data);
+
+		this.state.isUpdatingSlots = false;
+	}
+
+	/**
+	 * Обновление select с временными слотами
+	 */
+	updateTimeSelect(data) {
 		/**
 		 * @type {HTMLSelectElement}
 		 */
 		const timeSelectControl = this.form.elements.time;
+
+		// Сохраняем текущее выбранное значение
+		const currentSelectedTime = this.state.time;
 
 		timeSelectControl.innerHTML = '';
 
@@ -959,6 +1087,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 				const option = document.createElement('option');
 
 				option.value = time;
+				// Слоты отключаются только если disableSlots = true и available_for_booking = 0
 				option.disabled = data.disableSlots && slot.available_for_booking === 0;
 
 				let optionContent = time;
@@ -973,7 +1102,13 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			}
 		}
 
-		this.state.isUpdatingSlots = false;
+		// Восстанавливаем выбранное значение, если оно доступно
+		if (
+			currentSelectedTime &&
+			this.validateTimeAvailability(currentSelectedTime, data)
+		) {
+			timeSelectControl.value = currentSelectedTime;
+		}
 	}
 
 	async submitForm(event) {
@@ -984,7 +1119,8 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		}
 
 		this.state.isSubmitting = true;
-		this.state.error = null;
+		// Очищаем все ошибки при начале отправки
+		this.state.errors = [];
 
 		try {
 			const formData = new FormData(this.form);
@@ -1014,7 +1150,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			);
 		} catch (error) {
 			console.error(error);
-			this.state.error = error.message;
+			this.addError('general', error.message);
 		} finally {
 			this.state.isSubmitting = false;
 		}
@@ -1039,6 +1175,8 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 	}
 
 	updateUI() {
+		console.log({ ...this.state });
+
 		if (
 			this.prevState.date !== this.state.date ||
 			this.prevState.fitting_type !== this.state.fitting_type
@@ -1062,8 +1200,8 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			);
 		}
 
-		this.errorsElement.innerHTML = `<p>${this.state.error}</p>`;
-		this.errorsElement.hidden = !Boolean(this.state.error);
+		// Обновляем отображение ошибок
+		this.updateErrorsDisplay();
 
 		const allFieldChecked =
 			isValidRussianPhone(this.state.phone) &&
@@ -1085,6 +1223,18 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		}
 
 		this.prevState = { ...this.state };
+	}
+
+	/**
+	 * Обновление отображения ошибок
+	 */
+	updateErrorsDisplay() {
+		// Объединяем все ошибки в один текст
+		const errorMessages = this.state.errors.map((error) => error.message);
+		const errorText = errorMessages.join('<br>');
+
+		this.errorsElement.innerHTML = errorText ? `<p>${errorText}</p>` : '';
+		this.errorsElement.hidden = !errorText;
 	}
 
 	bindEvents() {
