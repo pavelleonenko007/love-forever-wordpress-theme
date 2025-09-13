@@ -6,6 +6,8 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+global $template;
+
 $phone         = get_field( 'phone', 'option' );
 $address       = get_field( 'address', 'option' );
 $working_hours = get_field( 'working_hours', 'option' );
@@ -536,6 +538,9 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 			</div>
 		</div>
 	</header>
+	<?php
+	if ( ! str_contains( $template, 'admin-fittings.php' ) ) :
+		?>
 	<div class="fixed-navbar menuline lf-fixed-navbar">
 		<div class="vert-menu">
 			<div class="spleet m-none">
@@ -1073,5 +1078,6 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 			</div>
 		</div>
 	</div>
+	<?php endif; ?>
 	<div class="rem10"></div>
 </div>
