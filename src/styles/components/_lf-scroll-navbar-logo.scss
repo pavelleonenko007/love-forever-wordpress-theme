@@ -7,6 +7,10 @@
 		color: var(--pink);
 	}
 
+	.mobmenuopened & {
+		color: var(--pink);
+	}
+
 	&__icon {
 		width: 203rem;
 		height: 40rem;

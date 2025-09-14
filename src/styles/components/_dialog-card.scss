@@ -4,7 +4,7 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	padding: 54rem 20rem 10rem;
+	padding: 54rem 20rem 20rem;
 	width: 100%;
 	max-width: calc(362rem + 16px);
 	height: 100dvh;
@@ -12,7 +12,8 @@
 	display: flex;
 	flex-direction: column;
 	row-gap: 36rem;
-	overflow: hidden;
+	overflow: auto;
+	pointer-events: auto;
 
 	@include mobile-s {
 		max-width: unset;
@@ -40,7 +41,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		row-gap: 20rem;
-		overflow: hidden auto;
+		overflow: visible;
 
 		&-button {
 			flex-shrink: 0;
