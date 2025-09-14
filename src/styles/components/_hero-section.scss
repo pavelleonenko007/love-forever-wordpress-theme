@@ -1,3 +1,5 @@
+@use '../media' as *;
+
 .hero-section {
   $root: &;
 
@@ -10,6 +12,17 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+
+    @include mobile {
+      &.section {
+        height: 340rem;
+        min-height: unset;
+      }
+
+      & .slider_home-slider_slide-in {
+        padding: 0;
+      }
+    }
   }
 
   &__blur {
