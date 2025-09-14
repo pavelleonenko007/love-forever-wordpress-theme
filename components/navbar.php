@@ -68,12 +68,12 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 											data-js-input-zoom-prevention
 										>
 											<input
-												type="lf-search-form__search-input search" 
+												type="search" 
 												name="s" 
 												maxlength="256" 
 												placeholder="Напишите, что вы ищите..." 
 												id="searchForm1SearchControl" 
-												class="search-input w-input" 
+												class="lf-search-form__search-input search-input w-input" 
 												required
 												data-js-search-form-search-input
 											>

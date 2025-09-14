@@ -4,7 +4,9 @@ const ROOT_SELECTOR = '[data-js-input-zoom-prevention]';
 
 class InputZoomPrevention {
 	constructor(root) {
-		this.inputs = root.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], textarea');
+		this.inputs = root.querySelectorAll('input:not([type="submit"]):not([type="reset"]):not([type="hidden"]):not([type="radio"]):not([type="checkbox"]), textarea');
+		console.log({root, inputs: this.inputs});
+		
 		this.init();
 	}
 
