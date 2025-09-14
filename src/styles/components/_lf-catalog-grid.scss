@@ -7,6 +7,10 @@
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 30rem 10rem;
 
+	.lf-product-filter-form[hidden] + & {
+		padding-top: 20rem;
+	}
+
 	&--3-col {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
