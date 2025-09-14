@@ -19,7 +19,7 @@ global $post; ?>
 	</div>
 	<div class="faq-bottom">
 		<div class="faq-content">
-			<div class="rich-faq w-richtext">
+			<div class="rich-faq flow w-richtext">
 				<?php the_content(); ?>
 			</div>
 		</div>
