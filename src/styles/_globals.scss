@@ -57,18 +57,22 @@ a[href]:where(:not([class])) {
 	}
 }
 
-.header.menuline {
-	.htmldopmenuopened & {
-		color: black;
-
-		.p-12-12.uper.white {
+.header {
+	z-index: 10;
+	
+	&.menuline {
+		.htmldopmenuopened & {
 			color: black;
+	
+			.p-12-12.uper.white {
+				color: black;
+			}
 		}
-	}
-
-	.white-top & {
-		.p-12-12.uper.white {
-			color: black;
+	
+		.white-top & {
+			.p-12-12.uper.white {
+				color: black;
+			}
 		}
 	}
 }
