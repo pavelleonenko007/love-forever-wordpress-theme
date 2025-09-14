@@ -60,7 +60,13 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							<div class="hovered-menue search-m">
 								<div id="w-node-_29763d6b-4a4a-4ba9-96d9-354223034cf4-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form id="searchForm1" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="lf-search-form search" data-js-search-form>
+										<form 
+											id="searchForm1" 
+											action="<?php echo esc_url( home_url( '/' ) ); ?>" 
+											class="lf-search-form search" 
+											data-js-search-form
+											data-js-input-zoom-prevention
+										>
 											<input
 												type="lf-search-form__search-input search" 
 												name="s" 
@@ -429,7 +435,13 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 								<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 									<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
 										<div class="div-block-7">
-											<form id="searchForm2" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="lf-search-form search" data-js-search-form>
+											<form 
+												id="searchForm2" 
+												action="<?php echo esc_url( home_url( '/' ) ); ?>" 
+												class="lf-search-form search" 
+												data-js-search-form
+												data-js-input-zoom-prevention
+											>
 												<input 
 													class="lf-search-form__search-input search-input w-input" 
 													maxlength="256" 
@@ -582,7 +594,13 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b87a-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form id="searchForm3" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="lf-search-form search" data-js-search-form>
+										<form 
+											id="searchForm3" 
+											action="<?php echo esc_url( home_url( '/' ) ); ?>" 
+											class="lf-search-form search" 
+											data-js-search-form
+											data-js-input-zoom-prevention
+										>
 											<input 
 												class="lf-search-form__search-input search-input w-input" 
 												maxlength="256" 
@@ -669,7 +687,13 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 							<div class="hovered-menue search-m">
 								<div id="w-node-_7814220d-338f-0ab7-0d3b-7d1e447cc090-be61d3ef" class="div-block-6">
 									<div class="div-block-7">
-										<form id="searchForm4" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="search" data-js-search-form>
+										<form 
+											id="searchForm4" 
+											action="<?php echo esc_url( home_url( '/' ) ); ?>" 
+											class="search" 
+											data-js-search-form
+											data-js-input-zoom-prevention
+										>
 											<input 
 												class="search-input w-input" 
 												maxlength="256" 

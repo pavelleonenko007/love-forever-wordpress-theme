@@ -107,7 +107,15 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 								<div class="pp-vert">
 									<div class="p-12-12 uper white m-12-12">Укажите телефон и мы пришлем вам список избранных платьев</div>
 									<div class="form-block-2">
-										<form id="favoritesContactForm" data-js-form class="form-2 favorites-contact-form" data-wf-page-id="672b5edfcfeb9652455dadc7" data-wf-element-id="8d5544fe-3d2a-0ad9-f4de-5a958bae3704" novalidate>
+										<form 
+											id="favoritesContactForm" 
+											data-js-form 
+											data-js-input-zoom-prevention 
+											class="form-2 favorites-contact-form" 
+											data-wf-page-id="672b5edfcfeb9652455dadc7" 
+											data-wf-element-id="8d5544fe-3d2a-0ad9-f4de-5a958bae3704" 
+											novalidate
+										>
 											<div class="favorites-contact-form__field field">
 												<input 
 													class="field__control" 

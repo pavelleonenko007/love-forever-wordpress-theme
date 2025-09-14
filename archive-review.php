@@ -48,7 +48,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 							</div>
 						</div>
 					</div>
-        </section>
+		</section>
 				<section class="section">
 					<div class="container n-top">
 						<?php if ( have_posts() ) : ?>
@@ -97,7 +97,16 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 								</li>
 							</ol>
 							<div class="otz-form-block">
-								<form id="addReview" class="reviews-form" data-js-form data-js-review-form data-wf-page-id="67249dc1fa10238682ee40ae" data-wf-element-id="d744d5e4-a65e-3d82-0a54-f293122549ec" novalidate>
+								<form 
+									id="addReview" 
+									class="reviews-form" 
+									data-js-form 
+									data-js-review-form 
+									data-js-input-zoom-prevention
+									data-wf-page-id="67249dc1fa10238682ee40ae" 
+									data-wf-element-id="d744d5e4-a65e-3d82-0a54-f293122549ec" 
+									novalidate
+								>
 									<div class="reviews-form__grid">
 										<div class="field">
 											<fieldset class="field__control star-rating">
