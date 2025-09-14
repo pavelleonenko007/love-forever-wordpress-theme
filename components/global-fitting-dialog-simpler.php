@@ -217,6 +217,19 @@ $date_with_nearest_available_slots = $booking_manager->get_nearest_available_dat
 											required
 										>
 									</div>
+									<?php if ( $can_edit_fittings ) : ?>
+										<div class="field">
+											<textarea 
+												name="comment" 
+												id="globalDressFittingFormSimplerCommentField"
+												class="field__control"
+												placeholder="Комментарий"
+												rows="8"
+												maxlength="200"
+												title="Оставьте ваш комментарий"
+											></textarea>
+										</div>
+									<?php endif; ?>
 									<?php if ( is_singular( 'dress' ) ) : ?>
 										<input type="hidden" name="target_dress" value="<?php echo esc_attr( get_the_ID() ); ?>">
 									<?php endif; ?>
