@@ -1,32 +1,32 @@
 <?php
-/**
- * Navbar
- *
- * @package 0.0.1
- */
-
-defined( 'ABSPATH' ) || exit;
-global $template;
-
-$phone         = get_field( 'phone', 'option' );
-$address       = get_field( 'address', 'option' );
-$working_hours = get_field( 'working_hours', 'option' );
-$socials       = loveforever_get_socials();
-$favorites     = loveforever_get_favorites();
-
-$left_menu    = get_field( 'left_menu', 'option' );
-$right_menu   = get_field( 'right_menu', 'option' );
-$search_links = get_field( 'search_links', 'option' );
-
-$mobile_menu_items  = array( ...$left_menu, ...$right_menu );
-$only_catalog_items = array_filter(
-	$mobile_menu_items,
-	function ( $item ) {
-		return 'dress-category' === $item['acf_fc_layout'] || 'dress-category-with-images' === $item['acf_fc_layout'];
-	}
-);
-$filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
-?>
+	/**
+	 * Navbar
+	 *
+	 * @package 0.0.1
+	 */
+	
+	defined( 'ABSPATH' ) || exit;
+	global $template;
+	
+	$phone         = get_field( 'phone', 'option' );
+	$address       = get_field( 'address', 'option' );
+	$working_hours = get_field( 'working_hours', 'option' );
+	$socials       = loveforever_get_socials();
+	$favorites     = loveforever_get_favorites();
+	
+	$left_menu    = get_field( 'left_menu', 'option' );
+	$right_menu   = get_field( 'right_menu', 'option' );
+	$search_links = get_field( 'search_links', 'option' );
+	
+	$mobile_menu_items  = array( ...$left_menu, ...$right_menu );
+	$only_catalog_items = array_filter(
+		$mobile_menu_items,
+		function ( $item ) {
+			return 'dress-category' === $item['acf_fc_layout'] || 'dress-category-with-images' === $item['acf_fc_layout'];
+		}
+	);
+	$filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
+	?>
 <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar w-nav">
 	<header class="header menuline">
 		<div class="vert-menu">
@@ -66,7 +66,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 											class="lf-search-form search" 
 											data-js-search-form
 											data-js-input-zoom-prevention
-										>
+											>
 											<input
 												type="search" 
 												name="s" 
@@ -76,7 +76,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 												class="lf-search-form__search-input search-input w-input" 
 												required
 												data-js-search-form-search-input
-											>
+												>
 											<input type="submit" class="search-button w-button" value="Search">
 											<button type="reset" class="lf-search-form__reset clear-search">Очистить</button>
 										</form>
@@ -84,38 +84,38 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 									</div>
 								</div>
 								<?php if ( ! empty( $search_links ) ) : ?>
-									<div class="serch-mob">
-										<div class="m-nav-cats">
-											<?php foreach ( $search_links as $search_column ) : ?>
-												<div class="m-nav-drops">
-													<a href="#" class="m-nav-drop-btn w-inline-block">
-														<div><?php echo esc_html( $search_column['column_name'] ); ?></div>
-														<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
-													</a>
-													<div class="m-nav-drop-contant">
-														<?php
-														$column_links = $search_column['column_links'];
-														if ( ! empty( $column_links ) ) :
+								<div class="serch-mob">
+									<div class="m-nav-cats">
+										<?php foreach ( $search_links as $search_column ) : ?>
+										<div class="m-nav-drops">
+											<a href="#" class="m-nav-drop-btn w-inline-block">
+												<div><?php echo esc_html( $search_column['column_name'] ); ?></div>
+												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
+											</a>
+											<div class="m-nav-drop-contant">
+												<?php
+													$column_links = $search_column['column_links'];
+													if ( ! empty( $column_links ) ) :
+														?>
+												<div class="div-block-11">
+													<?php
+														foreach ( $column_links as $column_link ) :
+															$column_link_attributes_str = loveforever_prepare_link_attributes(
+																array(
+																	'class' => 'a-12-12 in-drop',
+																),
+																$column_link['link']
+															);
 															?>
-															<div class="div-block-11">
-																<?php
-																foreach ( $column_links as $column_link ) :
-																	$column_link_attributes_str = loveforever_prepare_link_attributes(
-																		array(
-																			'class' => 'a-12-12 in-drop',
-																		),
-																		$column_link['link']
-																	);
-																	?>
-																	<a <?php echo $column_link_attributes_str; ?>><?php echo esc_html( $column_link['link']['title'] ); ?></a>
-																<?php endforeach; ?>
-															</div>
-														<?php endif; ?>
-													</div>
+													<a <?php echo $column_link_attributes_str; ?>><?php echo esc_html( $column_link['link']['title'] ); ?></a>
+													<?php endforeach; ?>
 												</div>
-											<?php endforeach; ?>
+												<?php endif; ?>
+											</div>
 										</div>
+										<?php endforeach; ?>
 									</div>
+								</div>
 								<?php endif; ?>
 								<div class="vert m-none">
 									<div id="w-node-_3c45bc09-5b3c-1a4e-f526-aea5e4cb6a05-be61d3ef" class="m-h-vert">
@@ -283,117 +283,117 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 									<div class="m-nav-keep">
 										<div class="m-nav-top">
 											<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
-												<?php
+											<?php
 												if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
 													$dress_category = get_term( $mobile_menu_item['category'] );
 													?>
-													<a href="#" class="m-nav-drop w-inline-block">
-														<div><?php echo esc_html( $dress_category->name ); ?></div>
-														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
-													</a>
-												<?php else : ?>
-													<?php $menu_link = $mobile_menu_item['link']; ?>
-													<a href="<?php echo esc_url( $menu_link['url'] ); ?>" class="m-nav-a w-inline-block">
-														<div>
-															<?php echo esc_html( $menu_link['title'] ); ?>
-															<?php if ( ! empty( $mobile_menu_item['green_badge'] ) ) : ?>
-																<span class="indirim-span"><?php echo esc_html( $mobile_menu_item['green_badge'] ); ?></span>
-															<?php endif; ?>
-														</div>
-													</a>
-												<?php endif; ?>
+											<a href="#" class="m-nav-drop w-inline-block">
+												<div><?php echo esc_html( $dress_category->name ); ?></div>
+												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
+											</a>
+											<?php else : ?>
+											<?php $menu_link = $mobile_menu_item['link']; ?>
+											<a href="<?php echo esc_url( $menu_link['url'] ); ?>" class="m-nav-a w-inline-block">
+												<div>
+													<?php echo esc_html( $menu_link['title'] ); ?>
+													<?php if ( ! empty( $mobile_menu_item['green_badge'] ) ) : ?>
+													<span class="indirim-span"><?php echo esc_html( $mobile_menu_item['green_badge'] ); ?></span>
+													<?php endif; ?>
+												</div>
+											</a>
+											<?php endif; ?>
 											<?php endforeach; ?>
 										</div>
 										<div id="w-node-_3514c32b-e70e-46c1-9d79-f82fca09e2e3-be61d3ef" class="div-block-4 cont-item">
 											<div class="p-12-12 uper m-12-12">Наши группы в социальных сетях</div>
-						<div class="soc-grid mpb lf-share-buttons">
-									<?php foreach ( $socials as $social ) : ?>
-						<a class="lf-share-button lf-share-button--dark" href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer">
-							<svg class="lf-share-button__icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-							<use href="#<?php echo esc_attr( $social['icon'] ); ?>"></use>
-							</svg>
-						</a>
-						<?php endforeach; ?>
+											<div class="soc-grid mpb lf-share-buttons">
+												<?php foreach ( $socials as $social ) : ?>
+												<a class="lf-share-button lf-share-button--dark" href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+													<svg class="lf-share-button__icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+														<use href="#<?php echo esc_attr( $social['icon'] ); ?>"></use>
+													</svg>
+												</a>
+												<?php endforeach; ?>
 											</div>
 										</div>
 										<div class="mob-work-time m-12-12">
 											<?php if ( ! empty( WORKING_HOURS ) ) : ?>
-												<div><?php echo esc_html( WORKING_HOURS ); ?></div>
+											<div><?php echo esc_html( WORKING_HOURS ); ?></div>
 											<?php endif; ?>
 											<?php if ( ! empty( ADDRESS ) ) : ?>
-												<div><?php echo esc_html( ADDRESS ); ?></div>
+											<div><?php echo esc_html( ADDRESS ); ?></div>
 											<?php endif; ?>
 										</div>
 									</div>
 									<?php if ( ! empty( $only_catalog_items ) ) : ?>
-										<div class="m-nav-content">
-											<?php
+									<div class="m-nav-content">
+										<?php
 											foreach ( $only_catalog_items as $only_catalog_item ) :
 												$dress_category = get_term( $only_catalog_item['category'] );
 												?>
-												<div class="m-nav-content_in">
-													<a href="#" class="m-nav-content_back w-inline-block">
-														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc840b23caa30509cbdf5_Union.svg' ); ?>" loading="eager" alt class="image-7">
-														<div class="p-12-12 uper m-12-12"><?php echo esc_html( $dress_category->name ); ?></div>
+										<div class="m-nav-content_in">
+											<a href="#" class="m-nav-content_back w-inline-block">
+												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc840b23caa30509cbdf5_Union.svg' ); ?>" loading="eager" alt class="image-7">
+												<div class="p-12-12 uper m-12-12"><?php echo esc_html( $dress_category->name ); ?></div>
+											</a>
+											<a href="<?php echo esc_url( get_term_link( $dress_category ) ); ?>" class="m-nav-a long w-inline-block">
+												<div>СМОТРЕТЬ ВСЕ</div>
+												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
+											</a>
+											<?php
+												$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
+												$dropdowns = array_filter(
+													$dropdowns,
+													function ( $dropdown ) {
+														return ! empty( $dropdown['links'] );
+													}
+												);
+												if ( ! empty( $dropdowns ) ) :
+													?>
+											<div class="m-nav-cats">
+												<?php foreach ( $dropdowns as $dropdown ) : ?>
+												<div class="m-nav-drops">
+													<a href="#" class="m-nav-drop-btn w-inline-block">
+														<div><?php echo esc_html( $dropdown['column_name'] ); ?></div>
+														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop">
 													</a>
-													<a href="<?php echo esc_url( get_term_link( $dress_category ) ); ?>" class="m-nav-a long w-inline-block">
-														<div>СМОТРЕТЬ ВСЕ</div>
-														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
-													</a>
-													<?php
-													$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
-													$dropdowns = array_filter(
-														$dropdowns,
-														function ( $dropdown ) {
-															return ! empty( $dropdown['links'] );
-														}
-													);
-													if ( ! empty( $dropdowns ) ) :
-														?>
-														<div class="m-nav-cats">
-															<?php foreach ( $dropdowns as $dropdown ) : ?>
-																<div class="m-nav-drops">
-																	<a href="#" class="m-nav-drop-btn w-inline-block">
-																		<div><?php echo esc_html( $dropdown['column_name'] ); ?></div>
-																		<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop">
-																	</a>
-																	<div class="m-nav-drop-contant">
-																		<div class="div-block-11">
-																			<?php foreach ( $dropdown['links'] as $dropdown_link_item ) : ?>
-																				<?php $dropdown_link = $dropdown_link_item['link']; ?>
-																				<a 
-																					href="<?php echo esc_url( $dropdown_link['url'] ); ?>" 
-																					class="a-12-12 in-drop"
-																					target="<?php echo esc_attr( $dropdown_link['target'] ) ?? '_self'; ?>"
-																				>
-																					<?php echo esc_html( $dropdown_link['title'] ); ?>
-																				</a>
-																			<?php endforeach; ?>
-																		</div>
-																	</div>
-																</div>
+													<div class="m-nav-drop-contant">
+														<div class="div-block-11">
+															<?php foreach ( $dropdown['links'] as $dropdown_link_item ) : ?>
+															<?php $dropdown_link = $dropdown_link_item['link']; ?>
+															<a 
+																href="<?php echo esc_url( $dropdown_link['url'] ); ?>" 
+																class="a-12-12 in-drop"
+																target="<?php echo esc_attr( $dropdown_link['target'] ) ?? '_self'; ?>"
+																>
+															<?php echo esc_html( $dropdown_link['title'] ); ?>
+															</a>
 															<?php endforeach; ?>
 														</div>
-													<?php endif; ?>
-													<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
-														<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
-														<?php if ( ! empty( $submenu_items ) ) : ?>
-															<div class="m-nav-cats">
-																<?php foreach ( $submenu_items as $submenu_item ) : ?>
-																	<div class="m-nav-drops">
-																		<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
-																			<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
-																			<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
-																			style="transform: rotate(-90deg);">
-																		</a>
-																	</div>
-																<?php endforeach; ?>
-															</div>
-														<?php endif; ?>
-													<?php endif; ?>
+													</div>
 												</div>
-											<?php endforeach; ?>
+												<?php endforeach; ?>
+											</div>
+											<?php endif; ?>
+											<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
+											<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
+											<?php if ( ! empty( $submenu_items ) ) : ?>
+											<div class="m-nav-cats">
+												<?php foreach ( $submenu_items as $submenu_item ) : ?>
+												<div class="m-nav-drops">
+													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
+														<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
+														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
+															style="transform: rotate(-90deg);">
+													</a>
+												</div>
+												<?php endforeach; ?>
+											</div>
+											<?php endif; ?>
+											<?php endif; ?>
 										</div>
+										<?php endforeach; ?>
+									</div>
 									<?php endif; ?>
 								</div>
 							</div>
@@ -403,140 +403,140 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 			</div>
 			<div class="spleet m-none">
 				<?php if ( ! empty( $left_menu ) ) : ?>
-					<!-- Desktop Left menu start -->
-					<div class="menu-line p-12-12 white uper n-voreder">
-						<?php foreach ( $left_menu as $left_menu_item ) : ?>
-							<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
-						<?php endforeach; ?>
-					</div>
-					<!-- Desktop Left menu end -->
+				<!-- Desktop Left menu start -->
+				<div class="menu-line p-12-12 white uper n-voreder">
+					<?php foreach ( $left_menu as $left_menu_item ) : ?>
+					<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
+					<?php endforeach; ?>
+				</div>
+				<!-- Desktop Left menu end -->
 				<?php endif; ?>
 				<div class="l-spacer"></div>
 				<!-- Desktop rigth menu start -->
 				<div class="menu-line p-12-12 white uper rev n-voreder">
-						<?php
+					<?php
 						if ( ! empty( $right_menu ) ) :
 							foreach ( $right_menu as $right_menu_item ) :
 								?>
-								<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
-								<?php
-							endforeach;
-							endif;
+					<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
+					<?php
+						endforeach;
+						endif;
 						?>
-						<div class="div-block-5">
-							<div class="menu-link-keeper">
-								<a href="#" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
-									<div class="lf-icon-button__icon-wrapper">
-										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
-											<use href="#searchIcon" />
-										</svg>
-									</div>
-								</a>
-								<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
-									<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
-										<div class="div-block-7">
-											<form 
-												id="searchForm2" 
-												action="<?php echo esc_url( home_url( '/' ) ); ?>" 
-												class="lf-search-form search" 
-												data-js-search-form
-												data-js-input-zoom-prevention
-											>
-												<input 
-													class="lf-search-form__search-input search-input w-input" 
-													maxlength="256" 
-													name="s" 
-													placeholder="Напишите, что вы ищите..." 
-													type="search" 
-													id="searchForm2SearchControl" 
-													required
-													data-js-search-form-search-input
-												>
-												<input type="hidden" name="posts_per_page" value="12">
-												<input type="submit" class="search-button w-button" value="Search">
-												<button type="reset" class="lf-search-form__reset clear-search">Очистить</button>
-											</form>
-											<div class="search-ajaxed" data-js-search-form-results></div>
-										</div>
-									</div>
-									<?php foreach ( $search_links as $search_column ) : ?>
-										<div id="w-node-_144563be-6001-1af8-6446-1240953daa3d-be61d3ef" class="m-h-vert">
-											<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
-											<?php
-											$column_links = $search_column['column_links'] ?: array();
-
-											if ( ! empty( $column_links ) ) :
-												?>
-												<div id="w-node-_144563be-6001-1af8-6446-1240953daa40-be61d3ef" class="m-h-vert">
-													<?php
-													foreach ( $column_links as $column_link ) :
-														$column_link_attributes_str = loveforever_prepare_link_attributes(
-															array(
-																'class' => 'a-12-12 w-inline-block',
-															),
-															$column_link['link']
-														);
-														?>
-													<a <?php echo $column_link_attributes_str; ?>>
-														<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
-													</a>
-													<?php endforeach; ?>
-												</div>
-											<?php endif; ?>
-										</div>
-									<?php endforeach; ?>
-									<!-- <div id="w-node-_144563be-6001-1af8-6446-1240953daac9-be61d3ef" class="div-block-6 _3">
-										<a href="#" class="btn in-single-btn _3 w-inline-block">
-											<div>перейти в каталог</div>
-										</a>
-									</div> -->
-									<div id="w-node-_144563be-6001-1af8-6446-1240953daacd-be61d3ef" class="hovered-menue_close-menu"></div>
-								</div>
-							</div>
-							<!-- Favorites button -->
-							<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+					<div class="div-block-5">
+						<div class="menu-link-keeper">
+							<a href="#" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
 								<div class="lf-icon-button__icon-wrapper">
-									<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
-										<use href="#heartIcon"></use>
+									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
+										<use href="#searchIcon" />
 									</svg>
 								</div>
-								<span class="lf-icon-button__counter" data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
 							</a>
-							<!-- Favorites button end -->
+							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
+								<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
+									<div class="div-block-7">
+										<form 
+											id="searchForm2" 
+											action="<?php echo esc_url( home_url( '/' ) ); ?>" 
+											class="lf-search-form search" 
+											data-js-search-form
+											data-js-input-zoom-prevention
+											>
+											<input 
+												class="lf-search-form__search-input search-input w-input" 
+												maxlength="256" 
+												name="s" 
+												placeholder="Напишите, что вы ищите..." 
+												type="search" 
+												id="searchForm2SearchControl" 
+												required
+												data-js-search-form-search-input
+												>
+											<input type="hidden" name="posts_per_page" value="12">
+											<input type="submit" class="search-button w-button" value="Search">
+											<button type="reset" class="lf-search-form__reset clear-search">Очистить</button>
+										</form>
+										<div class="search-ajaxed" data-js-search-form-results></div>
+									</div>
+								</div>
+								<?php foreach ( $search_links as $search_column ) : ?>
+								<div id="w-node-_144563be-6001-1af8-6446-1240953daa3d-be61d3ef" class="m-h-vert">
+									<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
+									<?php
+										$column_links = $search_column['column_links'] ?: array();
+										
+										if ( ! empty( $column_links ) ) :
+											?>
+									<div id="w-node-_144563be-6001-1af8-6446-1240953daa40-be61d3ef" class="m-h-vert">
+										<?php
+											foreach ( $column_links as $column_link ) :
+												$column_link_attributes_str = loveforever_prepare_link_attributes(
+													array(
+														'class' => 'a-12-12 w-inline-block',
+													),
+													$column_link['link']
+												);
+												?>
+										<a <?php echo $column_link_attributes_str; ?>>
+											<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
+										</a>
+										<?php endforeach; ?>
+									</div>
+									<?php endif; ?>
+								</div>
+								<?php endforeach; ?>
+								<!-- <div id="w-node-_144563be-6001-1af8-6446-1240953daac9-be61d3ef" class="div-block-6 _3">
+									<a href="#" class="btn in-single-btn _3 w-inline-block">
+										<div>перейти в каталог</div>
+									</a>
+									</div> -->
+								<div id="w-node-_144563be-6001-1af8-6446-1240953daacd-be61d3ef" class="hovered-menue_close-menu"></div>
+							</div>
 						</div>
+						<!-- Favorites button -->
+						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+							<div class="lf-icon-button__icon-wrapper">
+								<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+									<use href="#heartIcon"></use>
+								</svg>
+							</div>
+							<span class="lf-icon-button__counter" data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
+						</a>
+						<!-- Favorites button end -->
 					</div>
-					<!-- Desktop rigth menu end -->
+				</div>
+				<!-- Desktop rigth menu end -->
 			</div>
 			<div class="spleet m-none">
 				<a href="<?php echo esc_url( get_the_permalink( CONTACT_PAGE_ID ) . '#contacts' ); ?>" class="menu-line p-12-12 white uper" style="text-decoration: none;">
 					<?php if ( ! empty( ADDRESS ) ) : ?>
-						<div><?php echo esc_html( $address ); ?></div>
+					<div><?php echo esc_html( $address ); ?></div>
 					<?php endif; ?>
 					<?php if ( ! empty( WORKING_HOURS ) ) : ?>
-						<div><?php echo esc_html( WORKING_HOURS ); ?></div>
+					<div><?php echo esc_html( WORKING_HOURS ); ?></div>
 					<?php endif; ?>
 				</a>
 				<div class="l-spacer"></div>
 				<div class="menu-line p-12-12 white uper rev">
 					<?php if ( ! empty( PHONE ) ) : ?>
-						<div class="horiz lf-hidden-phone">
-							<div id="headerPhoneNumber" data-js-phone-number="<?php echo esc_attr( PHONE ); ?>"><?php echo esc_html( loveforever_mask_phone( PHONE ) ); ?></div>
-							<button type="button" data-js-phone-number-button="headerPhoneNumber" class="show-all-btn phone-button uppercase">Показать</button>
-						</div>
+					<div class="horiz lf-hidden-phone">
+						<div id="headerPhoneNumber" data-js-phone-number="<?php echo esc_attr( PHONE ); ?>"><?php echo esc_html( loveforever_mask_phone( PHONE ) ); ?></div>
+						<button type="button" data-js-phone-number-button="headerPhoneNumber" class="show-all-btn phone-button uppercase">Показать</button>
+					</div>
 					<?php endif; ?>
 					<?php
-					if ( ! empty( $socials ) ) :
-						?>
-			<div class="head-soc-menu">
+						if ( ! empty( $socials ) ) :
+							?>
+					<div class="head-soc-menu">
 						<?php foreach ( $socials as $social ) : ?>
-				<a href="<?php echo esc_url( $social['url'] ); ?>" aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>" class="lf-header-social" target="_blank" rel="noopener noreferrer">
-				<svg class="lf-header-social__icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-				<use href="#<?php echo esc_attr( $social['icon'] ); ?>" />
-				</svg>
-				</a>
-			<?php endforeach; ?>
-						</div>
-								<?php endif; ?>
+						<a href="<?php echo esc_url( $social['url'] ); ?>" aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>" class="lf-header-social" target="_blank" rel="noopener noreferrer">
+							<svg class="lf-header-social__icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+								<use href="#<?php echo esc_attr( $social['icon'] ); ?>" />
+							</svg>
+						</a>
+						<?php endforeach; ?>
+					</div>
+					<?php endif; ?>
 				</div>
 			</div>
 			<div class="logo-keeper">
@@ -551,17 +551,17 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 		</div>
 	</header>
 	<?php
-	if ( ! str_contains( $template, 'admin-fittings.php' ) ) :
-		?>
+		if ( ! str_contains( $template, 'admin-fittings.php' ) ) :
+			?>
 	<div class="fixed-navbar menuline lf-fixed-navbar">
 		<div class="vert-menu">
 			<div class="spleet m-none">
 				<?php if ( ! empty( $left_menu ) ) : ?>
-					<div class="menu-line p-12-12 white uper n-voreder">
-						<?php foreach ( $left_menu as $left_menu_item ) : ?>
-							<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
-						<?php endforeach; ?>
-					</div>
+				<div class="menu-line p-12-12 white uper n-voreder">
+					<?php foreach ( $left_menu as $left_menu_item ) : ?>
+					<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
+					<?php endforeach; ?>
+				</div>
 				<?php endif; ?>
 				<div class="l-spacer">
 					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="w-inline-block">
@@ -574,9 +574,9 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 				</div>
 				<div class="menu-line p-12-12 white uper rev n-voreder">
 					<?php if ( ! empty( $right_menu ) ) : ?>
-						<?php foreach ( $right_menu as $right_menu_item ) : ?>
-							<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
-						<?php endforeach; ?>
+					<?php foreach ( $right_menu as $right_menu_item ) : ?>
+					<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
+					<?php endforeach; ?>
 					<?php endif; ?>
 					<div class="horiz lf-hidden-phone">
 						<div id="fixedHeaderPhoneNumber" data-js-phone-number="<?php echo esc_attr( PHONE ); ?>"><?php echo esc_html( loveforever_mask_phone( PHONE ) ); ?></div>
@@ -600,7 +600,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 											class="lf-search-form search" 
 											data-js-search-form
 											data-js-input-zoom-prevention
-										>
+											>
 											<input 
 												class="lf-search-form__search-input search-input w-input" 
 												maxlength="256" 
@@ -610,7 +610,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 												id="searchForm3SearchControl" 
 												required
 												data-js-search-form-search-input
-											>
+												>
 											<input type="submit" class="search-button w-button" value="Search">
 											<button type="reset" class="ls-search-form__reset clear-search">Очистить</button>
 										</form>
@@ -618,30 +618,30 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 									</div>
 								</div>
 								<?php foreach ( $search_links as $search_column ) : ?>
-									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c4-be61d3ef" class="m-h-vert">
-										<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
-										<?php
+								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c4-be61d3ef" class="m-h-vert">
+									<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
+									<?php
 										$column_links = $search_column['column_links'];
 										if ( ! empty( $column_links ) ) :
 											?>
-											<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c7-be61d3ef" class="m-h-vert">
-												<?php
-												foreach ( $column_links as $column_link ) :
-													$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 w-inline-block' ), $column_link['link'] );
-													?>
-													<a <?php echo $column_link_attributes_str; ?>>
-														<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
-													</a>
-												<?php endforeach; ?>
-											</div>
-										<?php endif; ?>
+									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c7-be61d3ef" class="m-h-vert">
+										<?php
+											foreach ( $column_links as $column_link ) :
+												$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 w-inline-block' ), $column_link['link'] );
+												?>
+										<a <?php echo $column_link_attributes_str; ?>>
+											<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
+										</a>
+										<?php endforeach; ?>
 									</div>
+									<?php endif; ?>
+								</div>
 								<?php endforeach; ?>
 								<!-- <div id="w-node-_1716cbec-a8d5-9533-681b-95848935b950-be61d3ef" class="div-block-6 _3">
 									<a href="#" class="btn in-single-btn _3 w-inline-block">
 										<div>перейти в каталог</div>
 									</a>
-								</div> -->
+									</div> -->
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b954-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
@@ -652,7 +652,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 								</svg>
 							</div>
 							<span class="lf-icon-button__counter" data-js-favorites-button-counter>
-								<?php echo esc_html( (string) count( $favorites ) ); ?>
+							<?php echo esc_html( (string) count( $favorites ) ); ?>
 							</span>
 						</a>
 					</div>
@@ -693,7 +693,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 											class="search" 
 											data-js-search-form
 											data-js-input-zoom-prevention
-										>
+											>
 											<input 
 												class="search-input w-input" 
 												maxlength="256" 
@@ -703,7 +703,7 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 												id="searchForm4SearchControl" 
 												required
 												data-js-search-form-search-input
-											>
+												>
 											<input type="submit" class="search-button w-button" value="Search">
 											<button type="reset" class="clear-search">Очистить</button>
 										</form>
@@ -711,33 +711,33 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 									</div>
 								</div>
 								<?php if ( ! empty( $search_links ) ) : ?>
-									<div class="serch-mob">
-										<div class="m-nav-cats">
-											<?php foreach ( $search_links as $search_column ) : ?>
-												<div class="m-nav-drops">
-													<a href="#" class="m-nav-drop-btn w-inline-block">
-														<div><?php echo esc_html( $search_column['column_name'] ); ?></div>
-														<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
+								<div class="serch-mob">
+									<div class="m-nav-cats">
+										<?php foreach ( $search_links as $search_column ) : ?>
+										<div class="m-nav-drops">
+											<a href="#" class="m-nav-drop-btn w-inline-block">
+												<div><?php echo esc_html( $search_column['column_name'] ); ?></div>
+												<img src="<?php echo TEMPLATE_PATH; ?>/images/673dc9a4d3949ca7d7c90f76_Union.svg" loading="eager" alt class="image-6-drop">
+											</a>
+											<?php $column_links = $search_column['column_links']; ?>
+											<div class="m-nav-drop-contant">
+												<?php if ( ! empty( $column_links ) ) : ?>
+												<div class="div-block-11">
+													<?php
+														foreach ( $column_links as $column_link ) :
+															$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 in-drop' ), $column_link['link'] );
+															?>
+													<a <?php echo $column_link_attributes_str; ?>>
+													<?php echo esc_html( $column_link['link']['title'] ); ?>
 													</a>
-													<?php $column_links = $search_column['column_links']; ?>
-													<div class="m-nav-drop-contant">
-														<?php if ( ! empty( $column_links ) ) : ?>
-															<div class="div-block-11">
-																<?php
-																foreach ( $column_links as $column_link ) :
-																	$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 in-drop' ), $column_link['link'] );
-																	?>
-																	<a <?php echo $column_link_attributes_str; ?>>
-																		<?php echo esc_html( $column_link['link']['title'] ); ?>
-																	</a>
-																<?php endforeach; ?>
-															</div>
-														<?php endif; ?>
-													</div>
+													<?php endforeach; ?>
 												</div>
-											<?php endforeach; ?>
+												<?php endif; ?>
+											</div>
 										</div>
+										<?php endforeach; ?>
 									</div>
+								</div>
 								<?php endif; ?>
 								<div class="vert m-none">
 									<div id="w-node-_7814220d-338f-0ab7-0d3b-7d1e447cc128-be61d3ef" class="m-h-vert">
@@ -901,200 +901,127 @@ $filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 								<div class="lf-burger-button__line b-line"></div>
 							</button>
 							<?php
-							if ( ! empty( $mobile_menu_items ) ) :
-								?>
-								<div class="hovered-menue mob-menue">
-									<div class="mob-menu-kee">
-										<div class="m-nav-keep">
-											<div class="m-nav-top">
-												<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
-													<?php
-													if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
-														$dress_category = get_term( $mobile_menu_item['category'] );
-														?>
-														<a href="#" class="m-nav-drop w-inline-block">
-															<div><?php echo esc_html( $dress_category->name ); ?></div>
-															<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
-														</a>
-													<?php else : ?>
-														<?php $link = $mobile_menu_item['link']; ?>
-														<a href="<?php echo esc_url( $link['url'] ); ?>" class="m-nav-a w-inline-block">
-															<div>
-																<?php echo esc_html( $link['title'] ); ?>
-																<?php if ( ! empty( $mobile_menu_item['green_badge'] ) ) : ?>
-																	<span class="indirim-span"><?php echo esc_html( $mobile_menu_item['green_badge'] ); ?></span>
-																<?php endif; ?>
-															</div>
-														</a>
+								if ( ! empty( $mobile_menu_items ) ) :
+									?>
+							<div class="hovered-menue mob-menue">
+								<div class="mob-menu-kee">
+									<div class="m-nav-keep">
+										<div class="m-nav-top">
+											<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
+											<?php
+												if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
+													$dress_category = get_term( $mobile_menu_item['category'] );
+													?>
+											<a href="#" class="m-nav-drop w-inline-block">
+												<div><?php echo esc_html( $dress_category->name ); ?></div>
+												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
+											</a>
+											<?php else : ?>
+											<?php $link = $mobile_menu_item['link']; ?>
+											<a href="<?php echo esc_url( $link['url'] ); ?>" class="m-nav-a w-inline-block">
+												<div>
+													<?php echo esc_html( $link['title'] ); ?>
+													<?php if ( ! empty( $mobile_menu_item['green_badge'] ) ) : ?>
+													<span class="indirim-span"><?php echo esc_html( $mobile_menu_item['green_badge'] ); ?></span>
 													<?php endif; ?>
-												<?php endforeach; ?>
-											</div>
-											<div id="w-node-_34c51008-eae1-f821-4ba8-4e111ca07545-be61d3ef" class="div-block-4 cont-item">
-												<div class="p-12-12 uper m-12-12">Наши группы в социальных сетях</div>
-												<div class="soc-grid mpb">
-													<a href="#" class="soc-btn w-inline-block">
-														<div class="svg-share w-embed">
-															<svg width="16" height="10" viewbox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M8.71455 10C3.24797 10 0.129919 6.24625 0 0H2.73829C2.82823 4.58458 4.84697 6.52653 6.44597 6.92693V0H9.02436V3.95395C10.6034 3.78378 12.2623 1.98198 12.822 0H15.4004C15.1895 1.02791 14.7691 2.00118 14.1655 2.85893C13.562 3.71668 12.7882 4.44045 11.8926 4.98498C12.8923 5.48254 13.7753 6.18678 14.4833 7.05125C15.1913 7.91571 15.7082 8.92073 16 10H13.1618C12.8999 9.06258 12.3676 8.22343 11.6316 7.58773C10.8956 6.95203 9.9886 6.54805 9.02436 6.42643V10H8.71455Z" fill="black"></path>
-															</svg>
-														</div>
-													</a>
-													<a href="#" class="soc-btn w-inline-block">
-														<div class="svg-share w-embed">
-															<svg width="14" height="13" viewbox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M14 0.460525L11.7855 12.4588C11.7855 12.4588 11.4756 13.2907 10.6244 12.8917L5.51495 8.68138L5.49126 8.66897C6.18143 8.00295 11.5333 2.83145 11.7673 2.59703C12.1294 2.23398 11.9046 2.01785 11.4841 2.2921L3.57869 7.68757L0.528786 6.5847C0.528786 6.5847 0.0488212 6.40122 0.00264736 6.00226C-0.044134 5.60264 0.544582 5.38651 0.544582 5.38651L12.9781 0.144489C12.9781 0.144489 14 -0.338054 14 0.460525Z" fill="black"></path>
-															</svg>
-														</div>
-													</a>
-													<a href="#" class="soc-btn w-inline-block">
-														<div class="svg-share w-embed">
-															<svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M13.6585 2.33333C12.1533 0.833333 10.1463 0 8.02787 0C3.62369 0 0.0557483 3.55556 0.0557483 7.94444C0.0557483 9.33333 0.445993 10.7222 1.11498 11.8889L0 16L4.23694 14.8889C5.40767 15.5 6.68989 15.8333 8.02787 15.8333C12.4321 15.8333 16 12.2778 16 7.88889C15.9443 5.83333 15.1638 3.83333 13.6585 2.33333ZM11.8746 10.7778C11.7073 11.2222 10.9268 11.6667 10.5366 11.7222C10.2021 11.7778 9.7561 11.7778 9.31011 11.6667C9.03136 11.5556 8.64112 11.4444 8.19512 11.2222C6.18815 10.3889 4.90592 8.38889 4.79443 8.22222C4.68293 8.11111 3.95819 7.16667 3.95819 6.16667C3.95819 5.16667 4.45993 4.72222 4.62718 4.5C4.79443 4.27778 5.01742 4.27778 5.18467 4.27778C5.29617 4.27778 5.46341 4.27778 5.57491 4.27778C5.68641 4.27778 5.85366 4.22222 6.02091 4.61111C6.18815 5 6.5784 6 6.63415 6.05556C6.68989 6.16667 6.68989 6.27778 6.63415 6.38889C6.5784 6.5 6.52265 6.61111 6.41115 6.72222C6.29965 6.83333 6.18815 7 6.1324 7.05556C6.0209 7.16667 5.90941 7.27778 6.02091 7.44444C6.1324 7.66667 6.52265 8.27778 7.13589 8.83333C7.91638 9.5 8.52962 9.72222 8.75261 9.83333C8.97561 9.94445 9.08711 9.88889 9.1986 9.77778C9.3101 9.66667 9.70035 9.22222 9.81185 9C9.92335 8.77778 10.0906 8.83333 10.2578 8.88889C10.4251 8.94444 11.4286 9.44445 11.5958 9.55556C11.8188 9.66667 11.9303 9.72222 11.9861 9.77778C12.0418 9.94444 12.0418 10.3333 11.8746 10.7778Z" fill="black"></path>
-															</svg>
-														</div>
-													</a>
-													<a href="#" class="soc-btn w-inline-block">
-														<div class="svg-share w-embed">
-															<svg width="100%" height="100%" viewbox="0 0 40 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M23.53 22H16.4282C14.0052 22 12 24.0052 12 26.4282V33.5718C12 35.9948 14.0052 38 16.4282 38H23.53C25.953 38 27.9582 35.9948 28 33.5718V26.47C28 24.0052 25.9948 22 23.53 22ZM19.9791 33.7807C17.8903 33.7807 16.2193 32.1097 16.2193 30.0209C16.2193 27.9321 17.8903 26.3029 19.9373 26.3029C21.9843 26.3029 23.6554 27.9739 23.6554 30.0209C23.6554 32.0679 22.0261 33.7807 19.9791 33.7807ZM25.8277 25.9269C25.4935 26.47 24.7833 26.6789 24.282 26.3446C23.7389 26.0104 23.53 25.3003 23.8642 24.799C24.1984 24.2559 24.9086 24.047 25.4099 24.3812C25.953 24.6736 26.1201 25.3838 25.8277 25.9269Z" fill="black"></path>
-															</svg>
-														</div>
-													</a>
-													<a href="#" class="soc-btn w-inline-block">
-														<div class="svg-share w-embed">
-															<svg width="100%" height="100%" viewbox="0 0 40 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path fill-rule="evenodd" clip-rule="evenodd" d="M12.1596 36.5864C11.7852 36.478 11.4436 36.2853 11.1635 36.0245C10.8835 35.7637 10.6733 35.4424 10.5507 35.0878C9.85006 33.2549 9.64246 25.6011 10.9919 24.0902C11.441 23.5987 12.0751 23.2961 12.7565 23.248C16.3766 22.8765 27.5612 22.926 28.8458 23.3719C29.2071 23.4838 29.5372 23.6722 29.8113 23.9232C30.0854 24.1741 30.2965 24.481 30.4287 24.8209C31.1943 26.7158 31.2202 33.6016 30.3249 35.4222C30.0875 35.8961 29.6899 36.28 29.1961 36.5121C27.8467 37.1561 13.9502 37.1437 12.1596 36.5864ZM17.9077 32.9948L24.3953 29.7748L17.9077 26.53V32.9948Z" fill="black"></path>
-															</svg>
-														</div>
-													</a>
 												</div>
-											</div>
-											<div class="mob-work-time m-12-12">
-												<?php if ( ! empty( WORKING_HOURS ) ) : ?>
-													<div><?php echo esc_html( WORKING_HOURS ); ?></div>
-												<?php endif; ?>
-												<?php if ( ! empty( ADDRESS ) ) : ?>
-													<div><?php echo esc_html( ADDRESS ); ?></div>
-												<?php endif; ?>
+											</a>
+											<?php endif; ?>
+											<?php endforeach; ?>
+										</div>
+										<div id="w-node-_3514c32b-e70e-46c1-9d79-f82fca09e2e3-be61d3ef" class="div-block-4 cont-item">
+											<div class="p-12-12 uper m-12-12">Наши группы в социальных сетях</div>
+											<div class="soc-grid mpb lf-share-buttons">
+												<?php foreach ( $socials as $social ) : ?>
+												<a class="lf-share-button lf-share-button--dark" href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+													<svg class="lf-share-button__icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+														<use href="#<?php echo esc_attr( $social['icon'] ); ?>"></use>
+													</svg>
+												</a>
+												<?php endforeach; ?>
 											</div>
 										</div>
-										<?php if ( ! empty( $only_catalog_items ) ) : ?>
-											<div class="m-nav-content">
-												<?php
-												foreach ( $only_catalog_items as $only_catalog_item ) :
-													$dress_category = get_term( $only_catalog_item['category'] );
+										<div class="mob-work-time m-12-12">
+											<?php if ( ! empty( WORKING_HOURS ) ) : ?>
+											<div><?php echo esc_html( WORKING_HOURS ); ?></div>
+											<?php endif; ?>
+											<?php if ( ! empty( ADDRESS ) ) : ?>
+											<div><?php echo esc_html( ADDRESS ); ?></div>
+											<?php endif; ?>
+										</div>
+									</div>
+									<?php if ( ! empty( $only_catalog_items ) ) : ?>
+									<div class="m-nav-content">
+										<?php
+											foreach ( $only_catalog_items as $only_catalog_item ) :
+												$dress_category = get_term( $only_catalog_item['category'] );
+												?>
+										<div class="m-nav-content_in">
+											<a href="#" class="m-nav-content_back w-inline-block">
+												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc840b23caa30509cbdf5_Union.svg' ); ?>" loading="eager" alt class="image-7">
+												<div class="p-12-12 uper m-12-12"><?php echo esc_html( $dress_category->name ); ?></div>
+											</a>
+											<a href="<?php echo esc_url( get_term_link( $dress_category ) ); ?>" class="m-nav-a long w-inline-block">
+												<div>СМОТРЕТЬ ВСЕ</div>
+												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
+											</a>
+											<?php
+												$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
+												$dropdowns = array_filter(
+													$dropdowns,
+													function ( $dropdown ) {
+														return ! empty( $dropdown['links'] );
+													}
+												);
+												if ( ! empty( $dropdowns ) ) :
 													?>
-													<div class="m-nav-content_in">
-														<a href="#" class="m-nav-content_back w-inline-block">
-															<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc840b23caa30509cbdf5_Union.svg' ); ?>" loading="eager" alt class="image-7">
-															<div class="p-12-12 uper m-12-12"><?php echo esc_html( $dress_category->name ); ?></div>
-														</a>
-														<a href="<?php echo esc_url( get_term_link( $dress_category ) ); ?>" class="m-nav-a long w-inline-block">
-															<div>СМОТРЕТЬ ВСЕ</div>
-															<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
-														</a>
-														<?php
-														if ( ! empty( $only_catalog_item['dropdown_menu_columns'] ) ) :
-															$mobile_dropdown_menu_columns = $only_catalog_item['dropdown_menu_columns'];
-															?>
-															<div class="m-nav-cats">
-																<?php foreach ( $mobile_dropdown_menu_columns as $mobile_dropdown_menu_column ) : ?>
-																	<?php
-																	if ( 'price' !== $mobile_dropdown_menu_column ) :
-																		$tax_object = get_taxonomy( $mobile_dropdown_menu_column );
-																		if ( ! empty( $tax_object ) ) :
-																			?>
-																			<div class="m-nav-drops">
-																				<a href="#" class="m-nav-drop-btn w-inline-block">
-																					<div><?php echo esc_html( $tax_object->labels->singular_name ); ?></div>
-																					<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt class="image-6-drop">
-																				</a>
-																				<?php
-																				$terms_args = array(
-																					'taxonomy'   => $tax_object->name,
-																					'hide_empty' => false, // TODO: set to true!
-																				);
-																				$terms      = get_terms( $terms_args );
-																				if ( ! empty( $terms ) ) :
-																					?>
-																					<div class="m-nav-drop-contant">
-																						<div class="div-block-11">
-																							<?php foreach ( $terms as $term_item ) : ?>
-																								<a href="<?php echo esc_url( get_term_link( $dress_category ) . '?' . $tax_object->name . '=' . $term_item->term_id ); ?>" class="a-12-12 in-drop"><?php echo esc_html( $term_item->name ); ?></a>
-																							<?php endforeach; ?>
-																						</div>
-																					</div>
-																				<?php endif; ?>
-																			</div>
-																		<?php endif; ?>
-																		<?php
-																	else :
-																		$price_links = $only_catalog_item['price_links'];
-																		if ( ! empty( $price_links ) ) :
-																			?>
-																			<div class="m-nav-drops">
-																				<a href="#" class="m-nav-drop-btn w-inline-block">
-																					<div>Cтоимость</div>
-																					<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt class="image-6-drop">
-																				</a>
-																				<div class="m-nav-drop-contant">
-																					<div class="div-block-11">
-																					<?php
-																					foreach ( $price_links as $price_links_item ) :
-																						$price_link       = get_term_link( $dress_category ) . '?';
-																						$price_link_title = '';
-
-																						if ( ! empty( $price_links_item['min_price'] ) ) {
-																							$price_link .= 'min-price=' . $price_links_item['min_price'];
-																						}
-
-																						if ( ! empty( $price_links_item['max_price'] ) ) {
-																							$price_link .= 'max-price=' . $price_links_item['max_price'];
-																						}
-
-																						if ( ! empty( $price_links_item['min_price'] ) && ! empty( $price_links_item['max_price'] ) ) {
-																							$price_link_title = loveforever_format_price( $price_links_item['min_price'], 0 ) . ' ₽ – ' . loveforever_format_price( $price_links_item['max_price'], 0 ) . ' ₽';
-																						} elseif ( ! empty( $price_links_item['min_price'] ) ) {
-																							$price_link_title = 'от ' . loveforever_format_price( $price_links_item['min_price'], 0 ) . ' ₽';
-																						} else {
-																							$price_link_title = 'до ' . loveforever_format_price( $price_links_item['max_price'], 0 ) . ' ₽';
-																						}
-
-																						?>
-																							<a href="<?php echo esc_url( $price_link ); ?>" class="a-12-12 in-drop"><?php echo esc_html( $price_link_title ); ?></a>
-																						<?php endforeach; ?>
-																					</div>
-																				</div>
-																			</div>
-																			<?php
-																		endif;
-																	endif;
-																	?>
-																<?php endforeach; ?>
-															</div>
-														<?php endif; ?>
-														<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
-															<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
-															<?php if ( ! empty( $submenu_items ) ) : ?>
-															<div class="m-nav-cats">
-																<?php foreach ( $submenu_items as $submenu_item ) : ?>
-																	<div class="m-nav-drops">
-																		<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
-																			<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
-																			<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
-																			style="transform: rotate(-90deg);">
-																		</a>
-																	</div>
-																<?php endforeach; ?>
-															</div>
-														<?php endif; ?>
-													<?php endif; ?>
+											<div class="m-nav-cats">
+												<?php foreach ( $dropdowns as $dropdown ) : ?>
+												<div class="m-nav-drops">
+													<a href="#" class="m-nav-drop-btn w-inline-block">
+														<div><?php echo esc_html( $dropdown['column_name'] ); ?></div>
+														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop">
+													</a>
+													<div class="m-nav-drop-contant">
+														<div class="div-block-11">
+															<?php foreach ( $dropdown['links'] as $dropdown_link_item ) : ?>
+															<?php $dropdown_link = $dropdown_link_item['link']; ?>
+															<a 
+																href="<?php echo esc_url( $dropdown_link['url'] ); ?>" 
+																class="a-12-12 in-drop"
+																target="<?php echo esc_attr( $dropdown_link['target'] ) ?? '_self'; ?>"
+																>
+															<?php echo esc_html( $dropdown_link['title'] ); ?>
+															</a>
+															<?php endforeach; ?>
+														</div>
 													</div>
+												</div>
 												<?php endforeach; ?>
 											</div>
-										<?php endif; ?>
+											<?php endif; ?>
+											<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
+											<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
+											<?php if ( ! empty( $submenu_items ) ) : ?>
+											<div class="m-nav-cats">
+												<?php foreach ( $submenu_items as $submenu_item ) : ?>
+												<div class="m-nav-drops">
+													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
+														<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
+														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
+															style="transform: rotate(-90deg);">
+													</a>
+												</div>
+												<?php endforeach; ?>
+											</div>
+											<?php endif; ?>
+											<?php endif; ?>
+										</div>
+										<?php endforeach; ?>
 									</div>
+									<?php endif; ?>
 								</div>
+							</div>
 							<?php endif; ?>
 						</div>
 					</div>

@@ -394,7 +394,7 @@ defined( 'ABSPATH' ) || exit;
 		position: absolute;
 		bottom: auto;
 		top: 0;
-		height: 100vh;
+		height: 100dvh;
 		}
 		@media screen and (max-width:992px){
 		.hovered-menue.active {
