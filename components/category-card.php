@@ -55,19 +55,16 @@ if ( ! empty( $card['image'] ) && ! empty( $card['heading'] ) ) : ?>
 				);
 				if ( ! empty( $bullets ) ) :
 					?>
-					<div class="horiz center-horiz">
-						<?php
-						foreach ( $bullets as $bullets_index => $bullet ) :
-							$link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12' ), $bullet['bullet_link'] );
-							?>
-							<a <?php echo $link_attributes_str; ?>>
-								<?php echo esc_html( $bullet['bullet_link']['title'] ); ?>
-							</a>
-							<?php if ( $bullets_index < count( $bullets ) - 1 ) : ?>
-								<div class="_2px_romb"></div>
-							<?php endif; ?>
+					<ul class="lf-category-bullets">
+						<?php foreach ( $bullets as $bullets_index => $bullet ) : ?>
+							<li class="lf-category-bullets__item">
+								<?php $link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'lf-category-bullets__link' ), $bullet['bullet_link'] ); ?>
+								<a <?php echo $link_attributes_str; ?>>
+									<?php echo esc_html( $bullet['bullet_link']['title'] ); ?>
+								</a>
+							</li>
 						<?php endforeach; ?>
-					</div>
+					</ul>
 				<?php endif; ?>
 				<?php if ( ! empty( $card['button'] ) ) : ?>
 					<a href="<?php echo esc_url( $card['button']['url'] ); ?>" target="<?php echo esc_attr( $card['button']['target'] ); ?>" class="btn in-slider-btn w-inline-block">
