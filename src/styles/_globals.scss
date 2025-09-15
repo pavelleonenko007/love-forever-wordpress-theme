@@ -8,6 +8,12 @@ html {
 	}
 }
 
+*::-webkit-scrollbar {
+	@include tablet {
+		display: none;
+	}
+}
+
 *:focus-visible {
 	outline: 2px dashed var(--pink);
 	transition-duration: 0ms;
