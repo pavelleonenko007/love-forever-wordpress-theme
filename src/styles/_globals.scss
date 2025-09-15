@@ -116,7 +116,7 @@ a[href]:where(:not([class])) {
 .hovered-menue {
 	&.search-m.active {
 		@include tablet {
-			height: 100dvh;
+			height: 100vh;
 		}
 	}
 
@@ -128,7 +128,7 @@ a[href]:where(:not([class])) {
 }
 
 .serch-mob {
-	overflow: auto;
+	overflow: hidden auto;
 }
 
 .m-nav-cats {
