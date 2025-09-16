@@ -23,6 +23,7 @@
 	background-color: var(--background-color, #fff);
 
 	&--no-border {
+		height: auto;
 		border: none;
 		border-radius: 0;
 		padding: 0;

@@ -9,13 +9,6 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <div class="css w-embed">
 	<style>
-		html{font-size:calc(100vw / 1440)}
-		@media screen and (max-width:992px){
-		html{font-size:calc(100vw / 756)}
-		}
-		@media screen and (max-width:495px){
-		html{font-size:calc(100vw / 375)}
-		}
 		.oyziv-item {
 		flex: 0 !important;
 		}

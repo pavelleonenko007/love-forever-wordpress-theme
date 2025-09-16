@@ -1,6 +1,7 @@
 @use '../media' as *;
 
 .lf-filter-button {
+	padding: 4rem 0;
 	border: none;
 	position: relative;
 	display: inline-flex;
@@ -22,10 +23,6 @@
 
 		&:disabled {
 			display: none;
-		}
-
-		@include mobile {
-			margin-left: 0;
 		}
 	}
 

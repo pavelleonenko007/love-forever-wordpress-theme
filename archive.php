@@ -246,7 +246,7 @@ if ( ! empty( $dresses_without_order ) ) {
 														'hasBorder' => false,
 														'position' => array(
 															'my' => 'left top',
-															'at' => 'left bottom',
+															'at' => 'left-10rem top-8rem',
 														),
 													)
 												)
