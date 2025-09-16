@@ -14,6 +14,7 @@
 		aspect-ratio: 205 / 308;
 
 		@include mobile {
+			min-height: unset;
 			aspect-ratio: 343 / 436;
 		}
 	}
@@ -494,23 +495,25 @@
 		color: var(--white);
 
 		&__wrapper {
-			padding: 69rem 69rem 39rem;
 			width: 100%;
 			background: linear-gradient(180deg, #f22fa9 0%, #ded3f1 100%);
+		}
+
+		&__link {
+			width: 100%;
+			height: 100%;
+			padding: 69rem 69rem 39rem;
+			display: flex;
+			flex-direction: column;
+			row-gap: 40rem;
+			text-decoration: none;
+			color: inherit;
 
 			@include tablet-above {
 				.lf-catalog-grid--3-col & {
 					padding-top: 85rem;
 				}
 			}
-		}
-
-		&__link {
-			display: flex;
-			flex-direction: column;
-			row-gap: 40rem;
-			text-decoration: none;
-			color: inherit;
 		}
 
 		&__header {
