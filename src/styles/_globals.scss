@@ -40,6 +40,15 @@ a[href]:where(:not([class])) {
 // 	overflow: hidden;
 // }
 
+.bg-grad {
+	@include mobile {
+		background-image: url('../assets/images/favorites-form-mobile-bg.jpg');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+}
+
 .code-embed-4 {
 	position: relative;
 }

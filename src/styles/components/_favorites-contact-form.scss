@@ -29,6 +29,10 @@
 			top: 100%;
 			left: 0;
 			color: #fff;
+
+			@include mobile {
+				position: static;
+			}
 		}
 	}
 }
