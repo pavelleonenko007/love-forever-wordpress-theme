@@ -1,4 +1,6 @@
 .lf-select {
+	$root: &;
+
 	display: inline-block;
 
 	&__control {
@@ -7,5 +9,11 @@
 		background-color: transparent;
 		font-weight: 500;
 		text-transform: uppercase;
+		appearance: none;
+
+		#{$root}--filter & {
+			font-size: 12rem;
+			line-height: 1;
+		}
 	}
 }

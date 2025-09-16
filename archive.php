@@ -150,19 +150,19 @@ if ( ! empty( $dresses_without_order ) ) {
 
 									if ( ! empty( $silhouettes ) ) :
 										?>
-										<div class="horiz categeory-list">
-											<label class="label loveforever-filter-radio">
+										<div class="horiz categeory-list lf-filter-radio-group">
+											<label class="lf-filter-radio">
 												<input 
 													type="radio" 
 													id="silhouette-0" 
 													name="silhouette" 
-													class="input loveforever-filter-radio__control" 
+													class="lf-filter-radio__control" 
 													value=""
 													<?php echo empty( $selected_silhouette ) ? 'checked' : ''; ?>
 												>
 												<span 
 													for="silhouette-0"
-													class="loveforever-filter-radio__label"
+													class="lf-filter-radio__label"
 												>Все</span>
 											</label>
 											<?php
@@ -179,18 +179,18 @@ if ( ! empty( $dresses_without_order ) ) {
 														</div>
 														<div class="dropdown-menu">
 												<?php endif; ?>
-														<label class="label loveforever-filter-radio">
+														<label class="lf-filter-radio">
 																<input
 																		type="radio"
 																		id="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"
 																		name="silhouette"
-																		class="input loveforever-filter-radio__control"
+																		class="lf-filter-radio__control"
 																		value="<?php echo esc_attr( $silhouette->term_id ); ?>"
 																		<?php echo ! empty( $selected_silhouette ) && $silhouette->term_id === $selected_silhouette ? 'checked' : ''; ?>
 																>
 																<span
 																		for="<?php echo esc_attr( 'silhouette-' . $silhouette->term_id ); ?>"
-																		class="loveforever-filter-radio__label"
+																		class="lf-filter-radio__label"
 																><?php echo esc_html( $silhouette->name ); ?></span>
 														</label>
 												<?php if ( 8 <= $count_silhouettes && $silhouettes_index === count( $silhouettes ) - 1 ) : ?>
@@ -198,21 +198,6 @@ if ( ! empty( $dresses_without_order ) ) {
 												</div>
 												<?php endif; ?>
 											<?php endforeach; ?>
-											<?php
-											$has_active_filters = loveforever_has_active_filters(
-												array(
-													'min-price' => $price_range['min_price'],
-													'max-price' => $price_range['max_price'],
-													'orderby' => 'views',
-												)
-											);
-											?>
-											<button 
-												type="reset" 
-												class="lf-product-filter-form__reset-button" 
-												data-js-product-filter-form-reset-button
-												<?php echo $has_active_filters ? '' : 'disabled'; ?>
-											>Очистить</button>
 										</div>
 									<?php endif; ?>
 									<?php
@@ -287,15 +272,28 @@ if ( ! empty( $dresses_without_order ) ) {
 									</div>
 									<?php
 									if ( ! empty( $other_filters ) ) :
+										$has_active_filters = loveforever_has_active_filters(
+											array(
+												'min-price' => $price_range['min_price'],
+												'max-price' => $price_range['max_price'],
+												'orderby' => 'views',
+											)
+										);
 										?>
-										<button type="button" class="filters-btn button button--filter w-inline-block" data-js-dialog-open-button="filterDialog">
-											<div class="w-embed">
-												<svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewbox="0 0 7 7" fill="none">
-													<line x1="3.5" y1="2.18552e-08" x2="3.5" y2="7" stroke="black"></line>
-													<line y1="3.5" x2="7" y2="3.5" stroke="black"></line>
-												</svg>
-											</div>
-											<div>Фильтры</div>
+										<button 
+											type="reset" 
+											class="lf-filter-button lf-filter-button--reset"
+											form="<?php echo esc_attr( $catalog_filter_form_id ); ?>"
+											data-js-product-filter-form-reset-button 
+											<?php echo $has_active_filters ? '' : 'disabled'; ?>
+										>Очистить</button>
+										<button 
+											type="button" 
+											class="lf-filter-button" 
+											data-js-dialog-open-button="filterDialog"
+										>
+											<span class="lf-filter-button__icon" aria-hidden="true"></span>
+											<span class="lf-filter-button__text">Фильтры</span>
 										</button>
 									<?php endif; ?>
 								</div>
@@ -576,14 +574,7 @@ if ( ! empty( $dresses_without_order ) ) {
 							else :
 								?>
 								<div class="empty-content">
-				<p>Товары с заданными параметрами не найдены</p>
-								<?php if ( ! empty( $_GET['color'] ) || ! empty( $_GET['silhouette'] ) || ! empty( $_GET['brand'] ) || ! empty( $_GET['fabric'] ) || ! empty( $_GET['min-price'] ) || ! empty( $_GET['max-price'] ) ) : ?>
-									<button 
-										type="reset" 
-										class="button"
-										form="catalogFilterForm"
-				>Очистить фильтры</button>
-				<?php endif; ?>
+									<p>Товары с заданными параметрами не найдены</p>
 								</div>
 							<?php endif; ?>
 						</div>

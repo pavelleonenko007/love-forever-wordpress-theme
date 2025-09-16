@@ -1,11 +1,12 @@
 @use "../mixins" as *;
 @use "../media" as *;
 
-.loveforever-filter-radio {
+.lf-filter-radio {
   $root: &;
 
   --color: rgba(0, 0, 0, 0.43);
 
+  margin: 0;
   padding-block: 20rem;
   position: relative;
   font-size: 12rem;
@@ -13,10 +14,15 @@
   line-height: 1;
   text-transform: uppercase;
   color: var(--color);
+  flex-shrink: 0;
   transition: color 0.2s ease;
 
-  .dropdown-menu &:last-child {
-    margin-right: 0;
+  .dropdown-menu & {
+    padding-inline: 10rem;
+
+    @include tablet {
+      padding-inline: 0;
+    }
   }
 
   &:has(:checked) {
@@ -45,9 +51,13 @@
     height: 3rem;
     background-color: #000;
     scale: 0 1;
-    translate: 0 2rem;
     transform-origin: left center;
     transition: scale 0.2s ease;
+  }
+
+  &-group {
+    display: flex;
+    gap: 20rem;
   }
 
   &__control {

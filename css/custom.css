@@ -1,14 +1,13 @@
-.filters-form .categeory-list input {
-	position: absolute;
-	opacity: 0;
-}
-
 .playvideobtn {
 	cursor: pointer;
 }
 
 .dyn-content:nth-child(1) {
 	margin-top: 0rem;
+}
+
+.spleet.botm-filter {
+	gap: 10rem;
 }
 
 .htmldopmenuopened .b-line {
@@ -735,17 +734,16 @@
 
 .dropdown-menu {
 	border: 1rem solid #e9ecef;
-	padding: 8px 0;
-	min-width: 200px;
+	min-width: 200rem;
 	position: absolute;
 	top: 100%;
 	left: 0;
 	background: white;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.1);
 	z-index: 1000;
 	opacity: 0;
 	visibility: hidden;
-	transform: translateY(-10px);
+	transform: translateY(-10rem);
 	transition: all 0.3s ease;
 }
 
@@ -753,21 +751,6 @@
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0);
-}
-
-.dropdown-menu .loveforever-filter-radio {
-	display: flex;
-	width: 100%;
-	padding: 10px 16px;
-	margin-top: 10px;
-
-	@media screen and (max-width: 991px) {
-		padding: 20rem 0rem;
-	}
-}
-
-.dropdown-menu .loveforever-filter-radio:first-child {
-	margin-top: 0;
 }
 
 @media (max-width: 991px) {
@@ -784,12 +767,6 @@
 		border: none;
 		box-shadow: none;
 		display: contents;
-	}
-
-	.dropdown-menu .loveforever-filter-radio {
-		width: auto;
-		margin-top: 0;
-		flex-shrink: 0;
 	}
 }
 

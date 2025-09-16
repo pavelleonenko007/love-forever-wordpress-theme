@@ -12,7 +12,7 @@
 @use 'components/card-video' as *;
 @use 'components/lf-badge' as *;
 @use 'components/lf-content' as *;
-@use 'components/loveforever-filter-radio' as *;
+@use 'components/lf-filter-radio' as *;
 @use 'components/phone-button' as *;
 @use 'components/lf-fixed-navbar' as *;
 @use 'components/lf-search-form' as *;
@@ -72,6 +72,7 @@
 @use 'components/lf-category-card' as *;
 @use 'components/lf-scroll-navbar-logo' as *;
 @use 'components/lf-category-bullets' as *;
+@use 'components/lf-filter-button' as *;
 
 @use 'pages/archive' as *;
 @use 'pages/single-product' as *;
