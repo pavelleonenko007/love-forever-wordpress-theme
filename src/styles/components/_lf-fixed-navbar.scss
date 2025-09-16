@@ -1,6 +1,8 @@
 @use '../media' as *;
 
 .lf-fixed-navbar {
+	z-index: 10;
+	
 	&__spacer {
 		@include mobile {
 			width: auto;
