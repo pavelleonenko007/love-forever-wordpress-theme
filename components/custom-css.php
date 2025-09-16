@@ -384,7 +384,7 @@ defined( 'ABSPATH' ) || exit;
 		.mobmenuopened .mob-menue{display:flex}
 		.htmldopmenuopened{overflow:hidden}
 		.hovered-menue.mob-menue {
-		position: absolute;
+		position: fixed;
 		bottom: auto;
 		top: 0;
 		height: 100dvh;
