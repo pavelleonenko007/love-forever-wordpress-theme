@@ -4,20 +4,20 @@
 	 *
 	 * @package 0.0.1
 	 */
-	
+
 	defined( 'ABSPATH' ) || exit;
 	global $template;
-	
+
 	$phone         = get_field( 'phone', 'option' );
 	$address       = get_field( 'address', 'option' );
 	$working_hours = get_field( 'working_hours', 'option' );
 	$socials       = loveforever_get_socials();
 	$favorites     = loveforever_get_favorites();
-	
+
 	$left_menu    = get_field( 'left_menu', 'option' );
 	$right_menu   = get_field( 'right_menu', 'option' );
 	$search_links = get_field( 'search_links', 'option' );
-	
+
 	$mobile_menu_items  = array( ...$left_menu, ...$right_menu );
 	$only_catalog_items = array_filter(
 		$mobile_menu_items,
@@ -28,16 +28,20 @@
 	$filter_taxonomies  = array( 'silhouette', 'style', 'fabric', 'brand' );
 	?>
 <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar w-nav">
-	<header class="header menuline">
+	<header class="lf-navbar header menuline">
 		<div class="vert-menu">
 			<div class="spleet pc-none">
 				<?php if ( ! empty( $phone ) ) : ?>
-				<div class="menu-line p-12-12 white uper n-voreder">
-					<a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" class="n-menu w-nav-link"><?php echo esc_html( $phone ); ?></a>
+				<div class="lf-navbar__menu-line lf-navbar__menu-line--mobile menu-line p-12-12 white uper n-voreder">
+					<a 
+						href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" 
+						class="n-menu w-nav-link"
+						aria-label="<?php echo esc_attr( 'Позвонить на номер ' . $phone ); ?>"
+					><?php echo esc_html( $phone ); ?></a>
 				</div>
 				<?php endif; ?>
 				<div class="l-spacer"></div>
-				<div class="menu-line p-12-12 white uper rev n-voreder">
+				<div class="lf-navbar__menu-line lf-navbar__menu-line--right lf-navbar__menu-line--mobile menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5">
 						<!-- Favorites button -->
 						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
@@ -95,18 +99,18 @@
 											<div class="m-nav-drop-contant">
 												<?php
 													$column_links = $search_column['column_links'];
-													if ( ! empty( $column_links ) ) :
-														?>
+												if ( ! empty( $column_links ) ) :
+													?>
 												<div class="div-block-11">
 													<?php
-														foreach ( $column_links as $column_link ) :
-															$column_link_attributes_str = loveforever_prepare_link_attributes(
-																array(
-																	'class' => 'a-12-12 in-drop',
-																),
-																$column_link['link']
-															);
-															?>
+													foreach ( $column_links as $column_link ) :
+														$column_link_attributes_str = loveforever_prepare_link_attributes(
+															array(
+																'class' => 'a-12-12 in-drop',
+															),
+															$column_link['link']
+														);
+														?>
 													<a <?php echo $column_link_attributes_str; ?>><?php echo esc_html( $column_link['link']['title'] ); ?></a>
 													<?php endforeach; ?>
 												</div>
@@ -283,7 +287,7 @@
 									<div class="m-nav-keep">
 										<div class="m-nav-top">
 											<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
-											<?php
+												<?php
 												if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
 													$dress_category = get_term( $mobile_menu_item['category'] );
 													?>
@@ -292,7 +296,7 @@
 												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
 											</a>
 											<?php else : ?>
-											<?php $menu_link = $mobile_menu_item['link']; ?>
+												<?php $menu_link = $mobile_menu_item['link']; ?>
 											<a href="<?php echo esc_url( $menu_link['url'] ); ?>" class="m-nav-a w-inline-block">
 												<div>
 													<?php echo esc_html( $menu_link['title'] ); ?>
@@ -328,9 +332,9 @@
 									<?php if ( ! empty( $only_catalog_items ) ) : ?>
 									<div class="m-nav-content">
 										<?php
-											foreach ( $only_catalog_items as $only_catalog_item ) :
-												$dress_category = get_term( $only_catalog_item['category'] );
-												?>
+										foreach ( $only_catalog_items as $only_catalog_item ) :
+											$dress_category = get_term( $only_catalog_item['category'] );
+											?>
 										<div class="m-nav-content_in">
 											<a href="#" class="m-nav-content_back w-inline-block">
 												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc840b23caa30509cbdf5_Union.svg' ); ?>" loading="eager" alt class="image-7">
@@ -341,15 +345,15 @@
 												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
 											</a>
 											<?php
-												$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
-												$dropdowns = array_filter(
-													$dropdowns,
-													function ( $dropdown ) {
-														return ! empty( $dropdown['links'] );
-													}
-												);
-												if ( ! empty( $dropdowns ) ) :
-													?>
+											$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
+											$dropdowns = array_filter(
+												$dropdowns,
+												function ( $dropdown ) {
+													return ! empty( $dropdown['links'] );
+												}
+											);
+											if ( ! empty( $dropdowns ) ) :
+												?>
 											<div class="m-nav-cats">
 												<?php foreach ( $dropdowns as $dropdown ) : ?>
 												<div class="m-nav-drops">
@@ -360,13 +364,13 @@
 													<div class="m-nav-drop-contant">
 														<div class="div-block-11">
 															<?php foreach ( $dropdown['links'] as $dropdown_link_item ) : ?>
-															<?php $dropdown_link = $dropdown_link_item['link']; ?>
+																<?php $dropdown_link = $dropdown_link_item['link']; ?>
 															<a 
 																href="<?php echo esc_url( $dropdown_link['url'] ); ?>" 
 																class="a-12-12 in-drop"
 																target="<?php echo esc_attr( $dropdown_link['target'] ) ?? '_self'; ?>"
 																>
-															<?php echo esc_html( $dropdown_link['title'] ); ?>
+																<?php echo esc_html( $dropdown_link['title'] ); ?>
 															</a>
 															<?php endforeach; ?>
 														</div>
@@ -376,10 +380,10 @@
 											</div>
 											<?php endif; ?>
 											<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
-											<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
-											<?php if ( ! empty( $submenu_items ) ) : ?>
+												<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
+												<?php if ( ! empty( $submenu_items ) ) : ?>
 											<div class="m-nav-cats">
-												<?php foreach ( $submenu_items as $submenu_item ) : ?>
+													<?php foreach ( $submenu_items as $submenu_item ) : ?>
 												<div class="m-nav-drops">
 													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
 														<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
@@ -404,25 +408,25 @@
 			<div class="spleet m-none">
 				<?php if ( ! empty( $left_menu ) ) : ?>
 				<!-- Desktop Left menu start -->
-				<div class="menu-line p-12-12 white uper n-voreder">
+				<div class="lf-navbar__menu-line menu-line p-12-12 white uper n-voreder">
 					<?php foreach ( $left_menu as $left_menu_item ) : ?>
-					<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
+						<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
 					<?php endforeach; ?>
 				</div>
 				<!-- Desktop Left menu end -->
 				<?php endif; ?>
 				<div class="l-spacer"></div>
 				<!-- Desktop rigth menu start -->
-				<div class="menu-line p-12-12 white uper rev n-voreder">
+				<div class="lf-navbar__menu-line lf-navbar__menu-line--right menu-line p-12-12 white uper rev n-voreder">
 					<?php
-						if ( ! empty( $right_menu ) ) :
-							foreach ( $right_menu as $right_menu_item ) :
-								?>
-					<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
-					<?php
+					if ( ! empty( $right_menu ) ) :
+						foreach ( $right_menu as $right_menu_item ) :
+							?>
+							<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
+							<?php
 						endforeach;
 						endif;
-						?>
+					?>
 					<div class="div-block-5">
 						<div class="menu-link-keeper">
 							<a href="#" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
@@ -464,19 +468,19 @@
 									<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
 									<?php
 										$column_links = $search_column['column_links'] ?: array();
-										
-										if ( ! empty( $column_links ) ) :
-											?>
+
+									if ( ! empty( $column_links ) ) :
+										?>
 									<div id="w-node-_144563be-6001-1af8-6446-1240953daa40-be61d3ef" class="m-h-vert">
 										<?php
-											foreach ( $column_links as $column_link ) :
-												$column_link_attributes_str = loveforever_prepare_link_attributes(
-													array(
-														'class' => 'a-12-12 w-inline-block',
-													),
-													$column_link['link']
-												);
-												?>
+										foreach ( $column_links as $column_link ) :
+											$column_link_attributes_str = loveforever_prepare_link_attributes(
+												array(
+													'class' => 'a-12-12 w-inline-block',
+												),
+												$column_link['link']
+											);
+											?>
 										<a <?php echo $column_link_attributes_str; ?>>
 											<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
 										</a>
@@ -525,8 +529,8 @@
 					</div>
 					<?php endif; ?>
 					<?php
-						if ( ! empty( $socials ) ) :
-							?>
+					if ( ! empty( $socials ) ) :
+						?>
 					<div class="head-soc-menu">
 						<?php foreach ( $socials as $social ) : ?>
 						<a href="<?php echo esc_url( $social['url'] ); ?>" aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>" class="lf-header-social" target="_blank" rel="noopener noreferrer">
@@ -551,15 +555,15 @@
 		</div>
 	</header>
 	<?php
-		if ( ! str_contains( $template, 'admin-fittings.php' ) ) :
-			?>
-	<div class="fixed-navbar menuline lf-fixed-navbar">
+	if ( ! str_contains( $template, 'admin-fittings.php' ) ) :
+		?>
+	<div class="fixed-navbar menuline lf-navbar lf-fixed-navbar">
 		<div class="vert-menu">
 			<div class="spleet m-none">
-				<?php if ( ! empty( $left_menu ) ) : ?>
-				<div class="menu-line p-12-12 white uper n-voreder">
+			<?php if ( ! empty( $left_menu ) ) : ?>
+				<div class="lf-navbar__menu-line menu-line p-12-12 white uper n-voreder">
 					<?php foreach ( $left_menu as $left_menu_item ) : ?>
-					<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
+						<?php get_template_part( 'components/navbar-' . $left_menu_item['acf_fc_layout'], null, $left_menu_item ); ?>
 					<?php endforeach; ?>
 				</div>
 				<?php endif; ?>
@@ -572,10 +576,10 @@
 						</div>
 					</a>
 				</div>
-				<div class="menu-line p-12-12 white uper rev n-voreder">
+				<div class="lf-navbar__menu-line lf-navbar__menu-line--right menu-line p-12-12 white uper rev n-voreder">
 					<?php if ( ! empty( $right_menu ) ) : ?>
 					<?php foreach ( $right_menu as $right_menu_item ) : ?>
-					<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
+						<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
 					<?php endforeach; ?>
 					<?php endif; ?>
 					<div class="horiz lf-hidden-phone">
@@ -617,18 +621,18 @@
 										<div class="search-ajaxed" data-js-search-form-results></div>
 									</div>
 								</div>
-								<?php foreach ( $search_links as $search_column ) : ?>
+							<?php foreach ( $search_links as $search_column ) : ?>
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c4-be61d3ef" class="m-h-vert">
 									<div class="p-16-16"><?php echo esc_html( $search_column['column_name'] ); ?></div>
 									<?php
 										$column_links = $search_column['column_links'];
-										if ( ! empty( $column_links ) ) :
-											?>
+									if ( ! empty( $column_links ) ) :
+										?>
 									<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b8c7-be61d3ef" class="m-h-vert">
 										<?php
-											foreach ( $column_links as $column_link ) :
-												$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 w-inline-block' ), $column_link['link'] );
-												?>
+										foreach ( $column_links as $column_link ) :
+											$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 w-inline-block' ), $column_link['link'] );
+											?>
 										<a <?php echo $column_link_attributes_str; ?>>
 											<div><?php echo esc_html( $column_link['link']['title'] ); ?></div>
 										</a>
@@ -659,7 +663,7 @@
 				</div>
 			</div>
 			<div class="spleet pc-none">
-				<div class="menu-line p-12-12 white uper n-voreder">
+				<div class="lf-navbar__menu-line lf-navbar__menu-line--mobile menu-line p-12-12 white uper n-voreder">
 					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
 						<div class="lf-icon-button__icon-wrapper">
 							<svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
@@ -668,13 +672,20 @@
 						</div>
 						<div data-js-favorites-button-counter class="lf-icon-button__counter"><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 					</a>
+					<a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" class="lf-icon-button lf-icon-button--phone" aria-label="<?php echo esc_attr( 'Позвонить на номер ' . $phone ); ?>">
+						<div class="lf-icon-button__icon-wrapper">
+							<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+								<use href="#phoneIcon" />
+							</svg>
+						</div>
+					</a>
 				</div>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( 'Перейти на главную ' . get_bloginfo( 'name' ) ); ?>" class="lf-scroll-navbar-logo lf-scroll-navbar-logo--mobile w-inline-block">
 					<svg width="177" height="35" class="lf-scroll-navbar-logo__icon">
 						<use href="#scrollNavbarLogo" />
 					</svg>
 				</a>
-				<div class="menu-line p-12-12 white uper rev n-voreder">
+				<div class="lf-navbar__menu-line lf-navbar__menu-line--right lf-navbar__menu-line--mobile menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5 wh-head">
 						<div class="menu-link-keeper">
 							<a href="#" class="lf-icon-button lf-icon-button--search">
@@ -724,11 +735,11 @@
 												<?php if ( ! empty( $column_links ) ) : ?>
 												<div class="div-block-11">
 													<?php
-														foreach ( $column_links as $column_link ) :
-															$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 in-drop' ), $column_link['link'] );
-															?>
+													foreach ( $column_links as $column_link ) :
+														$column_link_attributes_str = loveforever_prepare_link_attributes( array( 'class' => 'a-12-12 in-drop' ), $column_link['link'] );
+														?>
 													<a <?php echo $column_link_attributes_str; ?>>
-													<?php echo esc_html( $column_link['link']['title'] ); ?>
+														<?php echo esc_html( $column_link['link']['title'] ); ?>
 													</a>
 													<?php endforeach; ?>
 												</div>
@@ -901,23 +912,23 @@
 								<div class="lf-burger-button__line b-line"></div>
 							</button>
 							<?php
-								if ( ! empty( $mobile_menu_items ) ) :
-									?>
+							if ( ! empty( $mobile_menu_items ) ) :
+								?>
 							<div class="hovered-menue mob-menue">
 								<div class="mob-menu-kee">
 									<div class="m-nav-keep">
 										<div class="m-nav-top">
-											<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
+										<?php foreach ( $mobile_menu_items as $mobile_menu_item ) : ?>
 											<?php
-												if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
-													$dress_category = get_term( $mobile_menu_item['category'] );
-													?>
+											if ( 'dress-category' === $mobile_menu_item['acf_fc_layout'] || 'dress-category-with-images' === $mobile_menu_item['acf_fc_layout'] ) :
+												$dress_category = get_term( $mobile_menu_item['category'] );
+												?>
 											<a href="#" class="m-nav-drop w-inline-block">
 												<div><?php echo esc_html( $dress_category->name ); ?></div>
 												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
 											</a>
 											<?php else : ?>
-											<?php $link = $mobile_menu_item['link']; ?>
+												<?php $link = $mobile_menu_item['link']; ?>
 											<a href="<?php echo esc_url( $link['url'] ); ?>" class="m-nav-a w-inline-block">
 												<div>
 													<?php echo esc_html( $link['title'] ); ?>
@@ -953,9 +964,9 @@
 									<?php if ( ! empty( $only_catalog_items ) ) : ?>
 									<div class="m-nav-content">
 										<?php
-											foreach ( $only_catalog_items as $only_catalog_item ) :
-												$dress_category = get_term( $only_catalog_item['category'] );
-												?>
+										foreach ( $only_catalog_items as $only_catalog_item ) :
+											$dress_category = get_term( $only_catalog_item['category'] );
+											?>
 										<div class="m-nav-content_in">
 											<a href="#" class="m-nav-content_back w-inline-block">
 												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc840b23caa30509cbdf5_Union.svg' ); ?>" loading="eager" alt class="image-7">
@@ -966,15 +977,15 @@
 												<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc676af0eceedf43e40c1_Union.svg' ); ?>" loading="eager" alt class="image-6">
 											</a>
 											<?php
-												$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
-												$dropdowns = array_filter(
-													$dropdowns,
-													function ( $dropdown ) {
-														return ! empty( $dropdown['links'] );
-													}
-												);
-												if ( ! empty( $dropdowns ) ) :
-													?>
+											$dropdowns = ! empty( $only_catalog_item['columns'] ) ? $only_catalog_item['columns'] : array();
+											$dropdowns = array_filter(
+												$dropdowns,
+												function ( $dropdown ) {
+													return ! empty( $dropdown['links'] );
+												}
+											);
+											if ( ! empty( $dropdowns ) ) :
+												?>
 											<div class="m-nav-cats">
 												<?php foreach ( $dropdowns as $dropdown ) : ?>
 												<div class="m-nav-drops">
@@ -985,13 +996,13 @@
 													<div class="m-nav-drop-contant">
 														<div class="div-block-11">
 															<?php foreach ( $dropdown['links'] as $dropdown_link_item ) : ?>
-															<?php $dropdown_link = $dropdown_link_item['link']; ?>
+																<?php $dropdown_link = $dropdown_link_item['link']; ?>
 															<a 
 																href="<?php echo esc_url( $dropdown_link['url'] ); ?>" 
 																class="a-12-12 in-drop"
 																target="<?php echo esc_attr( $dropdown_link['target'] ) ?? '_self'; ?>"
 																>
-															<?php echo esc_html( $dropdown_link['title'] ); ?>
+																<?php echo esc_html( $dropdown_link['title'] ); ?>
 															</a>
 															<?php endforeach; ?>
 														</div>
@@ -1001,10 +1012,10 @@
 											</div>
 											<?php endif; ?>
 											<?php if ( 'dress-category-with-images' === $only_catalog_item['acf_fc_layout'] ) : ?>
-											<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
-											<?php if ( ! empty( $submenu_items ) ) : ?>
+												<?php $submenu_items = ! empty( $only_catalog_item['cards'] ) ? $only_catalog_item['cards'] : array(); ?>
+												<?php if ( ! empty( $submenu_items ) ) : ?>
 											<div class="m-nav-cats">
-												<?php foreach ( $submenu_items as $submenu_item ) : ?>
+													<?php foreach ( $submenu_items as $submenu_item ) : ?>
 												<div class="m-nav-drops">
 													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
 														<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>

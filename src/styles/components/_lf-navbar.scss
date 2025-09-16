@@ -1,0 +1,21 @@
+@use '../media' as *;
+
+.lf-navbar {
+	&__menu-line {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 40rem;
+
+		&--mobile {
+			@include mobile {
+				justify-content: start;
+				gap: 2rem;
+			}
+		}
+
+		&--right {
+			justify-content: end;
+		}
+	}
+}
