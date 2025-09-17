@@ -63,11 +63,11 @@ export default class Stories {
 				this.stories.set(index, instance);
 
 				instance.on('mounted', () => {
-					instance.Components.Slides.get().forEach((splideSlide) => {
-						const { slide } = splideSlide;
+					// instance.Components.Slides.get().forEach((splideSlide) => {
+					// 	const { slide } = splideSlide;
 
-						slide.dataset.splideInterval = this.getSlideInterval(slide);
-					});
+					// 	slide.dataset.splideInterval = this.getSlideInterval(slide);
+					// });
 
 					instance.Components.Autoplay.pause();
 				});

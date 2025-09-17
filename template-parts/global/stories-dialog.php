@@ -44,11 +44,17 @@ if ( ! empty( $args['stories'] ) ) :
 											<?php
 											$slides = get_field( 'slides', $story->ID );
 											foreach ( $slides as $slide ) :
+												$image_or_video = $slide['image_or_video'];
+												$interval = 5000;
+
+												if ( 'video' === $slide['image_or_video']['type'] ) {
+													$interval = absint( wp_get_attachment_metadata( $image_or_video['ID'] )['length'] ) * 1000;
+												}
+
 												?>
-												<li class="story-slider__slide splide__slide">
+												<li class="story-slider__slide splide__slide" data-splide-interval="<?php echo esc_attr( $interval ); ?>">
 													<div class="story">
 														<?php
-														$image_or_video = $slide['image_or_video'];
 														if ( 'video' === $image_or_video['type'] ) :
 															?>
 															<video class="story__bg" muted playsinline>
@@ -68,10 +74,10 @@ if ( ! empty( $args['stories'] ) ) :
 														<?php endif; ?>
 														<div class="story__body">
 															<div class="story__content">
-                                                                <div class="story__title h3"><?php echo $slide['story_title']; ?></div>
-                                                                <div class="story__description">
-                                                                    <p><?php echo $slide['story_description']; ?></p>
-                                                                </div>
+																<div class="story__title h3"><?php echo $slide['story_title']; ?></div>
+																<div class="story__description">
+																	<p><?php echo $slide['story_description']; ?></p>
+																</div>
 																<?php
 																if ( ! empty( $slide['cta'] ) ) :
 																	$cta = $slide['cta'];
