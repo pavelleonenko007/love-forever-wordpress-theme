@@ -57,9 +57,13 @@ if ( ! empty( $args['stories'] ) ) :
 														<?php
 														if ( 'video' === $image_or_video['type'] ) :
 															?>
-															<video class="story__bg" muted playsinline>
+															<video class="story__bg" playsinline>
 																<source src="<?php echo esc_url( $image_or_video['url'] ); ?>" type="<?php echo esc_attr( $image_or_video['mime_type'] ); ?>">
 															</video>
+															<div class="story__loader" data-js-video-loader>
+																<div class="story__loader-spinner"></div>
+																<div class="story__loader-text">Загрузка...</div>
+															</div>
 														<?php else : ?>
 															<?php
 															echo wp_get_attachment_image(

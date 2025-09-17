@@ -15,6 +15,7 @@
 	},
 	"dependencies": {
 		"@splidejs/splide": "^4.1.4",
+		"@splidejs/splide-extension-video": "^0.8.0",
 		"barba.js": "^1.0.0",
 		"classnames": "^2.5.1",
 		"imask": "^7.6.1"
