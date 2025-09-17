@@ -58,7 +58,7 @@ if ( ! empty( $args['stories'] ) ) :
 														if ( 'video' === $image_or_video['type'] ) :
 															?>
 															<video class="story__bg" playsinline>
-																<source src="<?php echo esc_url( $image_or_video['url'] ); ?>" type="<?php echo esc_attr( $image_or_video['mime_type'] ); ?>">
+																<source src="<?php echo esc_url( $image_or_video['url'] ); ?>" type="video/mp4">
 															</video>
 															<div class="story__loader" data-js-video-loader>
 																<div class="story__loader-spinner"></div>

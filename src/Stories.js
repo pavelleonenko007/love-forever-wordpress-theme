@@ -3,6 +3,76 @@ import '@splidejs/splide/css/core';
 import Splide from '@splidejs/splide';
 import DialogCollection from './Dialog';
 
+/**
+ * Кастомный Autoplay для слайдеров с одним слайдом
+ * Обновляет прогресс и переключает слайд по истечении интервала
+ */
+class CustomAutoplay {
+	constructor(splide, options = {}) {
+		this.splide = splide;
+		this.interval = options.interval || 5000;
+		this.isPaused = true;
+		this.startTime = 0;
+		this.animationId = null;
+		this.progress = 0;
+		
+		// Callbacks
+		this.onProgress = options.onProgress || (() => {});
+		this.onComplete = options.onComplete || (() => {});
+		
+		this.update = this.update.bind(this);
+	}
+	
+	start() {
+		if (!this.isPaused) return;
+		
+		this.isPaused = false;
+		this.startTime = Date.now();
+		this.progress = 0;
+		this.animationId = requestAnimationFrame(this.update);
+	}
+	
+	pause() {
+		this.isPaused = true;
+		if (this.animationId) {
+			cancelAnimationFrame(this.animationId);
+			this.animationId = null;
+		}
+	}
+	
+	rewind() {
+		this.startTime = Date.now();
+		this.progress = 0;
+		this.onProgress(0);
+	}
+	
+	set(interval) {
+		this.interval = interval;
+	}
+	
+	update() {
+		if (this.isPaused) return;
+		
+		const elapsed = Date.now() - this.startTime;
+		this.progress = Math.min(elapsed / this.interval, 1);
+		
+		// Обновляем прогресс
+		this.onProgress(this.progress);
+		
+		// Если интервал завершен
+		if (this.progress >= 1) {
+			this.onComplete();
+			this.rewind();
+		}
+		
+		this.animationId = requestAnimationFrame(this.update);
+	}
+	
+	destroy() {
+		this.pause();
+	}
+}
+
 const ROOT_SELECTOR = '[data-js-stories]';
 export default class Stories {
 	selectors = {
@@ -24,6 +94,9 @@ export default class Stories {
 		// Переменные для мониторинга прогресса
 		this.lastProgressUpdate = null;
 		this.lastProgressRate = null;
+		
+		// Хранилище кастомных автоплеев для слайдеров с одним слайдом
+		this.customAutoplays = new Map();
 
 		this.root = new Splide(this.element, {
 			width: '465rem',
@@ -50,6 +123,9 @@ export default class Stories {
 		this.element
 			.querySelectorAll(this.selectors.innerSlider)
 			.forEach((element, index) => {
+				const slides = element.querySelectorAll('.splide__slide');
+				const hasMultipleSlides = slides.length > 1;
+				
 				const instance = new Splide(element, {
 					perPage: 1,
 					perMove: 1,
@@ -58,15 +134,26 @@ export default class Stories {
 					pagination: true,
 					width: '465rem',
 					arrows: false,
-					autoplay: true,
+					autoplay: hasMultipleSlides, // Включаем автоплей только для множественных слайдов
 					pauseOnHover: false,
 					drag: false,
+					// Принудительно включаем пагинацию даже для одного слайда
+					classes: {
+						pagination: 'splide__pagination',
+						page: 'splide__pagination__page',
+					}
 				});
 
 				this.stories.set(index, instance);
 
 				instance.on('mounted', () => {
-					instance.Components.Autoplay.pause();
+					// Для слайдеров с множественными слайдами используем стандартный автоплей
+					if (hasMultipleSlides) {
+						instance.Components.Autoplay.pause();
+					} else {
+						// Для слайдеров с одним слайдом создаем кастомный автоплей
+						this.createCustomAutoplayForSingleSlide(instance, index);
+					}
 				});
 
 				instance.mount();
@@ -102,10 +189,8 @@ export default class Stories {
 									
 									if (!bufferingStartTime) {
 										bufferingStartTime = Date.now();
-										console.log('Video started buffering in move event...');
 										
 										bufferingTimeout = setTimeout(() => {
-											console.warn('Video buffering too long in move event, skipping to next slide');
 											if (loader) {
 												loader.classList.remove('is-active');
 											}
@@ -121,14 +206,17 @@ export default class Stories {
 									}
 									
 									if (bufferingStartTime) {
-										const bufferingDuration = Date.now() - bufferingStartTime;
-										console.log(`Video buffering completed in move event in ${bufferingDuration}ms`);
-										
 										bufferingStartTime = null;
 										if (bufferingTimeout) {
 											clearTimeout(bufferingTimeout);
 											bufferingTimeout = null;
 										}
+									}
+									
+									// Обновляем интервал кастомного автоплея если это слайдер с одним слайдом
+									const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+									if (customAutoplay) {
+										this.updateCustomAutoplayInterval(this.activeStoryIndex);
 									}
 								};
 
@@ -138,7 +226,6 @@ export default class Stories {
 							}
 
 							video.play().catch(error => {
-								console.warn('Video play failed in move event:', error);
 								// Скрываем лоадер при ошибке
 								if (loader) {
 									loader.classList.remove('is-active');
@@ -189,6 +276,12 @@ export default class Stories {
 		// Останавливаем все видео и сбрасываем таймеры перед уничтожением
 		this.stopAllVideos();
 		
+		// Уничтожаем кастомные автоплеи
+		this.customAutoplays.forEach((customAutoplay) => {
+			customAutoplay.destroy();
+		});
+		this.customAutoplays.clear();
+		
 		this.root.destroy();
 		this.stories.forEach((storySplide) => {
 			storySplide.root.removeEventListener('pointerdown', this.onPointerDown);
@@ -203,8 +296,16 @@ export default class Stories {
 	}
 
 	onMoveRootSlider = () => {
-		this.stories.forEach((splide) => {
+		this.stories.forEach((splide, index) => {
+			// Останавливаем стандартный автоплей
 			splide.Components.Autoplay.pause();
+			
+			// Останавливаем кастомный автоплей если есть
+			const customAutoplay = this.customAutoplays.get(index);
+			if (customAutoplay) {
+				customAutoplay.pause();
+			}
+			
 			splide.Components.Slides.get().forEach((splideSlide) => {
 				const video = this.hasVideo(splideSlide.slide);
 
@@ -217,7 +318,13 @@ export default class Stories {
 	};
 
 	onMovedRootSlider = (newIndex, prevIndex, destIndex) => {
-		this.stories.get(newIndex).Components.Autoplay.play();
+		// Запускаем автоплей для новой истории
+		const customAutoplay = this.customAutoplays.get(newIndex);
+		if (customAutoplay) {
+			customAutoplay.start();
+		} else {
+			this.stories.get(newIndex).Components.Autoplay.play();
+		}
 		this.clearHold();
 	};
 
@@ -287,7 +394,13 @@ export default class Stories {
 		);
 
 		this.holdTimeout = setTimeout(() => {
-			Autoplay.pause();
+			// Останавливаем автоплей (стандартный или кастомный)
+			const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+			if (customAutoplay) {
+				customAutoplay.pause();
+			} else {
+				Autoplay.pause();
+			}
 
 			if (video) {
 				video.pause();
@@ -304,7 +417,12 @@ export default class Stories {
 			if (pressDuration < this.holdDelay) {
 				if (event.offsetX < containerWidth / 2) {
 					if (activeStory.index === 0) {
-						this.openStory(this.activeStoryIndex - 1);
+						// Если это первый слайд первой истории, сбрасываем прогресс и перезапускаем
+						if (this.activeStoryIndex === 0) {
+							this.restartCurrentStory();
+						} else {
+							this.openStory(this.activeStoryIndex - 1);
+						}
 					} else {
 						activeStory.go('<');
 					}
@@ -316,7 +434,13 @@ export default class Stories {
 					}
 				}
 			} else {
-				Autoplay.play();
+				// Возобновляем автоплей (стандартный или кастомный)
+				const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+				if (customAutoplay) {
+					customAutoplay.start();
+				} else {
+					Autoplay.play();
+				}
 				video?.play();
 			}
 		};
@@ -341,9 +465,15 @@ export default class Stories {
 			index = 0;
 		}
 
-		const activeStory = this.stories.get(this.activeStoryIndex);
-
-		activeStory.root.removeEventListener('pointerdown', this.onPointerDown);
+		// Удаляем обработчики от предыдущей истории (если она существует)
+		if (this.activeStoryIndex !== undefined) {
+			const activeStory = this.stories.get(this.activeStoryIndex);
+			if (activeStory) {
+				activeStory.root.removeEventListener('pointerdown', this.onPointerDown);
+				activeStory.off('autoplay:playing', this.updateProgress);
+				activeStory.off('moved', this.setupProgressbars);
+			}
+		}
 
 		this.activeStoryIndex = index;
 
@@ -355,20 +485,27 @@ export default class Stories {
 
 		// currentStory.go(0);
 
-		// ВАЖНО: Сначала устанавливаем правильный интервал, потом запускаем автоплей
-		this.setSlideInterval();
+		// Сбрасываем мониторинг прогресса для новой истории
+		this.lastProgressUpdate = null;
+		this.lastProgressRate = null;
 
 		// Запускаем видео в активном слайде при открытии истории
 		this.playActiveSlideVideo(currentStory);
 
-		// Запускаем автоплей после установки правильного интервала
-		currentStory.Components.Autoplay.play();
+		// Проверяем, есть ли кастомный автоплей для этой истории
+		const customAutoplay = this.customAutoplays.get(index);
+		if (customAutoplay) {
+			// Для слайдеров с одним слайдом используем кастомный автоплей
+			customAutoplay.start();
+		} else {
+			// Для слайдеров с множественными слайдами используем стандартный автоплей
+			this.setSlideInterval();
+			currentStory.Components.Autoplay.play();
+			this.stories.get(index).on('autoplay:playing', this.updateProgress);
+			this.stories.get(index).on('moved', this.setupProgressbars);
+		}
 
 		currentStory.root.addEventListener('pointerdown', this.onPointerDown);
-
-		this.stories.get(index).on('autoplay:playing', this.updateProgress);
-		this.stories.get(index).on('moved', this.setupProgressbars);
-		// Убираем дублирующий обработчик - setSlideInterval уже вызывается в openStory()
 	}
 
 	hasVideo(slide) {
@@ -376,14 +513,175 @@ export default class Stories {
 	}
 
 	/**
+	 * Создает кастомный автоплей для слайдера с одним слайдом
+	 * @param {Splide} instance - экземпляр Splide
+	 * @param {number} index - индекс истории
+	 */
+	createCustomAutoplayForSingleSlide(instance, index) {
+		const slide = instance.Components.Slides.get()[0]?.slide;
+		if (!slide) return;
+
+		const interval = this.getSlideInterval(slide);
+		
+		const customAutoplay = new CustomAutoplay(instance, {
+			interval: interval,
+			onProgress: (rate) => {
+				// Обновляем прогресс-бар
+				this.updateProgress(rate);
+			},
+			onComplete: () => {
+				// Проверяем, является ли текущая история последней
+				if (this.activeStoryIndex === this.root.length - 1) {
+					// Если это последняя история, закрываем диалог
+					DialogCollection.getDialogsById('storiesDialog').close();
+				} else {
+					// Переходим к следующей истории
+					this.openStory(this.activeStoryIndex + 1);
+				}
+			}
+		});
+
+		// Сохраняем ссылку на кастомный автоплей
+		this.customAutoplays.set(index, customAutoplay);
+		
+		// Запускаем автоплей если это активная история
+		if (index === this.activeStoryIndex) {
+			customAutoplay.start();
+		}
+	}
+
+	/**
+	 * Обновляет интервал кастомного автоплея для слайдера с одним слайдом
+	 * Вызывается после загрузки видео для обновления интервала на длительность видео
+	 * @param {number} index - индекс истории
+	 */
+	updateCustomAutoplayInterval(index) {
+		const customAutoplay = this.customAutoplays.get(index);
+		if (!customAutoplay) return;
+
+		const instance = this.stories.get(index);
+		const slide = instance.Components.Slides.get()[0]?.slide;
+		if (!slide) return;
+
+		const newInterval = this.getSlideInterval(slide);
+		
+		// Обновляем интервал и сбрасываем прогресс до 0
+		customAutoplay.set(newInterval);
+		customAutoplay.rewind();
+		
+		// Если это активная история, перезапускаем автоплей с новым интервалом
+		if (index === this.activeStoryIndex) {
+			customAutoplay.start();
+		}
+	}
+
+	/**
+	 * Перезапускает текущую историю с первого слайда
+	 * Используется когда пользователь кликает на левую половину первого слайда первой истории
+	 */
+	restartCurrentStory() {
+		const activeStory = this.stories.get(this.activeStoryIndex);
+		
+		// Останавливаем текущий автоплей
+		const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+		if (customAutoplay) {
+			customAutoplay.pause();
+		} else {
+			activeStory.Components.Autoplay.pause();
+		}
+		
+		// Останавливаем и сбрасываем видео
+		const slides = activeStory.Components.Slides.get();
+		slides.forEach((splideSlide) => {
+			const video = this.hasVideo(splideSlide.slide);
+			if (video) {
+				video.pause();
+				video.currentTime = 0;
+				// Скрываем лоадер
+				const loader = splideSlide.slide.querySelector('[data-js-video-loader]');
+				if (loader) {
+					loader.classList.remove('is-active');
+				}
+			}
+		});
+		
+		// Сбрасываем прогресс-бары
+		const { items } = activeStory.Components.Pagination;
+		items.forEach((item) => {
+			item.button.style.setProperty('--progress', 0);
+		});
+		
+		// Сбрасываем мониторинг прогресса
+		this.lastProgressUpdate = null;
+		this.lastProgressRate = null;
+		
+		// Переходим к первому слайду
+		activeStory.go(0);
+		
+		// Запускаем видео в первом слайде
+		this.playActiveSlideVideo(activeStory);
+		
+		// Запускаем автоплей
+		if (customAutoplay) {
+			customAutoplay.start();
+		} else {
+			this.setSlideInterval();
+			activeStory.Components.Autoplay.play();
+		}
+	}
+
+	/**
+	 * Создает кастомный прогресс-бар для слайда
+	 * @param {HTMLElement} slide - элемент слайда
+	 * @param {number} rate - текущий прогресс (0-1)
+	 */
+	createCustomProgressBar(slide, rate) {
+		// Проверяем, не создан ли уже прогресс-бар
+		if (slide.querySelector('.story__progress-bar')) {
+			return;
+		}
+
+		const progressBar = document.createElement('div');
+		progressBar.className = 'story__progress-bar';
+		progressBar.style.cssText = `
+			position: absolute;
+			top: 20rem;
+			left: 20rem;
+			right: 20rem;
+			height: 4rem;
+			background: rgba(255, 255, 255, 0.3);
+			border-radius: 2rem;
+			overflow: hidden;
+			z-index: 5;
+		`;
+
+		const progressFill = document.createElement('div');
+		progressFill.className = 'story__progress-fill';
+		progressFill.style.cssText = `
+			height: 100%;
+			background: var(--white);
+			border-radius: 2rem;
+			width: ${rate * 100}%;
+			transition: width 0.1s ease;
+		`;
+
+		progressBar.appendChild(progressFill);
+		slide.appendChild(progressBar);
+	}
+
+	/**
 	 * Останавливает все видео во всех историях и сбрасывает их таймеры
 	 */
 	stopAllVideos() {
-		console.log('Stopping all videos and resetting timers');
-		
-		this.stories.forEach((storySplide) => {
-			// Останавливаем автоплей
+		this.stories.forEach((storySplide, index) => {
+			// Останавливаем стандартный автоплей
 			storySplide.Components.Autoplay.pause();
+			
+			// Останавливаем кастомный автоплей если есть
+			const customAutoplay = this.customAutoplays.get(index);
+			if (customAutoplay) {
+				customAutoplay.pause();
+			}
 			
 			// Сбрасываем прогресс-бары
 			const { items } = storySplide.Components.Pagination;
@@ -398,7 +696,6 @@ export default class Stories {
 				if (video) {
 					video.pause();
 					video.currentTime = 0;
-					console.log('Video stopped and reset:', video);
 				}
 			});
 		});
@@ -421,14 +718,13 @@ export default class Stories {
 		const loader = activeSlide.querySelector('[data-js-video-loader]');
 		
 		if (video) {
-			// Показываем лоадер при начале загрузки
-			if (loader) {
+			// Показываем лоадер только если видео еще не готово к воспроизведению
+			if (loader && video.readyState < 3) {
 				loader.classList.add('is-active');
 			}
 
 			// Добавляем обработчики для проблем с загрузкой
 			const handleVideoError = () => {
-				console.warn('Video failed to load, skipping to next slide');
 				// Скрываем лоадер
 				if (loader) {
 					loader.classList.remove('is-active');
@@ -441,13 +737,27 @@ export default class Stories {
 
 			const handleVideoLoad = () => {
 				// Обновляем интервал после успешной загрузки
-				this.setSlideInterval();
+				// Проверяем, есть ли кастомный автоплей (слайдер с одним слайдом)
+				const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+				if (customAutoplay) {
+					// Для слайдеров с одним слайдом обновляем кастомный автоплей
+					this.updateCustomAutoplayInterval(this.activeStoryIndex);
+				} else {
+					// Для слайдеров с множественными слайдами используем стандартный метод
+					this.setSlideInterval();
+				}
 			};
 
 			const handleCanPlayThrough = () => {
 				// Видео полностью загружено и готово к воспроизведению
 				if (loader) {
 					loader.classList.remove('is-active');
+				}
+				
+				// Дополнительно обновляем интервал для кастомного автоплея
+				const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+				if (customAutoplay) {
+					this.updateCustomAutoplayInterval(this.activeStoryIndex);
 				}
 			};
 
@@ -463,11 +773,9 @@ export default class Stories {
 				
 				if (!bufferingStartTime) {
 					bufferingStartTime = Date.now();
-					console.log('Video started buffering...');
 					
 					// Если буферизация длится больше 5 секунд, переходим к следующему слайду
 					bufferingTimeout = setTimeout(() => {
-						console.warn('Video buffering too long, skipping to next slide');
 						if (loader) {
 							loader.classList.remove('is-active');
 						}
@@ -483,15 +791,18 @@ export default class Stories {
 				}
 				
 				if (bufferingStartTime) {
-					const bufferingDuration = Date.now() - bufferingStartTime;
-					console.log(`Video buffering completed in ${bufferingDuration}ms`);
-					
 					// Сбрасываем таймеры
 					bufferingStartTime = null;
 					if (bufferingTimeout) {
 						clearTimeout(bufferingTimeout);
 						bufferingTimeout = null;
 					}
+				}
+				
+				// Обновляем интервал кастомного автоплея если это слайдер с одним слайдом
+				const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+				if (customAutoplay) {
+					this.updateCustomAutoplayInterval(this.activeStoryIndex);
 				}
 			};
 
@@ -501,13 +812,11 @@ export default class Stories {
 					loader.classList.add('is-active');
 				}
 				
-				console.warn('Video stalled, monitoring...');
 				if (!bufferingStartTime) {
 					bufferingStartTime = Date.now();
 					
 					// Если видео "застряло" больше 3 секунд, переходим к следующему
 					bufferingTimeout = setTimeout(() => {
-						console.warn('Video stalled too long, skipping to next slide');
 						if (loader) {
 							loader.classList.remove('is-active');
 						}
@@ -529,7 +838,6 @@ export default class Stories {
 
 			// Запускаем видео с обработкой ошибок
 			video.play().catch(error => {
-				console.warn('Video play failed:', error);
 				// Скрываем лоадер при ошибке
 				if (loader) {
 					loader.classList.remove('is-active');
@@ -554,7 +862,6 @@ export default class Stories {
 			
 			// Если видео есть, но метаданные не загружены, используем увеличенный fallback
 			if (video.readyState === 0) {
-				console.warn('Video metadata not loaded, using extended fallback');
 				return 10_000; // 10 секунд для видео, которые еще загружаются
 			}
 		}
@@ -567,7 +874,6 @@ export default class Stories {
 		const activeSlide = activeStory.Components.Slides.get()[activeSlideIndex].slide;
 
 		const newInterval = this.getSlideInterval(activeSlide);
-		console.log('Setting slide interval to:', newInterval);
 
 		// Используем data-атрибут метод (более надежный)
 		activeSlide.setAttribute('data-splide-interval', newInterval);
@@ -580,9 +886,29 @@ export default class Stories {
 	updateProgress = (rate) => {		
 		const activeStory = this.stories.get(this.activeStoryIndex);
 		const activePaginationButton =
-			activeStory.Components.Pagination.items[activeStory.index].button;
+			activeStory.Components.Pagination.items[activeStory.index]?.button;
 
-		activePaginationButton.style.setProperty('--progress', rate);
+		// Проверяем, есть ли кнопка пагинации
+		if (activePaginationButton) {
+			// Всегда обновляем прогресс-бар
+			activePaginationButton.style.setProperty('--progress', rate);
+		} else {
+			// Альтернативный способ: ищем прогресс-бар в DOM
+			const activeSlide = activeStory.Components.Slides.get()[activeStory.index]?.slide;
+			if (activeSlide) {
+				const customProgressBar = activeSlide.querySelector('.story__progress-bar');
+				if (customProgressBar) {
+					// Обновляем кастомный прогресс-бар
+					const progressFill = customProgressBar.querySelector('.story__progress-fill');
+					if (progressFill) {
+						progressFill.style.width = `${rate * 100}%`;
+					}
+				} else {
+					// Создаем кастомный прогресс-бар если его нет
+					this.createCustomProgressBar(activeSlide, rate);
+				}
+			}
+		}
 
 		// Дополнительная проверка: если прогресс не движется больше 10 секунд
 		// (это может указывать на зависшее видео)
@@ -594,7 +920,6 @@ export default class Stories {
 			
 			// Если прогресс не изменился больше 10 секунд и это не конец слайда
 			if (timeSinceLastUpdate > 10000 && rate === this.lastProgressRate && rate < 0.95) {
-				console.warn('Progress stuck, possible video issue, skipping to next slide');
 				activeStory.go('>');
 				return;
 			}
@@ -606,9 +931,31 @@ export default class Stories {
 			}
 		}
 
-		if (rate === 1 && activeStory.index === activeStory.length - 1) {
-			activeStory.off('autoplay:playing', this.updateProgress);
-			this.openStory(this.activeStoryIndex + 1);
+		// Обработка завершения слайда
+		if (rate === 1) {
+			// Проверяем, есть ли кастомный автоплей (слайдер с одним слайдом)
+			const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+			if (customAutoplay) {
+				// Для слайдеров с одним слайдом переход к следующей истории уже обрабатывается в onComplete
+				return;
+			}
+			
+			// Для слайдеров с множественными слайдами
+			// Если это последний слайд в истории
+			if (activeStory.index === activeStory.length - 1) {
+				// Если это последняя история, закрываем диалог
+				if (this.activeStoryIndex === this.root.length - 1) {
+					activeStory.off('autoplay:playing', this.updateProgress);
+					DialogCollection.getDialogsById('storiesDialog').close();
+				} else {
+					// Переходим к следующей истории
+					activeStory.off('autoplay:playing', this.updateProgress);
+					this.openStory(this.activeStoryIndex + 1);
+				}
+			} else {
+				// Переходим к следующему слайду в той же истории
+				activeStory.go('>');
+			}
 		}
 	};
 }
