@@ -32,6 +32,16 @@
 			row-gap: 30rem;
 		}
 
+		&-brand {
+			text-decoration: none;
+			color: inherit;
+			transition: color 0.3s ease;
+
+			@include hover {
+				color: var(--pink);
+			}
+		}
+
 		&-badges {
       gap: 20rem;
 

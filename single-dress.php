@@ -4,9 +4,9 @@
 	 *
 	 * @package 0.0.1
 	 */
-	
+
 	defined( 'ABSPATH' ) || exit;
-	
+
 	get_header(
 		null,
 		array(
@@ -16,10 +16,10 @@
 			'product-id'                    => get_the_ID(),
 		)
 	);
-	
+
 	$infoline_id   = loveforever_get_current_infoline();
 	$infoline_data = loveforever_get_infoline_data( $infoline_id );
-	
+
 	$availability        = get_field( 'availability' );
 	$badge               = loveforever_get_product_badge_text( get_the_ID() );
 	$images              = loveforever_get_product_images( get_the_ID() );
@@ -28,11 +28,11 @@
 	$price               = get_field( 'price' );
 	$has_discount        = get_field( 'has_discount' );
 	$price_with_discount = $has_discount ? get_field( 'price_with_discount' ) : null;
-	$brand               = ! empty( get_the_terms( get_the_ID(), 'brand' ) ) && ! is_wp_error( get_the_terms( get_the_ID(), 'brand' ) ) ? get_the_terms( get_the_ID(), 'brand' )[0]->name : null;
+	$brand               = get_the_terms( get_the_ID(), 'brand' );
 	$tags                = wp_get_post_terms( get_the_ID(), array( 'brand', 'silhouette', 'style', 'color' ) );
 	$dress_category      = loveforever_get_product_root_category( get_the_ID() );
 	$related_products    = get_field( 'related_products' );
-	
+
 	$has_change_fittings_capabilities  = loveforever_is_user_has_manager_capability();
 	$booking_manager                   = Fitting_Slots_Manager::get_instance();
 	$date_with_nearest_available_slots = $booking_manager->get_nearest_available_date();
@@ -53,11 +53,11 @@
 				</nav>
 			</div>
 			<?php
-				if ( ! empty( $images ) ) :
-					?>
+			if ( ! empty( $images ) ) :
+				?>
 			<div data-delay="4000" data-animation="slide" class="m-prod-slider lf-single-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
 				<div class="m-prod-slider_mask lf-single-slider__mask w-slider-mask">
-					<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
+				<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
 					<div class="lf-single-slider__slide w-slide">
 						<div class="mom-abs">
 							<?php if ( ! empty( $image_slide['image'] ) ) : ?>
@@ -104,7 +104,7 @@
 					<div class="single-img-mom">
 						<img src="<?php echo esc_url( $image_item['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_item['image']['alt'] ); ?>" class="img-fw">
 					</div>
-					<?php if ( 0 === $image_item_index && ! empty( $video ) ) : ?>
+						<?php if ( 0 === $image_item_index && ! empty( $video ) ) : ?>
 					<div class="single-img-mom">
 						<video 
 							class="img-fw"
@@ -132,17 +132,17 @@
 						<?php endif; ?>
 					</div>
 					<div class="single-product__info">
-						<?php if ( ! empty( $brand ) ) : ?>
-						<div class="p-12-12 uper m-12-12 single-product__content-brand"><?php echo esc_html( $brand ); ?></div>
+						<?php if ( ! is_wp_error( $brand ) && ! empty( $brand ) ) : ?>
+							<a href="<?php echo esc_url( loveforever_format_filter_link_for_tag( $brand[0], get_the_ID() ) ); ?>" class="p-12-12 uper m-12-12 single-product__content-brand"><?php echo esc_html( $brand[0]->name ); ?></a>
 						<?php endif; ?>
 						<h1 class="p-24-24 h-single single-product__content-heading"><?php echo wp_kses_post( loveforever_get_product_title( get_the_ID() ) ); ?></h1>
 					</div>
 					<?php if ( ! empty( $colors ) ) : ?>
 					<div class="horiz single-product__content-colors">
 						<?php
-							foreach ( $colors as $color ) :
-								if ( ! empty( $color['hex'] ) && ! empty( $color['name'] ) ) :
-									?>
+						foreach ( $colors as $color ) :
+							if ( ! empty( $color['hex'] ) && ! empty( $color['name'] ) ) :
+								?>
 						<a href="#" class="btn-color w-inline-block">
 							<div class="color-mom">
 								<div class="color-dot" style="background-color: <?php echo esc_attr( $color['hex'] ); ?>;">
@@ -151,10 +151,10 @@
 							</div>
 							<div class="p-12-12 uper m-12-12"><?php echo esc_html( $color['name'] ); ?></div>
 						</a>
-						<?php
+								<?php
 							endif;
 							endforeach;
-							?>
+						?>
 					</div>
 					<?php endif; ?>
 					<?php if ( ! empty( $price ) ) : ?>
@@ -163,7 +163,7 @@
 						<div class="p-24-24"><?php echo esc_html( $first_price ); ?></div>
 						<?php if ( ! empty( $price_with_discount ) ) : ?>
 						<div class="p-24-24 indirim-p-24-24"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?></div>
-						<?php
+							<?php
 							$discount = loveforever_get_product_discount( get_the_ID() );
 							?>
 						<div class="indirim-single">
@@ -317,13 +317,13 @@
 	</div>
 </section>
 <?php
-	if ( ! empty( $related_products ) ) :
-		$related_products_query_args = array(
-			'post_type' => 'dress',
-			'post__in'  => $related_products,
-		);
-		$related_products_query      = new WP_Query( $related_products_query_args );
-		?>
+if ( ! empty( $related_products ) ) :
+	$related_products_query_args = array(
+		'post_type' => 'dress',
+		'post__in'  => $related_products,
+	);
+	$related_products_query      = new WP_Query( $related_products_query_args );
+	?>
 <section class="section">
 	<div class="container">
 		<div class="spleet">
@@ -348,17 +348,17 @@
 		<div class="splide y-pc">
 			<div class="splide__track">
 				<div class="splide__list search-grid">
-					<?php
-						while ( $related_products_query->have_posts() ) :
-							$related_products_query->the_post();
-							?>
+				<?php
+				while ( $related_products_query->have_posts() ) :
+					$related_products_query->the_post();
+					?>
 					<div id="w-node-f2a03f55-cf72-e124-8648-e74d9b1c1778-450cc872" class="splide__slide">
-						<?php get_template_part( 'components/dress-card' ); ?>
+					<?php get_template_part( 'components/dress-card' ); ?>
 					</div>
 					<?php
-						endwhile;
-						wp_reset_postdata();
-						?>
+					endwhile;
+					wp_reset_postdata();
+				?>
 				</div>
 			</div>
 		</div>
