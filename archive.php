@@ -622,7 +622,11 @@ if ( ! empty( $dresses_without_order ) ) {
 												'sale'    => array(),
 											);
 
-											$child_term_name = str_replace( $terms_map[ $root_term->slug ], '', $child_term->name );
+											$child_term_name = $child_term->name;
+
+											if ( isset( $terms_map[ $root_term->slug ] ) ) {
+												$child_term_name = str_replace( $terms_map[ $root_term->slug ], '', $child_term->name );
+											}
 
 											echo esc_html( $child_term_name );
 											?>
