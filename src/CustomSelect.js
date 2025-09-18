@@ -51,7 +51,7 @@ class CustomSelect {
 	}
 
 	init() {
-		$(this.root).selectmenu(this.config);
+		jQuery(this.root).selectmenu(this.config);
 	}
 
 	toogleSelectDeviceType(isMobile = MatchMedia.mobile.matches) {
@@ -65,11 +65,11 @@ class CustomSelect {
 	}
 
 	destroy() {
-		if (!$(this.root).selectmenu('instance')) {
+		if (!jQuery(this.root).selectmenu('instance')) {
 			return;
 		}
 
-		$(this.root).selectmenu('destroy');
+		jQuery(this.root).selectmenu('destroy');
 	}
 }
 

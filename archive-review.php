@@ -73,7 +73,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 						<?php endif; ?>
 					</div>
 				</section>
-				<section class="section review-page">
+				<section id="addReview" class="section review-page">
 					<div class="container">
 						<div class="spleet">
 							<h1 class="h-36-36 review-page__title">Прислать отзыв</h1>
@@ -98,7 +98,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 							</ol>
 							<div class="otz-form-block">
 								<form 
-									id="addReview" 
+									id="addReviewForm" 
 									class="reviews-form" 
 									data-js-form 
 									data-js-review-form 
@@ -196,12 +196,12 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 												name="name" 
 												placeholder="Имя" 
 												type="text" 
-												id="addReviewNameField" 
+												id="addReviewFormNameField" 
 												title="Пожалуйста, укажите ваше имя"
-												aria-errormessage="addReviewNameFieldErrors"
+												aria-errormessage="addReviewFormNameFieldErrors"
 												required
 											>
-											<span class="field__errors" id="addReviewNameFieldErrors" data-js-form-field-errors></span>
+											<span class="field__errors" id="addReviewFormNameFieldErrors" data-js-form-field-errors></span>
 										</div>
 										<div class="field" data-js-datepicker>
 											<input 
@@ -224,7 +224,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 												value="<?php echo esc_attr( $today ); ?>"
 												data-js-datepicker-custom-control
 											/>
-											<span class="field__errors" id="addReviewDateFieldErrors" data-js-form-field-errors></span>
+											<span class="field__errors" id="addReviewFormDateFieldErrors" data-js-form-field-errors></span>
 										</div>
 									</div>
 									<div class="relaive">
@@ -232,14 +232,14 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 											<textarea 
 												placeholder="Ваш отзыв" 
 												maxlength="5000" 
-												id="addReviewReviewTextField" 
+												id="addReviewFormReviewTextField" 
 												name="review_text" 
 												class="field__control"
 												rows="10"
 												title="Оставьте ваши впечатления"
 												required
 											></textarea>
-											<span class="field__errors" id="addReviewReviewTextFieldErrors" data-js-form-field-errors></span>
+											<span class="field__errors" id="addReviewFormReviewTextFieldErrors" data-js-form-field-errors></span>
 										</div>
 										<div class="code-embed-6 w-embed">
 											<div class="input-file-row" data-js-file-input>
