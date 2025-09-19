@@ -396,10 +396,6 @@
 		gap: 8rem;
 	}
 
-	.splide__pagination button {
-		display: none;
-	}
-
 	.splide__pagination li:after {
 		content: '';
 		width: 8rem;

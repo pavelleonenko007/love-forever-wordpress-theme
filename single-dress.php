@@ -54,42 +54,42 @@
 			</div>
 			<?php
 			if ( ! empty( $images ) ) :
+				$slider_config = array(
+					'type'        => 'loop',
+					'perPage'     => 1,
+					'perMove'     => 1,
+					'speed'       => 500,
+					'arrows'      => false,
+					'pagination'  => true,
+					'easing'      => 'ease',
+					'classes'     => array(
+						'pagination' => 'lf-single-slider__pagination splide__pagination',
+						'page'       => 'lf-single-slider__page splide__pagination__page',
+					),
+					'mediaQuery'  => 'min',
+					'breakpoints' => array(
+						768 => array(
+							'destroy' => true,
+						),
+					),
+				);
 				?>
-			<div data-delay="4000" data-animation="slide" class="m-prod-slider lf-single-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-				<div class="m-prod-slider_mask lf-single-slider__mask w-slider-mask">
-				<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
-					<div class="lf-single-slider__slide w-slide">
-						<div class="mom-abs">
-							<?php if ( ! empty( $image_slide['image'] ) ) : ?>
-							<img src="<?php echo esc_url( $image_slide['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_slide['image']['alt'] ); ?>" class="img-cover">
-							<?php endif; ?>
-						</div>
-					</div>
-					<?php if ( 0 === $image_slide_index && ! empty( $video ) ) : ?>
-					<div class="w-slide">
-						<div class="mom-abs">
-							<video 
-								class="img-cover"
-								muted
-								playsinline
-								loop
-								autoplay
-								data-js-play-if-visible-video
-								>
-								<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
-							</video>
-						</div>
-					</div>
-					<?php endif; ?>
-					<?php endforeach; ?>
+			<div 
+				class="splide lf-single-slider visible-mobile" 
+				role="group" 
+				aria-hidden="true" 
+				data-splide="<?php echo esc_attr( wp_json_encode( $slider_config ) ); ?>"
+				data-js-product-slider
+			>
+				<div class="splide__track lf-single-slider__track">
+					<ul class="splide__list lf-single-slider__list">
+						<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
+						<li class="splide__slide lf-single-slider__slide">
+							<?php echo wp_get_attachment_image( $image_slide['image']['ID'], 'fullhd', false, array( 'class' => 'lf-single-slider__image' ) ); ?>
+						</li>
+						<?php endforeach; ?>
+					</ul>
 				</div>
-				<div class="none w-slider-arrow-left">
-					<div class="w-icon-slider-left"></div>
-				</div>
-				<div class="none w-slider-arrow-right">
-					<div class="w-icon-slider-right"></div>
-				</div>
-				<div class="m-prod-slider_nav w-slider-nav w-round"></div>
 			</div>
 			<?php endif; ?>
 		</div>

@@ -1,5 +1,4 @@
 import Splide from '@splidejs/splide';
-import Barba from 'barba.js';
 import { AccordionCollection } from './Accordion';
 import AddToFavoriteButtonCollection from './AddToFavoriteButton';
 import CopyToClipboardButtonCollection from './CopyToClipboardButton';
@@ -27,6 +26,7 @@ import './styles/index.scss';
 import { CallbackFormCollection } from './CallbackForm';
 import InputZoomPrevention from './InputZoomPrevention';
 import initMap from './YandexMap';
+import ProductSliderCollection from './ProductSlider';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -266,6 +266,7 @@ function initCatalogPage() {
 
 function initSingleDressPage() {
 	console.log('init single dress page');
+	ProductSliderCollection.init();
 }
 
 function initReviewsPage() {
