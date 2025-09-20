@@ -3,28 +3,36 @@ import '@splidejs/splide/css/core';
 import Splide from '@splidejs/splide';
 import DialogCollection from './Dialog';
 
-/**
- * Кастомный Autoplay для слайдеров с одним слайдом
- * Обновляет прогресс и переключает слайд по истечении интервала
- */
-class CustomAutoplay {
-	constructor(splide, options = {}) {
-		this.splide = splide;
-		this.interval = options.interval || 5000;
-		this.isPaused = true;
-		this.startTime = 0;
-		this.animationId = null;
-		this.progress = 0;
-		
-		// Callbacks
-		this.onProgress = options.onProgress || (() => {});
-		this.onComplete = options.onComplete || (() => {});
-		
-		this.update = this.update.bind(this);
-	}
+	/**
+	 * Кастомный Autoplay для слайдеров с одним слайдом
+	 * Обновляет прогресс и переключает слайд по истечении интервала
+	 */
+	class CustomAutoplay {
+		constructor(splide, options = {}) {
+			this.splide = splide;
+			this.interval = options.interval || 5000;
+			this.isPaused = true;
+			this.startTime = 0;
+			this.animationId = null;
+			this.progress = 0;
+			this.isMediaLoaded = false; // Флаг загрузки медиа
+			
+			// Callbacks
+			this.onProgress = options.onProgress || (() => {});
+			this.onComplete = options.onComplete || (() => {});
+			this.onMediaLoaded = options.onMediaLoaded || (() => {});
+			
+			this.update = this.update.bind(this);
+		}
 	
 	start() {
 		if (!this.isPaused) return;
+		
+		// Запускаем автоплей только если медиа загружено
+		if (!this.isMediaLoaded) {
+			console.log('Autoplay paused: media not loaded yet');
+			return;
+		}
 		
 		this.isPaused = false;
 		this.startTime = Date.now();
@@ -44,6 +52,26 @@ class CustomAutoplay {
 		this.startTime = Date.now();
 		this.progress = 0;
 		this.onProgress(0);
+	}
+	
+	/**
+	 * Отмечает медиа как загруженное и запускает автоплей если он был приостановлен
+	 */
+	markMediaAsLoaded() {
+		this.isMediaLoaded = true;
+		this.onMediaLoaded();
+		
+		// Если автоплей был приостановлен из-за незагруженного медиа, запускаем его
+		if (this.isPaused && !this.animationId) {
+			this.start();
+		}
+	}
+	
+	/**
+	 * Сбрасывает флаг загрузки медиа (при переходе к новому слайду)
+	 */
+	resetMediaLoaded() {
+		this.isMediaLoaded = false;
 	}
 	
 	set(interval) {
@@ -296,13 +324,8 @@ export default class Stories {
 	};
 
 	onMovedRootSlider = (newIndex, prevIndex, destIndex) => {
-		// Запускаем автоплей для новой истории
-		const customAutoplay = this.customAutoplays.get(newIndex);
-		if (customAutoplay) {
-			customAutoplay.start();
-		} else {
-			this.stories.get(newIndex).Components.Autoplay.play();
-		}
+		// Автоплей запустится автоматически после загрузки медиа в playActiveSlideVideo
+		// Не запускаем автоплей здесь, так как медиа может быть еще не загружено
 		this.clearHold();
 	};
 
@@ -412,12 +435,24 @@ export default class Stories {
 					}
 				}
 			} else {
-				// Возобновляем автоплей (стандартный или кастомный)
+				// Возобновляем автоплей (стандартный или кастомный) только если медиа загружено
 				const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
 				if (customAutoplay) {
-					customAutoplay.start();
+					// Для кастомного автоплея проверяем загрузку медиа
+					if (customAutoplay.isMediaLoaded) {
+						customAutoplay.start();
+					}
 				} else {
-					Autoplay.play();
+					// Для стандартного автоплея запускаем только если медиа загружено
+					const activeSlide = activeStory.Components.Slides.getAt(activeStory.index).slide;
+					const hasMedia = activeSlide.querySelector('video[src]') || 
+									activeSlide.querySelector('.story__bg--loaded img') ||
+									!activeSlide.querySelector('video[data-src]') && 
+									!activeSlide.querySelector('.story__bg--placeholder[data-src]');
+					
+					if (hasMedia) {
+						Autoplay.play();
+					}
 				}
 				video?.play();
 			}
@@ -479,12 +514,13 @@ export default class Stories {
 		// Проверяем, есть ли кастомный автоплей для этой истории
 		const customAutoplay = this.customAutoplays.get(index);
 		if (customAutoplay) {
-			// Для слайдеров с одним слайдом используем кастомный автоплей
-			customAutoplay.start();
+			// Для слайдеров с одним слайдом сбрасываем флаг загрузки медиа
+			customAutoplay.resetMediaLoaded();
+			// Автоплей запустится автоматически после загрузки медиа в playActiveSlideVideo
 		} else {
-			// Для слайдеров с множественными слайдами используем стандартный автоплей
+			// Для слайдеров с множественными слайдами настраиваем интервал
 			this.setSlideInterval();
-			currentStory.Components.Autoplay.play();
+			// Автоплей запустится автоматически после загрузки медиа в playActiveSlideVideo
 			this.stories.get(index).on('autoplay:playing', this.updateProgress);
 			this.stories.get(index).on('moved', this.setupProgressbars);
 		}
@@ -534,6 +570,37 @@ export default class Stories {
 	}
 
 	/**
+	 * Уведомляет кастомный автоплей о загрузке медиа
+	 * @param {number} storyIndex - индекс истории
+	 */
+	notifyCustomAutoplayMediaLoaded(storyIndex) {
+		const customAutoplay = this.customAutoplays.get(storyIndex);
+		if (customAutoplay) {
+			customAutoplay.markMediaAsLoaded();
+		}
+	}
+
+	/**
+	 * Управляет стандартным автоплеем Splide в зависимости от загрузки медиа
+	 * @param {number} storyIndex - индекс истории
+	 * @param {boolean} isMediaLoaded - загружено ли медиа
+	 */
+	manageStandardAutoplay(storyIndex, isMediaLoaded) {
+		const story = this.stories.get(storyIndex);
+		if (!story) return;
+
+		if (isMediaLoaded) {
+			// Если медиа загружено и это активная история, запускаем автоплей
+			if (storyIndex === this.activeStoryIndex) {
+				story.Components.Autoplay.play();
+			}
+		} else {
+			// Если медиа не загружено, останавливаем автоплей
+			story.Components.Autoplay.pause();
+		}
+	}
+
+	/**
 	 * Загружает медиа-файл (видео или изображение) для слайда
 	 * @param {HTMLElement} slide - элемент слайда
 	 * @param {number} storyIndex - индекс истории (опционально)
@@ -544,8 +611,16 @@ export default class Stories {
 		return new Promise((resolve, reject) => {
 			// Проверяем, не загружен ли уже слайд
 			if (storyIndex !== null && slideIndex !== null && this.isSlidePreloaded(storyIndex, slideIndex)) {
+				// Если медиа уже загружено, уведомляем автоплей
+				this.notifyCustomAutoplayMediaLoaded(storyIndex);
+				this.manageStandardAutoplay(storyIndex, true);
 				resolve();
 				return;
+			}
+
+			// Останавливаем автоплей до загрузки медиа
+			if (storyIndex !== null) {
+				this.manageStandardAutoplay(storyIndex, false);
 			}
 
 			const video = slide.querySelector('video[data-src]');
@@ -556,6 +631,9 @@ export default class Stories {
 					if (storyIndex !== null && slideIndex !== null) {
 						this.markSlideAsPreloaded(storyIndex, slideIndex);
 					}
+					// Уведомляем автоплей о загрузке видео
+					this.notifyCustomAutoplayMediaLoaded(storyIndex);
+					this.manageStandardAutoplay(storyIndex, true);
 					resolve();
 				}).catch(reject);
 			} else if (imagePlaceholder) {
@@ -563,6 +641,9 @@ export default class Stories {
 					if (storyIndex !== null && slideIndex !== null) {
 						this.markSlideAsPreloaded(storyIndex, slideIndex);
 					}
+					// Уведомляем автоплей о загрузке изображения
+					this.notifyCustomAutoplayMediaLoaded(storyIndex);
+					this.manageStandardAutoplay(storyIndex, true);
 					resolve();
 				}).catch(reject);
 			} else {
@@ -570,6 +651,9 @@ export default class Stories {
 				if (storyIndex !== null && slideIndex !== null) {
 					this.markSlideAsPreloaded(storyIndex, slideIndex);
 				}
+				// Уведомляем автоплей о готовности медиа
+				this.notifyCustomAutoplayMediaLoaded(storyIndex);
+				this.manageStandardAutoplay(storyIndex, true);
 				resolve();
 			}
 		});
@@ -930,16 +1014,17 @@ export default class Stories {
 					// Переходим к следующей истории
 					this.openStory(this.activeStoryIndex + 1);
 				}
+			},
+			onMediaLoaded: () => {
+				console.log(`Media loaded for story ${index}, starting autoplay`);
 			}
 		});
 
 		// Сохраняем ссылку на кастомный автоплей
 		this.customAutoplays.set(index, customAutoplay);
 		
-		// Запускаем автоплей если это активная история
-		if (index === this.activeStoryIndex) {
-			customAutoplay.start();
-		}
+		// НЕ запускаем автоплей сразу - ждем загрузки медиа
+		// Автоплей запустится автоматически после загрузки медиа в loadSlideMedia
 	}
 
 	/**
@@ -1013,13 +1098,8 @@ export default class Stories {
 		// Запускаем видео в первом слайде
 		this.playActiveSlideVideo(activeStory);
 		
-		// Запускаем автоплей
-		if (customAutoplay) {
-			customAutoplay.start();
-		} else {
-			this.setSlideInterval();
-			activeStory.Components.Autoplay.play();
-		}
+		// Автоплей запустится автоматически после загрузки медиа в playActiveSlideVideo
+		// Не запускаем автоплей здесь, так как медиа может быть еще не загружено
 	}
 
 	/**
