@@ -4,11 +4,10 @@
 	position: relative;
 	z-index: 1;
 	padding: 4rem;
-	height: 24rem;
-	min-width: 24rem;
+	height: 28rem;
+	min-width: 28rem;
 	display: inline-flex;
 	align-items: center;
-	column-gap: 4rem;
 	font-size: 12rem;
 	line-height: 1;
 	text-decoration: none;
@@ -68,15 +67,15 @@
 	&--search {
 		position: relative;
 		&.is-active {
-			#{$root}__icon-wrapper {
+			#{$root}__icon {
 				opacity: 0;
 			}
 
 			&::after,
 			&::before {
 				content: '';
-				width: 100%;
-				height: 1rem;
+				width: 50%;
+				height: 1px;
 				display: block;
 				background-color: var(--black);
 				position: absolute;
@@ -95,22 +94,22 @@
 		}
 	}
 
-	&__icon {
-		width: 100%;
-		height: 100%;
-		fill: currentColor;
-		stroke: currentColor;
-
-		&-wrapper {
-			width: 18rem;
-			height: 18rem;
-			display: flex;
-			justify-content: center;
-			align-items: center;
+	&--phone {
+		#{$root}__icon {
+			fill: transparent;
+			// stroke: currentColor;
 		}
 	}
 
+	&__icon {
+		width: 24rem;
+		height: 24rem;
+		fill: currentColor;
+		stroke: currentColor;
+	}
+
 	&__counter {
+		margin-left: -2rem;
 		width: 2ch;
 		text-align: center;
 

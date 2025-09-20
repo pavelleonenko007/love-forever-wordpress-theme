@@ -127,7 +127,7 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 		</a>
 		<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
 		<button type="button" class="btn-like lf-like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
-			<svg class="lf-like-button__icon" viewbox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<svg class="lf-like-button__icon" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<use href="#heartIcon"></use>
 			</svg>
 		</button>

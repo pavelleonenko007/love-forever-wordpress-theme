@@ -8,7 +8,7 @@
 		gap: 40rem;
 
 		&--mobile {
-			@include mobile {
+			@include tablet {
 				justify-content: start;
 				gap: 2rem;
 			}

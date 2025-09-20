@@ -45,21 +45,17 @@
 					<div class="div-block-5">
 						<!-- Favorites button -->
 						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-							<div class="lf-icon-button__icon-wrapper">
-								<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
-									<use href="#heartIcon"></use>
-								</svg>
-							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+								<use href="#heartIcon"></use>
+							</svg>
 							<span class="lf-icon-button__counter" data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
 						</a>
 						<!-- Favorites button end -->
 						<div class="menu-link-keeper">
 							<button type="button" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
-								<div class="lf-icon-button__icon-wrapper">
-									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
-										<use href="#searchIcon"></use>
-									</svg>
-								</div>
+								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+									<use href="#searchIcon"></use>
+								</svg>
 							</button>
 							<div class="hovered-menue search-m">
 								<div id="w-node-_29763d6b-4a4a-4ba9-96d9-354223034cf4-be61d3ef" class="div-block-6">
@@ -430,11 +426,9 @@
 					<div class="div-block-5">
 						<div class="menu-link-keeper">
 							<a href="#" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
-								<div class="lf-icon-button__icon-wrapper">
-									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
-										<use href="#searchIcon" />
-									</svg>
-								</div>
+								<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
+									<use href="#searchIcon" />
+								</svg>
 							</a>
 							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 								<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
@@ -499,11 +493,9 @@
 						</div>
 						<!-- Favorites button -->
 						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-							<div class="lf-icon-button__icon-wrapper">
-								<svg viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
-									<use href="#heartIcon"></use>
-								</svg>
-							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+								<use href="#heartIcon"></use>
+							</svg>
 							<span class="lf-icon-button__counter" data-js-favorites-button-counter><?php echo esc_html( (string) count( $favorites ) ); ?></span>
 						</a>
 						<!-- Favorites button end -->
@@ -589,11 +581,9 @@
 					<div class="div-block-5 wh-head">
 						<div class="menu-link-keeper">
 							<a href="#" class="lf-icon-button lf-icon-button--search">
-								<div class="lf-icon-button__icon-wrapper">
-									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
-										<use href="#searchIcon" />
-									</svg>
-								</div>
+								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+									<use href="#searchIcon" />
+								</svg>
 							</a>
 							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b87a-be61d3ef" class="div-block-6">
@@ -650,11 +640,9 @@
 							</div>
 						</div>
 						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-							<div class="lf-icon-button__icon-wrapper">
-								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon" viewBox="0 0 16 16">
-									<use href="#heartIcon"/>
-								</svg>
-							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+								<use href="#heartIcon"/>
+							</svg>
 							<span class="lf-icon-button__counter" data-js-favorites-button-counter>
 							<?php echo esc_html( (string) count( $favorites ) ); ?>
 							</span>
@@ -665,19 +653,15 @@
 			<div class="spleet pc-none">
 				<div class="lf-navbar__menu-line lf-navbar__menu-line--mobile menu-line p-12-12 white uper n-voreder">
 					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
-						<div class="lf-icon-button__icon-wrapper">
-							<svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
-								<use href="#heartIcon"  />
-							</svg>
-						</div>
+						<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+							<use href="#heartIcon"  />
+						</svg>
 						<div data-js-favorites-button-counter class="lf-icon-button__counter"><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 					</a>
 					<a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" class="lf-icon-button lf-icon-button--phone" aria-label="<?php echo esc_attr( 'Позвонить на номер ' . $phone ); ?>">
-						<div class="lf-icon-button__icon-wrapper">
-							<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
-								<use href="#phoneIcon" />
-							</svg>
-						</div>
+						<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+							<use href="#phoneIcon" />
+						</svg>
 					</a>
 				</div>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( 'Перейти на главную ' . get_bloginfo( 'name' ) ); ?>" class="lf-scroll-navbar-logo lf-scroll-navbar-logo--mobile w-inline-block">
@@ -689,11 +673,9 @@
 					<div class="div-block-5 wh-head">
 						<div class="menu-link-keeper">
 							<a href="#" class="lf-icon-button lf-icon-button--search">
-								<div class="lf-icon-button__icon-wrapper">
-									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
-										<use href="#searchIcon" />
-									</svg>
-								</div>
+								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
+									<use href="#searchIcon" />
+								</svg>
 							</a>
 							<div class="hovered-menue search-m">
 								<div id="w-node-_7814220d-338f-0ab7-0d3b-7d1e447cc090-be61d3ef" class="div-block-6">

@@ -124,6 +124,10 @@ a[href]:where(:not([class])) {
 	column-gap: 20rem;
 
 	@include tablet {
+		column-gap: 2rem;
+	}
+
+	@include mobile {
 		column-gap: 0rem;
 	}
 }
