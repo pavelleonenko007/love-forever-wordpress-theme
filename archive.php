@@ -306,8 +306,8 @@ if ( ! empty( $dresses_without_order ) ) {
 						</form>
 						<?php
 						$catalog_grid_classes = array(
-							'catalog-grid',
-							'catalog-page-grid',
+							// 'catalog-grid',
+							// 'catalog-page-grid',
 							'lf-catalog-grid',
 						);
 
@@ -555,7 +555,6 @@ if ( ! empty( $dresses_without_order ) ) {
 										}
 									} else {
 										?>
-										<div id="w-node-_53fa07b3-8fd9-bf77-2e13-30ca426c3020-d315ac0c" class="test-grid">
 											<?php
 											get_template_part(
 												'components/dress-card',
@@ -566,7 +565,6 @@ if ( ! empty( $dresses_without_order ) ) {
 												)
 											);
 											?>
-										</div>
 										<?php
 									}
 									++$card_index;

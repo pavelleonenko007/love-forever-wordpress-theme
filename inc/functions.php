@@ -514,6 +514,11 @@ function loveforever_get_product_title( $product_id ) {
 
 function loveforever_get_product_images( $product_id ) {
 	$images         = get_field( 'images', $product_id );
+
+	if ( empty( $images ) ) {
+		return array();
+	}
+
 	$result         = array();
 	$used_image_ids = array();
 

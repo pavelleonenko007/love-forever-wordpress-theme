@@ -95,20 +95,20 @@ class CardSlider {
 
 		const originalTranslate = this.splideInstance.Components.Move.translate;
 
-		this.splideInstance.Components.Move.translate = (position, preventLoop) => {
-			if (!this.splideInstance.is('fade')) {
-				const destination = position;
-				const transform = `translate${this.splideInstance.Components.Direction.resolve(
-					'X'
-				)}(${destination}px) translateZ(0)`;
-				this.splideInstance.Components.Elements.list.style.transform =
-					transform;
+		// this.splideInstance.Components.Move.translate = (position, preventLoop) => {
+		// 	if (!this.splideInstance.is('fade')) {
+		// 		const destination = position;
+		// 		const transform = `translate${this.splideInstance.Components.Direction.resolve(
+		// 			'X'
+		// 		)}(${destination}px) translateZ(0)`;
+		// 		this.splideInstance.Components.Elements.list.style.transform =
+		// 			transform;
 
-				if (position !== destination) {
-					this.splideInstance.emit('shifted');
-				}
-			}
-		};
+		// 		if (position !== destination) {
+		// 			this.splideInstance.emit('shifted');
+		// 		}
+		// 	}
+		// };
 	}
 
 	onPaginationMounted = (data) => {
@@ -121,8 +121,8 @@ class CardSlider {
 		/**
 		 * @type {HTMLElement}
 		 */
-		const list = this.root.querySelector(this.selectors.list);
-		list.style.willChange = 'transform';
+		// const list = this.root.querySelector(this.selectors.list);
+		// list.style.willChange = 'transform';
 	};
 
 	onMoved = () => {

@@ -810,7 +810,6 @@ function loveforever_get_filtered_products_via_ajax() {
 				}
 			} else {
 				?>
-				<div class="test-grid">
 					<?php
 					$position_in_block = ( $card_index - 1 ) % 6 + 1;
 					$size              = in_array( $position_in_block, array( 3, 4 ) ) ? 'full' : 'large';
@@ -824,7 +823,6 @@ function loveforever_get_filtered_products_via_ajax() {
 						)
 					);
 					?>
-				</div>
 				<?php
 			}
 			++$card_index;

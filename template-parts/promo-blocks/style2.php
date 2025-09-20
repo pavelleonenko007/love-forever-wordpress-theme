@@ -29,7 +29,7 @@ $field2 = $template_style2_fields['field2'] ?? false;
 
 $link_attributes = loveforever_prepare_link_attributes( array(), $custom_link );
 ?>
-<article class="test-grid lf-promo-block lf-promo-block-2">
+<article class="lf-promo-block lf-promo-block-2">
 	<div class="lf-promo-block__wrapper lf-promo-block-2__wrapper">
 		<a <?php echo $link_attributes; ?> class="lf-promo-block-2__link">
 			<h3 class="lf-promo-block-2__title"><?php echo wp_kses_post( $field1 ); ?></h3>

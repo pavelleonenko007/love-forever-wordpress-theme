@@ -39,7 +39,7 @@
 			background-color: var(--purple);
 		}
 
-		@include tablet {
+		@include mobile {
 			width: 100%;
 			height: 40rem;
 		}

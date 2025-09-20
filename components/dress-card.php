@@ -40,90 +40,86 @@ $size          = ! empty( $args['size'] ) ? $args['size'] : 'large';
 $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel'] : true;
 ?>
 
-<div id="w-node-_6e88719d-fe8f-116f-4337-b580b5a0b461-b5a0b461" class="prod-item">
-	<div class="prod-item_top">
-		<a href="<?php the_permalink(); ?>" class="link w-inline-block">
-			<div class="prod-item_img-mom">
-				<div class="mom-abs">
-					<?php if ( $show_video_in_product_card && ! empty( $video ) ) : ?>
-						<video 
-							class="card-video"
-							loop
-							muted
-							playsinline 
-							data-js-play-if-visible-video
-						>
-							<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
-						</video>
-					<?php elseif ( ! empty( $images ) && $show_carousel ) : ?>
-						<?php
-						$slider_config = array(
-							'type'         => 'loop',
-							'perPage'      => 1,
-							'perMove'      => 1,
-							'speed'        => 0,
-							'arrows'       => false,
-							// 'lazyLoad'     => 'nearby',
-							'preloadPages' => 1,
-							'classes'      => array(
-								'pagination' => 'card-slider__pagination splide__pagination your-class-pagination',
-								'page'       => 'card-slider__page splide__pagination__page',
-							),
-							'breakpoints'  => array(
-								991 => array(
-									'speed'             => 600,
-									'rewindSpeed'       => 600,
-									'waitForTransition' => true,
-									'easing'            => 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-									'flickPower'        => 400,
-									'flickMaxPages'     => 1,
-									'snap'              => true,
-									'slideFocus'        => false,
-								),
-							),
-						);
-						?>
-						<div class="card-slider splide" aria-label="<?php echo esc_attr( 'Карусель изображений платья ' . get_the_title() ); ?>" data-splide="<?php echo esc_attr( wp_json_encode( $slider_config ) ); ?>" data-js-card-splide="">
-							<div class="card-slider__track splide__track">
-								<ul class="card-slider__list splide__list">
-									<?php foreach ( $images as $index => $image ) : ?>
-										<li class="card-slider__list-item splide__slide">
-											<?php
-											$image_loading    = ( 0 === $index && 'eager' === $args['image_loading'] ) ? 'eager' : 'lazy';
-											$image_attributes = array(
-												'loading' => $image_loading,
-												'class'   => 'img-cover',
-											);
+<article class="lf-product-card">
+	<div class="lf-product-card__body">
+		<a href="<?php the_permalink(); ?>" class="lf-product-card__image">
+			<?php if ( $show_video_in_product_card && ! empty( $video ) ) : ?>
+				<video 
+					class="card-video"
+					loop
+					muted
+					playsinline 
+					data-js-play-if-visible-video
+				>
+					<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
+				</video>
+			<?php elseif ( ! empty( $images ) && $show_carousel ) : ?>
+				<?php
+				$slider_config = array(
+					'type'         => 'loop',
+					'perPage'      => 1,
+					'perMove'      => 1,
+					'speed'        => 0,
+					'arrows'       => false,
+					// 'lazyLoad'     => 'nearby',
+					'preloadPages' => 1,
+					'classes'      => array(
+						'pagination' => 'card-slider__pagination splide__pagination your-class-pagination',
+						'page'       => 'card-slider__page splide__pagination__page',
+					),
+					'breakpoints'  => array(
+						991 => array(
+							'speed'             => 600,
+							'rewindSpeed'       => 600,
+							'waitForTransition' => true,
+							'easing'            => 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+							'flickPower'        => 400,
+							'flickMaxPages'     => 1,
+							'snap'              => true,
+							'slideFocus'        => false,
+						),
+					),
+				);
+				?>
+				<div class="card-slider splide" aria-label="<?php echo esc_attr( 'Карусель изображений платья ' . get_the_title() ); ?>" data-splide="<?php echo esc_attr( wp_json_encode( $slider_config ) ); ?>" data-js-card-splide="">
+					<div class="card-slider__track splide__track">
+						<ul class="card-slider__list splide__list">
+							<?php foreach ( $images as $index => $image ) : ?>
+								<li class="card-slider__list-item splide__slide">
+									<?php
+									$image_loading    = ( 0 === $index && 'eager' === $args['image_loading'] ) ? 'eager' : 'lazy';
+									$image_attributes = array(
+										'loading' => $image_loading,
+										'class'   => 'img-cover',
+									);
 
-											if ( 'eager' === $image_loading ) {
-												$image_attributes['fetchpriority'] = 'high';
-											}
+									if ( 'eager' === $image_loading ) {
+										$image_attributes['fetchpriority'] = 'high';
+									}
 
-											echo wp_get_attachment_image(
-												$image['image']['ID'],
-												'fullhd',
-												false,
-												$image_attributes
-											);
-											?>
-										</li>
-									<?php endforeach; ?>
-								</ul>
-							</div>
-						</div>
-					<?php elseif ( has_post_thumbnail() ) : ?>
-						<?php
-						the_post_thumbnail(
-							'fullhd',
-							array(
-								'class'   => 'img-cover',
-								'loading' => $args['image_loading'],
-							)
-						);
-						?>
-					<?php endif; ?>
+									echo wp_get_attachment_image(
+										$image['image']['ID'],
+										'fullhd',
+										false,
+										$image_attributes
+									);
+									?>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
 				</div>
-			</div>
+			<?php elseif ( has_post_thumbnail() ) : ?>
+				<?php
+				the_post_thumbnail(
+					'fullhd',
+					array(
+						'class'   => 'img-cover',
+						'loading' => $args['image_loading'],
+					)
+				);
+				?>
+			<?php endif; ?>
 		</a>
 		<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
 		<button type="button" class="btn-like lf-like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
@@ -137,18 +133,17 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 			</div>
 		<?php endif; ?>
 	</div>
-	<a href="<?php the_permalink(); ?>" class="prod-item_bottom w-inline-block">
-		<div class="p-12-12 uper m-12-12"><?php the_title(); ?></div>
-		<?php
-		if ( ! empty( $price ) ) :
-			?>
-			<div class="horiz indirim-horiz">
-				<?php $first_price = loveforever_format_price( ! empty( $price_with_discount ) ? $price_with_discount : $price, 0 ); ?>
-				<div class="p-12-12 italic letter-5"><span><?php echo esc_html( $first_price ); ?></span></div>
-				<?php if ( ! empty( $price_with_discount ) ) : ?>
-					<div class="p-12-12 italic letter-5 oldprice"><span><?php echo esc_html( loveforever_format_price( $price ) ); ?></span></div>
-				<?php endif; ?>
-			</div>
-		<?php endif; ?>
-	</a>
-</div>
+	<div class="lf-product-card__footer">
+		<h3 class="lf-product-card__title">
+			<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+		</h3>
+		<div class="lf-product-card__prices">
+			<?php if ( ! empty( $price ) ) : ?>
+				<div class="lf-product-card__price"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?></div>
+			<?php endif; ?>
+			<?php if ( ! empty( $price_with_discount ) ) : ?>
+				<div class="lf-product-card__price lf-product-card__price--with-discount"><?php echo esc_html( loveforever_format_price( $price_with_discount, 0 ) ); ?></div>
+			<?php endif; ?>
+		</div>
+	</div>
+</article>

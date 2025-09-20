@@ -45,7 +45,7 @@ $field2 = $template_style11_fields['field2'] ?? false;
 
 $link_attributes = loveforever_prepare_link_attributes( array(), $custom_link );
 ?>
-<article class="test-grid lf-promo-block lf-promo-block-11">
+<article class="lf-promo-block lf-promo-block-11">
 	<div class="lf-promo-block__wrapper lf-promo-block-11__wrapper">
 		<a <?php echo $link_attributes; ?> class="lf-promo-block-11__link">
 			<div class="lf-promo-block-11__image">
