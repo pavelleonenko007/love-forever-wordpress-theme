@@ -57,30 +57,27 @@ if ( ! empty( $args['stories'] ) ) :
 														<?php
 														if ( 'video' === $image_or_video['type'] ) :
 															?>
-															<video class="story__bg" playsinline>
-																<source src="<?php echo esc_url( $image_or_video['url'] ); ?>" type="video/mp4">
+															<video class="story__bg" playsinline data-src="<?php echo esc_url( $image_or_video['url'] ); ?>" preload="none">
+																<!-- Source будет добавлен динамически через JavaScript -->
 															</video>
 															<div class="story__loader" data-js-video-loader>
 																<div class="story__loader-spinner"></div>
 																<div class="story__loader-text">Загрузка...</div>
 															</div>
 														<?php else : ?>
-															<?php
-															echo wp_get_attachment_image(
-																$image_or_video['ID'],
-																'large',
-																false,
-																array(
-																	'class' => 'story__bg',
-																)
-															);
-															?>
+															<div class="story__bg story__bg--placeholder" data-src="<?php echo esc_url( $image_or_video['url'] ); ?>" data-alt="<?php echo esc_attr( $image_or_video['alt'] ); ?>">
+																<!-- Изображение будет загружено динамически через JavaScript -->
+																<div class="story__bg-placeholder">
+																	<div class="story__bg-placeholder-icon">📷</div>
+																	<div class="story__bg-placeholder-text">Загрузка изображения...</div>
+																</div>
+															</div>
 														<?php endif; ?>
 														<div class="story__body">
 															<div class="story__content">
-																<div class="story__title h3"><?php echo $slide['story_title']; ?></div>
+																<div class="story__title h3"><?php echo esc_html( $slide['story_title'] ); ?></div>
 																<div class="story__description">
-																	<p><?php echo $slide['story_description']; ?></p>
+																	<p><?php echo esc_html( $slide['story_description'] ); ?></p>
 																</div>
 																<?php
 																if ( ! empty( $slide['cta'] ) ) :
