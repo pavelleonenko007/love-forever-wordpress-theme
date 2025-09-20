@@ -10,13 +10,10 @@
 	}
 
 	&__slide {
-		transform: translateZ(0);
 		backface-visibility: hidden;
 
 		img {
 			backface-visibility: hidden;
-			transform: translateZ(0);
-
 			image-rendering: -webkit-optimize-contrast;
 			image-rendering: optimize-contrast;
 

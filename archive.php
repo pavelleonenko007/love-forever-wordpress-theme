@@ -54,20 +54,20 @@ $stories  = get_posts(
 
 $dresses_without_order = get_posts(
 	array(
-		'post_type' => 'dress',
+		'post_type'   => 'dress',
 		'numberposts' => -1,
-		'fields' => 'ids',
-		'meta_query' => array(
+		'fields'      => 'ids',
+		'meta_query'  => array(
 			array(
-				'key' => 'dress_order_' . $queried_object->term_id,
+				'key'     => 'dress_order_' . $queried_object->term_id,
 				'compare' => 'NOT EXISTS',
 			),
 		),
-		'tax_query' => array(
+		'tax_query'   => array(
 			array(
 				'taxonomy' => 'dress_category',
-				'field' => 'term_id',
-				'terms' => array( $queried_object->term_id ),
+				'field'    => 'term_id',
+				'terms'    => array( $queried_object->term_id ),
 			),
 		),
 	)
@@ -313,9 +313,10 @@ if ( ! empty( $dresses_without_order ) ) {
 
 						$catalog_grid = get_field( 'catalog_grid', 'option' );
 
-						if ( '3' === $catalog_grid ) {
-							$catalog_grid_classes[] = 'lf-catalog-grid--3-col';
+						if ( ! empty( $catalog_grid ) ) {
+							$catalog_grid_classes[] = 'lf-catalog-grid--' . $catalog_grid . '-col';
 						}
+
 						?>
 						<div class="<?php echo esc_attr( implode( ' ', $catalog_grid_classes ) ); ?>" data-js-product-filter-form-content-element>
 							<?php

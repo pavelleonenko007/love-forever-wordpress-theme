@@ -50,7 +50,7 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 				</section>
 				<section class="section">
 					<div class="container n-top">
-						<div class="catalog-grid search-page">
+						<div class="lf-catalog-grid search-page">
 							<?php
 							$products_query_args = array(
 								'post_type'      => 'dress',

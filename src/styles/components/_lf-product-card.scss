@@ -20,19 +20,18 @@
 		min-height: 436rem;
 		position: relative;
 		flex: 1;
-		aspect-ratio: 205 / 308;
 		background-color: lightgray;
 
 		@include mobile {
 			min-height: unset;
-			overflow: hidden;
 		}
 	}
 
 	&__image {
-		display: block;
 		width: 100%;
 		height: 100%;
+		aspect-ratio: 205 / 308;
+		display: block;
 		overflow: hidden;
 	}
 
