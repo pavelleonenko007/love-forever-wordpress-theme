@@ -1,0 +1,55 @@
+@use '../media' as *;
+
+.lf-products-section {
+	&__container {
+		display: flex;
+		flex-direction: column;
+		gap: 35rem;
+
+		@include mobile {
+			gap: 20rem;
+		}
+	}
+
+	&__pagination {
+		padding: 0;
+		padding-top: 32rem;
+		list-style: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 8rem;
+
+		li {
+			display: flex;
+		}
+	}
+
+	&__page {
+		padding: 0;
+		width: 8rem;
+		height: 8rem;
+		border-radius: 50%;
+		background-color: rgba(0, 0, 0, 0.1);
+
+		&.is-active {
+			background-color: var(--pink);
+		}
+	}
+}
+
+.recently-viewed-products,
+.favorites-products,
+.category-products {
+	&__list {
+		.splide.is-initialized:not(.is-active) & {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 10rem;
+
+			@include tablet {
+				display: flex;
+			}
+		}
+	}
+}

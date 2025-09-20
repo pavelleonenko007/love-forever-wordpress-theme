@@ -3,6 +3,10 @@
 		overflow: visible;
 		transform: translateZ(0);
 		backface-visibility: hidden;
+
+		&.reviews-slider__track {
+			overflow: hidden;
+		}
 	}
 
 	&__list {
