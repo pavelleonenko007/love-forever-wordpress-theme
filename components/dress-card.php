@@ -139,10 +139,10 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 		</h3>
 		<div class="lf-product-card__prices">
 			<?php if ( ! empty( $price ) ) : ?>
-				<div class="lf-product-card__price"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?></div>
+				<div class="lf-product-card__price"><?php echo $price_with_discount ? esc_html( loveforever_format_price( $price_with_discount, 0 ) ) : esc_html( loveforever_format_price( $price, 0 ) ); ?></div>
 			<?php endif; ?>
 			<?php if ( ! empty( $price_with_discount ) ) : ?>
-				<div class="lf-product-card__price lf-product-card__price--with-discount"><?php echo esc_html( loveforever_format_price( $price_with_discount, 0 ) ); ?></div>
+				<div class="lf-product-card__price lf-product-card__price--with-discount"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?></div>
 			<?php endif; ?>
 		</div>
 	</div>
