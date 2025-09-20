@@ -2,12 +2,13 @@
 
 .lf-badge {
 	pointer-events: none;
-	
+	transform: translateZ(1px);
+
 	@include mobile {
 		top: 0;
 		left: 0;
 	}
-	
+
 	&::after {
 		content: '';
 		width: 5rem;
