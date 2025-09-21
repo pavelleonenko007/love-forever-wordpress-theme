@@ -7,8 +7,13 @@
 	padding: 0 20px;
 	font-size: 16rem;
 	line-height: 1.4;
+	background-image: url('../assets/images/lf-content.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 333rem 458rem;
 
 	@include mobile {
 		padding: 0;
+		background-size: 80% auto;
 	}
 }

@@ -636,15 +636,7 @@ if ( ! empty( $dresses_without_order ) ) {
 						</div>
 					</section>
 				<?php endif; ?>
-				<?php if ( ! empty( $seo_text ) ) : ?>
-					<section class="section">
-						<div class="container">
-							<div class="lf-content flow">
-								<?php echo wp_kses_post( $seo_text ); ?>
-							</div>
-						</div>
-					</section>
-				<?php endif; ?>
+				<?php get_template_part( 'template-parts/global/content-section', null, array( 'content' => $seo_text ) ); ?>
 				<?php get_template_part( 'template-parts/global/personal-choice-section' ); ?>
 				<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>

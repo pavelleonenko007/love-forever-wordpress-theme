@@ -107,6 +107,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 				<?php endif; ?>
 				<?php get_template_part( 'template-parts/global/personal-choice-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
+				<?php get_template_part( 'template-parts/global/content-section', null, array( 'content' => get_the_content() ) ); ?>
 			</div>
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>
