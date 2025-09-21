@@ -7,14 +7,16 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$content = isset( $args['content'] ) ? $args['content'] : '';
+$content      = isset( $args['content'] ) ? $args['content'] : '';
+$display_type = isset( $args['display_type'] ) ? $args['display_type'] : 'standard';
 
 if ( ! empty( $content ) ) :
+	$content = 'wrapped' === $display_type ? loveforever_convert_content_to_accordion( $content ) : $content;
 	?>
 <section class="section">
 	<div class="container">
 		<div class="lf-content flow">
-			<?php echo wp_kses_post( $content ); ?>
+			<?php echo $content; ?>
 		</div>
 	</div>
 </section>

@@ -50,6 +50,36 @@
             "delay": 0
         },
         {
+            "key": "field_68d02d5090f35",
+            "label": "Тип отображения SEO текста",
+            "name": "seo_text_display_type",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "standard": "По умолчанию (под картой)",
+                "under_tag": "Под тегами",
+                "wrapped": "Свернутый под тегами"
+            },
+            "default_value": "standard",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
             "key": "field_67e1b09f464f3",
             "label": "Силуэты",
             "name": "silhouette",
@@ -198,5 +228,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1754052798
+    "modified": 1758473744
 }

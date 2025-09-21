@@ -500,3 +500,79 @@ function loveforever_get_share_buttons( $url = '#', $title = '' ) {
 
 	return $share_buttons;
 }
+
+/**
+ * Преобразует контент WYSIWYG редактора в аккордеон.
+ * H2 заголовки становятся кнопками аккордеона, контент после H2 до следующего H2 - телом аккордеона.
+ *
+ * @param string $content Контент для преобразования.
+ * @return string HTML структура аккордеона.
+ */
+function loveforever_convert_content_to_accordion( $content ) {
+	if ( empty( $content ) ) {
+		return $content;
+	}
+
+	// Разбиваем контент на части по H2 заголовкам
+	$parts = preg_split( '/(<h2[^>]*>.*?<\/h2>)/i', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
+
+	if ( count( $parts ) < 3 ) {
+		// Если нет H2 заголовков, возвращаем исходный контент
+		return $content;
+	}
+
+	$result          = '';
+	$accordion_items = array();
+
+	// Первая часть - контент до первого H2 (если есть)
+	$intro_content = trim( $parts[0] );
+	if ( ! empty( $intro_content ) ) {
+		$result .= $intro_content;
+	}
+
+	// Обрабатываем пары заголовок-контент
+	for ( $i = 1; $i < count( $parts ); $i += 2 ) {
+		if ( isset( $parts[ $i ] ) && isset( $parts[ $i + 1 ] ) ) {
+			$header       = trim( $parts[ $i ] );
+			$body_content = trim( $parts[ $i + 1 ] );
+
+			if ( ! empty( $header ) && ! empty( $body_content ) ) {
+				$accordion_items[] = array(
+					'header'  => $header,
+					'content' => $body_content,
+				);
+			}
+		}
+	}
+
+	// Генерируем HTML аккордеона
+	if ( ! empty( $accordion_items ) ) {
+		$result .= '<div class="lf-accordion-group">';
+
+		foreach ( $accordion_items as $index => $item ) {
+			$result .= '<div class="lf-accordion">';
+			$result .= '<details class="lf-accordion__details">';
+			$result .= '<summary class="lf-accordion__summary">';
+			$result .= '<div class="lf-accordion__title" role="term" aria-details="' . esc_attr( 'accordion-content-' . $index ) . '">';
+			$result .= $item['header'];
+			$result .= '<svg class="lf-accordion__icon" width="10" height="6" viewbox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 10rem; height: 6rem;">
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M4.28598 5.24977L0 0.74993L0.714289 0L5.00027 4.49984L9.28571 0.000560648L10 0.750491L4.99998 6L4.28569 5.25007L4.28598 5.24977Z" fill="black"></path>
+			</svg>';
+			$result .= '</div>';
+			$result .= '</summary>';
+			$result .= '</details>';
+			$result .= '<div id="' . esc_attr( 'accordion-content-' . $index ) . '" class="lf-accordion__content" role="definition">';
+			$result .= '<div class="lf-accordion__content-inner">';
+			$result .= '<div class="lf-accordion__content-body flow">';
+			$result .= $item['content'];
+			$result .= '</div>';
+			$result .= '</div>';
+			$result .= '</div>';
+			$result .= '</div>';
+		}
+
+		$result .= '</div>';
+	}
+
+	return $result;
+}

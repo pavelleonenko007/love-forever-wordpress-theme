@@ -33,8 +33,9 @@ if ( empty( $thumbnail ) ) {
 	$hero_section_classes[] = 'hero-section--no-image';
 }
 
-$seo_text = get_field( 'seo_text', $queried_object );
-$stories  = get_posts(
+$seo_text              = get_field( 'seo_text', $queried_object );
+$seo_text_display_type = ! empty( get_field( 'seo_text_display_type', $queried_object ) ) ? get_field( 'seo_text_display_type', $queried_object ) : 'standard';
+$stories               = get_posts(
 	array(
 		'post_type'   => 'story',
 		'numberposts' => -1,
@@ -636,10 +637,33 @@ if ( ! empty( $dresses_without_order ) ) {
 						</div>
 					</section>
 				<?php endif; ?>
-				<?php get_template_part( 'template-parts/global/content-section', null, array( 'content' => $seo_text ) ); ?>
+				<?php
+				if ( ! empty( $seo_text ) && ( 'under_tag' === $seo_text_display_type || 'wrapped' === $seo_text_display_type ) ) :
+					get_template_part(
+						'template-parts/global/content-section',
+						null,
+						array(
+							'content'      => $seo_text,
+							'display_type' => $seo_text_display_type,
+						)
+					);
+				endif;
+				?>
 				<?php get_template_part( 'template-parts/global/personal-choice-section' ); ?>
 				<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
+				<?php
+				if ( ! empty( $seo_text ) && 'standard' === $seo_text_display_type ) :
+					get_template_part(
+						'template-parts/global/content-section',
+						null,
+						array(
+							'content'      => $seo_text,
+							'display_type' => $seo_text_display_type,
+						)
+					);
+				endif;
+				?>
 				<?php if ( ! empty( $other_filters ) ) : ?>
 					<div id="filterDialog" role="dialog" class="dialog" data-js-dialog>
 						<div class="dialog__overlay" data-js-dialog-overlay>
