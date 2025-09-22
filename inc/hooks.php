@@ -2629,3 +2629,54 @@ function loveforever_delete_review_attachments( $post_id ) {
 
 // Хук на удаление поста
 add_action( 'before_delete_post', 'loveforever_delete_review_attachments' );
+
+/**
+ * Добавляет блок address в JSON schema для organization в Yoast SEO
+ *
+ * @param array $data Данные organization schema
+ * @return array Модифицированные данные с добавленным address
+ */
+function loveforever_add_address_to_organization_schema( $data ) {
+	// Проверяем, что это действительно organization schema
+	if ( ! isset( $data['@type'] ) || $data['@type'] !== 'Organization' ) {
+		return $data;
+	}
+
+	// Получаем адрес из настроек темы или ACF полей
+	$address_data = loveforever_get_organization_address_data();
+	
+	if ( ! empty( $address_data ) ) {
+		$data['address'] = $address_data;
+	}
+
+	return $data;
+}
+
+/**
+ * Получает данные адреса организации для schema
+ *
+ * @return array|false Данные адреса или false если не найдены
+ */
+function loveforever_get_organization_address_data() {
+	// Получаем настройки адреса
+	$address_settings = loveforever_get_organization_address_settings();
+
+	// Формируем структуру адреса согласно schema.org
+	$address = array(
+		'@type' => 'PostalAddress',
+		'streetAddress' => $address_settings['street_address'],
+		'addressLocality' => $address_settings['locality'],
+		'postalCode' => $address_settings['postal_code'],
+		'addressCountry' => $address_settings['country'],
+	);
+
+	// Добавляем регион только если он указан
+	if ( ! empty( $address_settings['region'] ) ) {
+		$address['addressRegion'] = $address_settings['region'];
+	}
+
+	return $address;
+}
+
+// Подключаем хук для модификации organization schema
+add_filter( 'wpseo_schema_organization', 'loveforever_add_address_to_organization_schema', 10, 1 );

@@ -17,6 +17,7 @@ require_once __DIR__ . '/inc/post-types.php';
 require_once __DIR__ . '/inc/options.php';
 require_once __DIR__ . '/inc/functions.php';
 require_once __DIR__ . '/inc/hooks.php';
+require_once __DIR__ . '/inc/schema-settings.php';
 
 require_once __DIR__ . '/includes/class-dress-order.php';
 require_once __DIR__ . '/includes/class-promo-order.php';
