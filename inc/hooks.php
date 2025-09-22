@@ -1952,10 +1952,6 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 		'badge'      => get_field( 'badge', $post_id ),
 	);
 
-	if ( empty( array_filter( array_values( $filters ) ) ) ) {
-		return;
-	}
-
 	$rules = get_posts(
 		array(
 			'post_type'   => 'auto_rule',
@@ -1981,34 +1977,51 @@ function loveforever_apply_auto_rules_to_post( $post_id ) {
 
 		$matched = false;
 
-		foreach ( $rule_filters as $taxonomy => $rule_terms ) {
-			if ( empty( $rule_terms ) || empty( $filters[ $taxonomy ] ) ) {
-					continue;
-			}
-
-			// Специальная обработка для поля badge (не таксономия)
-			if ( 'badge' === $taxonomy ) {
-				if ( $filters[ $taxonomy ] === $rule_terms ) {
-					$matched = true;
-				} else {
-					$matched = false;
+		// Проверяем, есть ли фильтры в правиле
+		$has_filters = false;
+		if ( ! empty( $rule_filters ) ) {
+			foreach ( $rule_filters as $filter_value ) {
+				if ( ! empty( $filter_value ) ) {
+					$has_filters = true;
 					break;
 				}
-			} else {
-				// Обычная обработка для таксономий
-				$common = array_intersect( $filters[ $taxonomy ], $rule_terms );
+			}
+		}
 
-				if ( empty( $common ) ) {
-						$matched = false;
-						break;
+		if ( ! $has_filters ) {
+			// Если фильтров нет, применяем правило только по базовой категории
+			$matched = true;
+		} else {
+			// Если есть фильтры, проверяем их соответствие
+			foreach ( $rule_filters as $taxonomy => $rule_terms ) {
+				if ( empty( $rule_terms ) || empty( $filters[ $taxonomy ] ) ) {
+					continue;
 				}
 
-				$matched = true;
+				// Специальная обработка для поля badge (не таксономия)
+				if ( 'badge' === $taxonomy ) {
+					if ( $filters[ $taxonomy ] === $rule_terms ) {
+						$matched = true;
+					} else {
+						$matched = false;
+						break;
+					}
+				} else {
+					// Обычная обработка для таксономий
+					$common = array_intersect( $filters[ $taxonomy ], $rule_terms );
+
+					if ( empty( $common ) ) {
+						$matched = false;
+						break;
+					}
+
+					$matched = true;
+				}
 			}
 		}
 
 		if ( $matched ) {
-				$matched_terms[] = $result_category_id;
+			$matched_terms[] = $result_category_id;
 		}
 	}
 

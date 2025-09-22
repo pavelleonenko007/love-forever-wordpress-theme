@@ -1,13 +1,13 @@
 <?php
 /**
  * Seed скрипт для массового применения правил автокатегоризации
- * 
+ *
  * Запуск через браузер: https://your-site.com/wp-content/themes/loveforever/seed-rules.php
  * Запуск через командную строку: php seed-rules.php
  */
 
 // Подключаем WordPress
-require_once( dirname( __FILE__ ) . '/../../../wp-load.php' );
+require_once __DIR__ . '/../../../wp-load.php';
 
 // Проверяем права доступа (только для администраторов)
 if ( ! current_user_can( 'manage_options' ) ) {
@@ -35,7 +35,7 @@ function output_message( $message, $type = 'info' ) {
 // Функция для создания прогресс-бара
 function show_progress( $current, $total, $label = '' ) {
 	$percentage = round( ( $current / $total ) * 100, 1 );
-	
+
 	if ( php_sapi_name() === 'cli' ) {
 		echo "\r{$label}: {$current}/{$total} ({$percentage}%)";
 		if ( $current >= $total ) {
@@ -87,67 +87,69 @@ function show_usage_instructions() {
  */
 function apply_auto_rules_to_all_dresses() {
 	output_message( '🚀 Начинаем применение правил автокатегоризации ко всем платьям...', 'info' );
-	
+
 	// Получаем общее количество платьев
 	$total_dresses = wp_count_posts( 'dress' )->publish;
-	
+
 	if ( $total_dresses === 0 ) {
 		output_message( 'Платья не найдены.', 'error' );
 		return;
 	}
-	
+
 	output_message( '📋 Найдено ' . $total_dresses . ' платьев для обработки.', 'info' );
-	
-	$processed = 0;
-	$updated = 0;
+
+	$processed  = 0;
+	$updated    = 0;
 	$batch_size = 10; // Размер батча
-	$offset = 0;
-	
+	$offset     = 0;
+
 	// Обрабатываем платья батчами
 	while ( $processed < $total_dresses ) {
 		// Получаем батч платьев
-		$dresses = get_posts( array(
-			'post_type'      => 'dress',
-			'numberposts'    => $batch_size,
-			'offset'         => $offset,
-			'post_status'    => 'publish',
-			'fields'         => 'ids',
-			'orderby'        => 'ID',
-			'order'          => 'ASC',
-		) );
-		
+		$dresses = get_posts(
+			array(
+				'post_type'   => 'dress',
+				'numberposts' => $batch_size,
+				'offset'      => $offset,
+				'post_status' => 'publish',
+				'fields'      => 'ids',
+				'orderby'     => 'ID',
+				'order'       => 'ASC',
+			)
+		);
+
 		if ( empty( $dresses ) ) {
 			break;
 		}
-		
+
 		foreach ( $dresses as $dress_id ) {
 			// Показываем прогресс
 			show_progress( $processed + 1, $total_dresses, 'Применение правил автокатегоризации' );
-			
+
 			// Получаем текущие категории
 			$current_categories = get_field( 'dress_category', $dress_id );
 			$current_categories = is_array( $current_categories ) ? $current_categories : array();
-			
+
 			// Применяем правила автокатегоризации
 			$new_categories = apply_auto_rules_to_single_dress( $dress_id, $current_categories );
-			
+
 			// Если категории изменились, обновляем
 			if ( $new_categories !== $current_categories ) {
 				update_field( 'dress_category', $new_categories, $dress_id );
 				wp_set_post_terms( $dress_id, $new_categories, 'dress_category' );
-				$updated++;
+				++$updated;
 			}
-			
-			$processed++;
+
+			++$processed;
 		}
-		
+
 		$offset += $batch_size;
-		
+
 		// Очищаем кэш для освобождения памяти
 		wp_cache_flush();
 		gc_collect_cycles();
 	}
-	
+
 	output_message( '✅ Обработано ' . $processed . ' платьев. Обновлено: ' . $updated . ' платьев.', 'success' );
 }
 
@@ -156,67 +158,69 @@ function apply_auto_rules_to_all_dresses() {
  */
 function apply_price_rules_to_all_dresses() {
 	output_message( '💰 Начинаем применение ценовых правил ко всем платьям...', 'info' );
-	
+
 	// Получаем общее количество платьев
 	$total_dresses = wp_count_posts( 'dress' )->publish;
-	
+
 	if ( $total_dresses === 0 ) {
 		output_message( 'Платья не найдены.', 'error' );
 		return;
 	}
-	
+
 	output_message( '📋 Найдено ' . $total_dresses . ' платьев для обработки.', 'info' );
-	
-	$processed = 0;
-	$updated = 0;
+
+	$processed  = 0;
+	$updated    = 0;
 	$batch_size = 50; // Размер батча
-	$offset = 0;
-	
+	$offset     = 0;
+
 	// Обрабатываем платья батчами
 	while ( $processed < $total_dresses ) {
 		// Получаем батч платьев
-		$dresses = get_posts( array(
-			'post_type'      => 'dress',
-			'numberposts'    => $batch_size,
-			'offset'         => $offset,
-			'post_status'    => 'publish',
-			'fields'         => 'ids',
-			'orderby'        => 'ID',
-			'order'          => 'ASC',
-		) );
-		
+		$dresses = get_posts(
+			array(
+				'post_type'   => 'dress',
+				'numberposts' => $batch_size,
+				'offset'      => $offset,
+				'post_status' => 'publish',
+				'fields'      => 'ids',
+				'orderby'     => 'ID',
+				'order'       => 'ASC',
+			)
+		);
+
 		if ( empty( $dresses ) ) {
 			break;
 		}
-		
+
 		foreach ( $dresses as $dress_id ) {
 			// Показываем прогресс
 			show_progress( $processed + 1, $total_dresses, 'Применение ценовых правил' );
-			
+
 			// Получаем текущие категории
 			$current_categories = get_field( 'dress_category', $dress_id );
 			$current_categories = is_array( $current_categories ) ? $current_categories : array();
-			
+
 			// Применяем ценовые правила
 			$new_categories = apply_price_rules_to_single_dress( $dress_id, $current_categories );
-			
+
 			// Если категории изменились, обновляем
 			if ( $new_categories !== $current_categories ) {
 				update_field( 'dress_category', $new_categories, $dress_id );
 				wp_set_post_terms( $dress_id, $new_categories, 'dress_category' );
-				$updated++;
+				++$updated;
 			}
-			
-			$processed++;
+
+			++$processed;
 		}
-		
+
 		$offset += $batch_size;
-		
+
 		// Очищаем кэш для освобождения памяти
 		wp_cache_flush();
 		gc_collect_cycles();
 	}
-	
+
 	output_message( '✅ Обработано ' . $processed . ' платьев. Обновлено: ' . $updated . ' платьев.', 'success' );
 }
 
@@ -225,70 +229,72 @@ function apply_price_rules_to_all_dresses() {
  */
 function apply_all_rules_to_all_dresses() {
 	output_message( '🎯 Начинаем применение всех правил ко всем платьям...', 'info' );
-	
+
 	// Получаем общее количество платьев
 	$total_dresses = wp_count_posts( 'dress' )->publish;
-	
+
 	if ( $total_dresses === 0 ) {
 		output_message( 'Платья не найдены.', 'error' );
 		return;
 	}
-	
+
 	output_message( '📋 Найдено ' . $total_dresses . ' платьев для обработки.', 'info' );
-	
-	$processed = 0;
-	$updated = 0;
+
+	$processed  = 0;
+	$updated    = 0;
 	$batch_size = 50; // Размер батча
-	$offset = 0;
-	
+	$offset     = 0;
+
 	// Обрабатываем платья батчами
 	while ( $processed < $total_dresses ) {
 		// Получаем батч платьев
-		$dresses = get_posts( array(
-			'post_type'      => 'dress',
-			'numberposts'    => $batch_size,
-			'offset'         => $offset,
-			'post_status'    => 'publish',
-			'fields'         => 'ids',
-			'orderby'        => 'ID',
-			'order'          => 'ASC',
-		) );
-		
+		$dresses = get_posts(
+			array(
+				'post_type'   => 'dress',
+				'numberposts' => $batch_size,
+				'offset'      => $offset,
+				'post_status' => 'publish',
+				'fields'      => 'ids',
+				'orderby'     => 'ID',
+				'order'       => 'ASC',
+			)
+		);
+
 		if ( empty( $dresses ) ) {
 			break;
 		}
-		
+
 		foreach ( $dresses as $dress_id ) {
 			// Показываем прогресс
 			show_progress( $processed + 1, $total_dresses, 'Применение всех правил' );
-			
+
 			// Получаем текущие категории
 			$current_categories = get_field( 'dress_category', $dress_id );
 			$current_categories = is_array( $current_categories ) ? $current_categories : array();
-			
+
 			// Применяем правила автокатегоризации
 			$new_categories = apply_auto_rules_to_single_dress( $dress_id, $current_categories );
-			
+
 			// Применяем ценовые правила
 			$new_categories = apply_price_rules_to_single_dress( $dress_id, $new_categories );
-			
+
 			// Если категории изменились, обновляем
 			if ( $new_categories !== $current_categories ) {
 				update_field( 'dress_category', $new_categories, $dress_id );
 				wp_set_post_terms( $dress_id, $new_categories, 'dress_category' );
-				$updated++;
+				++$updated;
 			}
-			
-			$processed++;
+
+			++$processed;
 		}
-		
+
 		$offset += $batch_size;
-		
+
 		// Очищаем кэш для освобождения памяти
 		wp_cache_flush();
 		gc_collect_cycles();
 	}
-	
+
 	output_message( '✅ Обработано ' . $processed . ' платьев. Обновлено: ' . $updated . ' платьев.', 'success' );
 }
 
@@ -319,22 +325,25 @@ function apply_auto_rules_to_single_dress( $dress_id, $current_categories ) {
 		'badge'      => get_field( 'badge', $dress_id ),
 	);
 
-	if ( empty( array_filter( array_values( $filters ) ) ) ) {
-		return $current_categories;
-	}
+	// if ( empty( array_filter( array_values( $filters ) ) ) ) {
+	// return $current_categories;
+	// }
 
-	$rules = get_posts( array(
-		'post_type'   => 'auto_rule',
-		'numberposts' => -1,
-		'post_status' => 'publish',
-	) );
+	$rules = get_posts(
+		array(
+			'post_type'   => 'auto_rule',
+			'numberposts' => -1,
+			'post_status' => 'publish',
+			'fields'      => 'ids',
+		)
+	);
 
 	$matched_terms = array();
 
-	foreach ( $rules as $rule ) {
-		$base_category_id   = get_field( 'base_dress_category', $rule->ID );
-		$result_category_id = get_field( 'result_dress_category', $rule->ID );
-		$rule_filters       = get_field( 'filters', $rule->ID );
+	foreach ( $rules as $rule_id ) {
+		$base_category_id   = get_field( 'base_dress_category', $rule_id );
+		$result_category_id = get_field( 'result_dress_category', $rule_id );
+		$rule_filters       = get_field( 'filters', $rule_id );
 
 		if ( ! $base_category_id || ! $result_category_id ) {
 			continue;
@@ -346,29 +355,45 @@ function apply_auto_rules_to_single_dress( $dress_id, $current_categories ) {
 
 		$matched = false;
 
-		foreach ( $rule_filters as $taxonomy => $rule_terms ) {
-			if ( empty( $rule_terms ) || empty( $filters[ $taxonomy ] ) ) {
-				continue;
+		$has_filters = false;
+
+		if ( ! empty( $rule_filters ) ) {
+			foreach ( $rule_filters as $filter_value ) {
+				if ( ! empty( $filter_value ) ) {
+					$has_filters = true;
+					break;
+				}
 			}
+		}
 
-			// Специальная обработка для поля badge (не таксономия)
-			if ( 'badge' === $taxonomy ) {
-				if ( $filters[ $taxonomy ] === $rule_terms ) {
-					$matched = true;
+		if ( ! $has_filters ) {
+			$matched = true;
+		} else {
+
+			foreach ( $rule_filters as $taxonomy => $rule_terms ) {
+				if ( empty( $rule_terms ) || empty( $filters[ $taxonomy ] ) ) {
+					continue;
+				}
+
+				// Специальная обработка для поля badge (не таксономия)
+				if ( 'badge' === $taxonomy ) {
+					if ( $filters[ $taxonomy ] === $rule_terms ) {
+						$matched = true;
+					} else {
+						$matched = false;
+						break;
+					}
 				} else {
-					$matched = false;
-					break;
-				}
-			} else {
-				// Обычная обработка для таксономий
-				$common = array_intersect( $filters[ $taxonomy ], $rule_terms );
+					// Обычная обработка для таксономий
+					$common = array_intersect( $filters[ $taxonomy ], $rule_terms );
 
-				if ( empty( $common ) ) {
-					$matched = false;
-					break;
-				}
+					if ( empty( $common ) ) {
+						$matched = false;
+						break;
+					}
 
-				$matched = true;
+					$matched = true;
+				}
 			}
 		}
 
@@ -391,7 +416,7 @@ function apply_auto_rules_to_single_dress( $dress_id, $current_categories ) {
 function apply_price_rules_to_single_dress( $dress_id, $current_categories ) {
 	// Получаем финальную цену платья
 	$final_price = get_field( 'final_price', $dress_id );
-	
+
 	if ( empty( $final_price ) || ! is_numeric( $final_price ) ) {
 		return $current_categories;
 	}
@@ -413,18 +438,20 @@ function apply_price_rules_to_single_dress( $dress_id, $current_categories ) {
 	}
 
 	// Получаем все активные ценовые правила
-	$price_rules = get_posts( array(
-		'post_type'   => 'price_rule',
-		'numberposts' => -1,
-		'post_status' => 'publish',
-	) );
+	$price_rules = get_posts(
+		array(
+			'post_type'   => 'price_rule',
+			'numberposts' => -1,
+			'post_status' => 'publish',
+		)
+	);
 
 	$matched_categories = array();
 
 	foreach ( $price_rules as $rule ) {
-		$min_price = get_field( 'min_price', $rule->ID );
-		$max_price = get_field( 'max_price', $rule->ID );
-		$base_category = get_field( 'base_dress_category', $rule->ID ); // Базовая категория
+		$min_price       = get_field( 'min_price', $rule->ID );
+		$max_price       = get_field( 'max_price', $rule->ID );
+		$base_category   = get_field( 'base_dress_category', $rule->ID ); // Базовая категория
 		$target_category = get_field( 'target_category', $rule->ID );
 
 		if ( empty( $target_category ) ) {

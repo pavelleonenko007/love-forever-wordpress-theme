@@ -1050,3 +1050,52 @@ function loveforever_send_fitting_email_notification( $post_id, $updated = false
 
 	return wp_mail( $email, $subject, $message );
 }
+
+/**
+ * Собирает все термины dress_categories в JSON объект с подсчетом постов
+ * и сохраняет результат в JSON файл
+ */
+function loveforever_collect_dress_categories_to_json() {
+	// Получаем все термины таксономии dress_categories
+	$terms = get_terms( array(
+		'taxonomy'   => 'dress_category',
+		'hide_empty' => false,
+	) );
+
+	if ( is_wp_error( $terms ) ) {
+		return false;
+	}
+
+	$categories_data = array();
+
+	foreach ( $terms as $term ) {
+		// Получаем количество постов для каждого термина
+		$count = $term->count;
+		
+		// Добавляем в массив с ключом name и значением count
+		$categories_data[ $term->name ] = $count;
+	}
+
+	// Сортируем по количеству постов (по убыванию)
+	arsort( $categories_data );
+
+	// Конвертируем в JSON с красивым форматированием
+	$json_data = wp_json_encode( $categories_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
+
+	// Путь к файлу в папке темы
+	$file_path = get_template_directory() . '/dress_categories.json';
+
+	// Сохраняем в файл
+	$result = file_put_contents( $file_path, $json_data );
+
+	if ( $result === false ) {
+		return false;
+	}
+
+	return array(
+		'success' => true,
+		'file_path' => $file_path,
+		'categories_count' => count( $categories_data ),
+		'data' => $categories_data
+	);
+}
