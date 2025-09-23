@@ -143,11 +143,9 @@ if ( ! empty( $dresses_without_order ) ) {
 						>
 							<div class="vert vert-fw">
 								<div class="spleet m-vert">
-									<script>
-										let silhouettes = <?php echo wp_json_encode( loveforever_get_silhouettes_for_dress_category() ); ?>;
-									</script>
 									<?php
-									$silhouettes = loveforever_get_silhouettes_for_dress_category();
+									// $silhouettes = loveforever_get_silhouettes_for_dress_category();
+									$silhouettes = ! empty( get_field( 'silhouettes', $queried_object ) ) ? array_map( 'get_term', get_field( 'silhouettes', $queried_object ) ) : array();
 
 									if ( ! empty( $silhouettes ) ) :
 										?>
@@ -173,10 +171,17 @@ if ( ! empty( $dresses_without_order ) ) {
 												<?php if ( $silhouettes_index === 7 ) : ?>
 													<div class="dropdown-container">
 														<div class="more-button">
-																Еще
-																<svg width="6" height="4" viewBox="0 0 6 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-																		<path fill-rule="evenodd" clip-rule="evenodd" d="M2.48716 3.41604L0 0.583958L0.512837 0L3 2.83208L5.48716 0L6 0.583958L3.51284 3.41604L3 4L2.48716 3.41604Z" fill="black"/>
-																</svg>
+															Еще
+															<svg 
+																width="6" 
+																height="4" 
+																viewBox="0 0 6 4" 
+																fill="none" 
+																xmlns="http://www.w3.org/2000/svg"
+																style="width: 6rem; height: 4rem;"
+															>
+																<path fill-rule="evenodd" clip-rule="evenodd" d="M2.48716 3.41604L0 0.583958L0.512837 0L3 2.83208L5.48716 0L6 0.583958L3.51284 3.41604L3 4L2.48716 3.41604Z" fill="black"/>
+															</svg>
 														</div>
 														<div class="dropdown-menu">
 												<?php endif; ?>

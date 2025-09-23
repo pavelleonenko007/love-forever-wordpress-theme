@@ -29,6 +29,32 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_68d2495f56843",
+            "label": "Силуэты (линия фильтров)",
+            "name": "silhouettes",
+            "aria-label": "",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "silhouette",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "multi_select",
+            "allow_null": 1,
+            "allow_in_bindings": 0,
+            "bidirectional": 0,
+            "multiple": 0,
+            "bidirectional_target": []
+        },
+        {
             "key": "field_688cb872b7a64",
             "label": "SEO текст",
             "name": "seo_text",
@@ -228,5 +254,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1758473744
+    "modified": 1758612057
 }

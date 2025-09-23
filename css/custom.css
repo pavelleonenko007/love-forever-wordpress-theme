@@ -674,6 +674,14 @@
 	transform: translateY(0);
 }
 
+.dropdown-container svg {
+	transition: all 0.3s ease;
+}
+
+.dropdown-container:hover svg {
+	transform: rotate(180deg);
+}
+
 @media (max-width: 991px) {
 	.more-button {
 		display: none;
