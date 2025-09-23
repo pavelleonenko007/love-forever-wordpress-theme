@@ -660,7 +660,8 @@
 					</a>
 					<a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" class="lf-icon-button lf-icon-button--phone" aria-label="<?php echo esc_attr( 'Позвонить на номер ' . $phone ); ?>">
 						<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
-							<use href="#phoneIcon" />
+							<!-- <use href="#phoneIcon" /> -->
+							<use href="#deviceIcon" />
 						</svg>
 					</a>
 				</div>
