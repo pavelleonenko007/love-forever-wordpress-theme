@@ -257,7 +257,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 										<input type="hidden" name="action" value="add_review">
 										<?php wp_nonce_field( 'submit_review_form', '_submit_review_form_nonce', false ); ?>
 										<input type="submit" data-wait="отправка..." class="btn send-btn w-button" value="отправить">
-										<div class="p-12-12 uper m-12-12 reviews-form__legal">Нажимая отправить вы соглашаетесь с <a href="#">политикой конфиденциальности</a></div>
+										<div class="p-12-12 uper m-12-12 reviews-form__legal">Нажимая отправить вы соглашаетесь с <a href="<?php echo esc_url( get_privacy_policy_url() ); ?>">политикой конфиденциальности</a></div>
 									</div>
 								</form>
 							</div>
