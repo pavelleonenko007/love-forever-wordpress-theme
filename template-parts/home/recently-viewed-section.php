@@ -10,12 +10,14 @@ defined( 'ABSPATH' ) || exit;
 $view_all_link   = isset( $args['view_all_link'] ) ? $args['view_all_link'] : true;
 $id              = ! empty( $args['id'] ) ? $args['id'] : 'recentlyViewed';
 $recently_viewed = loveforever_get_viewed_products();
+$show_all        = isset( $args['show_all'] ) ? $args['show_all'] : false;
 
 if ( ! empty( $recently_viewed ) ) :
 	$query_args = array(
-		'post__in'       => $recently_viewed,
-		'posts_per_page' => 4,
 		'post_type'      => 'dress',
+		'posts_per_page' => $show_all ? 24 : 4,
+		'post__in'       => $recently_viewed,
+		'orderby'        => 'post__in',
 	);
 	$query      = new WP_Query( $query_args );
 

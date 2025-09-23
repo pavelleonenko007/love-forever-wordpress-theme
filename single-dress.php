@@ -365,7 +365,7 @@ if ( ! empty( $related_products ) ) :
 	</div>
 </section>
 <?php endif; ?>
-<?php get_template_part( 'template-parts/home/recently-viewed-section' ); ?>
+<?php get_template_part( 'template-parts/home/recently-viewed-section', null, array( 'view_all_link' => true ) ); ?>
 <?php get_template_part( 'template-parts/global/map-section' ); ?>
 <div id="singleProductFittingDialog" role="dialog" class="dialog" data-js-dialog>
 	<div class="dialog__overlay" data-js-dialog-overlay>

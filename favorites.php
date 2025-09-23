@@ -155,6 +155,7 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 						null,
 						array(
 							'view_all_link' => false,
+							'show_all'      => true,
 						)
 					);
 				endif;
