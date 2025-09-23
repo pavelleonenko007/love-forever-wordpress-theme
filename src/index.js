@@ -459,7 +459,7 @@ function AllPages() {
 
 		if (
 			url.origin.replace(url.protocol, '') + url.pathname !==
-			currentUrl.origin.replace(url.protocol, '') + currentUrl.pathname
+			currentUrl.origin.replace(currentUrl.protocol, '') + currentUrl.pathname
 		) {
 			return;
 		}
