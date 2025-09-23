@@ -452,6 +452,17 @@ function AllPages() {
 	// 	}
 	// });
 
+	document.querySelectorAll('a[href$="#catalog"]').forEach((catalogLink) => {
+		const url = new URL(catalogLink.href).toString().replace('#catalog', '');
+
+		catalogLink.href = url;
+
+		catalogLink.addEventListener('click', (event) => {
+			event.preventDefault();
+			window.location.href = catalogLink.href + '#catalog';
+		});
+	});
+
 	document
 		.querySelectorAll('[data-js-input-zoom-prevention]')
 		.forEach((inputZoomPrevention) => {
