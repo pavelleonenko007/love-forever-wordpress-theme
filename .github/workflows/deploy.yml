@@ -25,15 +25,18 @@ jobs:
           node-version: 20
 
       - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.SFTP_SERVER_IP }}
           username: ${{ secrets.SFTP_LOGIN }}
           password: ${{ secrets.SFTP_PASSWORD }}
           # server-dir: /domains/thevogne.ru/public_html/loveforever/wp-content/themes/loveforever/
           server-dir: /wordpress_db/public_html/wp-content/themes/loveforever/
+          protocol: ftps
+          port: 22
           log-level: verbose
           timeout: 1000000
+          security: loose
           exclude: |
             **/.git*
             **/.git*/**
