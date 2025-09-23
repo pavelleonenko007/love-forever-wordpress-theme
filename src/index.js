@@ -452,13 +452,15 @@ function AllPages() {
 	// 	}
 	// });
 
-
 	// Force browser reload on catalog link click with new query params and hash
 	document.querySelectorAll('a[href$="#catalog"]').forEach((catalogLink) => {
 		const url = new URL(catalogLink.href);
 		const currentUrl = new URL(window.location.href);
 
-		if (url.origin + url.pathname !== currentUrl.origin + currentUrl.pathname) {
+		if (
+			url.origin.replace(url.protocol, '') + url.pathname !==
+			currentUrl.origin.replace(url.protocol, '') + currentUrl.pathname
+		) {
 			return;
 		}
 
