@@ -462,7 +462,9 @@ function AllPages() {
 			return;
 		}
 
-		catalogLink.href = url.toString().replace('#catalog', '');
+		const newHref = url.toString().replace('#catalog', '');
+
+		catalogLink.href = newHref;
 
 		catalogLink.addEventListener('click', (event) => {
 			event.preventDefault();
