@@ -22,9 +22,10 @@
 		grid-area: slider;
 		z-index: 1;
 		align-self: end;
+		gap: 8rem;
 
-		li:after {
-			display: none;
+		li {
+			display: flex;
 		}
 	}
 
