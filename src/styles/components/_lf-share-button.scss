@@ -3,6 +3,10 @@
 .lf-share-buttons {
 	display: flex;
 	gap: 20rem;
+
+	&--no-margin {
+		margin: 0;
+	}
 }
 
 .lf-share-button {

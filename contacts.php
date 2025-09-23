@@ -97,7 +97,7 @@ $metro_stations   = get_field( 'metro_stations', 'option' );
 								<?php if ( ! empty( $socials ) ) : ?>
 									<div id="w-node-a3e9d446-0fc6-11f9-087f-e38dd88fa862-e1f817f5" class="div-block-4 cont-item">
 										<div class="p-12-12 uper m-12-12">Соц. сети</div>
-										<div class="soc-grid lf-share-buttons">
+										<div class="soc-grid lf-share-buttons lf-share-buttons--no-margin">
 										<?php foreach ( $socials as $social ) : ?>
 											<a class="lf-share-button lf-share-button--dark" href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer">
 												<svg class="lf-share-button__icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
