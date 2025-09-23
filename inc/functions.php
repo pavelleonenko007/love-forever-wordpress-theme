@@ -727,7 +727,7 @@ function loveforever_format_filter_link_for_tag( WP_Term $tag, int $product_id )
 		}
 	}
 
-	return get_term_link( $root_dress_category ) . '?' . $tag->taxonomy . $postfix . '=' . $tag->term_id;
+	return get_term_link( $root_dress_category ) . '?' . $tag->taxonomy . $postfix . '=' . $tag->term_id . '#catalog';
 }
 
 function loveforever_get_video_mime_type( $video ) {
