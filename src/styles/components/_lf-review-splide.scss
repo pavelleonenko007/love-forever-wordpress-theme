@@ -51,9 +51,17 @@
 		color: var(--white);
 		transition: all 0.3s ease;
 
-		@include hover {
+		&:hover,
+		&:focus-visible {
 			background-color: var(--white);
 			color: var(--pink);
+		}
+
+		@include tablet {
+			&:active {
+				background-color: var(--white);
+				color: var(--pink);
+			}
 		}
 
 		&.splide__arrow--prev {
