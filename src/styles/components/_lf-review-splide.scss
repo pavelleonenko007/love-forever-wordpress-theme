@@ -1,0 +1,86 @@
+@use '../media' as *;
+
+.lf-review-splide {
+	display: grid;
+	grid-template-areas: 'slider';
+
+	&__track {
+		grid-area: slider;
+		overflow: hidden;
+		z-index: 1;
+	}
+
+	&__slide-number {
+		margin: 20rem;
+		padding: 0 20rem;
+		height: 30rem;
+		border-radius: 100rem;
+		grid-area: slider;
+		display: inline-flex;
+		align-items: center;
+		justify-self: start;
+		align-self: end;
+		background-color: var(--white);
+		font-size: 12rem;
+		line-height: 1;
+		z-index: 2;
+		transform: translateZ(1px);
+	}
+
+	&__arrows {
+		margin: 20rem;
+		display: inline-flex;
+		gap: 10rem;
+		justify-self: end;
+		align-self: end;
+		grid-area: slider;
+		z-index: 2;
+		transform: translateZ(1px);
+	}
+
+	&__arrow {
+		padding: 0;
+		width: 40rem;
+		height: 60rem;
+		border: 1rem solid var(--pink);
+		border-radius: 100rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--pink);
+		color: var(--white);
+		transition: all 0.3s ease;
+
+		@include hover {
+			background-color: var(--white);
+			color: var(--pink);
+		}
+
+		&.splide__arrow--prev {
+			transform: rotate(180deg);
+		}
+
+		svg {
+			width: 10rem;
+			height: 10rem;
+			fill: currentColor;
+		}
+	}
+
+	&__pagination {
+		display: none;
+		grid-area: slider;
+
+		@include mobile {
+			display: flex;
+		}
+	}
+
+	&__list {
+		.lf-review-splide.is-initialized.is-active & {
+			display: flex;
+		}
+	}
+	
+
+}

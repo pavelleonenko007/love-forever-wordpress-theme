@@ -28,6 +28,7 @@ import InputZoomPrevention from './InputZoomPrevention';
 import initMap from './YandexMap';
 import ProductSliderCollection from './ProductSlider';
 import CatalogSplideCollection from './CatalogSplide';
+import ReviewImageSliderCollection from './ReviewImageSlider';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -256,6 +257,7 @@ function initPage() {
 	SaleTimerCollection.init();
 	CustomDatepickerCollection.init();
 	CallbackFormCollection.init();
+	ReviewImageSliderCollection.init();
 }
 
 function initCatalogPage() {

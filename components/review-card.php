@@ -26,7 +26,18 @@ if ( empty( $image_carousel ) && ! has_post_thumbnail() ) {
 ?>
 <div class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?>">
 	<?php if ( ! empty( $image_carousel ) ) : ?>
-		<div data-delay="4000" data-animation="slide" class="slider-oyziv w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+		<div class="lf-review-splide splide" data-js-review-splide>
+			<div class="lf-review-splide__track splide__track">
+				<div class="lf-review-splide__list splide__list">
+					<?php foreach ( $image_carousel as $image_carousel_item ) : ?>
+						<div class="lf-review-splide__slide splide__slide">
+							<?php echo wp_get_attachment_image( $image_carousel_item['image'], 'fullhd', false, array( 'class' => 'img-cover' ) ); ?>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</div>
+		<!-- <div data-delay="4000" data-animation="slide" class="slider-oyziv w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
 			<div class="slider-oyziv_mask w-slider-mask">
 				<?php
 				if ( has_post_thumbnail() ) :
@@ -62,7 +73,7 @@ if ( empty( $image_carousel ) && ! has_post_thumbnail() ) {
 				</div>
 			</div>
 			<div class="slider-oyziv_nav w-slider-nav w-round w-num"></div>
-		</div>
+		</div> -->
 	<?php elseif ( has_post_thumbnail() ) : ?>
 		<img src="<?php echo esc_url( get_the_post_thumbnail_url( $post, 'fullhd' ) ); ?>" loading="lazy" alt class="img-fw">
 	<?php endif; ?>
@@ -70,9 +81,7 @@ if ( empty( $image_carousel ) && ! has_post_thumbnail() ) {
 		<div class="<?php echo has_post_thumbnail() ? 'otziv-horiz' : 'otziv-horiz no-image'; ?>">
 			<?php if ( ! empty( $author ) ) : ?>
 				<div class="p-12-12 uper"><?php echo esc_html( $author ); ?></div>
-				<div class="<?php echo has_post_thumbnail() ? '_2px_romb purp' : '_2px_romb purp _2'; ?>"></div>
 			<?php endif; ?>
-			<div class="p-12-12 uper"><?php echo esc_html( get_the_date( 'd.m.y' ) ); ?></div>
 			<div class="<?php echo has_post_thumbnail() ? '_2px_romb purp' : '_2px_romb purp _2'; ?>"></div>
 			<div class="lf-review-card__rating">
 				<?php echo loveforever_get_rating_html( $rating ); ?>
