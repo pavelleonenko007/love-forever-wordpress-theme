@@ -66,4 +66,23 @@ class SmsService {
 			Logger::log( 'SMS: Не удалось отправить SMS с просьбой об отзыве', compact( 'post_id', 'phone' ) );
 		}
 	}
+
+	public function send_favorites_sms( string $phone, string $favorites_link ): void {
+		if ( empty( $phone ) || empty( $favorites_link ) ) {
+			Logger::log( 'SMS: Не удалось отправить SMS с избранным - отсутствует телефон или ссылка', compact( 'phone', 'favorites_link' ) );
+			return;
+		}
+
+		$text = "Список платьев, которые вы отметили, по ссылке ниже:
+🔗 $favorites_link
+Пусть выбор будет удобным — команда LOVE FOREVER!";
+
+		$success = $this->provider->send( $phone, $text, SmsRoute::CASCADE );
+
+		if ( ! $success ) {
+			Logger::log( 'SMS: Не удалось отправить SMS с избранным', compact( 'phone', 'favorites_link', 'text' ) );
+		} else {
+			Logger::log( 'SMS: SMS с избранным отправлен', compact( 'phone', 'favorites_link', 'text', 'success' ) );
+		}
+	}
 }

@@ -16,4 +16,8 @@ require_once __DIR__ . '/sms/class-appointment-manager.php';
 
 $sms_provider = RedSmsProvider::get_instance();
 $sms_service  = new SmsService( $sms_provider );
+
+// Делаем SmsService доступным глобально.
+$GLOBALS['sms_service'] = $sms_service;
+
 new AppointmentManager( $sms_service );

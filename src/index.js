@@ -29,6 +29,7 @@ import initMap from './YandexMap';
 import ProductSliderCollection from './ProductSlider';
 import CatalogSplideCollection from './CatalogSplide';
 import ReviewImageSliderCollection from './ReviewImageSlider';
+import FavoritesContactFormCollection from './FavoritesContactForm';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -258,6 +259,7 @@ function initPage() {
 	CustomDatepickerCollection.init();
 	CallbackFormCollection.init();
 	ReviewImageSliderCollection.init();
+	FavoritesContactFormCollection.init();
 }
 
 function initCatalogPage() {

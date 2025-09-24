@@ -111,16 +111,15 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 											id="favoritesContactForm" 
 											data-js-form 
 											data-js-input-zoom-prevention 
+											data-js-favorites-contact-form
 											class="form-2 favorites-contact-form" 
-											data-wf-page-id="672b5edfcfeb9652455dadc7" 
-											data-wf-element-id="8d5544fe-3d2a-0ad9-f4de-5a958bae3704" 
 											novalidate
 										>
 											<div class="favorites-contact-form__field field">
 												<input 
 													class="field__control" 
 													maxlength="18" 
-													name="name" 
+													name="phone" 
 													placeholder="+7 (000) 000-00-00" 
 													type="text" 
 													id="favoritesContactFormPhoneField" 
@@ -134,14 +133,20 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 											</div>
 											<input type="hidden" name="action" value="submit_favorites_to_phone">
 											<?php wp_nonce_field( 'submit_favorites_to_phone', '_submit_favorites_to_phone_nonce', false ); ?>
-											<input type="submit" data-wait="Please wait..." class="btn send-white w-button" value="Oтправить">
+											<button 
+												class="btn send-white w-button" 
+												data-js-favorites-contact-form-submit-button 
+												disabled
+											>
+												Oтправить
+											</button>
 										</form>
-										<div class="w-form-done">
-											<div>Thank you! Your submission has been received!</div>
-										</div>
-										<div class="w-form-fail">
-											<div>Oops! Something went wrong while submitting the form.</div>
-										</div>
+										<div 
+											class="w-form-done" 
+											data-js-favorites-contact-form-success-message
+											style="background-color: transparent; color: var(--white, #fff); font-size: 16rem; line-height: 1.5;"
+										></div>
+										<div class="w-form-fail" data-js-favorites-contact-form-error-message style="font-size: 16rem; line-height: 1.5;"></div>
 									</div>
 								</div>
 							</div>

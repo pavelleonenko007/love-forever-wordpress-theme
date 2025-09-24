@@ -28,8 +28,6 @@ export default class FormsValidator {
 					this.selectors.fieldErrors
 			  );
 
-		console.log({ fieldErrorsElement, fieldControlElement, errorMessages });
-
 		fieldErrorsElement.innerHTML = errorMessages
 			.map((message) => `<span class="field__error">${message}</span>`)
 			.join('');

@@ -1079,7 +1079,101 @@ function loveforever_add_product_to_favorites_via_ajax() {
 	);
 }
 
-add_action('pre_get_posts', 'loveforever_modify_review_query');
+add_action( 'wp_ajax_submit_favorites_to_phone', 'loveforever_submit_favorites_to_phone_via_ajax' );
+add_action( 'wp_ajax_nopriv_submit_favorites_to_phone', 'loveforever_submit_favorites_to_phone_via_ajax' );
+function loveforever_submit_favorites_to_phone_via_ajax() {
+	if ( ! isset( $_POST['_submit_favorites_to_phone_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_submit_favorites_to_phone_nonce'] ) ), 'submit_favorites_to_phone' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Ошибка в запросе',
+				'debug'   => 'Невалидный nonce',
+			),
+			400
+		);
+	}
+
+	if ( empty( $_POST['phone'] ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Пожалуйста, введите номер телефона',
+			),
+			400
+		);
+	}
+
+	$phone = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
+
+	// Получаем избранные товары из cookie.
+	$favorites = loveforever_get_favorites();
+
+	if ( empty( $favorites ) ) {
+		wp_send_json_error(
+			array(
+				'message' => 'В избранном нет товаров для отправки',
+			),
+			400
+		);
+	}
+
+	// Создаем ссылку на избранное.
+	$favorites_page_id = get_page_by_path( 'favorites' );
+	if ( ! $favorites_page_id ) {
+		wp_send_json_error(
+			array(
+				'message' => 'Страница избранного не найдена',
+			),
+			500
+		);
+	}
+
+	$favorites_link = get_permalink( $favorites_page_id ) . '?favorites=' . implode( ',', $favorites );
+
+	// Отправляем SMS через SmsService.
+	try {
+		// Получаем экземпляр SmsService из глобального контекста.
+		/**
+		 * @var SmsService $sms_service
+		 */
+		$sms_service = $GLOBALS['sms_service'] ?? null;
+
+		if ( ! $sms_service ) {
+			wp_send_json_error(
+				array(
+					'message' => 'SMS сервис недоступен',
+				),
+				500
+			);
+		}
+
+		$sms_service->send_favorites_sms( $phone, $favorites_link );
+
+		wp_send_json_success(
+			array(
+				'message' => 'Ссылка на избранное отправлена на номер ' . str_replace( ' ', '&nbsp;', $phone ),
+			),
+			200
+		);
+
+	} catch ( Exception $e ) {
+		Logger::log(
+			'SMS: Ошибка при отправке SMS с избранным',
+			array(
+				'phone'          => $phone,
+				'favorites_link' => $favorites_link,
+				'error'          => $e->getMessage(),
+			)
+		);
+
+		wp_send_json_error(
+			array(
+				'message' => 'Произошла ошибка при отправке SMS. Попробуйте позже.',
+			),
+			500
+		);
+	}
+}
+
+add_action( 'pre_get_posts', 'loveforever_modify_review_query' );
 function loveforever_modify_review_query( $query ) {
 	if ( is_post_type_archive( 'review' ) && ! is_admin() ) {
 		$query->set( 'posts_per_page', 12 );
@@ -1662,9 +1756,9 @@ function get_quick_categories_for_admin() {
 					),
 				),
 				array(
-					'id'   => 543,
-					'name' => 'Вечерние платья',
-					'icon' => '🌙',
+					'id'                    => 543,
+					'name'                  => 'Вечерние платья',
+					'icon'                  => '🌙',
 					'additional_categories' => array(
 						array(
 							'id'   => 379,
@@ -1673,9 +1767,9 @@ function get_quick_categories_for_admin() {
 					),
 				),
 				array(
-					'id'   => 544,
-					'name' => 'Выпускные платья',
-					'icon' => '🎓',
+					'id'                    => 544,
+					'name'                  => 'Выпускные платья',
+					'icon'                  => '🎓',
 					'additional_categories' => array(
 						array(
 							'id'   => 379,
@@ -1701,9 +1795,9 @@ function get_quick_categories_for_admin() {
 					),
 				),
 				array(
-					'id'   => 377,
-					'name' => 'Верхняя одежда',
-					'icon' => '🧥',
+					'id'                    => 377,
+					'name'                  => 'Верхняя одежда',
+					'icon'                  => '🧥',
 					'additional_categories' => array(
 						array(
 							'id'   => 375,
@@ -1712,9 +1806,9 @@ function get_quick_categories_for_admin() {
 					),
 				),
 				array(
-					'id'   => 580,
-					'name' => 'Клатчи',
-					'icon' => '👜',
+					'id'                    => 580,
+					'name'                  => 'Клатчи',
+					'icon'                  => '👜',
 					'additional_categories' => array(
 						array(
 							'id'   => 375,
@@ -1723,9 +1817,9 @@ function get_quick_categories_for_admin() {
 					),
 				),
 				array(
-					'id'   => 378,
-					'name' => 'Туфли',
-					'icon' => '👠',
+					'id'                    => 378,
+					'name'                  => 'Туфли',
+					'icon'                  => '👠',
 					'additional_categories' => array(
 						array(
 							'id'   => 375,
@@ -1734,9 +1828,9 @@ function get_quick_categories_for_admin() {
 					),
 				),
 				array(
-					'id'   => 581,
-					'name' => 'Украшения',
-					'icon' => '💎',
+					'id'                    => 581,
+					'name'                  => 'Украшения',
+					'icon'                  => '💎',
 					'additional_categories' => array(
 						array(
 							'id'   => 375,
@@ -1745,9 +1839,9 @@ function get_quick_categories_for_admin() {
 					),
 				),
 				array(
-					'id'   => 579,
-					'name' => 'Фаты',
-					'icon' => '👰',
+					'id'                    => 579,
+					'name'                  => 'Фаты',
+					'icon'                  => '👰',
 					'additional_categories' => array(
 						array(
 							'id'   => 375,
@@ -2657,7 +2751,7 @@ function loveforever_add_address_to_organization_schema( $data ) {
 
 	// Получаем адрес из настроек темы или ACF полей
 	$address_data = loveforever_get_organization_address_data();
-	
+
 	if ( ! empty( $address_data ) ) {
 		$data['address'] = $address_data;
 	}
@@ -2676,11 +2770,11 @@ function loveforever_get_organization_address_data() {
 
 	// Формируем структуру адреса согласно schema.org
 	$address = array(
-		'@type' => 'PostalAddress',
-		'streetAddress' => $address_settings['street_address'],
+		'@type'           => 'PostalAddress',
+		'streetAddress'   => $address_settings['street_address'],
 		'addressLocality' => $address_settings['locality'],
-		'postalCode' => $address_settings['postal_code'],
-		'addressCountry' => $address_settings['country'],
+		'postalCode'      => $address_settings['postal_code'],
+		'addressCountry'  => $address_settings['country'],
 	);
 
 	// Добавляем регион только если он указан
