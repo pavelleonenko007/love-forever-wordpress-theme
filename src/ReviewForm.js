@@ -5,9 +5,6 @@ const ROOT_SELECTOR = '[data-js-review-form]';
 class ReviewForm {
 	selectors = {
 		root: ROOT_SELECTOR,
-		errorMessageElementSelector: '[data-js-form-error-messages]',
-		globalErrorElementSelector: '[data-js-review-form-global-error]',
-		successMessageElementSelector: '[data-js-review-form-success-message]',
 	};
 
 	stateSelectors = {
@@ -60,8 +57,8 @@ class ReviewForm {
 
 	showGlobalError(error) {
 		const dialogInstance = DialogCollection.getDialogsById(this.dialogId);
-		console.log({dialogInstance});
-		
+		console.log({ dialogInstance });
+
 		const dialogTitle = dialogInstance.dialog.querySelector(
 			'.review-card__title'
 		);
@@ -75,23 +72,8 @@ class ReviewForm {
 		dialogInstance.open();
 	}
 
-	clearErrors() {
-		this.root
-			.querySelectorAll(this.selectors.errorMessageElementSelector)
-			.forEach((errorMessagesElement) => {
-				errorMessagesElement.innerHTML = '';
-			});
-		this.root.querySelectorAll('[aria-invalid]').forEach((invalidField) => {
-			invalidField.ariaInvalid = false;
-		});
-		this.root.parentElement.querySelector(
-			this.selectors.globalErrorElementSelector
-		).style.display = 'none';
-	}
-
 	showSuccessMessage(message) {
 		const dialogInstance = DialogCollection.getDialogsById(this.dialogId);
-		console.log({dialogInstance});
 		const dialogTitle = dialogInstance.dialog.querySelector(
 			'.review-card__title'
 		);
@@ -99,7 +81,7 @@ class ReviewForm {
 			'.review-card__description'
 		);
 
-		dialogTitle.textContent = 'Отзыв успешно отправлен';
+		dialogTitle.textContent = 'Спасибо за ваш отзыв';
 		dialogDescrition.textContent = message;
 
 		dialogInstance.open();
@@ -107,12 +89,12 @@ class ReviewForm {
 
 	resetForm() {
 		this.root.reset();
-		this.clearErrors();
 
 		this.root.querySelectorAll('[type="file"]').forEach((input) => {
+			input.value = '';
 			input.dispatchEvent(
 				new Event('change', {
-					bubbles: false,
+					bubbles: true,
 				})
 			);
 		});

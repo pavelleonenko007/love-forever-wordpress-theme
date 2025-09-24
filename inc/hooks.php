@@ -938,7 +938,7 @@ function loveforever_add_review_via_ajax() {
 	$review_post_id = wp_insert_post(
 		array(
 			'post_type'    => 'review',
-			'post_title'   => "Отзыв от $date от $name",
+			'post_title'   => "Новый отзыв от $date от $name",
 			'post_content' => '<p></p>',
 			'post_status'  => 'pending',
 		)
@@ -967,11 +967,8 @@ function loveforever_add_review_via_ajax() {
 			$_FILES['single_attachment'] = $file;
 			$featured_image_id           = media_handle_upload( 'single_attachment', 0 );
 
-			// wp_send_json_success( $featured_image_id );
-
 			if ( $featured_image_id && ! is_wp_error( $featured_image_id ) ) {
 				set_post_thumbnail( $review_post_id, $featured_image_id );
-				$image_array[] = array( 'image' => $featured_image_id );
 			}
 
 			// Handle additional images for carousel
@@ -1016,7 +1013,7 @@ function loveforever_add_review_via_ajax() {
 
 	wp_send_json_success(
 		array(
-			'message' => 'Отзыв успешно добавлен! В ближайшее время он будет опубликован',
+			'message' => 'Он будет опубликован в ближайшее время',
 		),
 		201
 	);

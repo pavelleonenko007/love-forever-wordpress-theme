@@ -223,6 +223,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 												class="field__control"
 												value="<?php echo esc_attr( $today ); ?>"
 												data-js-datepicker-custom-control
+												data-js-datepicker-config="<?php echo esc_attr( wp_json_encode( array( 'dateFormat' => 'd.mm.yy' ) ) ); ?>"
 											/>
 											<span class="field__errors" id="addReviewFormDateFieldErrors" data-js-form-field-errors></span>
 										</div>

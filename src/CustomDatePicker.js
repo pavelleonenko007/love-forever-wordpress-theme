@@ -25,6 +25,8 @@ class CustomDatepicker {
 			? JSON.parse(this.customControl.dataset.jsDatepickerConfig)
 			: {};
 
+		console.log({ datepickerConfig });
+
 		$.datepicker.setDefaults($.datepicker.regional['ru']);
 
 		$(this.customControl).datepicker({
@@ -51,8 +53,6 @@ class CustomDatepicker {
 			altField: this.originalControl,
 			altFormat: 'yy-mm-dd',
 			onSelect: (dateString, instance) => {
-				console.log({ dateString });
-
 				this.originalControl.dispatchEvent(
 					new Event('change', {
 						bubbles: true,
