@@ -24,7 +24,7 @@
 	$badge               = loveforever_get_product_badge_text( get_the_ID() );
 	$images              = loveforever_get_product_images( get_the_ID() );
 	$video               = get_field( 'video' );
-	$colors              = get_field( 'colors' );
+	$colors              = get_the_terms( get_the_ID(), 'color' );
 	$price               = get_field( 'price' );
 	$has_discount        = get_field( 'has_discount' );
 	$price_with_discount = $has_discount ? get_field( 'price_with_discount' ) : null;
@@ -137,20 +137,27 @@
 						<?php endif; ?>
 						<h1 class="p-24-24 h-single single-product__content-heading"><?php echo wp_kses_post( loveforever_get_product_title( get_the_ID() ) ); ?></h1>
 					</div>
-					<?php if ( ! empty( $colors ) ) : ?>
-					<div class="horiz single-product__content-colors">
+					<?php
+					if ( ! is_wp_error( $colors ) && ! empty( $colors ) && 1 < count( $colors ) ) :
+						$colors = array_map(
+							function ( $color ) {
+								return array(
+									'hex'  => get_field( 'color', $color ),
+									'name' => $color->name,
+								);
+							},
+							$colors
+						);
+						?>
+					<div class="single-product__colors lf-product-colors">
 						<?php
 						foreach ( $colors as $color ) :
 							if ( ! empty( $color['hex'] ) && ! empty( $color['name'] ) ) :
 								?>
-						<a href="#" class="btn-color w-inline-block">
-							<div class="color-mom">
-								<div class="color-dot" style="background-color: <?php echo esc_attr( $color['hex'] ); ?>;">
-									<div class="color-dot_in"></div>
+								<div class="lf-product-color">
+									<div class="lf-product-color__circle" style="background-color: <?php echo esc_attr( $color['hex'] ); ?>;"></div>
+									<div class="lf-product-color__name"><?php echo esc_html( $color['name'] ); ?></div>
 								</div>
-							</div>
-							<div class="p-12-12 uper m-12-12"><?php echo esc_html( $color['name'] ); ?></div>
-						</a>
 								<?php
 							endif;
 							endforeach;
