@@ -118,8 +118,10 @@ if ( ! empty( $dresses_without_order ) ) {
 				<?php get_template_part( 'template-parts/home/stories-section', null, array( 'stories' => $stories ) ); ?>
 				<?php
 				$price_range         = loveforever_get_product_price_range( $queried_object->term_id );
-				$min_price           = ! empty( $_GET['min-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['min-price'] ) ) : $price_range['min_price'];
-				$max_price           = ! empty( $_GET['max-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['max-price'] ) ) : $price_range['max_price'];
+				$min_price           = $price_range['min_price'];
+				$max_price           = $price_range['max_price'];
+				$current_min_price   = ! empty( $_GET['min-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['min-price'] ) ) : $min_price;
+				$current_max_price   = ! empty( $_GET['max-price'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['max-price'] ) ) : $max_price;
 				$current_page        = ! empty( $_GET['page'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['page'] ) ) : get_query_var( 'paged' );
 				$selected_silhouette = ! empty( $_GET['silhouette'] ) ? (int) sanitize_text_field( wp_unslash( $_GET['silhouette'] ) ) : null;
 				$orderby             = ! empty( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'views';
@@ -218,7 +220,7 @@ if ( ! empty( $dresses_without_order ) ) {
 													type="number" 
 													id="min" 
 													name="min-price" 
-													value="<?php echo esc_attr( $min_price ); ?>"
+													value="<?php echo esc_attr( $current_min_price ); ?>"
 													min="<?php echo esc_attr( $price_range['min_price'] ); ?>"
 													max="<?php echo esc_attr( $price_range['max_price'] ); ?>"
 													data-js-range-slider-control-min
@@ -227,7 +229,7 @@ if ( ! empty( $dresses_without_order ) ) {
 													type="number" 
 													id="max" 
 													name="max-price" 
-													value="<?php echo esc_attr( $max_price ); ?>"
+													value="<?php echo esc_attr( $current_max_price ); ?>"
 													min="<?php echo esc_attr( $price_range['min_price'] ); ?>"
 													max="<?php echo esc_attr( $price_range['max_price'] ); ?>"
 													data-js-range-slider-control-max
@@ -371,7 +373,7 @@ if ( ! empty( $dresses_without_order ) ) {
 									),
 									array(
 										'key'     => 'final_price',
-										'value'   => array( intval( $min_price ), intval( $max_price + 1 ) ),
+										'value'   => array( intval( $current_min_price ), intval( $current_max_price + 1 ) ),
 										'compare' => 'BETWEEN',
 										'type'    => 'DECIMAL',
 									),

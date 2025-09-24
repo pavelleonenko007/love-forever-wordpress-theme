@@ -42,11 +42,7 @@ class ProductFilterForm {
 	}
 
 	updateResetButtonVisibility() {
-		console.log('updateResetButtonVisibility');
-
 		const hasActiveFilters = this.hasActiveFilters();
-
-		console.log({ hasActiveFilters });
 
 		document.querySelectorAll(this.selectors.resetButton).forEach((button) => {
 			button.disabled = !hasActiveFilters;
@@ -61,8 +57,6 @@ class ProductFilterForm {
 		const formData = formDataToObject(new FormData(this.filterForm));
 
 		for (const key in this.defaultValues) {
-			console.log({ key, value: formData[key] });
-
 			if (Array.isArray(formData[key]) && formData[key].length > 0) {
 				return true;
 			}
@@ -151,7 +145,7 @@ class ProductFilterForm {
 			element.removeAttribute('checked');
 		});
 
-		silhouetteInputs[0].setAttribute('checked', '');
+		silhouetteInputs[0]?.setAttribute('checked', '');
 
 		document
 			.querySelectorAll('[name="brand[]"], [name="style[]"], [name="color[]"]')
@@ -171,9 +165,18 @@ class ProductFilterForm {
 			);
 		}
 
+		this.filterForm.elements['min-price'].setAttribute(
+			'value',
+			this.filterForm.elements['min-price'].min
+		);
+		this.filterForm.elements['max-price'].setAttribute(
+			'value',
+			this.filterForm.elements['max-price'].max
+		);
+
 		$('#slider').slider('values', [
-			parseInt(this.filterForm.elements['min-price'].min),
-			parseInt(this.filterForm.elements['max-price'].max),
+			parseInt(this.filterForm.elements['min-price'].value),
+			parseInt(this.filterForm.elements['max-price'].value),
 		]);
 
 		this.filterForm.dispatchEvent(
@@ -248,7 +251,7 @@ class ProductFilterForm {
 
 			const body = await response.json();
 
-			console.log({ body });
+			// console.log({ body });
 
 			if (!body.success) {
 				throw new Error(body.data.message);
