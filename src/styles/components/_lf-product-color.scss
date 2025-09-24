@@ -1,9 +1,10 @@
 .lf-product-colors {
 	display: flex;
+	gap: 10rem;
 }
 
 .lf-product-color {
-	width: 70rem;
+	min-width: 70rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
