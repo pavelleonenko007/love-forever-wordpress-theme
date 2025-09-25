@@ -6469,6 +6469,14 @@ ul {
 
 @font-face {
   font-family: 'Tt Chocolates';
+  src: url('../fonts/TT-Chocolates-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tt Chocolates';
   src: url('../fonts/672b2fcbbd7d12cc29e9d15e_TT-Chocolates-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;

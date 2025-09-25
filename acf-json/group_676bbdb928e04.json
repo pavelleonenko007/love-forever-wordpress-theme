@@ -57,9 +57,9 @@
             "label": "Цена",
             "name": "price",
             "aria-label": "",
-            "type": "number",
+            "type": "text",
             "instructions": "Укажите цену товара",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -67,11 +67,9 @@
                 "id": "regularPriceField"
             },
             "default_value": "",
-            "min": 0,
-            "max": "",
+            "maxlength": "",
             "allow_in_bindings": 0,
             "placeholder": "",
-            "step": "",
             "prepend": "",
             "append": ""
         },
@@ -101,7 +99,7 @@
             "label": "Скидка в процентах",
             "name": "discount_percent",
             "aria-label": "",
-            "type": "number",
+            "type": "text",
             "instructions": "",
             "required": 0,
             "conditional_logic": [
@@ -118,12 +116,10 @@
                 "class": "",
                 "id": "salePercentField"
             },
-            "default_value": 0,
-            "min": 1,
-            "max": 99,
+            "default_value": "",
+            "maxlength": "",
             "allow_in_bindings": 0,
             "placeholder": "",
-            "step": "",
             "prepend": "",
             "append": ""
         },
@@ -132,7 +128,7 @@
             "label": "Цена со скидкой",
             "name": "price_with_discount",
             "aria-label": "",
-            "type": "number",
+            "type": "text",
             "instructions": "",
             "required": 0,
             "conditional_logic": [
@@ -150,11 +146,9 @@
                 "id": "priceWithDiscountField"
             },
             "default_value": "",
-            "min": "",
-            "max": "",
+            "maxlength": "",
             "allow_in_bindings": 0,
             "placeholder": "",
-            "step": "",
             "prepend": "",
             "append": ""
         },
@@ -466,5 +460,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1756041730
+    "modified": 1758810071
 }
