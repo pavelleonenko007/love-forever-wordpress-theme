@@ -2452,6 +2452,7 @@ function loveforever_request_callback() {
 	$subject = 'На сайте ' . get_bloginfo( 'name' ) . ' пользователь заказал обратный звонок';
 
 	$message = '
+		<p>На сайте ' . get_bloginfo( 'name' ) . ' пользователь заказал обратный звонок</p>
 		<p>
 			<strong>Имя пользователя:</strong> ' . $name . '<br>
 			<strong>Телефон пользователя:</strong> ' . $phone . '<br>
