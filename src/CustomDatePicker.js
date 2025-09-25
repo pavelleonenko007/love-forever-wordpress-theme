@@ -21,11 +21,7 @@ class CustomDatepicker {
 
 		this.toggleControls();
 
-		const datepickerConfig = this.customControl.dataset.jsDatepickerConfig
-			? JSON.parse(this.customControl.dataset.jsDatepickerConfig)
-			: {};
-
-		console.log({ datepickerConfig });
+		const datepickerConfig = this.parseConfig();
 
 		$.datepicker.setDefaults($.datepicker.regional['ru']);
 
@@ -78,6 +74,14 @@ class CustomDatepicker {
 		});
 
 		this.bindEvents();
+	}
+
+	parseConfig() {
+		try {
+			return JSON.parse(this.customControl.dataset.jsDatepickerConfig);
+		} catch {
+			return {};
+		}
 	}
 
 	toggleControls(isMobile = MatchMedia.mobile.matches) {

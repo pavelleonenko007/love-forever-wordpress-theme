@@ -35,23 +35,6 @@ if ( empty( $thumbnail ) ) {
 
 $seo_text              = get_field( 'seo_text', $queried_object );
 $seo_text_display_type = ! empty( get_field( 'seo_text_display_type', $queried_object ) ) ? get_field( 'seo_text_display_type', $queried_object ) : 'standard';
-$stories               = get_posts(
-	array(
-		'post_type'   => 'story',
-		'numberposts' => -1,
-		'orderby'     => array(
-			'story_order_' . $queried_object->term_id => 'ASC',
-		),
-		'meta_key'    => 'story_order_' . $queried_object->term_id,
-		'tax_query'   => array(
-			array(
-				'taxonomy' => 'dress_category',
-				'field'    => 'term_id',
-				'terms'    => array( $queried_object->term_id ),
-			),
-		),
-	)
-);
 
 $dresses_without_order = get_posts(
 	array(
@@ -115,7 +98,36 @@ if ( ! empty( $dresses_without_order ) ) {
 						</div>
 					</div>
 				</section>
-				<?php get_template_part( 'template-parts/home/stories-section', null, array( 'stories' => $stories ) ); ?>
+				<?php
+				$main_catalog_categories  = array(
+					'wedding',
+					'evening',
+					'prom',
+				);
+				$is_main_catalog_category = in_array( $queried_object->slug, $main_catalog_categories, true );
+
+				if ( $is_main_catalog_category ) {
+					$stories = get_posts(
+						array(
+							'post_type'   => 'story',
+							'numberposts' => -1,
+							'orderby'     => array(
+								'story_order_' . $queried_object->term_id => 'ASC',
+							),
+							'meta_key'    => 'story_order_' . $queried_object->term_id,
+							'tax_query'   => array(
+								array(
+									'taxonomy' => 'dress_category',
+									'field'    => 'term_id',
+									'terms'    => array( $queried_object->term_id ),
+								),
+							),
+						)
+					);
+
+					get_template_part( 'template-parts/home/stories-section', null, array( 'stories' => $stories ) );
+				}
+				?>
 				<?php
 				$price_range         = loveforever_get_product_price_range( $queried_object->term_id );
 				$min_price           = $price_range['min_price'];
@@ -136,7 +148,7 @@ if ( ! empty( $dresses_without_order ) ) {
 				?>
 				<section id="catalog" class="section z">
 					<div class="container n-top">
-						<?php $is_hidden = 0 !== $queried_object->parent || $queried_object->taxonomy !== 'dress_category'; ?>
+						<?php $is_hidden = ! $is_main_catalog_category || 'dress_category' !== $queried_object->taxonomy; ?>
 						<form 
 							id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" 
 							class="filters-form lf-product-filter-form" 
