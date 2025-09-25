@@ -1,4 +1,4 @@
-import { promiseWrapper } from './utils';
+import { isValidRussianPhone, promiseWrapper } from './utils';
 
 const ROOT_SELECTOR = '[data-js-callback-form]';
 const FORM_STATUSES = {
@@ -79,6 +79,10 @@ class CallbackForm {
 		}
 	}
 
+	onPhoneInput = (event) => {
+		this.#state.phone = event.target.value;
+	}
+
 	onSubmit = async (event) => {
 		if (this.#state.status === FORM_STATUSES.submitting) {
 			return;
@@ -118,7 +122,8 @@ class CallbackForm {
 					this.#state.status = FORM_STATUSES.idle;
 				});
 			});
-
+		
+		this.form.elements.phone.addEventListener('input', this.onPhoneInput);
 		this.form.addEventListener('submit', this.onSubmit);
 	}
 
@@ -136,6 +141,7 @@ class CallbackForm {
 		this.submitButton.disabled =
 			this.#state.name === '' ||
 			this.#state.phone === '' ||
+			!isValidRussianPhone(this.#state.phone) ||
 			this.#state.status === FORM_STATUSES.submitting;
 
 		this.submitButton.textContent = this.#state.status;
