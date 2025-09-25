@@ -513,7 +513,7 @@ function loveforever_get_product_title( $product_id ) {
 }
 
 function loveforever_get_product_images( $product_id ) {
-	$images         = get_field( 'images', $product_id );
+	$images = get_field( 'images', $product_id );
 
 	if ( empty( $images ) ) {
 		return array();
@@ -964,7 +964,7 @@ function loveforever_has_active_filters( $default_filters = array() ) {
 
 	foreach ( $filters as $filter ) {
 		$default_value = isset( $default_filters[ $filter ] ) ? (string) $default_filters[ $filter ] : '';
-		
+
 		if ( ! empty( $_GET[ $filter ] ) ) {
 			if ( $_GET[ $filter ] !== $default_value ) {
 				$result = true;
@@ -977,7 +977,7 @@ function loveforever_has_active_filters( $default_filters = array() ) {
 }
 
 function loveforever_get_application_email() {
-	return get_field( 'email', 'option' ) ?: get_option( 'admin_email' );
+	return get_field( 'email_for_applications', 'option' ) ?: get_option( 'admin_email' );
 }
 
 function loveforever_get_fitting_type_name( $fitting_type ) {
@@ -1057,10 +1057,12 @@ function loveforever_send_fitting_email_notification( $post_id, $updated = false
  */
 function loveforever_collect_dress_categories_to_json() {
 	// Получаем все термины таксономии dress_categories
-	$terms = get_terms( array(
-		'taxonomy'   => 'dress_category',
-		'hide_empty' => false,
-	) );
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'dress_category',
+			'hide_empty' => false,
+		)
+	);
 
 	if ( is_wp_error( $terms ) ) {
 		return false;
@@ -1071,7 +1073,7 @@ function loveforever_collect_dress_categories_to_json() {
 	foreach ( $terms as $term ) {
 		// Получаем количество постов для каждого термина
 		$count = $term->count;
-		
+
 		// Добавляем в массив с ключом name и значением count
 		$categories_data[ $term->name ] = $count;
 	}
@@ -1093,9 +1095,9 @@ function loveforever_collect_dress_categories_to_json() {
 	}
 
 	return array(
-		'success' => true,
-		'file_path' => $file_path,
+		'success'          => true,
+		'file_path'        => $file_path,
 		'categories_count' => count( $categories_data ),
-		'data' => $categories_data
+		'data'             => $categories_data,
 	);
 }

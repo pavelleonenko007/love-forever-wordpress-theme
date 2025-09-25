@@ -62,6 +62,26 @@
             "append": ""
         },
         {
+            "key": "field_68d52eecc2b3f",
+            "label": "Email (для писем с сайта)",
+            "name": "email_for_applications",
+            "aria-label": "",
+            "type": "email",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_67a1d6a89b3a9",
             "label": "Адрес",
             "name": "address",
@@ -854,5 +874,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1756991236
+    "modified": 1758801791
 }
