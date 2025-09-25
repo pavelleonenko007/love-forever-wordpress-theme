@@ -982,9 +982,9 @@ function loveforever_get_application_email() {
 
 function loveforever_get_fitting_type_name( $fitting_type ) {
 	$fitting_types = array(
-		'wedding' => 'Свадебная',
-		'evening' => 'Вечерняя',
-		'prom'    => 'Промо',
+		'wedding' => 'Свадебные платья',
+		'evening' => 'Вечерние платья',
+		'prom'    => 'Выпускные платья',
 	);
 
 	// Проверяем на null или пустые значения
@@ -1036,19 +1036,29 @@ function loveforever_send_fitting_email_notification( $post_id, $updated = false
 
 	$date_time = get_field( 'fitting_time', $post_id );
 
-	$subject = $updated ? 'Обновлена примерка в ' . $date_time : 'Новая примерка в ' . $date_time;
+	$subject = $updated ? 'Обновлена примерка в ' . $date_time : 'Пользователь записался на примерку';
 
 	$message = '
-		<p><strong>Имя:</strong> ' . get_field( 'name', $post_id ) . '</p>
-		<p><strong>Телефон:</strong> ' . get_field( 'phone', $post_id ) . '</p>
-		<p><strong>Email:</strong> ' . get_field( 'email', $post_id ) . '</p>
-		<p><strong>Комментарий:</strong> ' . get_field( 'comment', $post_id ) . '</p>
+		<p>Пользователь записался на примерку в салон в <strong>' . $date_time . '</strong></p>
 		<p><strong>Тип примерки:</strong> ' . loveforever_get_fitting_type_name( get_field( 'fitting_type', $post_id ) ) . '</p>
 		<p><strong>Этап:</strong> ' . loveforever_get_fitting_step_name( get_field( 'fitting_step', $post_id ) ) . '</p>
+		<p>
+			<strong>Данные пользователя:</strong><br>
+			<strong>Имя:</strong> ' . get_field( 'name', $post_id ) . '<br>
+			<strong>Телефон:</strong> ' . get_field( 'phone', $post_id ) . '<br>
+			<strong>Email:</strong> ' . get_field( 'email', $post_id ) . '<br>
+			<strong>Комментарий:</strong> ' . get_field( 'comment', $post_id ) . '<br>
+			<strong>IP адрес:</strong> ' . get_field( 'ip_address', $post_id ) . '<br>
+		</p>
 		<p><strong>Ссылка на примерку:</strong> ' . get_home_url() . '/fittings-admin-panel/' . $post_id . '</p>
 	';
 
 	return wp_mail( $email, $subject, $message );
+}
+
+add_action( 'wp_mail_failed', 'loveforever_log_email_fails' );
+function loveforever_log_email_fails( $error ) {
+	error_log( $error->get_error_message(), 3, WP_CONTENT_DIR . '/debug.log' );
 }
 
 /**

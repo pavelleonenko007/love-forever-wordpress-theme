@@ -77,85 +77,26 @@ function loveforever_process_html_with_webp( $html ) {
 	}
 }
 
+add_filter( 'wp_mail_from', 'loveforever_change_mail_from' );
+function loveforever_change_mail_from() {
+	$domain = wp_parse_url( home_url(), PHP_URL_HOST );
+	return 'noreply@' . $domain;
+}
+
 add_filter( 'wp_mail_from_name', 'loveforever_wp_mail_from_name' );
 function loveforever_wp_mail_from_name( $from_name ) {
-	$site_name = get_bloginfo( 'name' );
-	$from_name = $site_name;
-	return $from_name;
+	return get_bloginfo( 'name' ); // тут можно указать свою почту: asd@asd.ru
+}
+
+add_filter( 'wp_mail_content_type', 'loveforever_wp_mail_content_type' );
+function loveforever_wp_mail_content_type( $content_type ) {
+	return 'text/html; charset=UTF-8';
 }
 
 add_action( 'admin_menu', 'loveforever_remove_comments_admin_menu' );
 function loveforever_remove_comments_admin_menu() {
 	remove_menu_page( 'edit-comments.php' );
 }
-
-/*
-add_action( 'init', 'loveforever_create_manager_role' ); */
-/*
-function loveforever_create_manager_role() { */
-/*  remove_role( 'manager' ); */
-/**
-
-/
-/*  add_role( */
-/*
-		'manager', */
-/*
-		'Менеджер', */
-/*
-		array( */
-/*
-			'read'         => true, */
-/*
-			'edit_posts'   => false, */
-/*
-			'upload_files' => false, */
-/*
-		) */
-/*
-	); */
-/* } */
-
-/*
-add_action( 'init', 'loveforever_register_fitting_capabilities' ); */
-/*
-function loveforever_register_fitting_capabilities() { */
-/*  $roles = array( 'manager', 'administrator' ); */
-/**
-
-/
-/*  foreach ( $roles as $role_name ) { */
-/*
-		$role = get_role( $role_name ); */
-/*
-		if ( $role ) { */
-/*
-			$role->add_cap( 'read' ); */
-/*
-			$role->add_cap( 'publish_fittings' ); */
-/*
-			$role->add_cap( 'edit_fittings' ); */
-/*
-			$role->add_cap( 'edit_others_fittings' ); */
-/*
-			$role->add_cap( 'edit_published_fittings' ); */
-/*
-			$role->add_cap( 'read_private_fittings' ); */
-/*
-			$role->add_cap( 'edit_private_fittings' ); */
-/*
-			$role->add_cap( 'delete_fittings' ); */
-/*
-			$role->add_cap( 'delete_published_fittings' ); */
-/*
-			$role->add_cap( 'delete_private_fittings' ); */
-/*
-			$role->add_cap( 'delete_others_fittings' ); */
-/*
-		} */
-/*
-	} */
-/* } */
 
 add_action( 'wp_ajax_create_new_fitting_record', 'loveforever_create_new_fitting_record_via_ajax' );
 add_action( 'wp_ajax_nopriv_create_new_fitting_record', 'loveforever_create_new_fitting_record_via_ajax' );
@@ -2508,14 +2449,16 @@ function loveforever_request_callback() {
 	$phone = sanitize_text_field( wp_unslash( $_POST['phone'] ) );
 
 	$email   = loveforever_get_application_email();
-	$subject = 'Новая заявка с сайта ' . get_bloginfo( 'name' );
+	$subject = 'На сайте ' . get_bloginfo( 'name' ) . ' пользователь заказал обратный звонок';
 
 	$message = '
-		<p>Имя: ' . $name . '</p>
-		<p>Телефон: ' . $phone . '</p>
+		<p>
+			<strong>Имя пользователя:</strong> ' . $name . '<br>
+			<strong>Телефон пользователя:</strong> ' . $phone . '<br>
+		</p>
 	';
 
-	$sent = wp_mail( $email, $subject, $message, array( 'Content-Type: text/html; charset=UTF-8' ) );
+	$sent = wp_mail( $email, $subject, $message );
 
 	if ( ! $sent ) {
 		wp_send_json_error(
