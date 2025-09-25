@@ -120,70 +120,62 @@ $metro_stations   = get_field( 'metro_stations', 'option' );
 				</section>
 				<?php
 				$video = get_field( 'video' );
+				$mobile_video = get_field( 'mobile_video' );
 				if ( ! empty( $video['mp4'] ) || ! empty( $video['webm'] ) ) :
 					?>
 					<section class="section">
 						<div class="container">
-							<div class="w-embed">
+							<div class="lf-video-player hidden-mobile" data-js-video-player>
 								<?php
-								$video_player_data_attributes = array(
-									'data-poster-url'      => '',
-									'data-video-urls'      => '',
-									'data-autoplay'        => 'false',
-									'data-loop'            => 'false',
-									'data-wf-ignore'       => 'true',
-									'class'                => 'lf-video-player video-block w-background-video w-background-video-atom',
-									'data-js-video-player' => '',
+								$video_data_attributes = array(
+									'class'       => 'lf-video-player__video',
+									'playsinline' => 'true',
+									'preload'     => 'metadata',
+									'data-js-video-player-video' => '',
 								);
 
 								if ( ! empty( $video['poster'] ) ) {
-									$video_player_data_attributes['data-poster-url'] = esc_url( $video['poster']['url'] );
+									$video_data_attributes['poster'] = esc_url( $video['poster']['url'] );
 								}
 
-								if ( ! empty( $video['mp4'] ) ) {
-									$video_player_data_attributes['data-video-urls'] .= esc_url( $video['mp4']['url'] );
-								}
-
-								if ( ! empty( $video['webm'] ) ) {
-									if ( ! empty( $video_player_data_attributes['data-video-urls'] ) ) {
-										$video_player_data_attributes['data-video-urls'] .= ',';
-									}
-									$video_player_data_attributes['data-video-urls'] = esc_url( $video['webm']['url'] );
-								}
-
-								$video_player_data_attributes['data-autoplay'] = 'false';
-
-								$video_player_data_attributes_string = loveforever_prepare_tag_attributes_as_string( $video_player_data_attributes );
+								$video_data_attributes_string = loveforever_prepare_tag_attributes_as_string( $video_data_attributes );
 								?>
-								<div <?php echo $video_player_data_attributes_string; ?>>
-									<?php
-									$video_data_attributes = array(
-										'id'              => 'db3812d2-ae01-6df8-78f1-ea8f8b9691de-video',
-										'class'           => 'lf-video-player__video',
-										'style'           => '',
-										'playsinline'     => 'true',
-										'data-wf-ignore'  => 'true',
-										'data-object-fit' => 'cover',
-										'data-js-video-player-video' => '',
-									);
+								<video <?php echo $video_data_attributes_string; ?>>
+									<?php if ( ! empty( $video['mp4'] ) ) : ?>
+										<source src="<?php echo esc_url( $video['mp4']['url'] ); ?>" type="<?php echo esc_attr( $video['mp4']['mime_type'] ); ?>">
+									<?php endif; ?>
+									<?php if ( ! empty( $video['webm'] ) ) : ?>
+										<source src="<?php echo esc_url( $video['webm']['url'] ); ?>" type="<?php echo esc_attr( $video['webm']['mime_type'] ); ?>">
+									<?php endif; ?>
+									</source>
+								</video>
+								<div role="button" class="lf-video-player__button playvideobtn" data-js-video-player-button></div>
+							</div>
+							<div class="lf-video-player visible-mobile" data-js-video-player>
+								<?php
+								$video_data_attributes = array(
+									'class'       => 'lf-video-player__video',
+									'playsinline' => 'true',
+									'preload'     => 'metadata',
+									'data-js-video-player-video' => '',
+								);
 
-									if ( ! empty( $video['poster'] ) ) {
-										$video_data_attributes['style'] = 'background-image:url("' . esc_url( $video['poster']['url'] ) . '")';
-									}
+								if ( ! empty( $mobile_video['poster'] ) ) {
+									$video_data_attributes['poster'] = esc_url( $mobile_video['poster']['url'] );
+								}
 
-									$video_data_attributes_string = loveforever_prepare_tag_attributes_as_string( $video_data_attributes );
-									?>
-									<video <?php echo $video_data_attributes_string; ?>>
-										<?php if ( ! empty( $video['mp4'] ) ) : ?>
-											<source src="<?php echo esc_url( $video['mp4']['url'] ); ?>" type="<?php echo esc_attr( $video['mp4']['mime_type'] ); ?>" data-wf-ignore="true">
-										<?php endif; ?>
-										<?php if ( ! empty( $video['webm'] ) ) : ?>
-											<source src="<?php echo esc_url( $video['webm']['url'] ); ?>" type="<?php echo esc_attr( $video['webm']['mime_type'] ); ?>" data-wf-ignore="true">
-										<?php endif; ?>
-										</source>
-									</video>
-									<div role="button" class="lf-video-player__button playvideobtn" data-js-video-player-button></div>
-								</div>
+								$video_data_attributes_string = loveforever_prepare_tag_attributes_as_string( $video_data_attributes );
+								?>
+								<video <?php echo $video_data_attributes_string; ?>>
+									<?php if ( ! empty( $mobile_video['mp4'] ) ) : ?>
+										<source src="<?php echo esc_url( $mobile_video['mp4']['url'] ); ?>" type="<?php echo esc_attr( $mobile_video['mp4']['mime_type'] ); ?>">
+									<?php endif; ?>
+									<?php if ( ! empty( $mobile_video['webm'] ) ) : ?>
+										<source src="<?php echo esc_url( $mobile_video['webm']['url'] ); ?>" type="<?php echo esc_attr( $mobile_video['webm']['mime_type'] ); ?>">
+									<?php endif; ?>
+									</source>
+								</video>
+								<div role="button" class="lf-video-player__button playvideobtn" data-js-video-player-button></div>
 							</div>
 						</div>
 					</section>

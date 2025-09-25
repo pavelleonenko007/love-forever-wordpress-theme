@@ -129,6 +129,92 @@
                     "allow_in_bindings": 0
                 }
             ]
+        },
+        {
+            "key": "field_68d595462e0ac",
+            "label": "Видео для мобильных устройств",
+            "name": "mobile_video",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_68d595462e0ad",
+                    "label": "Постер",
+                    "name": "poster",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Установите картинку. Она будет отображаться перед запуском видео.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium"
+                },
+                {
+                    "key": "field_68d595462e0ae",
+                    "label": "MP4",
+                    "name": "mp4",
+                    "aria-label": "",
+                    "type": "file",
+                    "instructions": "Файл в формате MP4",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_size": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0
+                },
+                {
+                    "key": "field_68d595462e0af",
+                    "label": "WEBM",
+                    "name": "webm",
+                    "aria-label": "",
+                    "type": "file",
+                    "instructions": "Файл в формате WEBM",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_size": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0
+                }
+            ]
         }
     ],
     "location": [
@@ -151,5 +237,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1754982735
+    "modified": 1758827880
 }

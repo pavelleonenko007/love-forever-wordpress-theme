@@ -1,8 +1,17 @@
 .lf-video-player {
+  position: relative;
+
   &__video {
+    display: block;
+    width: 100%;
+    object-fit: cover;
     z-index: auto !important;
   }
   &__button {
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    
     .is-playing & {
       display: none;
     }
