@@ -258,6 +258,7 @@ if ( ! empty( $dresses_without_order ) ) {
 										<select 
 											id="orderby" 
 											name="orderby" 
+											aria-label="<?php echo esc_attr( 'Сортировка товаров' ); ?>"
 											class="lf-select__control" 
 											data-js-custom-select="
 											<?php
@@ -325,6 +326,7 @@ if ( ! empty( $dresses_without_order ) ) {
 							<input type="hidden" name="action" value="get_filtered_products">
 							<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce', false ); ?>
 						</form>
+						<h2 class="sr-only">Каталог товаров в категории <?php echo esc_html( $queried_object->name ); ?></h2>
 						<?php
 						$catalog_grid_classes = array(
 							// 'catalog-grid',
@@ -337,7 +339,6 @@ if ( ! empty( $dresses_without_order ) ) {
 						if ( ! empty( $catalog_grid ) ) {
 							$catalog_grid_classes[] = 'lf-catalog-grid--' . $catalog_grid . '-col';
 						}
-
 						?>
 						<div class="<?php echo esc_attr( implode( ' ', $catalog_grid_classes ) ); ?>" data-js-product-filter-form-content-element>
 							<?php
@@ -571,7 +572,7 @@ if ( ! empty( $dresses_without_order ) ) {
 												null,
 												array(
 													'post_object' => $post,
-													'image_loading' => $image_loading,
+													'image_loading' => 'lazy',
 												)
 											);
 										}
@@ -583,7 +584,8 @@ if ( ! empty( $dresses_without_order ) ) {
 												null,
 												array(
 													'is_paged' => $current_page > 1,
-													'image_loading' => $image_loading,
+													// 'image_loading' => $image_loading,
+													'image_loading' => 'lazy',
 												)
 											);
 											?>
