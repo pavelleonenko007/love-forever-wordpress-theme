@@ -90,6 +90,12 @@
 						<?php endforeach; ?>
 					</ul>
 				</div>
+				<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
+				<button type="button" class="btn-like lf-like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
+					<svg class="lf-like-button__icon" xmlns="http://www.w3.org/2000/svg">
+						<use href="#heartIcon"></use>
+					</svg>
+				</button>
 			</div>
 			<?php endif; ?>
 		</div>

@@ -988,11 +988,13 @@ function loveforever_add_product_to_favorites_via_ajax() {
 	$message              = '';
 
 	if ( in_array( $product_id, $favorite_product_ids, true ) ) {
-		$favorite_product_ids = array_filter(
-			$favorite_product_ids,
-			function ( $id ) use ( $product_id ) {
-				return $id !== $product_id;
-			}
+		$favorite_product_ids = array_values(
+			array_filter(
+				$favorite_product_ids,
+				function ( $id ) use ( $product_id ) {
+					return $id !== $product_id;
+				}
+			)
 		);
 		$message              = 'Товар успешно удален из избранного';
 	} else {

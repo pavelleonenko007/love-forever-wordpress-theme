@@ -1,5 +1,3 @@
-import Barba from 'barba.js';
-
 export default class AddToFavoriteButtonCollection {
 	selectors = {
 		root: '[data-js-add-to-favorite-button]',
@@ -26,7 +24,7 @@ export default class AddToFavoriteButtonCollection {
 	 * @param {HTMLButtonElement} button
 	 */
 	async onAddToFavoritesButtonClick(button) {
-		const productId = button.dataset.jsAddToFavoriteButton;
+		const productId = parseInt(button.dataset.jsAddToFavoriteButton);
 
 		if (!productId) {
 			return;
@@ -54,29 +52,24 @@ export default class AddToFavoriteButtonCollection {
 				throw new Error(body.data.message);
 			}
 
-			Barba.BaseCache.reset();
-
 			const textElement = button.querySelector(this.selectors.text);
+			const isActive = body.data.favorites.includes(productId);
 
-			if (button.classList.contains(this.stateSelectors.isActive)) {
-				button.classList.remove(this.stateSelectors.isActive);
+			button.classList.toggle(this.stateSelectors.isActive, isActive);
 
-				if (textElement) {
-					textElement.textContent = this.stateTexts.add;
-				}
-			} else {
-				button.classList.add(this.stateSelectors.isActive);
-
-				if (textElement) {
-					textElement.textContent = this.stateTexts.remove;
-				}
+			if (textElement) {
+				textElement.textContent = isActive
+					? this.stateTexts.remove
+					: this.stateTexts.add;
 			}
 
 			button.dispatchEvent(
 				new CustomEvent('favoritesUpdated', {
 					bubbles: true,
 					detail: {
+						productId: productId,
 						countFavorites: body.data.countFavorites,
+						isActive,
 					},
 				})
 			);
@@ -103,7 +96,25 @@ export default class AddToFavoriteButtonCollection {
 		}
 	}
 
+	// По хорошему сделать каждую кнопку отдельным объектом и использовать его методы, а не искать все кнопки в DOM
+	onFavoritesUpdated = (event) => {
+		const { productId, isActive } = event.detail;
+
+		document.querySelectorAll(this.selectors.root).forEach((button) => {
+			if (button.dataset.jsAddToFavoriteButton === productId.toString()) {
+				button.classList.toggle(this.stateSelectors.isActive, isActive);
+
+				const textElement = button.querySelector(this.selectors.text);
+
+				if (textElement) {
+					textElement.textContent = isActive ? this.stateTexts.remove : this.stateTexts.add;
+				}
+			}
+		});
+	}
+
 	bindEvents() {
 		document.addEventListener('click', this.onClick);
+		document.addEventListener('favoritesUpdated', this.onFavoritesUpdated);
 	}
 }
