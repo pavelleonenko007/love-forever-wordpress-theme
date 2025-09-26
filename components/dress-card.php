@@ -50,6 +50,8 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 					muted
 					playsinline 
 					data-js-play-if-visible-video
+					preload="metadata"
+					poster="<?php echo esc_url( get_the_post_thumbnail_url( get_the_ID(), 'fullhd' ) ); ?>"
 				>
 					<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
 				</video>

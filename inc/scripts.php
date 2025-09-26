@@ -35,7 +35,7 @@ function loveforever_add_admin_scripts() {
 add_action( 'wp_enqueue_scripts', 'loveforever_add_site_scripts' );
 function loveforever_add_site_scripts() {
 	wp_deregister_script( 'jquery-core' );
-	wp_register_script( 'jquery-core', '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js', false, false, true );
+	wp_register_script( 'jquery-core', TEMPLATE_PATH . '/js/jquery.js', false, time(), true );
 	wp_enqueue_script( 'jquery' );
 
 	wp_enqueue_style( 'main', TEMPLATE_PATH . '/css/main.css', array(), time() );
@@ -52,11 +52,7 @@ function loveforever_add_site_scripts() {
 	wp_enqueue_script( 'maps-yandex', 'https://api-maps.yandex.ru/v3/?apikey=4edbd054-8d5b-4022-81d1-3808d3f13102&lang=ru_RU', array( 'jquery' ), null );
 	wp_enqueue_script( 'main', TEMPLATE_PATH . '/js/main.js', array( 'jquery' ), time(), true );
 	wp_enqueue_script( 'front', TEMPLATE_PATH . '/js/front.js', array( 'main' ), time(), true );
-	// wp_enqueue_script( 'barba', '//thevogne.ru/customfiles/barba.js', array( 'main' ), time(), true );
-	// wp_enqueue_script( 'splide', '//cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js', array( 'barba' ), time(), true );
-	// wp_enqueue_script( 'thevogne', '//thevogne.ru/clients/gavril/loveforever/scripts.js', array( 'splide' ), time(), true );
-	wp_enqueue_script( 'custom', TEMPLATE_PATH . '/js/custom.js', array( 'front' ), time(), true );
-	wp_enqueue_script( 'bundle', TEMPLATE_PATH . '/build/js/bundle.js', array( 'custom' ), time(), true );
+	wp_enqueue_script( 'bundle', TEMPLATE_PATH . '/build/js/bundle.js', array( 'front' ), time(), true );
 	wp_localize_script(
 		'bundle',
 		'LOVE_FOREVER',

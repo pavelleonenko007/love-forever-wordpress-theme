@@ -82,7 +82,14 @@ $socials       = loveforever_get_socials();
 					<div class="p-12-12 uper op05 m-non">следите за новинками</div>
 					<div class="soc-grid lf-share-buttons">
 						<?php foreach ( $socials as $social ) : ?>
-							<a class="lf-share-button" href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+							<a 
+								class="lf-share-button" 
+								href="<?php echo esc_url( $social['url'] ); ?>" 
+								target="_blank" 
+								rel="noopener noreferrer" 
+								aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>" 
+								title="<?php echo esc_attr( $social['aria-label'] ); ?>"
+							>
 								<svg class="lf-share-button__icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 									<use href="#<?php echo esc_attr( $social['icon'] ); ?>"></use>
 								</svg>
@@ -97,7 +104,7 @@ $socials       = loveforever_get_socials();
 				<div class="vert-foo"><img src="<?php echo get_template_directory_uri(); ?>/images/672cb6036d7798fdda9576af_D09FD0BBD0B0D182D191D0B6D0BDD18BD0B520D181D0B8D181D182D0B5D0BCD18B.svg" loading="lazy" alt></div>
 			</div>
 		</div>
-		<div class="foo-logo-keeper"><a class="w-inline-block"><img src="<?php echo get_template_directory_uri(); ?>/images/672cb1ff4e8d6c12ebcae46c_foo-logo.svg" loading="lazy" alt class="img-fw"></a></div>
+		<div class="foo-logo-keeper"><div class="w-inline-block"><img src="<?php echo get_template_directory_uri(); ?>/images/672cb1ff4e8d6c12ebcae46c_foo-logo.svg" loading="lazy" alt class="img-fw"></div></div>
 		<div class="foo-top bott">
 			<div id="w-node-b25aa748-36cb-7692-2710-65768ffd5e84-b053f56f" class="vert">
 				<div class="p-12-12 uper m-12-12"><?php echo esc_html( '© ' . wp_date( 'Y' ) . ' ' . get_bloginfo( 'site_name' ) ); ?></div>
