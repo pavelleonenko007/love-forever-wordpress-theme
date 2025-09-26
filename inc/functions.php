@@ -736,7 +736,7 @@ function loveforever_get_video_mime_type( $video ) {
 		'video/webm',
 	);
 
-	return in_array( $video['mime_type'], $accepted_mime_types ) ? $accepted_mime_types[ $video['mime_type'] ] : $accepted_mime_types[0];
+	return in_array( $video['mime_type'], $accepted_mime_types ) ? array_values( array_filter( $accepted_mime_types, fn( $mime_type ) => $mime_type === $video['mime_type'] ) )[0] : $accepted_mime_types[0];
 }
 
 /**
