@@ -32,8 +32,6 @@ $container_array_of_data_attributes = array_diff_key( $args, array_flip( array( 
 			}
 		</style>
 		<script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
-		<!-- Put this script tag to the <head> of your page -->
-		<script type="text/javascript" src="https://vk.com/js/api/openapi.js?168" charset="windows-1251"></script>
 		<?php wp_head(); ?>
 	</head>
 	<body class="body">

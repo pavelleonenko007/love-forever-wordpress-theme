@@ -10,18 +10,18 @@ defined( 'ABSPATH' ) || exit;
 add_action( 'admin_enqueue_scripts', 'loveforever_add_admin_scripts' );
 function loveforever_add_admin_scripts() {
 	wp_enqueue_style( 'admin', TEMPLATE_PATH . '/build/css/admin.css', array(), time() );
-	
+
 	// Подключаем стили для быстрых ссылок категорий
 	wp_enqueue_style( 'quick-links', TEMPLATE_PATH . '/css/quick-links.css', array(), time() );
-	
+
 	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_register_script( 'admin_script', TEMPLATE_PATH . '/js/admin.js', array( 'jquery' ), false, true );
 	wp_enqueue_script( 'admin_script' );
 	wp_enqueue_script( 'loveforever-admin', TEMPLATE_PATH . '/build/js/admin.js', array( 'jquery' ), time(), true );
-	
+
 	// Подключаем скрипт для быстрых ссылок категорий
 	wp_enqueue_script( 'dress-acf-filter', TEMPLATE_PATH . '/js/dress-acf-filter.js', array( 'jquery', 'acf-input' ), time(), true );
-	
+
 	wp_localize_script(
 		'loveforever-admin',
 		'LOVE_FOREVER_ADMIN',
@@ -73,5 +73,12 @@ function loveforever_remove_jquery_migrate( &$scripts ) {
 	if ( ! is_admin() ) {
 		$scripts->remove( 'jquery' );
 		$scripts->add( 'jquery', false, array( 'jquery-core' ), '1.12.4' );
+	}
+}
+
+add_action( 'wp_head', 'loveforever_add_wp_head' );
+function loveforever_add_wp_head() {
+	if ( is_singular( 'dress' ) ) {
+		echo '<script type="text/javascript" src="https://vk.com/js/api/openapi.js?168" charset="windows-1251"></script>';
 	}
 }
