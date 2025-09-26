@@ -81,7 +81,7 @@ $cards          = ! empty( $args['cards'] ) && is_array( $args['cards'] ) ? arra
 					<a <?php echo $page_link_attributes_str; ?>>
 						<h3 class="lf-hover-menu-card__title"><?php echo esc_html( $card['page_link']['title'] ); ?></h3>
 						<div class="lf-hover-menu-card__image">
-							<?php echo wp_get_attachment_image( $card['image'], 'fullhd', false ); ?>
+							<?php echo wp_get_attachment_image( $card['image'], 'fullhd', array( 'loading' => 'lazy' ) ); ?>
 						</div>
 					</a>
 				</li>
