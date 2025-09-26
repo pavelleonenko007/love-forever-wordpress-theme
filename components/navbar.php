@@ -282,7 +282,7 @@
 							</div>
 						</div>
 						<div class="menu-link-keeper">
-							<button type="button" class="lf-burger-button menu-bnt w-inline-block">
+							<button type="button" class="lf-burger-button menu-bnt w-inline-block" aria-label="<?php echo esc_attr( 'Открыть меню' ); ?>" title="<?php echo esc_attr( 'Открыть меню' ); ?>">
 								<div class="lf-burger-button__line b-line"></div>
 								<div class="lf-burger-button__line b-line"></div>
 								<div class="lf-burger-button__line b-line"></div>
@@ -945,7 +945,7 @@
 							</div>
 						</div>
 						<div class="menu-link-keeper">
-							<button type="button" class="lf-burger-button menu-bnt w-inline-block">
+							<button type="button" class="lf-burger-button menu-bnt w-inline-block" aria-label="<?php echo esc_attr( 'Открыть меню' ); ?>" title="<?php echo esc_attr( 'Открыть меню' ); ?>">
 								<div class="lf-burger-button__line b-line"></div>
 								<div class="lf-burger-button__line b-line"></div>
 								<div class="lf-burger-button__line b-line"></div>

@@ -42,7 +42,7 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 
 <article class="lf-product-card">
 	<div class="lf-product-card__body">
-		<a href="<?php the_permalink(); ?>" class="lf-product-card__image">
+		<a href="<?php the_permalink(); ?>" class="lf-product-card__image" aria-label="<?php echo esc_attr( 'Перейти на страницу товара ' . get_the_title() ); ?>" title="<?php echo esc_attr( 'Перейти на страницу товара ' . get_the_title() ); ?>">
 			<?php if ( $show_video_in_product_card && ! empty( $video ) ) : ?>
 				<video 
 					class="card-video"
