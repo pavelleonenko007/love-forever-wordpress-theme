@@ -78,6 +78,7 @@ if ( ! empty( $dresses_without_order ) ) {
 										array(
 											'class'   => 'img-cover',
 											'loading' => 'eager',
+											'fetchpriority' => 'high',
 										)
 									);
 									?>

@@ -75,6 +75,7 @@ export default async function initMap() {
 				imgElement.width = 27;
 				imgElement.height = 46;
 				imgElement.style.pointerEvents = 'none';
+				imgElement.alt = '';
 				element.append(imgElement);
 			}
 

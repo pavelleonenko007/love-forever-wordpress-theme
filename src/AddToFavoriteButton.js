@@ -52,10 +52,23 @@ export default class AddToFavoriteButtonCollection {
 				throw new Error(body.data.message);
 			}
 
+			const productName = button.dataset.productName;
 			const textElement = button.querySelector(this.selectors.text);
 			const isActive = body.data.favorites.includes(productId);
 
 			button.classList.toggle(this.stateSelectors.isActive, isActive);
+			button.setAttribute(
+				'aria-label',
+				isActive
+					? `${this.stateTexts.remove} товар ${productName}`
+					: `${this.stateTexts.add} товар ${productName}`
+			);
+			button.setAttribute(
+				'title',
+				isActive
+					? `${this.stateTexts.remove} товар ${productName}`
+					: `${this.stateTexts.add} товар ${productName}`
+			);
 
 			if (textElement) {
 				textElement.textContent = isActive
@@ -105,13 +118,29 @@ export default class AddToFavoriteButtonCollection {
 				button.classList.toggle(this.stateSelectors.isActive, isActive);
 
 				const textElement = button.querySelector(this.selectors.text);
+				const productName = button.dataset.productName;
 
 				if (textElement) {
-					textElement.textContent = isActive ? this.stateTexts.remove : this.stateTexts.add;
+					textElement.textContent = isActive
+						? this.stateTexts.remove
+						: this.stateTexts.add;
 				}
+
+				button.setAttribute(
+					'aria-label',
+					isActive
+						? `${this.stateTexts.remove} товар ${productName}`
+						: `${this.stateTexts.add} товар ${productName}`
+				);
+				button.setAttribute(
+					'title',
+					isActive
+						? `${this.stateTexts.remove} товар ${productName}`
+						: `${this.stateTexts.add} товар ${productName}`
+				);
 			}
 		});
-	}
+	};
 
 	bindEvents() {
 		document.addEventListener('click', this.onClick);

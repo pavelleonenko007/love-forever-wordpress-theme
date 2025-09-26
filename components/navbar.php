@@ -44,7 +44,11 @@
 				<div class="lf-navbar__menu-line lf-navbar__menu-line--right lf-navbar__menu-line--mobile menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5">
 						<!-- Favorites button -->
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+						<a 
+							href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button
+							aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+							title="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+							>
 							<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 								<use href="#heartIcon"></use>
 							</svg>
@@ -52,7 +56,12 @@
 						</a>
 						<!-- Favorites button end -->
 						<div class="menu-link-keeper">
-							<button type="button" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
+							<button 
+								type="button" 
+								class="lf-icon-button lf-icon-button--search lf-icon-button--white"
+								aria-label="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+								title="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+								>
 								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 									<use href="#searchIcon"></use>
 								</svg>
@@ -308,7 +317,13 @@
 											<div class="p-12-12 uper m-12-12">Наши группы в социальных сетях</div>
 											<div class="soc-grid mpb lf-share-buttons">
 												<?php foreach ( $socials as $social ) : ?>
-												<a class="lf-share-button lf-share-button--dark" href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+												<a 
+													class="lf-share-button lf-share-button--dark" 
+													href="<?php echo esc_url( $social['url'] ); ?>" 
+													target="_blank" 
+													rel="noopener noreferrer" 
+													aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>" 
+													title="<?php echo esc_attr( $social['aria-label'] ); ?>">
 													<svg class="lf-share-button__icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 														<use href="#<?php echo esc_attr( $social['icon'] ); ?>"></use>
 													</svg>
@@ -425,7 +440,11 @@
 					?>
 					<div class="div-block-5">
 						<div class="menu-link-keeper">
-							<a href="#" class="lf-icon-button lf-icon-button--search lf-icon-button--white">
+							<a href="#" 
+								class="lf-icon-button lf-icon-button--search lf-icon-button--white"
+								aria-label="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+								title="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+								>
 								<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="lf-icon-button__icon">
 									<use href="#searchIcon" />
 								</svg>
@@ -492,7 +511,11 @@
 							</div>
 						</div>
 						<!-- Favorites button -->
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+						<a 
+							href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button
+							aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+							title="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+							>
 							<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 								<use href="#heartIcon"></use>
 							</svg>
@@ -525,7 +548,14 @@
 						?>
 					<div class="head-soc-menu">
 						<?php foreach ( $socials as $social ) : ?>
-						<a href="<?php echo esc_url( $social['url'] ); ?>" aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>" class="lf-header-social" target="_blank" rel="noopener noreferrer">
+						<a 
+							href="<?php echo esc_url( $social['url'] ); ?>" 
+							aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>" 
+							class="lf-header-social" 
+							target="_blank" 
+							rel="noopener noreferrer"
+							title="<?php echo esc_attr( $social['aria-label'] ); ?>"
+						>
 							<svg class="lf-header-social__icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
 								<use href="#<?php echo esc_attr( $social['icon'] ); ?>" />
 							</svg>
@@ -570,8 +600,8 @@
 				</div>
 				<div class="lf-navbar__menu-line lf-navbar__menu-line--right menu-line p-12-12 white uper rev n-voreder">
 					<?php if ( ! empty( $right_menu ) ) : ?>
-					<?php foreach ( $right_menu as $right_menu_item ) : ?>
-						<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
+						<?php foreach ( $right_menu as $right_menu_item ) : ?>
+							<?php get_template_part( 'components/navbar-' . $right_menu_item['acf_fc_layout'], null, $right_menu_item ); ?>
 					<?php endforeach; ?>
 					<?php endif; ?>
 					<div class="horiz lf-hidden-phone">
@@ -580,7 +610,12 @@
 					</div>
 					<div class="div-block-5 wh-head">
 						<div class="menu-link-keeper">
-							<a href="#" class="lf-icon-button lf-icon-button--search">
+							<a 
+								href="#" 
+								class="lf-icon-button lf-icon-button--search"
+								aria-label="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+								title="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+							>
 								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 									<use href="#searchIcon" />
 								</svg>
@@ -639,7 +674,13 @@
 								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b954-be61d3ef" class="hovered-menue_close-menu"></div>
 							</div>
 						</div>
-						<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+						<a 
+							href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" 
+							class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" 
+							data-js-favorites-button
+							aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+							title="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+							>
 							<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 								<use href="#heartIcon"/>
 							</svg>
@@ -652,13 +693,24 @@
 			</div>
 			<div class="spleet pc-none">
 				<div class="lf-navbar__menu-line lf-navbar__menu-line--mobile menu-line p-12-12 white uper n-voreder">
-					<a href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button>
+					<a 
+						href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" 
+						class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" 
+						data-js-favorites-button
+						aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+						title="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
+						>
 						<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 							<use href="#heartIcon"  />
 						</svg>
 						<div data-js-favorites-button-counter class="lf-icon-button__counter"><?php echo esc_html( (string) count( $favorites ) ); ?></div>
 					</a>
-					<a href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" class="lf-icon-button lf-icon-button--phone" aria-label="<?php echo esc_attr( 'Позвонить на номер ' . $phone ); ?>">
+					<a 
+						href="<?php echo esc_url( loveforever_format_phone_to_link( $phone ) ); ?>" 
+						class="lf-icon-button lf-icon-button--phone" 
+						aria-label="<?php echo esc_attr( 'Позвонить на номер ' . $phone ); ?>"
+						title="<?php echo esc_attr( 'Позвонить на номер ' . $phone ); ?>"
+						>
 						<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 							<use href="#phoneIcon" />
 							<!-- <use href="#deviceIcon" /> -->
@@ -673,7 +725,11 @@
 				<div class="lf-navbar__menu-line lf-navbar__menu-line--right lf-navbar__menu-line--mobile menu-line p-12-12 white uper rev n-voreder">
 					<div class="div-block-5 wh-head">
 						<div class="menu-link-keeper">
-							<a href="#" class="lf-icon-button lf-icon-button--search">
+							<a href="#" 
+								class="lf-icon-button lf-icon-button--search"
+								aria-label="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+								title="<?php echo esc_attr( 'Открыть поиск' ); ?>"
+								>
 								<svg xmlns="http://www.w3.org/2000/svg" class="lf-icon-button__icon">
 									<use href="#searchIcon" />
 								</svg>
@@ -927,7 +983,14 @@
 											<div class="p-12-12 uper m-12-12">Наши группы в социальных сетях</div>
 											<div class="soc-grid mpb lf-share-buttons">
 												<?php foreach ( $socials as $social ) : ?>
-												<a class="lf-share-button lf-share-button--dark" href="<?php echo esc_url( $social['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+												<a 
+													class="lf-share-button lf-share-button--dark" 
+													href="<?php echo esc_url( $social['url'] ); ?>" 
+													target="_blank" 
+													rel="noopener noreferrer"
+													aria-label="<?php echo esc_attr( $social['aria-label'] ); ?>"
+													title="<?php echo esc_attr( $social['aria-label'] ); ?>"
+												>
 													<svg class="lf-share-button__icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 														<use href="#<?php echo esc_attr( $social['icon'] ); ?>"></use>
 													</svg>

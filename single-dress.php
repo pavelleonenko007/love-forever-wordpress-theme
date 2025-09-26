@@ -90,8 +90,17 @@
 						<?php endforeach; ?>
 					</ul>
 				</div>
-				<?php $is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() ); ?>
-				<button type="button" class="btn-like lf-like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" data-js-add-to-favorite-button="<?php the_ID(); ?>">
+				<?php 
+				$is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() );
+				$aria_label = $is_in_favorites ? 'Удалить из избранного товар ' . get_the_title() : 'Добавить в избранное товар ' . get_the_title();
+				?>
+				<button 
+					type="button" class="btn-like lf-like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" 
+					data-js-add-to-favorite-button="<?php the_ID(); ?>"
+					aria-label="<?php echo esc_attr( $aria_label ); ?>"
+					title="<?php echo esc_attr( $aria_label ); ?>"
+					data-product-name="<?php echo esc_attr( get_the_title() ); ?>"
+				>
 					<svg class="lf-like-button__icon" xmlns="http://www.w3.org/2000/svg">
 						<use href="#heartIcon"></use>
 					</svg>
