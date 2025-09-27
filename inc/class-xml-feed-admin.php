@@ -72,11 +72,6 @@ class XML_Feed_Admin {
 			}
 		}
 		
-		// Debug: Log categories for troubleshooting
-		error_log( 'XML Feed Admin - Categories found: ' . count( $categories ) );
-		foreach ( $categories as $category ) {
-			error_log( 'XML Feed Admin - Category: ' . ( is_object( $category ) ? $category->name : 'Not an object' ) );
-		}
 		
 		?>
 		<div class="wrap">
@@ -91,7 +86,8 @@ class XML_Feed_Admin {
 						<div class="status-info">
 							<?php if ( $cron_status['is_scheduled'] ): ?>
 								<span class="status-badge success">Активен</span>
-								<p>Следующий запуск: <?php echo esc_html( $cron_status['next_run_relative'] ); ?></p>
+								<p>Следующий запуск: через <?php echo esc_html( $cron_status['next_run_relative'] ); ?></p>
+								<p>Точное время: <?php echo esc_html( $cron_status['next_run'] ); ?></p>
 								<p>Интервал: <?php echo esc_html( $cron_status['current_interval_name'] ); ?></p>
 							<?php else: ?>
 								<span class="status-badge error">Неактивен</span>
@@ -462,7 +458,7 @@ class XML_Feed_Admin {
 		return array(
 			'is_scheduled' => $next_run !== false,
 			'next_run' => $next_run ? date( 'Y-m-d H:i:s', $next_run ) : null,
-			'next_run_relative' => $next_run ? human_time_diff( $next_run ) : null,
+			'next_run_relative' => $next_run ? human_time_diff( time(), $next_run ) : null,
 			'last_run' => $last_run,
 			'current_interval' => $current_interval,
 			'current_interval_name' => isset( $interval_names[ $current_interval ] ) ? $interval_names[ $current_interval ] : $current_interval,
@@ -615,6 +611,26 @@ class XML_Feed_Admin {
 				alert('Генерация отдельных категорий пока не реализована');
 				button.prop('disabled', false).text('Сгенерировать');
 			});
+			
+			// Function to update time display
+			function updateTimeDisplay() {
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'xml_feed_cron_status',
+						nonce: '" . wp_create_nonce( 'xml_feed_status' ) . "'
+					},
+					success: function(response) {
+						if (response.success && response.data.next_run_relative) {
+							$('.status-info p:contains(\"Следующий запуск\")').html('Следующий запуск: через ' + response.data.next_run_relative);
+						}
+					}
+				});
+			}
+			
+			// Update time display every minute
+			setInterval(updateTimeDisplay, 60000);
 		});
 		";
 	}

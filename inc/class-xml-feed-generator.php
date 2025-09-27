@@ -455,22 +455,13 @@ class XML_Feed_Generator {
 	public function get_available_categories() {
 		$result = array();
 		
-		// Debug: Log allowed categories
-		error_log( 'XML Feed Generator - Allowed categories: ' . implode( ', ', $this->allowed_categories ) );
-		
 		foreach ( $this->allowed_categories as $category_slug ) {
 			$category = get_term_by( 'slug', $category_slug, 'dress_category' );
-			error_log( 'XML Feed Generator - Looking for category: ' . $category_slug . ' - Found: ' . ( $category ? 'Yes' : 'No' ) );
 			
 			if ( $category && ! is_wp_error( $category ) ) {
-				error_log( 'XML Feed Generator - Adding category: ' . $category->name . ' (' . $category->slug . ')' );
 				$result[] = $category;
-			} else {
-				error_log( 'XML Feed Generator - Category not found or error: ' . $category_slug );
 			}
 		}
-		
-		error_log( 'XML Feed Generator - Total categories returned: ' . count( $result ) );
 		return $result;
 	}
 	
