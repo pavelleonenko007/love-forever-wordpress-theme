@@ -12,6 +12,14 @@ defined( 'ABSPATH' ) || exit;
 // Load XML Feed Generator class
 require_once __DIR__ . '/class-xml-feed-generator.php';
 
+// Load WP-Cron system
+require_once __DIR__ . '/class-wp-cron-xml-feed.php';
+
+// Load Admin interface
+if ( is_admin() ) {
+	require_once __DIR__ . '/class-xml-feed-admin.php';
+}
+
 // Load WP-CLI commands only if WP-CLI is available
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once __DIR__ . '/class-wp-cli-xml-feed.php';

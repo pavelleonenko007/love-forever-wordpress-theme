@@ -125,12 +125,18 @@ class XML_Feed_Generator {
 		// Generate XML
 		$xml_content = $this->build_xml_content( $category, $products );
 		
+		// Clear products array to free memory
+		$products = null;
+		
 		// Save to file
 		$result = file_put_contents( $output_path, $xml_content );
 		
 		if ( false === $result ) {
 			return new WP_Error( 'file_write_failed', 'Failed to write XML file: ' . $output_path );
 		}
+		
+		// Clear XML content to free memory
+		$xml_content = null;
 		
 		return $output_path;
 	}
@@ -149,6 +155,9 @@ class XML_Feed_Generator {
 			'post_type'      => 'dress',
 			'post_status'    => 'publish',
 			'posts_per_page' => $posts_per_page,
+			'no_found_rows'  => true, // Don't calculate total rows for better performance
+			'update_post_meta_cache' => false, // Don't cache meta for better memory usage
+			'update_post_term_cache' => false, // Don't cache terms for better memory usage
 			'tax_query'      => array(
 				array(
 					'taxonomy' => 'dress_category',
@@ -168,7 +177,12 @@ class XML_Feed_Generator {
 		);
 		
 		$query = new WP_Query( $args );
-		return $query->posts;
+		$posts = $query->posts;
+		
+		// Clean up query object to free memory
+		$query = null;
+		
+		return $posts;
 	}
 	
 	/**
@@ -441,17 +455,22 @@ class XML_Feed_Generator {
 	public function get_available_categories() {
 		$result = array();
 		
+		// Debug: Log allowed categories
+		error_log( 'XML Feed Generator - Allowed categories: ' . implode( ', ', $this->allowed_categories ) );
+		
 		foreach ( $this->allowed_categories as $category_slug ) {
 			$category = get_term_by( 'slug', $category_slug, 'dress_category' );
+			error_log( 'XML Feed Generator - Looking for category: ' . $category_slug . ' - Found: ' . ( $category ? 'Yes' : 'No' ) );
+			
 			if ( $category && ! is_wp_error( $category ) ) {
-				$result[] = array(
-					'slug'  => $category->slug,
-					'name'  => $category->name,
-					'count' => $category->count,
-				);
+				error_log( 'XML Feed Generator - Adding category: ' . $category->name . ' (' . $category->slug . ')' );
+				$result[] = $category;
+			} else {
+				error_log( 'XML Feed Generator - Category not found or error: ' . $category_slug );
 			}
 		}
 		
+		error_log( 'XML Feed Generator - Total categories returned: ' . count( $result ) );
 		return $result;
 	}
 	
