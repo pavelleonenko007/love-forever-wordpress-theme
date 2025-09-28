@@ -40,7 +40,7 @@ function loveforever_add_site_scripts() {
 
 	wp_enqueue_style( 'main', TEMPLATE_PATH . '/css/main.css', array(), time() );
 	wp_enqueue_style( 'bundle', TEMPLATE_PATH . '/build/css/bundle.css', array( 'main' ), time() );
-	wp_enqueue_style( 'custom', TEMPLATE_PATH . '/css/custom.css', array( 'bundle' ), time() );
+	// wp_enqueue_style( 'custom', TEMPLATE_PATH . '/css/custom.css', array( 'bundle' ), time() );
 
 	wp_enqueue_script( 'jquery-ui-core' );
 	wp_enqueue_script( 'jquery-ui-widget' );
