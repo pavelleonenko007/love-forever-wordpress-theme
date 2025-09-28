@@ -91,7 +91,7 @@ if ( ! empty( $dresses_without_order ) ) {
 							<?php endif; ?>
 							<div class="slider-bottom-content inner-pages">
 								<?php get_template_part( 'components/breadcrumb' ); ?>
-								<h1 class="p-86-96"><?php echo esc_html( mb_strtolower( $queried_object->name ) ); ?></h1>
+								<h1 class="p-86-96 lowercase"><?php echo wp_kses_post( loveforever_to_uppercase_brand_name_in_string( $queried_object->name ) ); ?></h1>
 								<?php if ( ! empty( $queried_object->description ) ) : ?>
 									<p class="p-16-20 mmax695"><?php echo wp_kses_post( $queried_object->description ); ?></p>
 								<?php endif; ?>
@@ -149,6 +149,7 @@ if ( ! empty( $dresses_without_order ) ) {
 				?>
 				<section id="catalog" class="section z">
 					<div class="container n-top">
+						<h2 class="sr-only">Каталог товаров в категории <?php echo esc_html( $queried_object->name ); ?></h2>
 						<?php $is_hidden = ! $is_main_catalog_category || 'dress_category' !== $queried_object->taxonomy; ?>
 						<form 
 							id="<?php echo esc_attr( $catalog_filter_form_id ); ?>" 
@@ -326,7 +327,6 @@ if ( ! empty( $dresses_without_order ) ) {
 							<input type="hidden" name="action" value="get_filtered_products">
 							<?php wp_nonce_field( 'submit_filter_form', 'submit_filter_form_nonce', false ); ?>
 						</form>
-						<h2 class="sr-only">Каталог товаров в категории <?php echo esc_html( $queried_object->name ); ?></h2>
 						<?php
 						$catalog_grid_classes = array(
 							// 'catalog-grid',

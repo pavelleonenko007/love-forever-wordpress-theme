@@ -1111,3 +1111,16 @@ function loveforever_collect_dress_categories_to_json() {
 		'data'             => $categories_data,
 	);
 }
+
+function loveforever_to_uppercase_brand_name_in_string( $str = '' ) {
+	$brand_names = loveforever_get_all_brand_names();
+
+	foreach ( $brand_names as $brand_name ) {
+		// Используем mb_stripos для регистронезависимого поиска с поддержкой UTF-8 (включая кириллицу)
+		if ( mb_stripos( $str, $brand_name, 0, 'UTF-8' ) !== false ) {
+			$str = str_replace( $brand_name, '<span class="uppercase">' . $brand_name . '</span>', $str );
+		}
+	}
+
+	return $str;
+}
