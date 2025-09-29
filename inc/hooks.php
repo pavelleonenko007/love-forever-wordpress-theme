@@ -2730,3 +2730,13 @@ function loveforever_get_organization_address_data() {
 
 // Подключаем хук для модификации organization schema
 add_filter( 'wpseo_schema_organization', 'loveforever_add_address_to_organization_schema', 10, 1 );
+
+add_filter( 'wpseo_schema_graph_pieces', 'loveforever_remove_breadcrumbs_from_schema', 11, 2 );
+function loveforever_remove_breadcrumbs_from_schema( $pieces, $context ) {
+	return \array_filter(
+		$pieces,
+		function ( $piece ) {
+			return ! $piece instanceof \Yoast\WP\SEO\Generators\Schema\Breadcrumb;
+		}
+	);
+}

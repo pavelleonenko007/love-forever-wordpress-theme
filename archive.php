@@ -620,6 +620,32 @@ if ( ! empty( $dresses_without_order ) ) {
 					</div>
 				</section>
 				<?php
+				if ( ! empty( $all_posts ) ) :
+					$catalog_schema = array(
+						'@context'    => 'https://schema.org/',
+						'@type'       => 'OfferCatalog',
+						'name'        => $queried_object->name,
+						'image'       => wp_get_attachment_image_url( $thumbnail, 'full' ),
+						'description' => $queried_object->description,
+						'itemListElement' => array_map( function( $product ) {
+							return array(
+								'@type' => 'Offer',
+								'name' => $product->post_title,
+								'description' => $product->post_excerpt,
+								'url' => get_permalink( $product->ID ),
+								'price' => get_post_meta( $product->ID, 'final_price', true ),
+								'priceCurrency' => 'RUB',
+								'image' => wp_get_attachment_image_url( get_post_thumbnail_id( $product->ID ), 'full' ),
+								'availability' => 'https://schema.org/InStock',
+							);
+						}, $products ),
+					);
+					?>
+					<script type="application/ld+json">
+					<?php echo wp_json_encode( $catalog_schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE ); ?>	
+					</script>
+				<?php endif; ?>
+				<?php
 				$root_term   = loveforever_get_dress_category_root_term( $queried_object );
 				$child_terms = get_terms(
 					array(

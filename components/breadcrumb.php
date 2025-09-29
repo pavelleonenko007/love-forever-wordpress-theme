@@ -13,7 +13,7 @@ if ( ! empty( $args['extra_classes'] ) ) {
 }
 ?>
 
-<ol class="<?php echo esc_attr( implode( ' ', $breadcrumb_classes ) ); ?>">
+<ol itemscope itemtype="https://schema.org/BreadcrumbList" class="<?php echo esc_attr( implode( ' ', $breadcrumb_classes ) ); ?>">
 	<?php
 	add_filter( 'bcn_display_attributes', 'loveforever_breadcrumbs_attribute_filter', 10, 3 );
 	bcn_display_list();
