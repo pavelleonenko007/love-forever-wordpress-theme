@@ -556,6 +556,7 @@ function loveforever_get_filtered_products_via_ajax() {
 		! empty( $_POST['brand'] ) ||
 		! empty( $_POST['style'] ) ||
 		! empty( $_POST['color'] ) ||
+		! empty( $_POST['fabric'] ) ||
 		( ! empty( $_POST['orderby'] ) && $orderby != 'views' )
 	) {
 		$can_show_promo = false;
@@ -631,7 +632,7 @@ function loveforever_get_filtered_products_via_ajax() {
 	}
 
 	// Добавляем фильтры
-	$filters = array( 'silhouette', 'brand', 'style', 'color' );
+	$filters = array( 'silhouette', 'brand', 'style', 'color', 'fabric' );
 	foreach ( $filters as $filter ) {
 		if ( ! empty( $_POST[ $filter ] ) ) {
 			$terms = is_array( $_POST[ $filter ] ) ?

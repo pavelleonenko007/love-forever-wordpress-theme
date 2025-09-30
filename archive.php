@@ -363,6 +363,7 @@ if ( ! empty( $dresses_without_order ) ) {
 								! empty( $_GET['brand'] ) ||
 								! empty( $_GET['style'] ) ||
 								! empty( $_GET['color'] ) ||
+								! empty( $_GET['fabric'] ) ||
 								( ! empty( $_POST['orderby'] ) && $orderby != 'views' )
 							) {
 								$can_show_promo = false;
@@ -457,6 +458,14 @@ if ( ! empty( $dresses_without_order ) ) {
 									'taxonomy' => 'color',
 									'field'    => 'term_id',
 									'terms'    => array_map( 'absint', wp_unslash( $_GET['color'] ) ),
+								);
+							}
+
+							if ( isset( $_GET['fabric'] ) ) {
+								$products_query_args['tax_query'][] = array(
+									'taxonomy' => 'fabric',
+									'field'    => 'term_id',
+									'terms'    => array_map( 'absint', wp_unslash( $_GET['fabric'] ) ),
 								);
 							}
 

@@ -2,6 +2,7 @@ import { debounce, formDataToObject, wait } from './utils';
 
 const ROOT_SELECTOR = '[data-js-product-filter-form]';
 
+// TODO: при фильрации сбрасываются фильтры, которые уже были в параметрах URL, если их нет в форме
 class ProductFilterForm {
 	selectors = {
 		root: ROOT_SELECTOR,
