@@ -1,4 +1,6 @@
 .splide {
+	position: static;
+	
 	&__track {
 		overflow: visible;
 		transform: translateZ(0);

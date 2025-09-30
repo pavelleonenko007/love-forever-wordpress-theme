@@ -73,7 +73,7 @@ a[href]:where(:not([class])) {
 }
 
 .header {
-	z-index: 11;
+	z-index: 9999;
 	
 	&.menuline {
 		.htmldopmenuopened & {

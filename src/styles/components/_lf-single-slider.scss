@@ -2,6 +2,7 @@
 	margin-inline: -20rem;
 	display: grid;
 	grid-template-areas: 'slider';
+	position: relative;
 
 	&__track {
 		grid-area: slider;
