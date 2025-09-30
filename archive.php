@@ -706,7 +706,7 @@ if ( ! empty( $dresses_without_order ) ) {
 					);
 				endif;
 				?>
-				<?php get_template_part( 'template-parts/global/personal-choice-section' ); ?>
+				<?php // get_template_part( 'template-parts/global/personal-choice-section' ); ?>
 				<?php get_template_part( 'template-parts/home/recently-viewed-section', null, array( 'view_all_link' => true ) ); ?>
 				<?php get_template_part( 'template-parts/global/map-section' ); ?>
 				<?php
