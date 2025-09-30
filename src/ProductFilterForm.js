@@ -252,7 +252,7 @@ class ProductFilterForm {
 
 			const body = await response.json();
 
-			// console.log({ body });
+			console.log({ body });
 
 			if (!body.success) {
 				throw new Error(body.data.message);

@@ -23,7 +23,15 @@ get_header(
 $infoline_id   = loveforever_get_current_infoline();
 $infoline_data = loveforever_get_infoline_data( $infoline_id );
 
-$queried_object = get_queried_object();
+$queried_object           = get_queried_object();
+$main_catalog_categories  = array(
+	'wedding',
+	'evening',
+	'prom',
+);
+$is_main_catalog_category = in_array( $queried_object->slug, $main_catalog_categories, true );
+
+$stories = array();
 
 $thumbnail = get_field( 'thumbnail', $queried_object );
 
@@ -100,13 +108,6 @@ if ( ! empty( $dresses_without_order ) ) {
 					</div>
 				</section>
 				<?php
-				$main_catalog_categories  = array(
-					'wedding',
-					'evening',
-					'prom',
-				);
-				$is_main_catalog_category = in_array( $queried_object->slug, $main_catalog_categories, true );
-
 				if ( $is_main_catalog_category ) {
 					$stories = get_posts(
 						array(
@@ -631,23 +632,26 @@ if ( ! empty( $dresses_without_order ) ) {
 				<?php
 				if ( ! empty( $all_posts ) ) :
 					$catalog_schema = array(
-						'@context'    => 'https://schema.org/',
-						'@type'       => 'OfferCatalog',
-						'name'        => $queried_object->name,
-						'image'       => wp_get_attachment_image_url( $thumbnail, 'full' ),
-						'description' => $queried_object->description,
-						'itemListElement' => array_map( function( $product ) {
-							return array(
-								'@type' => 'Offer',
-								'name' => $product->post_title,
-								'description' => $product->post_excerpt,
-								'url' => get_permalink( $product->ID ),
-								'price' => get_post_meta( $product->ID, 'final_price', true ),
-								'priceCurrency' => 'RUB',
-								'image' => wp_get_attachment_image_url( get_post_thumbnail_id( $product->ID ), 'full' ),
-								'availability' => 'https://schema.org/InStock',
-							);
-						}, $products ),
+						'@context'        => 'https://schema.org/',
+						'@type'           => 'OfferCatalog',
+						'name'            => $queried_object->name,
+						'image'           => wp_get_attachment_image_url( $thumbnail, 'full' ),
+						'description'     => $queried_object->description,
+						'itemListElement' => array_map(
+							function ( $product ) {
+								return array(
+									'@type'         => 'Offer',
+									'name'          => $product->post_title,
+									'description'   => $product->post_excerpt,
+									'url'           => get_permalink( $product->ID ),
+									'price'         => get_post_meta( $product->ID, 'final_price', true ),
+									'priceCurrency' => 'RUB',
+									'image'         => wp_get_attachment_image_url( get_post_thumbnail_id( $product->ID ), 'full' ),
+									'availability'  => 'https://schema.org/InStock',
+								);
+							},
+							$products
+						),
 					);
 					?>
 					<script type="application/ld+json">
@@ -818,6 +822,10 @@ if ( ! empty( $dresses_without_order ) ) {
 			</div>
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>
-		<?php get_template_part( 'template-parts/global/stories-dialog', null, array( 'stories' => $stories ) ); ?>
+		<?php
+		if ( ! $is_main_catalog_category ) {
+			get_template_part( 'template-parts/global/stories-dialog', null, array( 'stories' => $stories ) );
+		}
+		?>
 		<?php get_footer(); ?>
 <?php
