@@ -12,7 +12,15 @@ global $post;
 $author         = get_field( 'author' );
 $rating         = min( intval( get_field( 'rating' ) ), 5 );
 $review_text    = get_field( 'review_text' );
-$image_carousel = ! empty( get_field( 'image_carousel' ) ) ? array_filter( get_field( 'image_carousel' ) ) : array();
+$image_carousel = array();
+
+if ( ! empty( get_field( 'image_carousel' ) ) ) {
+	$image_carousel = array_map( fn( $item ) => $item['image'], array_filter( get_field( 'image_carousel' ) ) );
+}
+
+if ( ! empty( $image_carousel ) && has_post_thumbnail() ) {
+	array_unshift( $image_carousel, get_post_thumbnail_id() );
+}
 
 $card_classes = array(
 	'lf-rewiew-card',
@@ -31,7 +39,7 @@ if ( empty( $image_carousel ) && ! has_post_thumbnail() ) {
 				<div class="lf-review-splide__list splide__list">
 					<?php foreach ( $image_carousel as $image_carousel_item ) : ?>
 						<div class="lf-review-splide__slide splide__slide">
-							<?php echo wp_get_attachment_image( $image_carousel_item['image'], 'fullhd', false, array( 'class' => 'img-cover' ) ); ?>
+							<?php echo wp_get_attachment_image( $image_carousel_item, 'fullhd', false, array( 'class' => 'img-cover' ) ); ?>
 						</div>
 					<?php endforeach; ?>
 				</div>
