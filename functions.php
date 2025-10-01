@@ -32,4 +32,3 @@ require_once __DIR__ . '/inc/class-loveforever-seo-importer.php';
 
 // Load XML Feed functionality.
 require_once __DIR__ . '/inc/xml-feed-loader.php';
-// require_once __DIR__ . '/inc/dress-categories-importer.php'.

@@ -264,7 +264,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 
 	wp_send_json_success(
 		array(
-			'fitting_type' => $fitting_type,
+			'fitting_type' => is_array( $fitting_type ) ? $fitting_type[0] : $fitting_type,
 			'message'      => 0 === $fitting_id ? 'Вы успешно записались на примерку' : 'Запись на примерку успешно обновлена',
 			'debug'        => array(
 				'sended_email' => $sended_email,
@@ -2740,4 +2740,55 @@ function loveforever_remove_breadcrumbs_from_schema( $pieces, $context ) {
 			return ! $piece instanceof \Yoast\WP\SEO\Generators\Schema\Breadcrumb;
 		}
 	);
+}
+
+/**
+ * Отключение микроразметки breadcrumb от Yoast SEO
+ *
+ * Этот фильтр отключает генерацию schema.org разметки для breadcrumb,
+ * но сохраняет визуальные breadcrumb если они включены в настройках.
+ */
+add_filter( 'wpseo_schema_webpage', 'loveforever_remove_breadcrumb_schema_ref', 10, 1 );
+function loveforever_remove_breadcrumb_schema_ref( $piece ) {
+		unset( $piece['breadcrumb'] );
+		return $piece;
+}
+
+add_action( 'wp_head', 'loveforever_add_yandex_metrika_script' );
+function loveforever_add_yandex_metrika_script() {
+	?>
+		<!-- Yandex.Metrika counter -->
+		<script type="text/javascript">
+			(function(m,e,t,r,i,k,a){
+					m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+					m[i].l=1*new Date();
+					for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+					k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+			})(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+			ym(43639474, 'init', {webvisor:true, clickmap:true, accurateTrackBounce:true, trackLinks:true, triggerEvent: true});
+		</script>
+		<noscript><div><img src="https://mc.yandex.ru/watch/43639474" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+		<!-- /Yandex.Metrika counter -->
+	<?php
+}
+
+add_action( 'wp_head', 'loveforever_add_top_mail_ru_script' );
+function loveforever_add_top_mail_ru_script() {
+	?>
+	<!-- Top.Mail.Ru counter -->
+	<script type="text/javascript">
+		var _tmr = window._tmr || (window._tmr = []);
+		_tmr.push({id: "3575961", type: "pageView", start: (new Date()).getTime()});
+		(function (d, w, id) {
+			if (d.getElementById(id)) return;
+			var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+			ts.src = "https://top-fwz1.mail.ru/js/code.js";
+			var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
+			if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+		})(document, window, "tmr-code");
+	</script>
+	<noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3575961;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
+	<!-- /Top.Mail.Ru counter -->
+	<?php
 }

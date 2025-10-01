@@ -22,7 +22,7 @@ export default class MaskedPhoneButtonCollection {
 			event.stopPropagation();
 
 			const button = event.target.closest(this.selectors.button);
-			const phoneElementId = button.dataset.jsPhoneNumberButton;			
+			const phoneElementId = button.dataset.jsPhoneNumberButton;
 
 			if (!phoneElementId) return;
 
@@ -35,6 +35,17 @@ export default class MaskedPhoneButtonCollection {
 			phoneElement.textContent = phoneElement.dataset.jsPhoneNumber;
 
 			button.classList.add(this.stateSelectors.isActive);
+
+			button.dispatchEvent(
+				new CustomEvent('phoneNumberRevealed', {
+					bubbles: true,
+					detail: {
+						phoneElementId,
+						trigger: button,
+						phoneNumber: phoneElement.dataset.jsPhoneNumber,
+					},
+				})
+			);
 		}
 	};
 

@@ -73,6 +73,39 @@ function initHeroPageSliderPagination() {
 new FormsValidator();
 new MaskedPhoneButtonCollection();
 
+document.addEventListener('dialogOpen', (event) => {
+	const dialogId = event.detail.dialogId;
+
+	if (
+		['singleProductFittingDialog', 'globalFittingDialog'].includes(dialogId)
+	) {
+		ym(43639474, 'reachGoal', 'FITTING_WIDGET_OPEN');
+	}
+});
+
+document.addEventListener('favoritesUpdated', (event) => {
+	console.log({ event });
+	const { isActive, productId } = event.detail;
+
+	if (!productId) {
+		return;
+	}
+
+	if (!isActive) {
+		ym(43639474, 'reachGoal', 'ADD_TO_FAVORITE');
+	}
+});
+
+document.addEventListener('phoneNumberRevealed', (event) => {
+	ym(43639474, 'reachGoal', 'PHONE_VIEW');
+});
+
+document.querySelectorAll('[href^="tel:"]').forEach((phoneLink) => {
+	phoneLink.addEventListener('click', (event) => {
+		ym(43639474, 'reachGoal', 'MOBILE_PHONE_CALL');
+	});
+});
+
 // document.addEventListener('DOMContentLoaded', function () {
 // 	Barba.Pjax.start();
 // 	Barba.Prefetch.init();
