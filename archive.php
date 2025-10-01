@@ -664,8 +664,35 @@ if ( ! empty( $dresses_without_order ) ) {
 					array(
 						'taxonomy'   => 'dress_category',
 						'parent'     => $root_term->term_id,
-						'hide_empty' => true,
+						'hide_empty' => false,
 					)
+				);
+
+				$left_menu       = get_field( 'left_menu', 'option' );
+				$menu_categories = array_filter(
+					$left_menu,
+					function ( $item ) {
+						return 'dress-category' === $item['acf_fc_layout'];
+					}
+				);
+
+				// Извлекаем все URL из структуры данных
+				$urls = array();
+				array_walk_recursive(
+					$menu_categories,
+					function ( $value, $key ) use ( &$urls ) {
+						if ( $key === 'url' && ! empty( $value ) ) {
+							$urls[] = $value;
+						}
+					}
+				);
+
+				$urls        = array_unique( $urls );
+				$child_terms = array_filter(
+					$child_terms,
+					function ( $term ) use ( $urls ) {
+						return ! in_array( get_term_link( $term ), $urls, true );
+					}
 				);
 				?>
 				<?php if ( ! empty( $child_terms ) ) : ?>
@@ -677,9 +704,9 @@ if ( ! empty( $dresses_without_order ) ) {
 										<div class="lf-tag__text">
 											<?php
 											$terms_map = array(
-												'wedding' => array( 'Свадебные', 'свадебные', 'Платья', 'платья' ),
-												'evening' => array( 'Вечерние', 'вечерние', 'Платья', 'платья' ),
-												'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной', 'Платья', 'платья' ),
+												'wedding' => array( 'Свадебные', 'свадебные' ),
+												'evening' => array( 'Вечерние', 'вечерние' ),
+												'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной' ),
 												'sale'    => array(),
 											);
 
