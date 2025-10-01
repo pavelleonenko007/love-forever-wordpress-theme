@@ -8,8 +8,36 @@
 			margin-bottom: 20rem;
 		}
 	}
+}
 
-	&__list {
+.lf-review-section {
+	&__container {
+		display: flex;
+		flex-direction: column;
+		row-gap: 25rem;
+
+		@include mobile {
+			row-gap: 20rem;
+		}
+	}
+	&__header {
+	}
+
+	&__body.spleet {
 		margin: 0;
+		display: flex;
+		justify-content: space-between;
+		gap: 25rem;
+
+		@include mobile {
+			margin: 0;
+			flex-direction: column;
+		}
+	}
+
+	&__content {
+		font-size: 16rem;
+		line-height: 1.25;
+		max-width: 578rem;
 	}
 }
