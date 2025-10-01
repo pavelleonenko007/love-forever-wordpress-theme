@@ -77,6 +77,15 @@ class XML_Feed_Generator {
 	}
 	
 	/**
+	 * Get shop configuration
+	 *
+	 * @return array
+	 */
+	public function get_shop_config() {
+		return $this->shop_config;
+	}
+	
+	/**
 	 * Generate XML feed for specific category
 	 *
 	 * @param string $category_slug Category slug to generate feed for

@@ -258,7 +258,10 @@ class XML_Feed_Batch_Generator {
 		$xml_string = '';
 		
 		foreach ( $products as $product ) {
-			$offer_xml = $generator->create_offer_element( $product, $feed_category_slug );
+			// Create a temporary XML document for the offer element
+			$temp_xml = new DOMDocument( '1.0', 'UTF-8' );
+			$offer_element = $generator->create_offer_element( $temp_xml, $product, $feed_category_slug );
+			$offer_xml = $temp_xml->saveXML( $offer_element );
 			$xml_string .= $offer_xml;
 		}
 		

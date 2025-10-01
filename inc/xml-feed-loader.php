@@ -102,12 +102,12 @@ function loveforever_xml_feed_admin_page() {
 					<tbody>
 						<?php foreach ( $categories as $category ) : ?>
 							<tr>
-								<td><strong><?php echo esc_html( $category['name'] ); ?></strong></td>
-								<td><code><?php echo esc_html( $category['slug'] ); ?></code></td>
-								<td><?php echo intval( $category['count'] ); ?></td>
+								<td><strong><?php echo esc_html( is_object( $category ) ? $category->name : 'Ошибка объекта' ); ?></strong></td>
+								<td><code><?php echo esc_html( is_object( $category ) ? $category->slug : 'Ошибка объекта' ); ?></code></td>
+								<td><?php echo intval( is_object( $category ) ? $category->count : 0 ); ?></td>
 								<td>
 									<button type="button" class="button button-primary generate-feed-btn" 
-											data-category="<?php echo esc_attr( $category['slug'] ); ?>">
+											data-category="<?php echo esc_attr( is_object( $category ) ? $category->slug : '' ); ?>">
 										Generate Feed
 									</button>
 								</td>
