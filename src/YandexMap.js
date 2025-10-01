@@ -146,7 +146,7 @@ export default async function initMap() {
 
 			const headerElement = document.createElement('header');
 			headerElement.className = 'lf-popup__header';
-			headerElement.textContent = this._props.title;
+			headerElement.innerHTML = this._props.title;
 
 			const bodyElement = document.createElement('div');
 			bodyElement.className = 'lf-popup__body';
@@ -255,7 +255,7 @@ export default async function initMap() {
 	map.addChild(
 		new CustomMarkerWithPopup({
 			coordinates: [30.308628, 59.929353],
-			title: 'Свадебный салон Love Forever',
+			title: 'Свадебный салон Love&nbsp;Forever',
 			address: 'Санкт-Петербург, м. Садовая, Вознесенский проспект, 18',
 			phone: '8 812 425-67-82',
 			workingHours: '10:00 - 22:00',
