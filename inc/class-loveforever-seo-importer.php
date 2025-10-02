@@ -273,47 +273,72 @@ class LoveForever_SEO_Importer {
 			return;
 		}
 
-		// Find term by slug.
-		$term = get_term_by( 'slug', $term_slug, 'dress_category' );
-		if ( ! $term ) {
-			error_log( 'Term not found with slug: ' . $term_slug );
-			++$skipped;
-			$this->send_progress_update( $current_row + 1, $total_rows, $updated, $skipped );
-			return;
-		}
-
-		// Update Yoast SEO fields.
-		$title_updated = update_post_meta( $post->ID, '_yoast_wpseo_title', $seo_title );
-		$desc_updated  = update_post_meta( $post->ID, '_yoast_wpseo_metadesc', $seo_desc );
-
-		// Update ACF dress_category field - add term if not already present.
-		$existing_categories = get_field( 'dress_category', $post->ID );
-		$category_updated = false;
+		// Check existing values and update Yoast SEO fields.
+		$existing_title = get_post_meta( $post->ID, '_yoast_wpseo_title', true );
+		$existing_desc  = get_post_meta( $post->ID, '_yoast_wpseo_metadesc', true );
 		
-		if ( empty( $existing_categories ) ) {
-			// No existing categories, set the new one.
-			$category_updated = update_field( 'dress_category', $term->term_id, $post->ID );
-			error_log( 'Set new category ' . $term->term_id . ' for post ' . $post->ID );
+		$title_updated = false;
+		$desc_updated  = false;
+		
+		// Update title if different.
+		if ( $existing_title !== $seo_title ) {
+			$title_updated = update_post_meta( $post->ID, '_yoast_wpseo_title', $seo_title );
+			error_log( 'Updated title for post ' . $post->ID . ' from "' . $existing_title . '" to "' . $seo_title . '"' );
 		} else {
-			// Convert to array if it's not already.
-			$existing_categories = is_array( $existing_categories ) ? $existing_categories : array( $existing_categories );
-			
-			// Check if term is already assigned.
-			if ( ! in_array( $term->term_id, $existing_categories, true ) ) {
-				// Add new term to existing categories.
-				$existing_categories[] = $term->term_id;
-				$category_updated = update_field( 'dress_category', $existing_categories, $post->ID );
-				error_log( 'Added category ' . $term->term_id . ' to existing categories for post ' . $post->ID );
-			} else {
-				error_log( 'Category ' . $term->term_id . ' already exists for post ' . $post->ID );
-			}
+			error_log( 'Title already correct for post ' . $post->ID . ': "' . $seo_title . '"' );
+		}
+		
+		// Update description if different.
+		if ( $existing_desc !== $seo_desc ) {
+			$desc_updated = update_post_meta( $post->ID, '_yoast_wpseo_metadesc', $seo_desc );
+			error_log( 'Updated description for post ' . $post->ID . ' from "' . $existing_desc . '" to "' . $seo_desc . '"' );
+		} else {
+			error_log( 'Description already correct for post ' . $post->ID . ': "' . $seo_desc . '"' );
 		}
 
-		if ( $title_updated || $desc_updated || $category_updated ) {
-			error_log( 'Successfully updated post ' . $post->ID . ' (slug: ' . $post_slug . ')' );
+		// Update ACF dress_category field only if term_slug is not empty.
+		$category_updated = false;
+		if ( ! empty( $term_slug ) ) {
+			// Find term by slug.
+			$term = get_term_by( 'slug', $term_slug, 'dress_category' );
+			if ( ! $term ) {
+				error_log( 'Term not found with slug: ' . $term_slug );
+				// Don't skip the row, just log the warning and continue without updating category
+			} else {
+				// Update ACF dress_category field - add term if not already present.
+				$existing_categories = get_field( 'dress_category', $post->ID );
+				
+				if ( empty( $existing_categories ) ) {
+					// No existing categories, set the new one.
+					$category_updated = update_field( 'dress_category', $term->term_id, $post->ID );
+					error_log( 'Set new category ' . $term->term_id . ' for post ' . $post->ID );
+				} else {
+					// Convert to array if it's not already.
+					$existing_categories = is_array( $existing_categories ) ? $existing_categories : array( $existing_categories );
+					
+					// Check if term is already assigned.
+					if ( ! in_array( $term->term_id, $existing_categories, true ) ) {
+						// Add new term to existing categories.
+						$existing_categories[] = $term->term_id;
+						$category_updated = update_field( 'dress_category', $existing_categories, $post->ID );
+						error_log( 'Added category ' . $term->term_id . ' to existing categories for post ' . $post->ID );
+					} else {
+						error_log( 'Category ' . $term->term_id . ' already exists for post ' . $post->ID );
+					}
+				}
+			}
+		} else {
+			error_log( 'Skipping category update for post ' . $post->ID . ' - term_slug is empty' );
+		}
+
+		// Count as updated if any field was processed (even if already correct).
+		$fields_processed = ( $existing_title !== $seo_title || $existing_desc !== $seo_desc || $category_updated );
+		
+		if ( $fields_processed ) {
+			error_log( 'Successfully processed post ' . $post->ID . ' (slug: ' . $post_slug . ')' );
 			++$updated;
 		} else {
-			error_log( 'No changes made to post ' . $post->ID . ' (slug: ' . $post_slug . ')' );
+			error_log( 'No changes needed for post ' . $post->ID . ' (slug: ' . $post_slug . ') - all fields already correct' );
 			++$skipped;
 		}
 
@@ -486,20 +511,13 @@ class LoveForever_SEO_Importer {
 		}
 		$result['post_slug'] = $post_slug;
 
-		// Validate term slug
-		if ( empty( $term_slug ) ) {
-			$result['valid']  = false;
-			$result['reason'] = 'Empty term slug';
-			return $result;
+		// Validate term slug (optional - only sanitize if not empty)
+		if ( ! empty( $term_slug ) ) {
+			$term_slug = sanitize_title( $term_slug );
+			$result['term_slug'] = $term_slug;
+		} else {
+			$result['term_slug'] = '';
 		}
-
-		$term_slug = sanitize_title( $term_slug );
-		if ( strlen( $term_slug ) < 1 ) {
-			$result['valid']  = false;
-			$result['reason'] = 'Invalid term slug';
-			return $result;
-		}
-		$result['term_slug'] = $term_slug;
 
 		// Validate SEO title
 		if ( empty( $seo_title ) ) {
