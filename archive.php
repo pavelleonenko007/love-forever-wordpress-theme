@@ -912,7 +912,7 @@ if ( ! empty( $dresses_without_order ) ) {
 		</div>
 		<?php get_template_part( 'components/footer' ); ?>
 		<?php
-		if ( ! $is_main_catalog_category ) {
+		if ( $is_main_catalog_category ) {
 			get_template_part( 'template-parts/global/stories-dialog', null, array( 'stories' => $stories ) );
 		}
 		?>

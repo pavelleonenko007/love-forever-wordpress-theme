@@ -207,7 +207,7 @@ class XML_Feed_Generator {
 		
 		// Create root element
 		$yml_catalog = $xml->createElement( 'yml_catalog' );
-		$yml_catalog->setAttribute( 'date', date( 'Y-m-d H:i' ) );
+		$yml_catalog->setAttribute( 'date', wp_date( 'Y-m-d H:i' ) );
 		$xml->appendChild( $yml_catalog );
 		
 		// Create shop element

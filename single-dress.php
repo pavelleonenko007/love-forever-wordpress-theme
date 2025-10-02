@@ -85,14 +85,23 @@
 					<ul class="splide__list lf-single-slider__list">
 						<?php foreach ( $images as $image_slide_index => $image_slide ) : ?>
 						<li class="splide__slide lf-single-slider__slide">
-							<?php echo wp_get_attachment_image( $image_slide['image']['ID'], 'fullhd', false, array( 'class' => 'lf-single-slider__image' ) ); ?>
+							<?php
+							echo wp_get_attachment_image(
+								$image_slide,
+								'fullhd',
+								false,
+								array(
+									'class' => 'lf-single-slider__image',
+								)
+							);
+							?>
 						</li>
 						<?php endforeach; ?>
 					</ul>
 				</div>
-				<?php 
+				<?php
 				$is_in_favorites = loveforever_has_product_in_favorites( get_the_ID() );
-				$aria_label = $is_in_favorites ? 'Удалить из избранного товар ' . get_the_title() : 'Добавить в избранное товар ' . get_the_title();
+				$aria_label      = $is_in_favorites ? 'Удалить из избранного товар ' . get_the_title() : 'Добавить в избранное товар ' . get_the_title();
 				?>
 				<button 
 					type="button" class="btn-like lf-like-button w-inline-block <?php echo $is_in_favorites ? 'is-active' : ''; ?>" 
@@ -117,7 +126,17 @@
 				<div class="single-product__images">
 					<?php foreach ( $images as $image_item_index => $image_item ) : ?>
 					<div class="single-img-mom">
-						<img src="<?php echo esc_url( $image_item['image']['url'] ); ?>" loading="lazy" alt="<?php echo esc_attr( $image_item['image']['alt'] ); ?>" class="img-fw">
+						<?php
+						echo wp_get_attachment_image(
+							$image_item,
+							'full',
+							false,
+							array(
+								'class' => 'img-fw',
+								'style' => 'height: auto;',
+							)
+						);
+						?>
 					</div>
 						<?php if ( 0 === $image_item_index && ! empty( $video ) ) : ?>
 					<div class="single-img-mom">

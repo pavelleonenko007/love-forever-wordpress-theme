@@ -513,39 +513,21 @@ function loveforever_get_product_title( $product_id ) {
 }
 
 function loveforever_get_product_images( $product_id ) {
-	$images = get_field( 'images', $product_id );
+	$images = array();
 
-	if ( empty( $images ) ) {
-		return array();
+	if ( ! empty( get_field( 'images', $product_id ) ) ) {
+		$images = get_field( 'images', $product_id );
 	}
 
-	$result         = array();
-	$used_image_ids = array();
+	$images = array_map( fn( $image ) => $image['image']['ID'], $images );
 
 	// Добавляем миниатюру поста, если она есть
 	if ( has_post_thumbnail( $product_id ) ) {
-		$thumbnail_id     = get_post_thumbnail_id( $product_id );
-		$result[]         = array(
-			'image' => array(
-				'ID'  => $thumbnail_id,
-				'url' => get_the_post_thumbnail_url( $product_id, 'full' ),
-				'alt' => '',
-			),
-		);
-		$used_image_ids[] = $thumbnail_id;
+		$thumbnail_id = get_post_thumbnail_id( $product_id );
+		array_unshift( $images, $thumbnail_id );
 	}
 
-	// Добавляем картинки из ACF поля, если они есть
-	if ( ! empty( $images ) ) {
-		foreach ( $images as $image_item ) {
-			if ( ! empty( $image_item['image']['ID'] ) && ! in_array( $image_item['image']['ID'], $used_image_ids ) ) {
-				$result[]         = $image_item;
-				$used_image_ids[] = $image_item['image']['ID'];
-			}
-		}
-	}
-
-	return array_filter( $result, fn( $item ) => ! empty( $item['image'] ) );
+	return array_unique( $images );
 }
 
 function loveforever_get_filter_terms_for_dress_category( $taxonomy = '', $category_id = null ) {
