@@ -710,71 +710,11 @@ if ( ! empty( $dresses_without_order ) ) {
 												'sale'    => array(),
 											);
 
-											// Список тегов, к которым нужно добавлять приписку категории
-											$category_prefix_terms = array(
-												'wedding' => array(
-													'белые',
-													'дорогие',
-													'облегающие',
-													'2025',
-													'для беременных',
-													'для венчания',
-													'для загса',
-													'миди',
-													'минимализм',
-													'с кейпом',
-													'с открытыми плечами',
-													'с жемчугом',
-													'в пол',
-												),
-												'evening' => array(
-													'бальные',
-													'короткие',
-													'для мамы невесты',
-													'для мамы жениха',
-													'на корпоратив',
-													'2025',
-													'а-силуэта',
-													'больших размеров',
-													'для беременных',
-													'на бретельках',
-													'на новый год',
-													'на свадьбу',
-													'в пол',
-													'ассиметричные',
-												),
-												'prom'    => array(
-													'дорогие',
-													'белые',
-													'бордовые',
-													'черные',
-													'голубые',
-													'классические',
-													'коктейльные',
-													'красные',
-													'11 класс',
-													'2025',
-													'9 класс',
-													'пышные',
-													'розовые',
-													'серебристые',
-													'синие',
-												),
-												'sale'    => array(),
-											);
+											$child_term_name = $child_term->name;
 
-											$need_to_trim_name = true;
-											$child_term_name   = $child_term->name;
-
-											if ( isset( $category_prefix_terms[ $root_term->slug ] ) ) {
-												foreach ( $category_prefix_terms[ $root_term->slug ] as $prefix_term ) {
-													if ( mb_strpos( mb_strtolower( $child_term_name ), $prefix_term ) !== false ) {
-														$need_to_trim_name = false;
-													}
-												}
-											}
-
-											if ( $need_to_trim_name ) {
+											if ( ! empty( get_field( 'tag_label', $child_term ) ) ) {
+												$child_term_name = get_field( 'tag_label', $child_term );
+											} else {
 												$child_term_name = str_replace( $terms_map[ $root_term->slug ], '', $child_term->name );
 											}
 
