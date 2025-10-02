@@ -2792,3 +2792,19 @@ function loveforever_add_top_mail_ru_script() {
 	<!-- /Top.Mail.Ru counter -->
 	<?php
 }
+
+add_filter( 'wpseo_canonical', 'loveforever_catalog_page_canonical' );
+function loveforever_catalog_page_canonical( $canonical ) {
+	if ( is_paged() ) {
+		if ( is_home() ) {
+			return home_url();
+		}
+
+		if ( is_archive() ) {
+			$url = get_term_link( get_queried_object_id() );
+			return $url;
+		}
+	}
+
+	return $canonical;
+}
