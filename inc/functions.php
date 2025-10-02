@@ -517,6 +517,7 @@ function loveforever_get_product_images( $product_id ) {
 
 	if ( ! empty( get_field( 'images', $product_id ) ) ) {
 		$images = get_field( 'images', $product_id );
+		$images = array_filter( $images, fn( $image ) => ! empty( $image['image'] ) );
 	}
 
 	$images = array_map( fn( $image ) => $image['image']['ID'], $images );
