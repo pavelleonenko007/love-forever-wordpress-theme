@@ -36,9 +36,17 @@ $cards          = ! empty( $args['cards'] ) && is_array( $args['cards'] ) ? arra
 		'href'  => esc_url( get_term_link( $dress_category ) ),
 		'class' => esc_attr( implode( ' ', $link_class_names ) ),
 	);
+
+	$name_mappings = array(
+		'wedding'     => 'Свадебные',
+		'evening'     => 'Вечерние',
+		'prom'        => 'Выпускные',
+		'sale'        => 'Распродажа',
+		'accessories' => 'Аксессуары',
+	);
 	?>
 	<a <?php echo loveforever_prepare_tag_attributes_as_string( $link_attributes ); ?>>
-		<span><?php echo esc_html( str_replace( ' платья', '', $dress_category->name ) ); ?></span>
+		<span><?php echo esc_html( $name_mappings[ $dress_category->slug ] ); ?></span>
 		<?php if ( ! empty( $green_badge ) ) : ?>
 			<span class="lf-nav-link__badge"><?php echo esc_html( $green_badge ); ?></span>
 		<?php endif; ?>
