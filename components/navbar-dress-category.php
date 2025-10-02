@@ -33,9 +33,11 @@ $columns        = $args['columns'];
 	);
 
 	$name_mappings = array(
-		'wedding' => 'Свадебные',
-		'evening' => 'Вечерние',
-		'prom'    => 'Выпускные',
+		'wedding'     => 'Свадебные',
+		'evening'     => 'Вечерние',
+		'prom'        => 'Выпускные',
+		'sale'        => 'Распродажа',
+		'accessories' => 'Аксессуары',
 	);
 	?>
 	<a <?php echo loveforever_prepare_tag_attributes_as_string( $link_attributes ); ?>>
