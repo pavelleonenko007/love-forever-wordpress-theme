@@ -100,7 +100,7 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 									}
 
 									echo wp_get_attachment_image(
-										$image['image']['ID'],
+										$image,
 										'fullhd',
 										false,
 										$image_attributes
