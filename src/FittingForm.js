@@ -1136,7 +1136,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 			const body = await response.json();
 
-			console.log({ body });
+			// console.log({ body });
 
 			this.state.success = body.success;
 
@@ -1149,7 +1149,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 			ym(43639474, 'reachGoal', 'FITTING_603973');
 
-			if (this.state.fitting_type) {
+			if (body.data.fitting_type) {
 				ym(43639474, 'reachGoal', `fitting-${this.state.fitting_type}`);
 			}
 
