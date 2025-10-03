@@ -69,7 +69,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 													<?php
 													if ( ! empty( $button ) ) :
 														$url    = $button['url'];
-														$target = ! empty( $button['target'] ) ? $button['target'] : 'self';
+														$target = ! empty( $button['target'] ) ? $button['target'] : '_self';
 														$text   = $button['title'];
 														?>
 														<a href="<?php echo esc_url( $url ); ?>" class="btn in-slider-btn w-inline-block" target="<?php echo esc_attr( $target ); ?>">
