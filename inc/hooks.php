@@ -2815,3 +2815,24 @@ function loveforever_catalog_page_canonical( $canonical ) {
 
 	return $canonical;
 }
+
+add_action( 'template_redirect', 'loveforever_redirect_dress_category' );
+function loveforever_redirect_dress_category() {
+	if ( is_tax( 'dress_category' ) ) {
+		$term = get_queried_object();
+
+		if ( $term && ! is_wp_error( $term ) ) {
+			// Получаем правильный canonical URL
+			$canonical = get_term_link( $term, 'dress_category' );
+
+			// Текущий URL
+			$current = home_url( add_query_arg( array(), $GLOBALS['wp']->request ) );
+
+			// Если не совпадают — редиректим
+			if ( trailingslashit( $canonical ) !== trailingslashit( $current ) ) {
+				wp_redirect( $canonical, 301 );
+				exit;
+			}
+		}
+	}
+}
