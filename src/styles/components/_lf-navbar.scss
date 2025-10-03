@@ -2,7 +2,14 @@
 
 .lf-navbar {
 	@include mobile {
-		padding-top: 6rem;
+		& .lf-navbar__menu-line--mobile {
+			padding-top: 26rem;
+		}
+
+		& .logo-link,
+		& .lf-scroll-navbar-logo--mobile {
+			padding-top: 6rem;
+		}
 	}
 
 	&__menu-line {
