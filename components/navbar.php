@@ -45,7 +45,7 @@
 					<div class="div-block-5">
 						<!-- Favorites button -->
 						<a 
-							href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button
+							href="<?php echo esc_url( home_url( '/' ) . 'favorites/' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button
 							aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
 							title="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
 							>
@@ -512,7 +512,7 @@
 						</div>
 						<!-- Favorites button -->
 						<a 
-							href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button
+							href="<?php echo esc_url( home_url( '/' ) . 'favorites/' ); ?>" class="lf-icon-button lf-icon-button--favorites lf-icon-button--white <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" data-js-favorites-button
 							aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
 							title="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
 							>
@@ -675,7 +675,7 @@
 							</div>
 						</div>
 						<a 
-							href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" 
+							href="<?php echo esc_url( home_url( '/' ) . 'favorites/' ); ?>" 
 							class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" 
 							data-js-favorites-button
 							aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
@@ -694,7 +694,7 @@
 			<div class="spleet pc-none">
 				<div class="lf-navbar__menu-line lf-navbar__menu-line--mobile menu-line p-12-12 white uper n-voreder">
 					<a 
-						href="<?php echo esc_url( home_url( '/' ) . 'favorites' ); ?>" 
+						href="<?php echo esc_url( home_url( '/' ) . 'favorites/' ); ?>" 
 						class="lf-icon-button lf-icon-button--favorites <?php echo 0 < count( $favorites ) ? 'is-active' : ''; ?>" 
 						data-js-favorites-button
 						aria-label="<?php echo esc_attr( 'Перейти в избранное' ); ?>"
