@@ -708,6 +708,7 @@ if ( ! empty( $dresses_without_order ) ) {
 												'evening' => array( 'Вечерние', 'вечерние', 'Платья', 'платья' ),
 												'prom'    => array( 'Выпускные', 'выпускные', 'на выпускной', 'Платья', 'платья' ),
 												'sale'    => array(),
+												'accessories' => array(),
 											);
 
 											$child_term_name = $child_term->name;
