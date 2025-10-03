@@ -1,6 +1,10 @@
 @use '../media' as *;
 
 .lf-navbar {
+	@include mobile {
+		padding-top: 6rem;
+	}
+
 	&__menu-line {
 		display: flex;
 		align-items: center;
