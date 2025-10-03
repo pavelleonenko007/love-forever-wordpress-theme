@@ -639,14 +639,16 @@ if ( ! empty( $dresses_without_order ) ) {
 						'description'     => $queried_object->description,
 						'itemListElement' => array_map(
 							function ( $product ) {
+								$product_images = loveforever_get_product_images( $product->ID );
+
 								return array(
 									'@type'         => 'Offer',
 									'name'          => $product->post_title,
-									'description'   => $product->post_excerpt,
+									'description'   => get_post_meta( $product->ID, '_yoast_wpseo_metadesc', true ),
 									'url'           => get_permalink( $product->ID ),
 									'price'         => get_post_meta( $product->ID, 'final_price', true ),
 									'priceCurrency' => 'RUB',
-									'image'         => wp_get_attachment_image_url( get_post_thumbnail_id( $product->ID ), 'full' ),
+									'image'         => ! empty( $product_images ) ? wp_get_attachment_image_url( $product_images[0], 'fullhd' ) : '',
 									'availability'  => 'https://schema.org/InStock',
 								);
 							},
