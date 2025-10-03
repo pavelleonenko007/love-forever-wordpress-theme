@@ -2795,15 +2795,22 @@ function loveforever_add_top_mail_ru_script() {
 
 add_filter( 'wpseo_canonical', 'loveforever_catalog_page_canonical' );
 function loveforever_catalog_page_canonical( $canonical ) {
-	if ( is_paged() ) {
-		if ( is_home() ) {
-			return home_url();
-		}
+	global $post_type;
 
-		if ( is_archive() ) {
-			$url = get_term_link( get_queried_object_id() );
-			return $url;
-		}
+	if ( ! is_paged() ) {
+		return $canonical;
+	}
+
+	if ( is_home() ) {
+		return home_url();
+	}
+
+	if ( is_post_type_archive() ) {
+		return get_post_type_archive_link( $post_type );
+	}
+
+	if ( is_archive() ) {
+		return get_term_link( get_queried_object_id() );
 	}
 
 	return $canonical;
