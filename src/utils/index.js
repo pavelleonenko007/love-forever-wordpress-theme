@@ -198,3 +198,65 @@ export const isValidRussianPhone = (phone) => {
 	return false;
 };
 
+/**
+ * Плавный скролл к элементу с контролем изинга и длительности
+ *
+ * @param {Element} targetElement - DOM элемент, до которого нужно доскроллить
+ * @param {Object} [config]
+ * @param {number} [config.duration=600] - Длительность анимации в мс
+ * @param {(t:number)=>number} [config.easing] - Функция изинга (0..1 → 0..1)
+ * @param {'start'|'center'|'end'} [config.align='start'] - Куда выровнять элемент
+ * @returns {Promise<void>}
+ */
+export function scrollToElement(targetElement, config = {}) {
+	return new Promise((resolve, reject) => {
+		if (!(targetElement instanceof Element)) {
+			reject(
+				new Error('scrollToElement: targetElement должен быть DOM-элементом.')
+			);
+			return;
+		}
+
+		const {
+			duration = 600,
+			easing = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2), // easeInOutQuad по умолчанию
+			align = 'start',
+		} = config;
+
+		const startY = window.pageYOffset;
+		const rect = targetElement.getBoundingClientRect();
+		let targetY;
+
+		switch (align) {
+			case 'center':
+				targetY = rect.top + startY - window.innerHeight / 2 + rect.height / 2;
+				break;
+			case 'end':
+				targetY = rect.top + startY - window.innerHeight + rect.height;
+				break;
+			case 'start':
+			default:
+				targetY = rect.top + startY;
+				break;
+		}
+
+		const diff = targetY - startY;
+		const startTime = performance.now();
+
+		function step(currentTime) {
+			const elapsed = currentTime - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+			const easedProgress = easing(progress);
+
+			window.scrollTo(0, startY + diff * easedProgress);
+
+			if (elapsed < duration) {
+				requestAnimationFrame(step);
+			} else {
+				resolve();
+			}
+		}
+
+		requestAnimationFrame(step);
+	});
+}

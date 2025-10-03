@@ -1,4 +1,4 @@
-import { debounce, formDataToObject, wait } from './utils';
+import { debounce, formDataToObject, scrollToElement, wait } from './utils';
 
 const ROOT_SELECTOR = '[data-js-product-filter-form]';
 
@@ -217,31 +217,32 @@ class ProductFilterForm {
 	scrollToCatalogIfNecessary() {
 		const catalogElement = document.getElementById('catalog');
 
-		if (catalogElement) {
-			const catalogRect = catalogElement.getBoundingClientRect();
-
-			if (catalogRect.top < 0) {
-				catalogElement.scrollIntoView({ behavior: 'smooth' });
-			}
+		if (!catalogElement) {
+			return Promise.resolve();
 		}
+
+		const catalogRect = catalogElement.getBoundingClientRect();
+
+		if (catalogRect.top >= 0) {
+			return Promise.resolve();
+		}
+
+		return scrollToElement(catalogElement, {
+			duration: 1000,
+			easing: function (x) {
+				return x < 0.5
+					? 16 * x * x * x * x * x
+					: 1 - Math.pow(-2 * x + 2, 5) / 2;
+			},
+			align: 'start',
+		});
 	}
 
-	async getFilteredProducts() {
-		if (this.abortController) {
-			this.abortController.abort();
-		}
-
-		document.documentElement.classList.add(this.stateSelectors.isLoading);
-
-		this.scrollToCatalogIfNecessary();
-
+	async fetchProducts() {
 		this.abortController = new AbortController();
 		const signal = this.abortController.signal;
 
 		const formData = new FormData(this.filterForm);
-
-		this.filterForm.classList.add(this.stateSelectors.isLoading);
-		this.contentElement.classList.add(this.stateSelectors.isLoading);
 
 		try {
 			const response = await fetch(LOVE_FOREVER.AJAX_URL, {
@@ -258,8 +259,36 @@ class ProductFilterForm {
 				throw new Error(body.data.message);
 			}
 
-			this.contentElement.innerHTML = body.data.feed;
-			this.paginationElement.innerHTML = body.data.pagination;
+			return body.data;
+		} catch (error) {
+			if (error.name === 'AbortError') {
+				return null;
+			}
+			throw error;
+		}
+	}
+
+	async getFilteredProducts() {
+		if (this.abortController) {
+			this.abortController.abort();
+		}
+
+		document.documentElement.classList.add(this.stateSelectors.isLoading);
+		this.filterForm.classList.add(this.stateSelectors.isLoading);
+		this.contentElement.classList.add(this.stateSelectors.isLoading);
+
+		const formData = new FormData(this.filterForm);
+
+		try {
+			const [{ value: data }, _] = await Promise.allSettled([
+				this.fetchProducts(),
+				this.scrollToCatalogIfNecessary(),
+			]);
+
+			console.log({ data });
+
+			this.contentElement.innerHTML = data.feed;
+			this.paginationElement.innerHTML = data.pagination;
 		} catch (error) {
 			if (error.name !== 'AbortError') {
 				console.error(error.message);
