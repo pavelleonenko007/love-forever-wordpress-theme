@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 					<?php endif; ?>
 				</div>
 				<div class="dialog-card__body">
-					<form id="globalCallbackForm" class="fitting-form" data-js-callback-form>
+					<form id="globalCallbackForm" class="fitting-form" data-js-callback-form data-js-input-zoom-prevention>
 						<fieldset class="fitting-form__group">
 							<div class="fitting-form__group-body">
 								<div class="field">
