@@ -3,12 +3,12 @@
 .lf-navbar {
 	@include mobile {
 		& .lf-navbar__menu-line--mobile {
-			padding-top: 26rem;
+			padding-top: 28rem;
 		}
 
 		& .logo-link,
 		& .lf-scroll-navbar-logo--mobile {
-			padding-top: 6rem;
+			padding-top: 8rem;
 		}
 	}
 
