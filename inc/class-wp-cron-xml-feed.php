@@ -108,10 +108,6 @@ class WP_Cron_XML_Feed {
 					'limit'    => 360,
 				),
 				array(
-					'category' => 'evening',
-					'limit'    => 72,
-				),
-				array(
 					'category' => 'prom',
 					'limit'    => 96,
 				),
@@ -127,6 +123,18 @@ class WP_Cron_XML_Feed {
 				array(
 					'category' => 'prom',
 					'limit'    => 48,
+				),
+				array(
+					'category' => 'wedding',
+					'limit'    => 72,
+				),
+				array(
+					'category' => 'evening',
+					'limit'    => 72,
+				),
+				array(
+					'category' => 'prom',
+					'limit'    => 72,
 				),
 			);
 
