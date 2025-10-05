@@ -96,6 +96,21 @@
 							);
 							?>
 						</li>
+							<?php if ( 0 === $image_slide_index && ! empty( $video ) ) : ?>
+						<li class="splide__slide lf-single-slider__slide">
+							<video 
+								class="lf-single-slider__video" 
+								preload="metadata"
+								muted 
+								playsinline 
+								loop 
+								autoplay
+								data-js-play-if-visible-video
+							>
+								<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
+							</video>
+						</li>
+						<?php endif; ?>
 						<?php endforeach; ?>
 					</ul>
 				</div>
@@ -146,6 +161,7 @@
 							playsinline
 							loop
 							autoplay
+							preload="metadata"
 							data-js-play-if-visible-video
 							>
 							<source src="<?php echo esc_url( $video['url'] ); ?>" type="<?php echo esc_attr( loveforever_get_video_mime_type( $video ) ); ?>">
