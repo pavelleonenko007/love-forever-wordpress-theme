@@ -251,7 +251,7 @@ class XML_Feed_Generator {
 		// Add collections
 		$collections = $xml->createElement( 'collections' );
 		$collection  = $xml->createElement( 'collection' );
-		$collection->setAttribute( 'id', $category->slug );
+		$collection->setAttribute( 'id', $category->term_id );
 		$collection->appendChild( $xml->createElement( 'url', esc_url( get_term_link( $category ) ) ) );
 		$collection_name = ( $category->slug === 'wedding-sale' ) ? 'Распродажа' : $category->name;
 		$collection->appendChild( $xml->createElement( 'name', esc_html( $collection_name . ' в магазине Love Forever' ) ) );
