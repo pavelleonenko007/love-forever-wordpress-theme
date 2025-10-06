@@ -2836,3 +2836,27 @@ function loveforever_redirect_dress_category() {
 		}
 	}
 }
+
+
+add_filter( 'redirection_url_target', 'loveforever_filter_redirect_target_url', 10, 2 );
+function loveforever_filter_redirect_target_url( $target_url, $original_url ) {
+	// Если это редирект с параметром style
+	if ( strpos( $target_url, 'style=' ) !== false ) {
+		$query_params = array();
+		$parsed       = parse_url( $target_url );
+
+		if ( isset( $parsed['query'] ) ) {
+			parse_str( $parsed['query'], $query_params );
+
+			unset( $query_params['style'] );
+			$new_query = http_build_query( $query_params );
+
+			$target_url = $parsed['path'];
+
+			if ( $new_query ) {
+				$target_url .= '?' . $new_query;
+			}
+		}
+	}
+	return $target_url;
+}
