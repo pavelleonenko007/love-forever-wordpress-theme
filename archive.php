@@ -450,7 +450,7 @@ if ( ! empty( $dresses_without_order ) ) {
 								$products_query_args['tax_query'][] = array(
 									'taxonomy' => 'style',
 									'field'    => 'term_id',
-									'terms'    => array_map( 'absint', wp_unslash( $_GET['style'] ) ),
+									'terms'    => is_array( $_GET['style'] ) ? array_map( 'absint', wp_unslash( $_GET['style'] ) ) : array( absint( $_GET['style'] ) ),
 								);
 							}
 
@@ -805,7 +805,7 @@ if ( ! empty( $dresses_without_order ) ) {
 																		name="<?php echo esc_attr( $other_filter_name . '[]' ); ?>"
 																		class="loveforever-checkbox__control"
 																		value="<?php echo esc_attr( $other_filter_field->term_id ); ?>"
-																		<?php checked( isset( $_GET[ $other_filter_name ] ) && in_array( $other_filter_field->term_id, $_GET[ $other_filter_name ] ) ); ?>
+																		<?php checked( isset( $_GET[ $other_filter_name ] ) && in_array( $other_filter_field->term_id, is_array( $_GET[ $other_filter_name ] ) ? $_GET[ $other_filter_name ] : array( $_GET[ $other_filter_name ] ) ) ); ?>
 																	>
 																	<span class="loveforever-checkbox__label"><?php echo esc_html( $other_filter_field->name ); ?></span>
 																</label>
