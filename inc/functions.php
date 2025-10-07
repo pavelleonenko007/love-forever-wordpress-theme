@@ -1107,3 +1107,126 @@ function loveforever_to_uppercase_brand_name_in_string( $str = '' ) {
 
 	return $str;
 }
+
+/**
+ * Проверяет наличие WebP копии изображения
+ *
+ * @param int $attachment_id ID вложения (изображения)
+ * @return bool true если WebP копия существует, false если нет
+ */
+function loveforever_has_webp_copy( $attachment_id ) {
+	if ( ! $attachment_id ) {
+		return false;
+	}
+
+	// Получаем URL оригинального изображения
+	$original_url = wp_get_attachment_url( $attachment_id );
+
+	if ( ! $original_url ) {
+		return false;
+	}
+
+	$relative_path = str_replace( WP_CONTENT_URL, '', $original_url );
+
+	// Формируем путь к WebP копии
+	$webp_path = WP_CONTENT_DIR . '/webp-express/webp-images/doc-root/wp-content' . $relative_path . '.webp';
+	// Проверяем существование файла
+	return file_exists( $webp_path );
+}
+
+/**
+ * Получает srcset для изображения с WebP копиями, если они существуют
+ *
+ * @param int    $attachment_id ID вложения (изображения)
+ * @param array  $size          Размер изображения
+ * @param string $image_meta    Метаданные изображения
+ * @return string|false srcset строка или false при ошибке
+ */
+function loveforever_get_attachment_image_srcset( $attachment_id, $size = 'medium', $image_meta = null ) {
+	if ( ! $attachment_id ) {
+		return false;
+	}
+
+	// Получаем обычный srcset
+	$srcset = wp_get_attachment_image_srcset( $attachment_id, $size, $image_meta );
+	
+	if ( ! $srcset ) {
+		return false;
+	}
+
+	// Проверяем, есть ли WebP копии
+	$has_webp = loveforever_has_webp_copy( $attachment_id );
+	
+	if ( ! $has_webp ) {
+		return $srcset;
+	}
+
+	// Получаем метаданные изображения
+	if ( ! $image_meta ) {
+		$image_meta = wp_get_attachment_metadata( $attachment_id );
+	}
+
+	if ( ! $image_meta || ! isset( $image_meta['sizes'] ) ) {
+		return $srcset;
+	}
+
+	// Получаем базовый URL для WebP
+	$base_url = wp_get_attachment_url( $attachment_id );
+	$relative_path = str_replace( WP_CONTENT_URL, '', $base_url );
+	$webp_base_url = WP_CONTENT_URL . '/webp-express/webp-images/doc-root/wp-content' . $relative_path;
+
+	$webp_wp_content_url = WP_CONTENT_URL . '/webp-express/webp-images/doc-root/wp-content';
+	$webp_wp_content_dir = WP_CONTENT_DIR . '/webp-express/webp-images/doc-root/wp-content';
+
+	// Парсим существующий srcset
+	$srcset_parts = explode( ', ', $srcset );
+	$webp_srcset_parts = array();
+
+	foreach ( $srcset_parts as $part ) {
+		$part_parts = explode( ' ', trim( $part ) );
+
+		if ( count( $part_parts ) >= 2 ) {
+			$url = trim( $part_parts[0] );
+			$descriptor = trim( $part_parts[1] );
+			
+			// Заменяем URL на WebP версию
+			$webp_url = str_replace( WP_CONTENT_URL, $webp_wp_content_url, $url ) . '.webp';
+			
+			// Проверяем существование WebP файла
+			$webp_path = str_replace( $webp_wp_content_url, $webp_wp_content_dir, $webp_url );
+
+			if ( file_exists( $webp_path ) ) {
+				$webp_srcset_parts[] = $webp_url . ' ' . $descriptor;
+			} else {
+				// Если WebP версии нет, используем оригинал
+				$webp_srcset_parts[] = $part;
+			}
+		}
+	}
+
+	return implode( ', ', $webp_srcset_parts );
+}
+
+function loveforever_get_attachment_image_url( $attachment_id, $size = 'medium' ) {
+	if ( ! $attachment_id ) {
+		return false;
+	}
+
+	$src = wp_get_attachment_image_url( $attachment_id, $size );
+
+	if ( ! $src ) {
+		return false;
+	}
+
+	$has_webp = loveforever_has_webp_copy( $attachment_id );
+
+	if ( ! $has_webp ) {
+		return $src;
+	}
+
+	$webp_wp_content_url = WP_CONTENT_URL . '/webp-express/webp-images/doc-root/wp-content';
+
+	$webp_src = str_replace( WP_CONTENT_URL, $webp_wp_content_url, $src ) . '.webp';
+
+	return $webp_src;
+}

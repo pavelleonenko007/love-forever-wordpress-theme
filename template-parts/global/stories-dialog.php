@@ -45,7 +45,7 @@ if ( ! empty( $args['stories'] ) ) :
 											$slides = get_field( 'slides', $story->ID );
 											foreach ( $slides as $slide ) :
 												$image_or_video = $slide['image_or_video'];
-												$interval = 5000;
+												$interval       = 5000;
 
 												if ( 'video' === $slide['image_or_video']['type'] ) {
 													$interval = absint( wp_get_attachment_metadata( $image_or_video['ID'] )['length'] ) * 1000;
@@ -64,8 +64,16 @@ if ( ! empty( $args['stories'] ) ) :
 																<div class="story__loader-spinner"></div>
 																<div class="story__loader-text">Загрузка...</div>
 															</div>
-														<?php else : ?>
-															<div class="story__bg story__bg--placeholder" data-src="<?php echo esc_url( $image_or_video['url'] ); ?>" data-alt="<?php echo esc_attr( $image_or_video['alt'] ); ?>">
+															<?php
+														else :
+															?>
+															<div 
+																class="story__bg story__bg--placeholder" 
+																data-srcset="<?php echo esc_attr( loveforever_get_attachment_image_srcset( $image_or_video['ID'], 'fullhd' ) ); ?>" 
+																data-src="<?php echo esc_url( loveforever_get_attachment_image_url( $image_or_video['ID'], 'fullhd' ) ); ?>" 
+																data-sizes="<?php echo wp_get_attachment_image_sizes( $image_or_video['ID'], 'fullhd' ); ?>"
+																data-alt="<?php echo esc_attr( $image_or_video['alt'] ); ?>"
+															>
 																<!-- Изображение будет загружено динамически через JavaScript -->
 																<div class="story__bg-placeholder">
 																	<div class="story__bg-placeholder-icon">📷</div>

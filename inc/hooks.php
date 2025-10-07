@@ -1113,14 +1113,10 @@ function loveforever_submit_favorites_to_phone_via_ajax() {
 	}
 }
 
-add_action( 'pre_get_posts', 'loveforever_modify_review_query' );
+add_filter( 'pre_get_posts', 'loveforever_modify_review_query' );
 function loveforever_modify_review_query( $query ) {
 	if ( is_post_type_archive( 'review' ) && ! is_admin() ) {
 		$query->set( 'posts_per_page', 12 );
-	}
-
-	if ( $query->get( 'post_type' ) === 'review' ) {
-		$query->set( 'orderby', 'menu_order' );
 	}
 }
 

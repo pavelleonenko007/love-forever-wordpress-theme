@@ -3,43 +3,43 @@ import '@splidejs/splide/css/core';
 import Splide from '@splidejs/splide';
 import DialogCollection from './Dialog';
 
-	/**
-	 * Кастомный Autoplay для слайдеров с одним слайдом
-	 * Обновляет прогресс и переключает слайд по истечении интервала
-	 */
-	class CustomAutoplay {
-		constructor(splide, options = {}) {
-			this.splide = splide;
-			this.interval = options.interval || 5000;
-			this.isPaused = true;
-			this.startTime = 0;
-			this.animationId = null;
-			this.progress = 0;
-			this.isMediaLoaded = false; // Флаг загрузки медиа
-			
-			// Callbacks
-			this.onProgress = options.onProgress || (() => {});
-			this.onComplete = options.onComplete || (() => {});
-			this.onMediaLoaded = options.onMediaLoaded || (() => {});
-			
-			this.update = this.update.bind(this);
-		}
-	
+/**
+ * Кастомный Autoplay для слайдеров с одним слайдом
+ * Обновляет прогресс и переключает слайд по истечении интервала
+ */
+class CustomAutoplay {
+	constructor(splide, options = {}) {
+		this.splide = splide;
+		this.interval = options.interval || 5000;
+		this.isPaused = true;
+		this.startTime = 0;
+		this.animationId = null;
+		this.progress = 0;
+		this.isMediaLoaded = false; // Флаг загрузки медиа
+
+		// Callbacks
+		this.onProgress = options.onProgress || (() => {});
+		this.onComplete = options.onComplete || (() => {});
+		this.onMediaLoaded = options.onMediaLoaded || (() => {});
+
+		this.update = this.update.bind(this);
+	}
+
 	start() {
 		if (!this.isPaused) return;
-		
+
 		// Запускаем автоплей только если медиа загружено
 		if (!this.isMediaLoaded) {
 			console.log('Autoplay paused: media not loaded yet');
 			return;
 		}
-		
+
 		this.isPaused = false;
 		this.startTime = Date.now();
 		this.progress = 0;
 		this.animationId = requestAnimationFrame(this.update);
 	}
-	
+
 	pause() {
 		this.isPaused = true;
 		if (this.animationId) {
@@ -47,55 +47,55 @@ import DialogCollection from './Dialog';
 			this.animationId = null;
 		}
 	}
-	
+
 	rewind() {
 		this.startTime = Date.now();
 		this.progress = 0;
 		this.onProgress(0);
 	}
-	
+
 	/**
 	 * Отмечает медиа как загруженное и запускает автоплей если он был приостановлен
 	 */
 	markMediaAsLoaded() {
 		this.isMediaLoaded = true;
 		this.onMediaLoaded();
-		
+
 		// Если автоплей был приостановлен из-за незагруженного медиа, запускаем его
 		if (this.isPaused && !this.animationId) {
 			this.start();
 		}
 	}
-	
+
 	/**
 	 * Сбрасывает флаг загрузки медиа (при переходе к новому слайду)
 	 */
 	resetMediaLoaded() {
 		this.isMediaLoaded = false;
 	}
-	
+
 	set(interval) {
 		this.interval = interval;
 	}
-	
+
 	update() {
 		if (this.isPaused) return;
-		
+
 		const elapsed = Date.now() - this.startTime;
 		this.progress = Math.min(elapsed / this.interval, 1);
-		
+
 		// Обновляем прогресс
 		this.onProgress(this.progress);
-		
+
 		// Если интервал завершен
 		if (this.progress >= 1) {
 			this.onComplete();
 			this.rewind();
 		}
-		
+
 		this.animationId = requestAnimationFrame(this.update);
 	}
-	
+
 	destroy() {
 		this.pause();
 	}
@@ -122,7 +122,7 @@ export default class Stories {
 		// Переменные для мониторинга прогресса
 		this.lastProgressUpdate = null;
 		this.lastProgressRate = null;
-		
+
 		// Хранилище кастомных автоплеев для слайдеров с одним слайдом
 		this.customAutoplays = new Map();
 
@@ -158,7 +158,7 @@ export default class Stories {
 			.forEach((element, index) => {
 				const slides = element.querySelectorAll('.splide__slide');
 				const hasMultipleSlides = slides.length > 1;
-				
+
 				const instance = new Splide(element, {
 					perPage: 1,
 					perMove: 1,
@@ -174,7 +174,7 @@ export default class Stories {
 					classes: {
 						pagination: 'splide__pagination',
 						page: 'splide__pagination__page',
-					}
+					},
 				});
 
 				this.stories.set(index, instance);
@@ -200,27 +200,33 @@ export default class Stories {
 
 						const slide = splideSlide.slide;
 						const isActiveSlide = splideSlide.index === newIndex;
-						
+
 						// Загружаем медиа для активного слайда
 						if (isActiveSlide) {
-							this.loadSlideMedia(slide, this.activeStoryIndex, splideSlide.index).then(() => {
-								const video = this.hasVideo(slide);
-								if (video) {
-									this.handleVideoPlayback(video, slide, activeStory);
-								}
-								
-								// Адаптивная предзагрузка после загрузки активного слайда
-								if (this.isMobile) {
-									// На мобильных предзагружаем следующий слайд
-									this.preloadMobile(this.activeStoryIndex);
-								}
-							}).catch(error => {
-								console.warn('Failed to load slide media on move:', error);
-								// При ошибке загрузки переходим к следующему слайду
-								setTimeout(() => {
-									activeStory.go('>');
-								}, 2000);
-							});
+							this.loadSlideMedia(
+								slide,
+								this.activeStoryIndex,
+								splideSlide.index
+							)
+								.then(() => {
+									const video = this.hasVideo(slide);
+									if (video) {
+										this.handleVideoPlayback(video, slide, activeStory);
+									}
+
+									// Адаптивная предзагрузка после загрузки активного слайда
+									if (this.isMobile) {
+										// На мобильных предзагружаем следующий слайд
+										this.preloadMobile(this.activeStoryIndex);
+									}
+								})
+								.catch((error) => {
+									console.warn('Failed to load slide media on move:', error);
+									// При ошибке загрузки переходим к следующему слайду
+									setTimeout(() => {
+										activeStory.go('>');
+									}, 2000);
+								});
 						} else {
 							// Останавливаем видео в неактивных слайдах
 							const video = this.hasVideo(slide);
@@ -264,7 +270,7 @@ export default class Stories {
 	onWindowResize = () => {
 		const wasMobile = this.isMobile;
 		this.isMobile = this.checkIsMobile();
-		
+
 		// Если изменился тип устройства, перезапускаем предзагрузку
 		if (wasMobile !== this.isMobile) {
 			this.adaptivePreload(this.activeStoryIndex);
@@ -274,10 +280,10 @@ export default class Stories {
 	destroy() {
 		window.removeEventListener('dialogClose', this.onDialogClose);
 		window.removeEventListener('resize', this.onWindowResize);
-		
+
 		// Останавливаем все видео и сбрасываем таймеры перед уничтожением
 		this.stopAllVideos();
-		
+
 		// Уничтожаем кастомные автоплеи
 		this.customAutoplays.forEach((customAutoplay) => {
 			customAutoplay.destroy();
@@ -287,7 +293,7 @@ export default class Stories {
 		// Очищаем кэш предзагрузки
 		this.preloadedStories.clear();
 		this.preloadedSlides.clear();
-		
+
 		this.root.destroy();
 		this.stories.forEach((storySplide) => {
 			storySplide.root.removeEventListener('pointerdown', this.onPointerDown);
@@ -305,13 +311,13 @@ export default class Stories {
 		this.stories.forEach((splide, index) => {
 			// Останавливаем стандартный автоплей
 			splide.Components.Autoplay.pause();
-			
+
 			// Останавливаем кастомный автоплей если есть
 			const customAutoplay = this.customAutoplays.get(index);
 			if (customAutoplay) {
 				customAutoplay.pause();
 			}
-			
+
 			splide.Components.Slides.get().forEach((splideSlide) => {
 				const video = this.hasVideo(splideSlide.slide);
 
@@ -444,12 +450,15 @@ export default class Stories {
 					}
 				} else {
 					// Для стандартного автоплея запускаем только если медиа загружено
-					const activeSlide = activeStory.Components.Slides.getAt(activeStory.index).slide;
-					const hasMedia = activeSlide.querySelector('video[src]') || 
-									activeSlide.querySelector('.story__bg--loaded img') ||
-									!activeSlide.querySelector('video[data-src]') && 
-									!activeSlide.querySelector('.story__bg--placeholder[data-src]');
-					
+					const activeSlide = activeStory.Components.Slides.getAt(
+						activeStory.index
+					).slide;
+					const hasMedia =
+						activeSlide.querySelector('video[src]') ||
+						activeSlide.querySelector('.story__bg--loaded img') ||
+						(!activeSlide.querySelector('video[data-src]') &&
+							!activeSlide.querySelector('.story__bg--placeholder[data-src]'));
+
 					if (hasMedia) {
 						Autoplay.play();
 					}
@@ -610,7 +619,11 @@ export default class Stories {
 	loadSlideMedia(slide, storyIndex = null, slideIndex = null) {
 		return new Promise((resolve, reject) => {
 			// Проверяем, не загружен ли уже слайд
-			if (storyIndex !== null && slideIndex !== null && this.isSlidePreloaded(storyIndex, slideIndex)) {
+			if (
+				storyIndex !== null &&
+				slideIndex !== null &&
+				this.isSlidePreloaded(storyIndex, slideIndex)
+			) {
 				// Если медиа уже загружено, уведомляем автоплей
 				this.notifyCustomAutoplayMediaLoaded(storyIndex);
 				this.manageStandardAutoplay(storyIndex, true);
@@ -624,28 +637,34 @@ export default class Stories {
 			}
 
 			const video = slide.querySelector('video[data-src]');
-			const imagePlaceholder = slide.querySelector('.story__bg--placeholder[data-src]');
-			
+			const imagePlaceholder = slide.querySelector(
+				'.story__bg--placeholder[data-src]'
+			);
+
 			if (video) {
-				this.loadVideo(video).then(() => {
-					if (storyIndex !== null && slideIndex !== null) {
-						this.markSlideAsPreloaded(storyIndex, slideIndex);
-					}
-					// Уведомляем автоплей о загрузке видео
-					this.notifyCustomAutoplayMediaLoaded(storyIndex);
-					this.manageStandardAutoplay(storyIndex, true);
-					resolve();
-				}).catch(reject);
+				this.loadVideo(video)
+					.then(() => {
+						if (storyIndex !== null && slideIndex !== null) {
+							this.markSlideAsPreloaded(storyIndex, slideIndex);
+						}
+						// Уведомляем автоплей о загрузке видео
+						this.notifyCustomAutoplayMediaLoaded(storyIndex);
+						this.manageStandardAutoplay(storyIndex, true);
+						resolve();
+					})
+					.catch(reject);
 			} else if (imagePlaceholder) {
-				this.loadImage(imagePlaceholder).then(() => {
-					if (storyIndex !== null && slideIndex !== null) {
-						this.markSlideAsPreloaded(storyIndex, slideIndex);
-					}
-					// Уведомляем автоплей о загрузке изображения
-					this.notifyCustomAutoplayMediaLoaded(storyIndex);
-					this.manageStandardAutoplay(storyIndex, true);
-					resolve();
-				}).catch(reject);
+				this.loadImage(imagePlaceholder)
+					.then(() => {
+						if (storyIndex !== null && slideIndex !== null) {
+							this.markSlideAsPreloaded(storyIndex, slideIndex);
+						}
+						// Уведомляем автоплей о загрузке изображения
+						this.notifyCustomAutoplayMediaLoaded(storyIndex);
+						this.manageStandardAutoplay(storyIndex, true);
+						resolve();
+					})
+					.catch(reject);
 			} else {
 				// Если медиа уже загружено или отсутствует
 				if (storyIndex !== null && slideIndex !== null) {
@@ -679,7 +698,9 @@ export default class Stories {
 			}
 
 			// Показываем лоадер
-			const loader = video.parentElement.querySelector('[data-js-video-loader]');
+			const loader = video.parentElement.querySelector(
+				'[data-js-video-loader]'
+			);
 			if (loader) {
 				loader.classList.add('is-active');
 			}
@@ -692,7 +713,7 @@ export default class Stories {
 
 			// Обработчики загрузки
 			const handleLoad = () => {
-				video.removeEventListener('loadeddata', handleLoad);
+				video.removeEventListener('canplay', handleLoad);
 				video.removeEventListener('error', handleError);
 				if (loader) {
 					loader.classList.remove('is-active');
@@ -701,7 +722,7 @@ export default class Stories {
 			};
 
 			const handleError = () => {
-				video.removeEventListener('loadeddata', handleLoad);
+				video.removeEventListener('canplay', handleLoad);
 				video.removeEventListener('error', handleError);
 				if (loader) {
 					loader.classList.remove('is-active');
@@ -709,7 +730,7 @@ export default class Stories {
 				reject(new Error('Failed to load video'));
 			};
 
-			video.addEventListener('loadeddata', handleLoad);
+			video.addEventListener('canplay', handleLoad);
 			video.addEventListener('error', handleError);
 
 			// Загружаем видео
@@ -725,8 +746,10 @@ export default class Stories {
 	loadImage(placeholder) {
 		return new Promise((resolve, reject) => {
 			const src = placeholder.getAttribute('data-src');
+			const srcset = placeholder.getAttribute('data-srcset');
+			const sizes = placeholder.getAttribute('data-sizes');
 			const alt = placeholder.getAttribute('data-alt') || '';
-			
+
 			if (!src) {
 				reject(new Error('No image source provided'));
 				return;
@@ -739,7 +762,7 @@ export default class Stories {
 			}
 
 			const img = new Image();
-			
+
 			img.onload = () => {
 				// Заменяем плейсхолдер на изображение
 				placeholder.innerHTML = '';
@@ -748,13 +771,12 @@ export default class Stories {
 				img.className = 'story__bg';
 				img.alt = alt;
 				placeholder.appendChild(img);
-				
+
 				// Добавляем класс для плавного появления
 				setTimeout(() => {
 					img.classList.add('loaded');
+					resolve();
 				}, 50);
-				
-				resolve();
 			};
 
 			img.onerror = () => {
@@ -770,6 +792,8 @@ export default class Stories {
 			};
 
 			img.src = src;
+			img.srcset = srcset;
+			img.sizes = sizes;
 		});
 	}
 
@@ -781,7 +805,7 @@ export default class Stories {
 	 */
 	handleVideoPlayback(video, slide, activeStory) {
 		const loader = slide.querySelector('[data-js-video-loader]');
-		
+
 		// Добавляем мониторинг буферизации для переключенных видео
 		if (!video.hasAttribute('data-buffering-monitor')) {
 			let bufferingStartTime = null;
@@ -792,10 +816,10 @@ export default class Stories {
 				if (loader) {
 					loader.classList.add('is-active');
 				}
-				
+
 				if (!bufferingStartTime) {
 					bufferingStartTime = Date.now();
-					
+
 					bufferingTimeout = setTimeout(() => {
 						if (loader) {
 							loader.classList.remove('is-active');
@@ -810,7 +834,7 @@ export default class Stories {
 				if (loader) {
 					loader.classList.remove('is-active');
 				}
-				
+
 				if (bufferingStartTime) {
 					bufferingStartTime = null;
 					if (bufferingTimeout) {
@@ -818,7 +842,7 @@ export default class Stories {
 						bufferingTimeout = null;
 					}
 				}
-				
+
 				// Обновляем интервал кастомного автоплея если это слайдер с одним слайдом
 				const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
 				if (customAutoplay) {
@@ -831,7 +855,7 @@ export default class Stories {
 			video.setAttribute('data-buffering-monitor', 'true');
 		}
 
-		video.play().catch(error => {
+		video.play().catch((error) => {
 			// Скрываем лоадер при ошибке
 			if (loader) {
 				loader.classList.remove('is-active');
@@ -865,15 +889,20 @@ export default class Stories {
 
 		const currentSlideIndex = currentStory.index;
 		const slides = currentStory.Components.Slides.get();
-		
+
 		// Предзагружаем только следующий слайд в текущей истории
 		const nextSlideIndex = currentSlideIndex + 1;
 		if (nextSlideIndex < slides.length) {
 			const nextSlide = slides[nextSlideIndex]?.slide;
-			if (nextSlide && !this.isSlidePreloaded(currentStoryIndex, nextSlideIndex)) {
-				this.loadSlideMedia(nextSlide, currentStoryIndex, nextSlideIndex).catch(error => {
-					console.warn('Failed to preload next slide on mobile:', error);
-				});
+			if (
+				nextSlide &&
+				!this.isSlidePreloaded(currentStoryIndex, nextSlideIndex)
+			) {
+				this.loadSlideMedia(nextSlide, currentStoryIndex, nextSlideIndex).catch(
+					(error) => {
+						console.warn('Failed to preload next slide on mobile:', error);
+					}
+				);
 			}
 		}
 	}
@@ -915,11 +944,16 @@ export default class Stories {
 		if (slides.length > 0) {
 			const firstSlide = slides[0]?.slide;
 			if (firstSlide && !this.isSlidePreloaded(storyIndex, 0)) {
-				this.loadSlideMedia(firstSlide, storyIndex, 0).then(() => {
-					this.preloadedStories.add(storyIndex);
-				}).catch(error => {
-					console.warn(`Failed to preload first slide of story ${storyIndex}:`, error);
-				});
+				this.loadSlideMedia(firstSlide, storyIndex, 0)
+					.then(() => {
+						this.preloadedStories.add(storyIndex);
+					})
+					.catch((error) => {
+						console.warn(
+							`Failed to preload first slide of story ${storyIndex}:`,
+							error
+						);
+					});
 			}
 		}
 	}
@@ -936,8 +970,11 @@ export default class Stories {
 		slides.forEach((splideSlide, slideIndex) => {
 			const slide = splideSlide.slide;
 			if (slide && !this.isSlidePreloaded(storyIndex, slideIndex)) {
-				this.loadSlideMedia(slide, storyIndex, slideIndex).catch(error => {
-					console.warn(`Failed to preload slide ${slideIndex} of story ${storyIndex}:`, error);
+				this.loadSlideMedia(slide, storyIndex, slideIndex).catch((error) => {
+					console.warn(
+						`Failed to preload slide ${slideIndex} of story ${storyIndex}:`,
+						error
+					);
 				});
 			}
 		});
@@ -949,8 +986,8 @@ export default class Stories {
 	 */
 	cleanupDistantStories(currentStoryIndex) {
 		const keepRange = 1; // Держим в кэше текущую ±1 историю
-		
-		this.preloadedStories.forEach(storyIndex => {
+
+		this.preloadedStories.forEach((storyIndex) => {
 			if (Math.abs(storyIndex - currentStoryIndex) > keepRange) {
 				this.cleanupStoryMedia(storyIndex);
 				this.preloadedStories.delete(storyIndex);
@@ -958,7 +995,7 @@ export default class Stories {
 		});
 
 		// Очищаем слайды далеких историй
-		this.preloadedSlides.forEach(slideId => {
+		this.preloadedSlides.forEach((slideId) => {
 			const [storyIndex] = slideId.split('-').map(Number);
 			if (Math.abs(storyIndex - currentStoryIndex) > keepRange) {
 				this.preloadedSlides.delete(slideId);
@@ -998,7 +1035,7 @@ export default class Stories {
 		if (!slide) return;
 
 		const interval = this.getSlideInterval(slide);
-		
+
 		const customAutoplay = new CustomAutoplay(instance, {
 			interval: interval,
 			onProgress: (rate) => {
@@ -1017,12 +1054,12 @@ export default class Stories {
 			},
 			onMediaLoaded: () => {
 				console.log(`Media loaded for story ${index}, starting autoplay`);
-			}
+			},
 		});
 
 		// Сохраняем ссылку на кастомный автоплей
 		this.customAutoplays.set(index, customAutoplay);
-		
+
 		// НЕ запускаем автоплей сразу - ждем загрузки медиа
 		// Автоплей запустится автоматически после загрузки медиа в loadSlideMedia
 	}
@@ -1041,11 +1078,11 @@ export default class Stories {
 		if (!slide) return;
 
 		const newInterval = this.getSlideInterval(slide);
-		
+
 		// Обновляем интервал и сбрасываем прогресс до 0
 		customAutoplay.set(newInterval);
 		customAutoplay.rewind();
-		
+
 		// Если это активная история, перезапускаем автоплей с новым интервалом
 		if (index === this.activeStoryIndex) {
 			customAutoplay.start();
@@ -1058,7 +1095,7 @@ export default class Stories {
 	 */
 	restartCurrentStory() {
 		const activeStory = this.stories.get(this.activeStoryIndex);
-		
+
 		// Останавливаем текущий автоплей
 		const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
 		if (customAutoplay) {
@@ -1066,7 +1103,7 @@ export default class Stories {
 		} else {
 			activeStory.Components.Autoplay.pause();
 		}
-		
+
 		// Останавливаем и сбрасываем видео
 		const slides = activeStory.Components.Slides.get();
 		slides.forEach((splideSlide) => {
@@ -1075,29 +1112,31 @@ export default class Stories {
 				video.pause();
 				video.currentTime = 0;
 				// Скрываем лоадер
-				const loader = splideSlide.slide.querySelector('[data-js-video-loader]');
+				const loader = splideSlide.slide.querySelector(
+					'[data-js-video-loader]'
+				);
 				if (loader) {
 					loader.classList.remove('is-active');
 				}
 			}
 		});
-		
+
 		// Сбрасываем прогресс-бары
 		const { items } = activeStory.Components.Pagination;
 		items.forEach((item) => {
 			item.button.style.setProperty('--progress', 0);
 		});
-		
+
 		// Сбрасываем мониторинг прогресса
 		this.lastProgressUpdate = null;
 		this.lastProgressRate = null;
-		
+
 		// Переходим к первому слайду
 		activeStory.go(0);
-		
+
 		// Запускаем видео в первом слайде
 		this.playActiveSlideVideo(activeStory);
-		
+
 		// Автоплей запустится автоматически после загрузки медиа в playActiveSlideVideo
 		// Не запускаем автоплей здесь, так как медиа может быть еще не загружено
 	}
@@ -1148,19 +1187,19 @@ export default class Stories {
 		this.stories.forEach((storySplide, index) => {
 			// Останавливаем стандартный автоплей
 			storySplide.Components.Autoplay.pause();
-			
+
 			// Останавливаем кастомный автоплей если есть
 			const customAutoplay = this.customAutoplays.get(index);
 			if (customAutoplay) {
 				customAutoplay.pause();
 			}
-			
+
 			// Сбрасываем прогресс-бары
 			const { items } = storySplide.Components.Pagination;
 			items.forEach((item) => {
 				item.button.style.setProperty('--progress', 0);
 			});
-			
+
 			// Останавливаем все видео в слайдах
 			const slides = storySplide.Components.Slides.get();
 			slides.forEach((splideSlide) => {
@@ -1179,50 +1218,59 @@ export default class Stories {
 	 */
 	playActiveSlideVideo(storyInstance) {
 		const activeSlideIndex = storyInstance.index;
-		const activeSlide = storyInstance.Components.Slides.get()[activeSlideIndex]?.slide;
-		
+		const activeSlide =
+			storyInstance.Components.Slides.get()[activeSlideIndex]?.slide;
+
 		if (!activeSlide) {
 			console.warn('Active slide not found');
 			return;
 		}
 
 		// Сначала загружаем медиа-файл для слайда
-		this.loadSlideMedia(activeSlide, this.activeStoryIndex, activeSlideIndex).then(() => {
-			const video = this.hasVideo(activeSlide);
-			
-			if (video) {
-				// Используем новый метод для обработки воспроизведения видео
-				this.handleVideoPlayback(video, activeSlide, storyInstance);
-			}
-			
-			// Обновляем интервал после успешной загрузки (для видео и изображений)
-			const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
-			if (customAutoplay) {
-				// Для слайдеров с одним слайдом обновляем кастомный автоплей
-				this.updateCustomAutoplayInterval(this.activeStoryIndex);
-			} else {
-				// Для слайдеров с множественными слайдами используем стандартный метод
-				this.setSlideInterval();
-			}
-		}).catch(error => {
-			console.warn('Failed to load slide media:', error);
-			// При ошибке загрузки медиа переходим к следующему слайду
-			setTimeout(() => {
-				storyInstance.go('>');
-			}, 2000);
-		});
+		this.loadSlideMedia(activeSlide, this.activeStoryIndex, activeSlideIndex)
+			.then(() => {
+				const video = this.hasVideo(activeSlide);
+
+				if (video) {
+					// Используем новый метод для обработки воспроизведения видео
+					this.handleVideoPlayback(video, activeSlide, storyInstance);
+				}
+
+				// Обновляем интервал после успешной загрузки (для видео и изображений)
+				const customAutoplay = this.customAutoplays.get(this.activeStoryIndex);
+				if (customAutoplay) {
+					// Для слайдеров с одним слайдом обновляем кастомный автоплей
+					this.updateCustomAutoplayInterval(this.activeStoryIndex);
+				} else {
+					// Для слайдеров с множественными слайдами используем стандартный метод
+					this.setSlideInterval();
+				}
+			})
+			.catch((error) => {
+				console.warn('Failed to load slide media:', error);
+				// При ошибке загрузки медиа переходим к следующему слайду
+				setTimeout(() => {
+					storyInstance.go('>');
+				}, 2000);
+			});
 	}
 
 	getSlideInterval = (slideEl) => {
 		const video = slideEl.querySelector('video');
 		if (video) {
 			const duration = video.duration;
-			
+
 			// Проверяем готовность видео
-			if (video.readyState >= 1 && duration && !isNaN(duration) && isFinite(duration) && duration > 0) {
+			if (
+				video.readyState >= 1 &&
+				duration &&
+				!isNaN(duration) &&
+				isFinite(duration) &&
+				duration > 0
+			) {
 				return duration * 1000;
 			}
-			
+
 			// Если видео есть, но метаданные не загружены, используем увеличенный fallback
 			if (video.readyState === 0) {
 				return 10_000; // 10 секунд для видео, которые еще загружаются
@@ -1234,19 +1282,20 @@ export default class Stories {
 	setSlideInterval = () => {
 		const activeStory = this.stories.get(this.activeStoryIndex);
 		const activeSlideIndex = activeStory.index;
-		const activeSlide = activeStory.Components.Slides.get()[activeSlideIndex].slide;
+		const activeSlide =
+			activeStory.Components.Slides.get()[activeSlideIndex].slide;
 
 		const newInterval = this.getSlideInterval(activeSlide);
 
 		// Используем data-атрибут метод (более надежный)
 		activeSlide.setAttribute('data-splide-interval', newInterval);
 		activeStory.options.interval = newInterval;
-		
+
 		// Принудительно вызываем событие move для обновления интервала
 		activeStory.emit('move', activeSlideIndex, activeSlideIndex);
 	};
 
-	updateProgress = (rate) => {		
+	updateProgress = (rate) => {
 		const activeStory = this.stories.get(this.activeStoryIndex);
 		const activePaginationButton =
 			activeStory.Components.Pagination.items[activeStory.index]?.button;
@@ -1257,12 +1306,17 @@ export default class Stories {
 			activePaginationButton.style.setProperty('--progress', rate);
 		} else {
 			// Альтернативный способ: ищем прогресс-бар в DOM
-			const activeSlide = activeStory.Components.Slides.get()[activeStory.index]?.slide;
+			const activeSlide =
+				activeStory.Components.Slides.get()[activeStory.index]?.slide;
 			if (activeSlide) {
-				const customProgressBar = activeSlide.querySelector('.story__progress-bar');
+				const customProgressBar = activeSlide.querySelector(
+					'.story__progress-bar'
+				);
 				if (customProgressBar) {
 					// Обновляем кастомный прогресс-бар
-					const progressFill = customProgressBar.querySelector('.story__progress-fill');
+					const progressFill = customProgressBar.querySelector(
+						'.story__progress-fill'
+					);
 					if (progressFill) {
 						progressFill.style.width = `${rate * 100}%`;
 					}
@@ -1280,13 +1334,17 @@ export default class Stories {
 			this.lastProgressRate = rate;
 		} else {
 			const timeSinceLastUpdate = Date.now() - this.lastProgressUpdate;
-			
+
 			// Если прогресс не изменился больше 10 секунд и это не конец слайда
-			if (timeSinceLastUpdate > 10000 && rate === this.lastProgressRate && rate < 0.95) {
+			if (
+				timeSinceLastUpdate > 10000 &&
+				rate === this.lastProgressRate &&
+				rate < 0.95
+			) {
 				activeStory.go('>');
 				return;
 			}
-			
+
 			// Обновляем время последнего изменения прогресса
 			if (rate !== this.lastProgressRate) {
 				this.lastProgressUpdate = Date.now();
@@ -1302,7 +1360,7 @@ export default class Stories {
 				// Для слайдеров с одним слайдом переход к следующей истории уже обрабатывается в onComplete
 				return;
 			}
-			
+
 			// Для слайдеров с множественными слайдами
 			// Если это последний слайд в истории
 			if (activeStory.index === activeStory.length - 1) {
