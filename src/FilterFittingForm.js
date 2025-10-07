@@ -108,13 +108,13 @@ class FilterFittingForm {
 
 		const dateControl = this.root.elements.date;
 
-		dateControl.value = date;
+		// dateControl.value = date;
+		// Преобразуем дату из формата yyyy-mm-dd в формат dd.mm.yyyy
+		const [year, month, day] = date.split('-');
+		const formattedDate = [day, month, year].join('.');
+		$(this.root.elements.altdate).val(formattedDate).datepicker('setDate', formattedDate);
 
-		dateControl.dispatchEvent(
-			new Event('change', {
-				bubbles: true,
-			})
-		);
+		this.filterFittings();
 	};
 
 	/**

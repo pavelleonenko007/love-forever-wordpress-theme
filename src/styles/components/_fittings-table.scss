@@ -19,13 +19,23 @@
 			opacity: 0.5;
 			pointer-events: none;
 		}
-		
+
 		tr:last-child {
 			td:first-child {
 				border-bottom-left-radius: 10rem;
 			}
 			td:last-child {
 				border-bottom-right-radius: 10rem;
+			}
+		}
+	}
+
+	&__row {
+		td {
+			width: 20%;
+
+			&:nth-child(3) {
+				width: 40%;
 			}
 		}
 	}

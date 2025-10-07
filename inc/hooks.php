@@ -332,9 +332,8 @@ function loveforever_filter_fittings_via_ajax() {
 	}
 
 	$today         = wp_date( 'Y-m-d', current_time( 'timestamp' ) );
-	$selected_date = ! empty( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
-	$start_date    = ! empty( $selected_date ) && strtotime( $selected_date ) > strtotime( $today ) ? $selected_date : $today;
-	$next_date     = wp_date( 'Y-m-d', strtotime( $start_date . ' +1 day' ) );
+	$selected_date = ! empty( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : $today;
+	$next_date     = wp_date( 'Y-m-d', strtotime( $selected_date . ' +1 day' ) );
 
 	$fittings_query_args = array(
 		'post_type'      => 'fitting',
@@ -346,7 +345,7 @@ function loveforever_filter_fittings_via_ajax() {
 		'meta_query'     => array(
 			array(
 				'key'     => 'fitting_time',
-				'value'   => $start_date,
+				'value'   => $selected_date,
 				'compare' => '>=',
 				'type'    => 'DATETIME',
 			),
@@ -1118,6 +1117,10 @@ add_action( 'pre_get_posts', 'loveforever_modify_review_query' );
 function loveforever_modify_review_query( $query ) {
 	if ( is_post_type_archive( 'review' ) && ! is_admin() ) {
 		$query->set( 'posts_per_page', 12 );
+	}
+
+	if ( $query->get( 'post_type' ) === 'review' ) {
+		$query->set( 'orderby', 'menu_order' );
 	}
 }
 
@@ -2837,6 +2840,15 @@ function loveforever_redirect_dress_category() {
 	}
 }
 
+add_filter( 'template_include', 'loveforever_redirect_non_authorized_users_from_fittings_admin_panel', 20 );
+function loveforever_redirect_non_authorized_users_from_fittings_admin_panel( $template ) {
+	if ( false !== strpos( $template, 'admin-fittings.php' ) && ! current_user_can( 'edit_fittings' ) ) {
+		wp_redirect( home_url() );
+		exit;
+	}
+
+	return $template;
+}
 
 add_filter( 'redirection_url_target', 'loveforever_filter_redirect_target_url', 10, 2 );
 function loveforever_filter_redirect_target_url( $target_url, $original_url ) {

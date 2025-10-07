@@ -45,7 +45,7 @@ $fitting_steps_colors = array(
 				</section>
 				<section class="section admin-fittings" style="padding-top: 100rem">
 					<div class="container">
-						<h1 class="p-86-96">
+						<h1 style="font-family: Tt Norms Pro Serif, sans-serif; font-style: italic; font-weight: 500;">
 						<?php
 						echo wp_kses_post( $page_title );
 						?>
@@ -220,7 +220,28 @@ $fitting_steps_colors = array(
 											<div class="fitting-filter-form__field field">
 												<input type="search" name="s" id="filterFittingFormSearchField" placeholder="Поиск" value="" class="field__control">
 											</div>
-											<div class="fitting-filter-form__field field">
+											<div class="fitting-filter-form__field field" data-js-datepicker>
+												<input 
+													type="date" 
+													name="date" 
+													value="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>"
+													id="filterFittingFormDateField" 
+													class="field__control"
+													title="Пожалуйста, укажите дату"
+													data-js-datepicker-original-control
+												>
+												<input 
+													type="text" 
+													name="altdate" 
+													id="filterFittingFormCustomDateField" 
+													class="field__control"
+													value="<?php echo esc_attr( wp_date( 'd.m.Y' ) ); ?>"
+													data-js-datepicker-custom-control
+													data-js-datepicker-config="<?php echo esc_attr( wp_json_encode( array( 'dateFormat' => 'd.mm.yy' ) ) ); ?>"
+												/>
+												<span class="field__errors" id="addReviewFormDateFieldErrors" data-js-form-field-errors></span>
+											</div>
+											<!-- <div class="fitting-filter-form__field field">
 												<input 
 													type="date" 
 													name="date" 
@@ -228,7 +249,7 @@ $fitting_steps_colors = array(
 													class="field__control"
 													value="<?php echo esc_attr( $today ); ?>"
 												>
-											</div>
+											</div> -->
 											<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $today ); ?>">Сегодня</button>
 											<button type="button" class="button" data-js-filter-fitting-form-date-button="<?php echo esc_attr( $tomorrow ); ?>">Завтра</button>
 											<button type="reset" class="button button--link">Сбросить фильтры</button>
