@@ -9,7 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 global $post;
 
-$price = get_field( 'price' );
+$price               = get_field( 'price' );
+$has_discount        = get_field( 'has_discount' );
+$price_with_discount = $has_discount ? get_field( 'price_with_discount' ) : null;
 ?>
 <a href="<?php the_permalink(); ?>" class="lf-search-result" data-js-search-result>
 	<span class="lf-search-result__title"><?php the_title(); ?></span>
@@ -25,5 +27,5 @@ $price = get_field( 'price' );
 			?>
 		</span>
 	</span>
-	<span class="lf-search-result__price"><?php echo esc_html( loveforever_format_price( $price, 0 ) ); ?></span>
+	<span class="lf-search-result__price"><?php echo esc_html( loveforever_format_price( ! empty( $price_with_discount ) ? $price_with_discount : $price, 0 ) ); ?></span>
 </a>
