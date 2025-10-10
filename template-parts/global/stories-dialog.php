@@ -31,78 +31,81 @@ if ( ! empty( $args['stories'] ) ) :
 			>
 				<div class="stories-slider__track splide__track">
 					<ul class="stories-slider__list splide__list">
-						<?php foreach ( $args['stories'] as $story ) : ?>
+						<?php foreach ( $args['stories'] as $i => $story ) : ?>
 							<li class="stories-slider__slide splide__slide">
 								<div
-									class="story-slider splide"
-									role="group"
-									aria-label="Splide Basic HTML Example"
-									data-js-story
+									class="story-slider story"
+									data-js-story="<?php echo esc_attr( $i ); ?>"
 								>
-									<div class="story-slider__track splide__track">
-										<ul class="story-slider__list splide__list">
-											<?php
-											$slides = get_field( 'slides', $story->ID );
-											foreach ( $slides as $slide ) :
-												$image_or_video = $slide['image_or_video'];
-												$interval       = 5000;
-
-												if ( 'video' === $slide['image_or_video']['type'] ) {
-													$interval = absint( wp_get_attachment_metadata( $image_or_video['ID'] )['length'] ) * 1000;
-												}
-
-												?>
-												<li class="story-slider__slide splide__slide" data-splide-interval="<?php echo esc_attr( $interval ); ?>">
-													<div class="story">
+									<?php $story_slides = get_field( 'slides', $story->ID ); ?>
+									<div class="story__pagination">
+										<?php foreach ( $story_slides as $slide ) : ?>
+											<div class="story__pagination-item" data-js-story-progress-bar>
+											</div>
+										<?php endforeach; ?>
+									</div>
+									<div class="story__list">
+										<?php
+										foreach ( $story_slides as $slide ) :
+											$image_or_video = $slide['image_or_video'];
+											?>
+											<div class="story__item" data-js-story-slide data-js-story-slide-type="<?php echo esc_attr( $image_or_video['type'] ); ?>">
+												<div class="story__item-body">
+													<?php
+													if ( 'video' === $image_or_video['type'] ) :
+														?>
+														<video class="story__bg" playsinline data-src="<?php echo esc_url( $image_or_video['url'] ); ?>" preload="metadata">
+															<!-- Source будет добавлен динамически через JavaScript -->
+														</video>
 														<?php
-														if ( 'video' === $image_or_video['type'] ) :
-															?>
-															<video class="story__bg" playsinline data-src="<?php echo esc_url( $image_or_video['url'] ); ?>" preload="none">
-																<!-- Source будет добавлен динамически через JavaScript -->
-															</video>
-															<div class="story__loader" data-js-video-loader>
-																<div class="story__loader-spinner"></div>
-																<div class="story__loader-text">Загрузка...</div>
-															</div>
-															<?php
-														else :
-															?>
-															<div 
-																class="story__bg story__bg--placeholder" 
-																data-srcset="<?php echo esc_attr( loveforever_get_attachment_image_srcset( $image_or_video['ID'], 'fullhd' ) ); ?>" 
-																data-src="<?php echo esc_url( loveforever_get_attachment_image_url( $image_or_video['ID'], 'fullhd' ) ); ?>" 
-																data-sizes="<?php echo wp_get_attachment_image_sizes( $image_or_video['ID'], 'fullhd' ); ?>"
-																data-alt="<?php echo esc_attr( $image_or_video['alt'] ); ?>"
-															>
-																<!-- Изображение будет загружено динамически через JavaScript -->
-																<div class="story__bg-placeholder">
-																	<div class="story__bg-placeholder-icon">📷</div>
-																	<div class="story__bg-placeholder-text">Загрузка изображения...</div>
-																</div>
-															</div>
-														<?php endif; ?>
-														<div class="story__body">
-															<div class="story__content">
-																<div class="story__title h3"><?php echo esc_html( $slide['story_title'] ); ?></div>
-																<div class="story__description">
-																	<p><?php echo esc_html( $slide['story_description'] ); ?></p>
-																</div>
-																<?php
-																if ( ! empty( $slide['cta'] ) ) :
-																	$cta = $slide['cta'];
-																	?>
-																	<a
-																		href="<?php echo esc_url( $cta['url'] ); ?>" 
-																		class="story__cta button button--pink" 
-																		data-js-story-cta
-																	><?php echo esc_html( $cta['title'] ); ?></a>
-																<?php endif; ?>
-															</div>
+													else :
+														?>
+														<div 
+															class="story__bg" 
+															data-srcset="<?php echo esc_attr( loveforever_get_attachment_image_srcset( $image_or_video['ID'], 'fullhd' ) ); ?>" 
+															data-src="<?php echo esc_url( loveforever_get_attachment_image_url( $image_or_video['ID'], 'fullhd' ) ); ?>" 
+															data-sizes="<?php echo wp_get_attachment_image_sizes( $image_or_video['ID'], 'fullhd' ); ?>"
+															data-alt="<?php echo esc_attr( $image_or_video['alt'] ); ?>"
+														>
+															<!-- Изображение будет загружено динамически через JavaScript -->
 														</div>
+													<?php endif; ?>
+													<div class="story__loader" data-js-story-loader>
+														<div class="story__loader-spinner"></div>
 													</div>
-												</li>
-											<?php endforeach; ?>
-										</ul>
+												</div>
+												<?php $title = $slide['story_title'] ?? ''; ?>
+												<?php $description = $slide['story_description'] ?? ''; ?>
+												<?php
+												$cta = $slide['cta'] ?? null;
+
+												if ( ! empty( $title ) || ! empty( $description ) || ! empty( $cta ) ) :
+													?>
+													<div class="story__item-content">
+														<?php if ( ! empty( $slide['story_title'] ) ) : ?>
+														<div class="story__title h3"><?php echo esc_html( $slide['story_title'] ); ?></div>
+														<?php endif; ?>
+														<?php if ( ! empty( $slide['story_description'] ) ) : ?>
+														<div class="story__description">
+															<p><?php echo esc_html( $slide['story_description'] ); ?></p>
+														</div>
+														<?php endif; ?>
+														<?php
+														if ( ! empty( $slide['cta'] ) ) :
+															$cta = $slide['cta'];
+															?>
+															<a
+																href="<?php echo esc_url( $cta['url'] ); ?>" 
+																class="story__cta button button--pink" 
+																data-js-story-cta
+															><?php echo esc_html( $cta['title'] ); ?></a>
+														<?php endif; ?>
+													</div>
+												<?php endif; ?>
+											</div>
+											<?php
+										endforeach;
+										?>
 									</div>
 								</div>
 							</li>

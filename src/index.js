@@ -21,7 +21,7 @@ import CardSliderCollection from './CardSlider';
 import PlayIfVisibleVideoCollection from './PlayIfVisibleVideoCollection';
 import { SaleTimerCollection } from './SaleTimer';
 import CustomDatepickerCollection from './CustomDatePicker';
-import Stories from './Stories';
+import Stories, { StoriesManager } from './Stories';
 import './styles/index.scss';
 import { CallbackFormCollection } from './CallbackForm';
 import InputZoomPrevention from './InputZoomPrevention';
@@ -455,9 +455,13 @@ window.addEventListener('dialogOpen', (event) => {
 		const storiesElement =
 			storiesDialog.dialog.querySelector('[data-js-stories]');
 
-		new Stories(storiesElement, {
+		new StoriesManager(storiesElement, {
 			startSlide: storyNumber,
 		});
+
+		// new Stories(storiesElement, {
+		// 	startSlide: storyNumber,
+		// });
 	}
 });
 
