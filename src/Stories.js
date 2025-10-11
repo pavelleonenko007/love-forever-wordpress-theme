@@ -577,11 +577,21 @@ class StoryPlayer {
 	}
 
 	async play() {
-		await this.loadSlideMedia();
-
 		if (this.type === 'video') {
+			// Если не загружено — запускаем загрузку (но не ждем await)
+			if (!this.state.isLoaded) {
+				this.loadSlideMedia().then(() => {
+					// Если пользователь уже "нажал" и видео в состоянии play, можно продолжить
+					if (this.state.isPlaying) {
+						this.playVideo();
+					}
+				});
+			}
+
+			// ⚡️ Запускаем видео сразу, пока Safari считает это user gesture
 			this.playVideo();
 		} else {
+			await this.loadSlideMedia();
 			this.playImage();
 		}
 	}
@@ -600,7 +610,7 @@ class StoryPlayer {
 
 		video.onended = () => {
 			console.log('video onended', video, video.currentTime, video.duration);
-			
+
 			if (video.currentTime <= video.duration - 0.05) return; // safeguard for Safari
 			this.progressBar.setProgress(1);
 			document.dispatchEvent(
