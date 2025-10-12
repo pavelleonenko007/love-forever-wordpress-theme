@@ -162,7 +162,7 @@
 				transform-origin: left;
 			}
 
-			&.is-active {
+			&.is-playing {
 				&::after {
 					transition: scale 0.3s ease-out;
 				}

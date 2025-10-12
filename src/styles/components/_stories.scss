@@ -2,6 +2,7 @@
 
 .stories-section {
 	&__list {
+		padding-inline: 20rem;
 		@include mobile-s {
 			gap: 0;
 		}

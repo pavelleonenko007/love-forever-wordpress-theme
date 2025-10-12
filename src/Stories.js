@@ -733,6 +733,9 @@ class StoryPlayer {
 		this.slide.classList.toggle('is-loading', this.state.isLoading);
 
 		this.slide.classList.toggle('is-paused', !this.state.isPlaying);
+
+		this.slide.classList.toggle('is-playing', this.state.isPlaying);
+		this.progressBar.getElement().classList.toggle('is-playing', this.state.isPlaying);
 	}
 }
 
