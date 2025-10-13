@@ -1791,19 +1791,29 @@ class EditFittingForm extends BaseFittingForm {
 		}
 
 		const timeSelectControl = this.form.elements.time;
-		let timeOptions = '';
+
+		timeSelectControl.innerHTML = '';
 
 		for (const time in data.slots) {
 			if (Object.prototype.hasOwnProperty.call(data.slots, time)) {
 				const slot = data.slots[time];
 
-				timeOptions += `<option value="${time}" ${
-					slot.available === 0 ? 'disabled' : ''
-				}>${time} (Доступно примерок: ${slot.available})</option>`;
+				const option = document.createElement('option');
+
+				option.value = time;
+				option.textContent = `${time} (Доступно примерок: ${slot.available})`;
+
+				option.disabled = data.disableSlots && slot.available === 0;
+
+				timeSelectControl.append(option);
 			}
 		}
 
-		timeSelectControl.innerHTML = timeOptions;
+		timeSelectControl.dispatchEvent(
+			new Event('change', {
+				bubbles: true,
+			})
+		);
 		this.state.isUpdatingSlots = false;
 	}
 

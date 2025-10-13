@@ -80,7 +80,28 @@ $fitting_steps_colors = array(
 												</div>
 											<?php endif; ?>
 											<h2 class="edit-fitting-form__title h2 ff-tt-norms-pro"><?php echo wp_kses_post( get_the_title( $booking_id ) ); ?></h2>
-											<div class="field">
+											<div class="edit-filter-form__field field" data-js-datepicker>
+												<input 
+													type="date" 
+													name="date" 
+													value="<?php echo esc_attr( $fitting_date ); ?>"
+													id="editFittingFormDateField" 
+													class="field__control"
+													title="Пожалуйста, укажите дату"
+													data-js-datepicker-original-control
+												>
+												<input 
+													type="text" 
+													name="altdate" 
+													id="editFittingFormCustomDateField" 
+													class="field__control"
+													value="<?php echo esc_attr( ( new DateTime( $fitting_date, $timezone ) )->format( 'd.m.Y' ) ); ?>"
+													data-js-datepicker-custom-control
+													data-js-datepicker-config="<?php echo esc_attr( wp_json_encode( array( 'dateFormat' => 'd.mm.yy' ) ) ); ?>"
+												/>
+												<span class="field__errors" id="addReviewFormDateFieldErrors" data-js-form-field-errors></span>
+											</div>
+											<!-- <div class="field">
 												<label for="fittingDate" class="field__label">Дата</label>
 												<input 
 													type="date" 
@@ -89,16 +110,21 @@ $fitting_steps_colors = array(
 													class="field__control" 
 													value="<?php echo esc_attr( $fitting_date ); ?>"
 													required
-													min="<?php echo esc_attr( $fitting_date ); ?>"
 												>
 												<span class="field__errors" id="fittingDateErrors" data-js-form-field-errors></span>
-											</div>
+											</div> -->
 											<?php
 											$slots = $booking_manager->get_slots_for_date( $fitting_date, in_array( 'wedding', $fitting_type ) ? 'wedding' : 'evening', $booking_id );
 											?>
 											<div class="field">
 												<label for="fittingTime" class="field__label">Время</label>
-												<select name="time" id="fittingTime" required data-js-custom-select>
+												<?php
+												$select_config = array(
+													// 'type' => 'time',
+													'hasBorder' => true,
+												);
+												?>
+												<select name="time" id="fittingTime" required data-js-custom-select="<?php echo esc_attr( wp_json_encode( $select_config ) ); ?>">
 													<?php foreach ( $slots as $time => $slot_object ) : ?>
 														<option 
 															value="<?php echo esc_attr( $time ); ?>"
