@@ -86,55 +86,58 @@ class WP_Cron_XML_Feed {
 			// Generate feeds one by one to avoid memory issues
 			$feeds_to_generate = array(
 				// Full feeds
-				array(
-					'category' => 'wedding',
-					'limit'    => null,
-				),
-				array(
-					'category' => 'evening',
-					'limit'    => null,
-				),
-				array(
-					'category' => 'prom',
-					'limit'    => null,
-				),
-				array(
-					'category' => 'wedding-sale',
-					'limit'    => null,
-				),
+				// array(
+				// 'category' => 'wedding',
+				// 'limit'    => null,
+				// ),
+				// array(
+				// 'category' => 'evening',
+				// 'limit'    => null,
+				// ),
+				// array(
+				// 'category' => 'prom',
+				// 'limit'    => null,
+				// ),
+				// array(
+				// 'category' => 'wedding-sale',
+				// 'limit'    => null,
+				// ),
 				// Limited feeds
-				array(
-					'category' => 'wedding',
-					'limit'    => 360,
-				),
-				array(
-					'category' => 'prom',
-					'limit'    => 96,
-				),
+				// array(
+				// 'category' => 'wedding',
+				// 'limit'    => 360,
+				// ),
+				// array(
+				// 'category' => 'prom',
+				// 'limit'    => 96,
+				// ),
 
+				// array(
+				// 'category' => 'wedding',
+				// 'limit'    => 48,
+				// ),
+				// array(
+				// 'category' => 'evening',
+				// 'limit'    => 48,
+				// ),
+				// array(
+				// 'category' => 'prom',
+				// 'limit'    => 48,
+				// ),
 				array(
-					'category' => 'wedding',
-					'limit'    => 48,
+					'category'    => 'wedding',
+					'limit'       => 72,
+					'output_path' => ABSPATH . 'xml/yml_wedding.xml',
 				),
 				array(
-					'category' => 'evening',
-					'limit'    => 48,
+					'category'    => 'evening',
+					'limit'       => 72,
+					'output_path' => ABSPATH . 'xml/yml_evening_2.xml',
 				),
 				array(
-					'category' => 'prom',
-					'limit'    => 48,
-				),
-				array(
-					'category' => 'wedding',
-					'limit'    => 72,
-				),
-				array(
-					'category' => 'evening',
-					'limit'    => 72,
-				),
-				array(
-					'category' => 'prom',
-					'limit'    => 72,
+					'category'    => 'prom',
+					'limit'       => 72,
+					'output_path' => ABSPATH . 'xml/yml_prom_3.xml',
 				),
 			);
 
@@ -144,13 +147,20 @@ class WP_Cron_XML_Feed {
 
 			// Generate individual feeds
 			foreach ( $feeds_to_generate as $feed_config ) {
-				$category  = $feed_config['category'];
-				$limit     = $feed_config['limit'];
-				$feed_name = $category . ( $limit ? "-{$limit}" : '' );
+				$category    = $feed_config['category'];
+				$limit       = $feed_config['limit'];
+				$output_path = $feed_config['output_path'];
+				$feed_name   = '';
+
+				if ( $output_path ) {
+					$feed_name = basename( $output_path );
+				} else {
+					$feed_name = $category . ( $limit ? "-{$limit}" : '' );
+				}
 
 				$this->log( "Generating feed for {$feed_name}" );
 
-				$result = $generator->generate_feed( $category, null, $limit );
+				$result = $generator->generate_feed( $category, $output_path, $limit );
 
 				if ( is_wp_error( $result ) ) {
 					$error_message = $result->get_error_message();
