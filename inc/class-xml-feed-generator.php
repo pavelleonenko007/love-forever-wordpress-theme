@@ -176,13 +176,25 @@ class XML_Feed_Generator {
 			),
 			'meta_query'             => array(
 				array(
-					'key'     => 'availability',
-					'value'   => true,
-					'compare' => '=',
+					'key'   => 'availability',
+					'value' => '1',
 				),
 			),
-			'orderby'                => 'menu_order',
-			'order'                  => 'ASC',
+		);
+
+		$args['meta_query']['product_views_count']           = array(
+			'key'     => 'product_views_count',
+			'compare' => 'EXISTS',
+			'type'    => 'NUMERIC',
+		);
+		$args['meta_query'][ 'dress_order_' . $category_id ] = array(
+			'key'     => 'dress_order_' . $category_id,
+			'compare' => 'EXISTS',
+			'type'    => 'NUMERIC',
+		);
+		$args['orderby']                                     = array(
+			'dress_order_' . $category_id => 'ASC',
+			'product_views_count'         => 'DESC',
 		);
 
 		$query = new WP_Query( $args );
