@@ -181,6 +181,17 @@ class DialogCollection {
 			const dialog = new Dialog(dialogElement);
 
 			this.dialogs.set(dialogElement.id, dialog);
+
+			const url = new URL(window.location.href);
+			const queryParams = new URLSearchParams(url.search);
+			const openDialogId = queryParams.get('open_dialog');
+
+			if (
+				openDialogId === 'globalFittingDialog' &&
+				openDialogId === dialog.dialog.id
+			) {
+				dialog.open();
+			}
 		});
 	}
 }
