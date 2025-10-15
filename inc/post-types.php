@@ -83,39 +83,39 @@ function loveforever_register_post_types() {
 	);
 
 	// register_taxonomy(
-	// 	'dress_tag',
-	// 	null,
-	// 	array(
-	// 		'label'              => '',
-	// 		'labels'             => array(
-	// 			'name'              => 'Теги',
-	// 			'singular_name'     => 'Тег',
-	// 			'search_items'      => 'Поиск тегов',
-	// 			'all_items'         => 'Все теги',
-	// 			'view_item '        => 'Просмотр тега',
-	// 			'parent_item'       => 'Родитель тега',
-	// 			'parent_item_colon' => 'Родитель тега:',
-	// 			'edit_item'         => 'Редактировать тег',
-	// 			'update_item'       => 'Обновить тег',
-	// 			'add_new_item'      => 'Добавить новый тег',
-	// 			'new_item_name'     => 'Название нового тега',
-	// 			'menu_name'         => 'Теги',
-	// 			'back_to_items'     => '← Назад к тегам',
-	// 		),
-	// 		'description'        => '',
-	// 		'public'             => true,
-	// 		'show_ui'            => true,
-	// 		'show_in_quick_edit' => true,
-	// 		'hierarchical'       => false,
+	// 'dress_tag',
+	// null,
+	// array(
+	// 'label'              => '',
+	// 'labels'             => array(
+	// 'name'              => 'Теги',
+	// 'singular_name'     => 'Тег',
+	// 'search_items'      => 'Поиск тегов',
+	// 'all_items'         => 'Все теги',
+	// 'view_item '        => 'Просмотр тега',
+	// 'parent_item'       => 'Родитель тега',
+	// 'parent_item_colon' => 'Родитель тега:',
+	// 'edit_item'         => 'Редактировать тег',
+	// 'update_item'       => 'Обновить тег',
+	// 'add_new_item'      => 'Добавить новый тег',
+	// 'new_item_name'     => 'Название нового тега',
+	// 'menu_name'         => 'Теги',
+	// 'back_to_items'     => '← Назад к тегам',
+	// ),
+	// 'description'        => '',
+	// 'public'             => true,
+	// 'show_ui'            => true,
+	// 'show_in_quick_edit' => true,
+	// 'hierarchical'       => false,
 
-	// 		'rewrite'            => true,
-	// 		// 'query_var'             => taxonomy, // название параметра запроса
-	// 		'capabilities'       => array(),
-	// 		'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
-	// 		'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
-	// 		'show_in_rest'       => null, // добавить в REST API
-	// 		'rest_base'          => null, // taxonomy
-	// 	)
+	// 'rewrite'            => true,
+	// 'query_var'             => taxonomy, // название параметра запроса
+	// 'capabilities'       => array(),
+	// 'meta_box_cb'        => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+	// 'show_admin_column'  => true, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+	// 'show_in_rest'       => null, // добавить в REST API
+	// 'rest_base'          => null, // taxonomy
+	// )
 	// );
 
 	register_taxonomy(
@@ -408,8 +408,8 @@ function loveforever_register_post_types() {
 	register_post_type(
 		'story',
 		array(
-			'label'         => null,
-			'labels'        => array(
+			'label'           => null,
+			'labels'          => array(
 				'name'               => 'Истории',
 				'singular_name'      => 'История',
 				'add_new'            => 'Добавить новую',
@@ -423,19 +423,20 @@ function loveforever_register_post_types() {
 				'parent_item_colon'  => '',
 				'menu_name'          => 'Истории',
 			),
-			'description'   => '',
-			'public'        => false,
-			'show_ui'       => true,
-			'show_in_menu'  => null,
-			'show_in_rest'  => true,
-			'rest_base'     => null,
-			'menu_position' => null,
-			'hierarchical'  => false,
-			'supports'      => array( 'title', 'thumbnail' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
-			'taxonomies'    => array( 'dress_category' ),
-			'has_archive'   => false,
-			'rewrite'       => true,
-			'query_var'     => true,
+			'description'     => '',
+			'public'          => false,
+			'show_ui'         => true,
+			'show_in_menu'    => null,
+			'show_in_rest'    => true,
+			'rest_base'       => null,
+			'menu_position'   => null,
+			'hierarchical'    => false,
+			'capability_type' => array( 'story', 'stories' ),
+			'supports'        => array( 'title', 'thumbnail' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+			'taxonomies'      => array( 'dress_category' ),
+			'has_archive'     => false,
+			'rewrite'         => true,
+			'query_var'       => true,
 		)
 	);
 
@@ -461,7 +462,7 @@ function loveforever_register_post_types() {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'reviews' ),
-			'capability_type'    => 'post',
+			'capability_type'    => array( 'review', 'reviews' ),
 			'has_archive'        => true,
 			'hierarchical'       => false,
 			'menu_position'      => null,
@@ -473,8 +474,8 @@ function loveforever_register_post_types() {
 	register_post_type(
 		'faq',
 		array(
-			'label'         => null,
-			'labels'        => array(
+			'label'           => null,
+			'labels'          => array(
 				'name'               => 'FAQs',
 				'singular_name'      => 'FAQ',
 				'add_new'            => 'Добавить новый',
@@ -488,22 +489,23 @@ function loveforever_register_post_types() {
 				'parent_item_colon'  => '',
 				'menu_name'          => 'FAQs',
 			),
-			'description'   => '',
-			'public'        => true,
-			'show_ui'       => true,
-			'show_in_menu'  => null,
-			'show_in_rest'  => true,
-			'rest_base'     => null,
-			'menu_position' => null,
-			'hierarchical'  => false,
-			'supports'      => array( 'title', 'editor' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
-			'taxonomies'    => array( 'faq_category' ),
-			'has_archive'   => true,
-			'rewrite'       => array(
+			'description'     => '',
+			'public'          => true,
+			'show_ui'         => true,
+			'show_in_menu'    => null,
+			'show_in_rest'    => true,
+			'rest_base'       => null,
+			'menu_position'   => null,
+			'capability_type' => array( 'faq', 'faqs' ),
+			'hierarchical'    => false,
+			'supports'        => array( 'title', 'editor' ), // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+			'taxonomies'      => array( 'faq_category' ),
+			'has_archive'     => true,
+			'rewrite'         => array(
 				'slug' => 'faqs',
 			),
-			'menu_icon'     => 'dashicons-format-status',
-			'query_var'     => true,
+			'menu_icon'       => 'dashicons-format-status',
+			'query_var'       => true,
 		)
 	);
 
@@ -580,6 +582,7 @@ function loveforever_register_post_types() {
 			'public'              => true,
 			'exclude_from_search' => true,
 			'show_in_nav_menus'   => false,
+			'capability_type'     => array( 'promo_block', 'promo_blocks' ),
 			'menu_icon'           => 'dashicons-layout',
 			'supports'            => array( 'title' ), // Отключаем редактор
 			'has_archive'         => false,
@@ -617,7 +620,7 @@ function loveforever_register_post_types() {
 			'rest_base'           => null,
 			'menu_position'       => null,
 			'menu_icon'           => 'dashicons-megaphone',
-			'capability_type'     => 'post',
+			'capability_type'     => array( 'infoline', 'infolines' ),
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'supports'            => array( 'title', 'editor' ),
