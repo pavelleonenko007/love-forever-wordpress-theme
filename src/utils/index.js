@@ -226,6 +226,8 @@ export function scrollToElement(targetElement, config = {}) {
 		const startY = window.pageYOffset;
 		const rect = targetElement.getBoundingClientRect();
 		let targetY;
+		const scrollPaddingTop =
+			parseInt(window.getComputedStyle(targetElement).scrollPaddingTop) || 0;
 
 		switch (align) {
 			case 'center':
@@ -236,7 +238,7 @@ export function scrollToElement(targetElement, config = {}) {
 				break;
 			case 'start':
 			default:
-				targetY = rect.top + startY;
+				targetY = rect.top + startY - scrollPaddingTop / 2;
 				break;
 		}
 

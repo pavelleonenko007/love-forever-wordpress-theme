@@ -11,6 +11,11 @@
 }
 
 .lf-review-section {
+
+	@include mobile {
+		scroll-padding-top: 76rem;
+	}
+
 	&__container {
 		display: flex;
 		flex-direction: column;

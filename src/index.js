@@ -30,6 +30,7 @@ import ProductSliderCollection from './ProductSlider';
 import CatalogSplideCollection from './CatalogSplide';
 import ReviewImageSliderCollection from './ReviewImageSlider';
 import FavoritesContactFormCollection from './FavoritesContactForm';
+import AnchorLinkCollection from './AnchorLink';
 
 const mutationObserver = new MutationObserver((mutationRecords) => {
 	for (let i = 0; i < mutationRecords.length; i++) {
@@ -413,6 +414,7 @@ document.addEventListener('catalog:updated', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+	AnchorLinkCollection.init();
 	new AddToFavoriteButtonCollection();
 	new DeleteFittingButton();
 	initSearchResultsImageOnHover();

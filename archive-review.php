@@ -36,11 +36,18 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 								<?php if ( ! empty( $reviews_hero_section['description'] ) ) : ?>
 									<p class="p-16-20 mmax480"><?php echo wp_kses_post( $reviews_hero_section['description'] ); ?></p>
 								<?php endif; ?>
-								<?php if ( ! empty( $reviews_hero_section['button'] ) ) : ?>
+								<?php
+								if ( ! empty( $reviews_hero_section['button'] ) ) :
+									$anchor_link_config = array(
+										'duration' => 1000,
+										'align'    => 'start',
+									);
+									?>
 									<a 
 										href="<?php echo esc_url( $reviews_hero_section['button']['url'] ); ?>" 
 										class="btn in-slider-btn w-inline-block"
 										target="<?php echo esc_attr( $reviews_hero_section['button']['target'] ); ?>"
+										data-js-anchor-link="<?php echo esc_attr( wp_json_encode( $anchor_link_config ) ); ?>"
 									>
 										<div><?php echo esc_html( $reviews_hero_section['button']['title'] ); ?></div>
 									</a>
