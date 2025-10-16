@@ -3,6 +3,7 @@ import DialogCollection from './Dialog';
 import MatchMedia from './MatchMedia';
 import {
 	formatDateToRussian,
+	getCookie,
 	isSafariBrowser,
 	isValidRussianPhone,
 	promiseWrapper,
@@ -1253,6 +1254,21 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.errorsElement.hidden = !errorText;
 	}
 
+	onFavoritesUpdated = (event) => {
+		const favorites = getCookie('favorites') || '';
+		const clientFavoritesControl = this.form.elements.client_favorite_dresses;
+
+		if (clientFavoritesControl) {
+			clientFavoritesControl.value = favorites;
+		} else {
+			const newClientFavoritesControl = document.createElement('input');
+			newClientFavoritesControl.type = 'hidden';
+			newClientFavoritesControl.name = 'client_favorite_dresses';
+			newClientFavoritesControl.value = favorites;
+			this.form.append(newClientFavoritesControl);
+		}
+	};
+
 	bindEvents() {
 		if (this.phoneControl) {
 			this.phoneControl.addEventListener('blur', this.phoneControlBlurHandler);
@@ -1262,6 +1278,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.form.addEventListener('input', this.inputFormHandler);
 		document.addEventListener('dialogClose', this.closeDialogHandler);
 		document.addEventListener('dialogOpen', this.openDialogHandler);
+		document.addEventListener('favoritesUpdated', this.onFavoritesUpdated);
 	}
 
 	destroy() {
@@ -1275,6 +1292,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		this.form.removeEventListener('submit', this.submitForm);
 		document.removeEventListener('dialogClose', this.closeDialogHandler);
 		document.removeEventListener('dialogOpen', this.openDialogHandler);
+		document.removeEventListener('favoritesUpdated', this.onFavoritesUpdated);
 	}
 }
 
@@ -1482,6 +1500,21 @@ class SingleFittingForm extends BaseFittingForm {
 		}
 	};
 
+	onFavoritesUpdated = (event) => {
+		const favorites = getCookie('favorites') || '';
+		const clientFavoritesControl = this.form.elements.client_favorite_dresses;
+
+		if (clientFavoritesControl) {
+			clientFavoritesControl.value = favorites;
+		} else {
+			const newClientFavoritesControl = document.createElement('input');
+			newClientFavoritesControl.type = 'hidden';
+			newClientFavoritesControl.name = 'client_favorite_dresses';
+			newClientFavoritesControl.value = favorites;
+			this.form.append(newClientFavoritesControl);
+		}
+	};
+
 	async updateTimeSlots() {
 		const selectedDate = this.form.elements.date.value;
 
@@ -1672,6 +1705,7 @@ class SingleFittingForm extends BaseFittingForm {
 		// document.addEventListener('change', this.onChange);
 		this.form.addEventListener('submit', this.submitForm);
 		document.addEventListener('dialogClose', this.onCloseDialog);
+		document.addEventListener('favoritesUpdated', this.onFavoritesUpdated);
 	}
 
 	destroy() {
@@ -1687,6 +1721,7 @@ class SingleFittingForm extends BaseFittingForm {
 		// this.form.removeEventListener('change', this.onChange);
 		this.form.removeEventListener('submit', this.submitForm);
 		document.removeEventListener('dialogClose', this.onCloseDialog);
+		document.removeEventListener('favoritesUpdated', this.onFavoritesUpdated);
 	}
 }
 

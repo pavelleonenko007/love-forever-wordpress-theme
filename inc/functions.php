@@ -1022,6 +1022,10 @@ function loveforever_send_fitting_email_notification( $post_id, $updated = false
 	$subject   = $updated ? 'Обновлена примерка в ' . $date_time : 'Пользователь записался на примерку';
 	$favorites = get_field( 'client_favorite_dresses', $post_id ) ? implode( ',', get_field( 'client_favorite_dresses', $post_id ) ) : '';
 
+	error_log( 'Favorites: ' . $favorites );
+	error_log( 'Home URL: ' . get_home_url() );
+	error_log( 'Favorites URL: ' . get_home_url() . '/favorites/?favorites=' . $favorites );
+
 	$message = '
 		<p>Пользователь записался на примерку в салон в <strong>' . $date_time . '</strong></p>
 		<p><strong>Тип примерки:</strong> ' . loveforever_get_fitting_type_name( get_field( 'fitting_type', $post_id ) ) . '</p>
