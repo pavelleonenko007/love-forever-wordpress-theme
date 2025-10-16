@@ -2,7 +2,7 @@ import { isValidRussianPhone, promiseWrapper } from './utils';
 
 const ROOT_SELECTOR = '[data-js-callback-form]';
 const FORM_STATUSES = {
-	success: 'Ваша заявка отправлена',
+	success: 'Спасибо за заявку!',
 	error: 'Ошибка',
 	submitting: 'Отправка...',
 	idle: 'Заказать звонок',
@@ -28,11 +28,16 @@ class CallbackForm {
 	 */
 	constructor(form) {
 		this.form = form;
+		this.dialogId = this.form.closest('[data-js-dialog]').id;
 		this.submitButton = this.form.querySelector(this.selectors.submitButton);
 		this.errors = this.form.querySelector(this.selectors.errors);
 		this.dialogTitle = this.form
 			.closest('[data-js-dialog]')
 			.querySelector('[data-js-dialog-title]');
+		this.dialogSubtitle = this.form
+			.closest('[data-js-dialog]')
+			.querySelector('[data-js-dialog-subtitle]');
+		this.dialogSubtitleText = this.dialogSubtitle.textContent;
 
 		this.#state = new Proxy(this.#state, {
 			get: (target, key) => {
@@ -64,7 +69,7 @@ class CallbackForm {
 
 			const body = await response.json();
 
-			console.log({ body });
+			// console.log({ body });
 
 			if (!body.success) {
 				this.#state.errors = body.data.errors;
@@ -81,7 +86,7 @@ class CallbackForm {
 
 	onPhoneInput = (event) => {
 		this.#state.phone = event.target.value;
-	}
+	};
 
 	onSubmit = async (event) => {
 		if (this.#state.status === FORM_STATUSES.submitting) {
@@ -101,9 +106,15 @@ class CallbackForm {
 
 		this.#state.status = FORM_STATUSES.success;
 
-		setTimeout(() => {
+		// setTimeout(() => {
+		// 	this.reset();
+		// }, 3_000);
+	};
+
+	onDialogClose = (event) => {
+		if (event.detail.dialogId === this.dialogId) {
 			this.reset();
-		}, 3_000);
+		}
 	};
 
 	bindEvents() {
@@ -122,9 +133,10 @@ class CallbackForm {
 					this.#state.status = FORM_STATUSES.idle;
 				});
 			});
-		
+
 		this.form.elements.phone.addEventListener('input', this.onPhoneInput);
 		this.form.addEventListener('submit', this.onSubmit);
+		document.addEventListener('dialogClose', this.onDialogClose);
 	}
 
 	reset() {
@@ -149,6 +161,13 @@ class CallbackForm {
 		this.form.hidden = this.#state.status === FORM_STATUSES.success;
 
 		this.dialogTitle.textContent = this.#state.status;
+
+		if (this.#state.status === FORM_STATUSES.success) {
+			this.dialogSubtitle.textContent =
+				'Наш консультант свяжется с вами в ближайшее время, чтобы ответить на все вопросы.';
+		} else {
+			this.dialogSubtitle.textContent = this.dialogSubtitleText;
+		}
 
 		this.errors.hidden = this.#state.errors.length === 0;
 		this.errors.innerHTML = this.#state.errors

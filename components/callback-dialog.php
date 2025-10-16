@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 				<div class="dialog-card__header">
 					<h3 class="dialog-card__title italic ff-tt-norms-pro" data-js-dialog-title>Заказать звонок</h3>
 					<?php if ( ! empty( ADDRESS ) ) : ?>
-						<p class="dialog-card__subtitle"><?php echo esc_html( ADDRESS ); ?></p>
+						<p class="dialog-card__subtitle" data-js-dialog-subtitle><?php echo esc_html( ADDRESS ); ?></p>
 					<?php endif; ?>
 					<?php if ( ! empty( MAP_LINK ) ) : ?>
 						<?php
