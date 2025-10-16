@@ -226,6 +226,24 @@
             "placeholder": ""
         },
         {
+            "key": "field_68f0b675f1ae2",
+            "label": "Ссылка на Telegram 2",
+            "name": "telegram_url_2",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Ссылка на альтернативный чат в телеграм",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": ""
+        },
+        {
             "key": "field_68610d818d503",
             "label": "Ссылка на WhatsApp",
             "name": "whatsapp_url",
@@ -874,5 +892,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1758801791
+    "modified": 1760605867
 }
