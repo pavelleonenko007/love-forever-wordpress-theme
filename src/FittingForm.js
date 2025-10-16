@@ -1148,10 +1148,12 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 			this.state.dialogMessage = body.data.message;
 
-			ym(43639474, 'reachGoal', 'FITTING_603973');
+			if (LOVE_FOREVER.template !== 'admin-fittings') {
+				ym(43639474, 'reachGoal', 'FITTING_603973');
 
-			if (body.data.fitting_type) {
-				ym(43639474, 'reachGoal', `fitting-${this.state.fitting_type}`);
+				if (body.data.fitting_type) {
+					ym(43639474, 'reachGoal', `fitting-${this.state.fitting_type}`);
+				}
 			}
 
 			document.dispatchEvent(

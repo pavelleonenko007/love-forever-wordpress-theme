@@ -78,7 +78,8 @@ document.addEventListener('dialogOpen', (event) => {
 	const dialogId = event.detail.dialogId;
 
 	if (
-		['singleProductFittingDialog', 'globalFittingDialog'].includes(dialogId)
+		['singleProductFittingDialog', 'globalFittingDialog'].includes(dialogId) &&
+		LOVE_FOREVER.template !== 'admin-fittings'
 	) {
 		ym(43639474, 'reachGoal', 'FITTING_WIDGET_OPEN');
 	}

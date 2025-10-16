@@ -34,6 +34,8 @@ function loveforever_add_admin_scripts() {
 
 add_action( 'wp_enqueue_scripts', 'loveforever_add_site_scripts' );
 function loveforever_add_site_scripts() {
+	global $template;
+
 	wp_deregister_script( 'jquery-core' );
 	wp_register_script( 'jquery-core', TEMPLATE_PATH . '/js/jquery.js', false, time(), true );
 	wp_enqueue_script( 'jquery' );
@@ -60,6 +62,7 @@ function loveforever_add_site_scripts() {
 			'AJAX_URL'          => admin_url( 'admin-ajax.php' ),
 			'NONCE'             => wp_create_nonce( 'loveforever_nonce' ),
 			'MAP_CUSTOMIZATION' => esc_url( TEMPLATE_PATH . '/assets/yandex-map.json' ),
+			'template'          => str_replace( '.php', '', basename( $template ) ),
 		)
 	);
 }
