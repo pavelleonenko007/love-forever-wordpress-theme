@@ -454,8 +454,8 @@
 									<use href="#searchIcon" />
 								</svg>
 							</a>
-							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
-								<div id="w-node-_144563be-6001-1af8-6446-1240953da9f3-be61d3ef" class="div-block-6">
+							<div class="hovered-menue search-m" style="grid-template-columns: repeat(5, auto);">
+								<div class="div-block-6" style="grid-column: -1 / 1;">
 									<div class="div-block-7">
 										<form 
 											id="searchForm2" 
@@ -625,8 +625,8 @@
 									<use href="#searchIcon" />
 								</svg>
 							</a>
-							<div class="hovered-menue search-m" style="grid-template-columns: repeat(6, auto);">
-								<div id="w-node-_1716cbec-a8d5-9533-681b-95848935b87a-be61d3ef" class="div-block-6">
+							<div class="hovered-menue search-m" style="grid-template-columns: repeat(5, auto);">
+								<div class="div-block-6" style="grid-column: -1 / 1;">
 									<div class="div-block-7">
 										<form 
 											id="searchForm3" 
