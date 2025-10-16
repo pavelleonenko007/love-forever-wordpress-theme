@@ -1019,7 +1019,8 @@ function loveforever_send_fitting_email_notification( $post_id, $updated = false
 
 	$date_time = get_field( 'fitting_time', $post_id );
 
-	$subject = $updated ? 'Обновлена примерка в ' . $date_time : 'Пользователь записался на примерку';
+	$subject   = $updated ? 'Обновлена примерка в ' . $date_time : 'Пользователь записался на примерку';
+	$favorites = get_field( 'client_favorite_dresses', $post_id ) ? implode( ',', get_field( 'client_favorite_dresses', $post_id ) ) : '';
 
 	$message = '
 		<p>Пользователь записался на примерку в салон в <strong>' . $date_time . '</strong></p>
@@ -1035,6 +1036,10 @@ function loveforever_send_fitting_email_notification( $post_id, $updated = false
 		</p>
 		<p><strong>Ссылка на примерку:</strong> ' . get_home_url() . '/fittings-admin-panel/' . $post_id . '</p>
 	';
+
+	if ( ! empty( $favorites ) ) {
+		$message .= '<p><strong>Ссылка на избранное пользователя:</strong> ' . get_home_url() . '/favorites/?favorites=' . $favorites . '</p>';
+	}
 
 	return wp_mail( $email, $subject, $message );
 }
