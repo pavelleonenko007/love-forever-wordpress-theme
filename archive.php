@@ -99,7 +99,7 @@ if ( ! empty( $dresses_without_order ) ) {
 							<?php endif; ?>
 							<div class="slider-bottom-content inner-pages">
 								<?php get_template_part( 'components/breadcrumb' ); ?>
-								<h1 class="p-86-96 lowercase"><?php echo wp_kses_post( loveforever_to_uppercase_brand_name_in_string( $queried_object->name ) ); ?></h1>
+								<h1 class="p-86-96 lowercase"><?php echo wp_kses_post( loveforever_to_capitalize_brand_name_in_string( $queried_object->name ) ); ?></h1>
 								<?php if ( ! empty( $queried_object->description ) ) : ?>
 									<p class="p-16-20 mmax695"><?php echo wp_kses_post( $queried_object->description ); ?></p>
 								<?php endif; ?>

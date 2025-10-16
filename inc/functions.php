@@ -1095,13 +1095,13 @@ function loveforever_collect_dress_categories_to_json() {
 	);
 }
 
-function loveforever_to_uppercase_brand_name_in_string( $str = '' ) {
+function loveforever_to_capitalize_brand_name_in_string( $str = '' ) {
 	$brand_names = loveforever_get_all_brand_names();
 
 	foreach ( $brand_names as $brand_name ) {
 		// Используем mb_stripos для регистронезависимого поиска с поддержкой UTF-8 (включая кириллицу)
-		if ( mb_stripos( $str, $brand_name, 0, 'UTF-8' ) !== false ) {
-			$str = str_replace( $brand_name, '<span class="uppercase">' . $brand_name . '</span>', $str );
+		if ( mb_stripos( $str, ' ' . $brand_name, 0, 'UTF-8' ) !== false ) {
+			$str = str_ireplace( $brand_name, '<span class="capitalize">' . $brand_name . '</span>', $str );
 		}
 	}
 
@@ -1149,14 +1149,14 @@ function loveforever_get_attachment_image_srcset( $attachment_id, $size = 'mediu
 
 	// Получаем обычный srcset
 	$srcset = wp_get_attachment_image_srcset( $attachment_id, $size, $image_meta );
-	
+
 	if ( ! $srcset ) {
 		return false;
 	}
 
 	// Проверяем, есть ли WebP копии
 	$has_webp = loveforever_has_webp_copy( $attachment_id );
-	
+
 	if ( ! $has_webp ) {
 		return $srcset;
 	}
@@ -1171,7 +1171,7 @@ function loveforever_get_attachment_image_srcset( $attachment_id, $size = 'mediu
 	}
 
 	// Получаем базовый URL для WebP
-	$base_url = wp_get_attachment_url( $attachment_id );
+	$base_url      = wp_get_attachment_url( $attachment_id );
 	$relative_path = str_replace( WP_CONTENT_URL, '', $base_url );
 	$webp_base_url = WP_CONTENT_URL . '/webp-express/webp-images/doc-root/wp-content' . $relative_path;
 
@@ -1179,19 +1179,19 @@ function loveforever_get_attachment_image_srcset( $attachment_id, $size = 'mediu
 	$webp_wp_content_dir = WP_CONTENT_DIR . '/webp-express/webp-images/doc-root/wp-content';
 
 	// Парсим существующий srcset
-	$srcset_parts = explode( ', ', $srcset );
+	$srcset_parts      = explode( ', ', $srcset );
 	$webp_srcset_parts = array();
 
 	foreach ( $srcset_parts as $part ) {
 		$part_parts = explode( ' ', trim( $part ) );
 
 		if ( count( $part_parts ) >= 2 ) {
-			$url = trim( $part_parts[0] );
+			$url        = trim( $part_parts[0] );
 			$descriptor = trim( $part_parts[1] );
-			
+
 			// Заменяем URL на WebP версию
 			$webp_url = str_replace( WP_CONTENT_URL, $webp_wp_content_url, $url ) . '.webp';
-			
+
 			// Проверяем существование WebP файла
 			$webp_path = str_replace( $webp_wp_content_url, $webp_wp_content_dir, $webp_url );
 

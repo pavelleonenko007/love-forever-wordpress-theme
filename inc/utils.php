@@ -593,6 +593,7 @@ function loveforever_get_all_brand_names() {
 		'Fler',
 		'Kookla',
 		'Kvinsenta',
+		'Kvinsente',
 		'Lanesta',
 		'LE Salon',
 		'Lezardi',
