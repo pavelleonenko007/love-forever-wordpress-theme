@@ -11,7 +11,12 @@
 	$phone         = get_field( 'phone', 'option' );
 	$address       = get_field( 'address', 'option' );
 	$working_hours = get_field( 'working_hours', 'option' );
-	$socials       = loveforever_get_socials();
+	$socials       = array_filter(
+		loveforever_get_socials(),
+		function ( $social ) {
+			return loveforever_get_telegram_link() !== $social['url'];
+		}
+	);
 	$favorites     = loveforever_get_favorites();
 
 	$left_menu    = get_field( 'left_menu', 'option' );

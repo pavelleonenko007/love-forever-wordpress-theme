@@ -463,6 +463,14 @@ function loveforever_get_socials() {
 		);
 	}
 
+	if ( ! empty( TELEGRAM_LINK_2 ) ) {
+		$socials[] = array(
+			'url'        => TELEGRAM_LINK_2,
+			'icon'       => 'telegramIcon',
+			'aria-label' => 'Ссылка на чат в Telegram',
+		);
+	}
+
 	if ( ! empty( WHATSAPP_LINK ) ) {
 		$socials[] = array(
 			'url'        => WHATSAPP_LINK,

@@ -9,7 +9,12 @@ defined( 'ABSPATH' ) || exit;
 
 $infoline_id   = loveforever_get_current_infoline();
 $infoline_data = loveforever_get_infoline_data( $infoline_id );
-$socials       = loveforever_get_socials();
+$socials       = array_filter(
+	loveforever_get_socials(),
+	function ( $social ) {
+		return loveforever_get_telegram_link_2() !== $social['url'];
+	}
+);
 ?>
 <footer class="footer">
 	<?php get_template_part( 'components/marquee', null, $infoline_data ); ?>

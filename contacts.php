@@ -17,7 +17,12 @@ get_header(
 
 $infoline_id   = loveforever_get_current_infoline();
 $infoline_data = loveforever_get_infoline_data( $infoline_id );
-$socials       = loveforever_get_socials();
+$socials       = array_filter(
+	loveforever_get_socials(),
+	function ( $social ) {
+		return loveforever_get_telegram_link_2() !== $social['url'];
+	}
+);
 
 the_post();
 
@@ -119,7 +124,7 @@ $metro_stations   = get_field( 'metro_stations', 'option' );
 					</div>
 				</section>
 				<?php
-				$video = get_field( 'video' );
+				$video        = get_field( 'video' );
 				$mobile_video = get_field( 'mobile_video' );
 				if ( ! empty( $video['mp4'] ) || ! empty( $video['webm'] ) ) :
 					?>

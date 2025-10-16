@@ -26,6 +26,9 @@ function loveforever_define_acf_constants() {
 	if ( ! defined( 'TELEGRAM_LINK' ) ) {
 		define( 'TELEGRAM_LINK', get_field( 'telegram_url', 'option' ) );
 	}
+	if ( ! defined( 'TELEGRAM_LINK_2' ) ) {
+		define( 'TELEGRAM_LINK_2', get_field( 'telegram_url_2', 'option' ) );
+	}
 	if ( ! defined( 'WHATSAPP_LINK' ) ) {
 		define( 'WHATSAPP_LINK', get_field( 'whatsapp_url', 'option' ) );
 	}
@@ -81,6 +84,15 @@ function loveforever_get_vk_link() {
  */
 function loveforever_get_telegram_link() {
 	return defined( 'TELEGRAM_LINK' ) ? TELEGRAM_LINK : '';
+}
+
+/**
+ * Получить ссылку на альтернативный чат в Telegram
+ *
+ * @return string Ссылка на Telegram или пустая строка
+ */
+function loveforever_get_telegram_link_2() {
+	return defined( 'TELEGRAM_LINK_2' ) ? TELEGRAM_LINK_2 : '';
 }
 
 /**
