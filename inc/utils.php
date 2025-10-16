@@ -642,3 +642,41 @@ function loveforever_get_all_brand_names() {
 
 	return $brand_names;
 }
+
+/**
+ * Удаляет указанные атрибуты (например, itemprop, itemtype и т.п.) из HTML.
+ *
+ * @param string $html HTML строка.
+ * @param array  $attributes Массив атрибутов, которые нужно удалить.
+ * @return string HTML без указанных атрибутов.
+ */
+function loveforever_remove_attributes_from_html( string $html, array $attributes = array() ): string {
+	if ( empty( $attributes ) ) {
+		return $html;
+	}
+
+	// Создаем DOMDocument и отключаем ошибки парсинга (HTML может быть невалидным)
+	$dom = new DOMDocument();
+	libxml_use_internal_errors( true );
+	$dom->loadHTML( mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8' ) );
+	libxml_clear_errors();
+
+	$xpath = new DOMXPath( $dom );
+
+	// Ищем все элементы, у которых есть хотя бы один из указанных атрибутов
+	foreach ( $attributes as $attr ) {
+		$nodes = $xpath->query( "//*[@$attr]" );
+		foreach ( $nodes as $node ) {
+			$node->removeAttribute( $attr );
+		}
+	}
+
+	// Возвращаем чистый HTML (без <html><body>)
+	$body      = $dom->getElementsByTagName( 'body' )->item( 0 );
+	$innerHTML = '';
+	foreach ( $body->childNodes as $child ) {
+		$innerHTML .= $dom->saveHTML( $child );
+	}
+
+	return trim( $innerHTML );
+}

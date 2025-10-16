@@ -49,7 +49,14 @@
 		<div class="spleet m-h-vert">
 			<div class="code-embed-2 w-embed visible-mobile-s">
 				<nav aria-label="Breadcrumb" class="breadcrumb">
-					<?php get_template_part( 'components/breadcrumb', null, array( 'extra_classes' => array( 'breadcrumbs--single-dress' ) ) ); ?>
+					<?php
+					ob_start();
+					get_template_part( 'components/breadcrumb', null, array( 'extra_classes' => array( 'breadcrumbs--single-dress' ) ) );
+					$breadcrumb_html = ob_get_clean();
+					$breadcrumb_html = loveforever_remove_attributes_from_html( $breadcrumb_html, array( 'itemprop', 'itemtype', 'itemscope' ) );
+
+					echo $breadcrumb_html;
+					?>
 				</nav>
 			</div>
 			<?php
