@@ -1101,7 +1101,7 @@ function loveforever_to_capitalize_brand_name_in_string( $str = '' ) {
 	foreach ( $brand_names as $brand_name ) {
 		// Используем mb_stripos для регистронезависимого поиска с поддержкой UTF-8 (включая кириллицу)
 		if ( mb_stripos( $str, ' ' . $brand_name, 0, 'UTF-8' ) !== false ) {
-			$str = str_ireplace( $brand_name, '<span class="capitalize">' . $brand_name . '</span>', $str );
+			$str = str_ireplace( $brand_name, '<span class="capitalize">' . mb_convert_case( $brand_name, MB_CASE_TITLE, 'UTF-8' ) . '</span>', $str );
 		}
 	}
 
