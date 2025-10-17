@@ -67,7 +67,7 @@ class AppointmentManager {
 		}
 
 		$feedback_datetime = clone $fitting_datetime;
-		$feedback_datetime->modify( '+2 hours' );
+		$feedback_datetime->modify( '+3 hours' );
 		SmsScheduler::schedule_sms( $feedback_datetime->getTimestamp(), 'send_feedback_sms', array( $post_id ) );
 	}
 
