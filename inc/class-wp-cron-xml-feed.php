@@ -126,17 +126,17 @@ class WP_Cron_XML_Feed {
 				// ),
 				array(
 					'category'    => 'wedding',
-					'limit'       => 72,
+					'limit'       => 240,
 					'output_path' => ABSPATH . 'xml/yml_wedding.xml',
 				),
 				array(
 					'category'    => 'evening',
-					'limit'       => 72,
+					'limit'       => 240,
 					'output_path' => ABSPATH . 'xml/yml_evening_2.xml',
 				),
 				array(
 					'category'    => 'prom',
-					'limit'       => 72,
+					'limit'       => 240,
 					'output_path' => ABSPATH . 'xml/yml_prom_3.xml',
 				),
 			);
