@@ -330,7 +330,7 @@
 								data-js-add-to-favorite-button-text
 								><?php echo $is_in_favorites ? 'Удалить из избранного' : 'Добавить в избранное'; ?></span>
 						</button>
-						<div class="button button--vk">
+						<div class="button button--vk" data-js-add-to-vk-button>
 							<div style="position: absolute; top: 50%; left: 50%; translate: -50% -50%; scale: 5; opacity: 0.01;">
 								<div id="vk_bookmarks"></div>
 								<script type="text/javascript">

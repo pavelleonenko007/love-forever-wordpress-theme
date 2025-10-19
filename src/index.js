@@ -86,14 +86,13 @@ document.addEventListener('dialogOpen', (event) => {
 });
 
 document.addEventListener('favoritesUpdated', (event) => {
-	console.log({ event });
 	const { isActive, productId } = event.detail;
 
 	if (!productId) {
 		return;
 	}
 
-	if (!isActive) {
+	if (isActive) {
 		ym(43639474, 'reachGoal', 'ADD_TO_FAVORITE');
 	}
 });
@@ -105,6 +104,12 @@ document.addEventListener('phoneNumberRevealed', (event) => {
 document.querySelectorAll('[href^="tel:"]').forEach((phoneLink) => {
 	phoneLink.addEventListener('click', (event) => {
 		ym(43639474, 'reachGoal', 'MOBILE_PHONE_CALL');
+	});
+});
+
+document.querySelectorAll('[data-js-add-to-vk-button]').forEach((vkButton) => {
+	vkButton.addEventListener('click', (event) => {
+		ym(43639474, 'reachGoal', 'VK_BOOKMARK');
 	});
 });
 
