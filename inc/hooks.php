@@ -211,7 +211,12 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		);
 	}
 
-	update_field( 'fitting_time', $date . ' ' . $time, $fitting_post_id );
+	$is_new_fitting = 0 === $fitting_id;
+
+	$old_fitting_time = $is_new_fitting ? '' : get_post_meta( $fitting_post_id, 'fitting_time', true );
+	$new_fitting_time = trim( $date . ' ' . $time );
+
+	update_field( 'fitting_time', $new_fitting_time, $fitting_post_id );
 
 	update_field( 'phone', $phone, $fitting_post_id );
 	$phone_formatted = substr( preg_replace( '/[^0-9]/', '', $phone ), 1 );
@@ -245,27 +250,48 @@ function loveforever_create_new_fitting_record_via_ajax() {
 		update_field( 'client_favorite_dresses', $client_favorite_dresses, $fitting_post_id );
 	}
 
-	do_action( 'acf/save_post', $fitting_post_id );
+	if ( $is_new_fitting || $old_fitting_time !== $new_fitting_time ) {
+		error_log( 'Send SMS to client ' . $name );
+		// do_action( 'acf/save_post', $fitting_post_id );
+	}
 
-	// Log successful booking creation
-	error_log(
-		sprintf(
-			'Fitting booking created: ID=%d, Name=%s, Phone=%s, Date=%s, Time=%s, IP=%s',
-			$fitting_post_id,
-			$name,
-			$phone,
-			$date,
-			$time,
-			$ip_address
-		)
-	);
+	$sended_email = false;
 
-	$sended_email = loveforever_send_fitting_email_notification( $fitting_post_id );
+	if ( $is_new_fitting ) {
+		$sended_email = loveforever_send_fitting_email_notification( $fitting_post_id );
+	}
+
+	if ( $is_new_fitting ) {
+		// Log successful booking creation
+		error_log(
+			sprintf(
+				'Fitting booking created: ID=%d, Name=%s, Phone=%s, Date=%s, Time=%s, IP=%s',
+				$fitting_post_id,
+				$name,
+				$phone,
+				$date,
+				$time,
+				$ip_address
+			)
+		);
+	} else {
+		error_log(
+			sprintf(
+				'Fitting booking updated: ID=%d, Name=%s, Phone=%s, Date=%s, Time=%s, IP=%s',
+				$fitting_post_id,
+				$name,
+				$phone,
+				$date,
+				$time,
+				$ip_address
+			)
+		);
+	}
 
 	wp_send_json_success(
 		array(
 			'fitting_type' => is_array( $fitting_type ) ? $fitting_type[0] : $fitting_type,
-			'message'      => 0 === $fitting_id ? 'Вы успешно записались на примерку' : 'Запись на примерку успешно обновлена',
+			'message'      => $is_new_fitting ? 'Вы успешно записались на примерку' : 'Запись на примерку успешно обновлена',
 			'debug'        => array(
 				'sended_email' => $sended_email,
 				'ip_address'   => $ip_address,
