@@ -195,7 +195,8 @@
 						<h1 class="p-24-24 h-single single-product__content-heading"><?php echo wp_kses_post( loveforever_get_product_title( get_the_ID() ) ); ?></h1>
 					</div>
 					<?php
-					if ( ! is_wp_error( $colors ) && ! empty( $colors ) && 1 < count( $colors ) ) :
+					$is_wedding_dress = $dress_category->slug === 'wedding';
+					if ( ! is_wp_error( $colors ) && ! empty( $colors ) && ( ! $is_wedding_dress || 1 < count( $colors ) ) ) :
 						$colors = array_map(
 							function ( $color ) {
 								return array(
