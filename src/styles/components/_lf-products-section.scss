@@ -1,10 +1,16 @@
 @use '../media' as *;
 
 .lf-products-section {
+	$root: &;
+
 	&__container {
 		display: flex;
 		flex-direction: column;
 		gap: 35rem;
+
+		.stories-section + #{$root} & {
+			margin-top: 60rem;
+		}
 
 		@include mobile {
 			gap: 20rem;
