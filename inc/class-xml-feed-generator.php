@@ -296,7 +296,7 @@ class XML_Feed_Generator {
 
 		// Product name with category prefix
 		$product_name = $this->get_product_name_with_category( $product, $category_id );
-		$offer->appendChild( $xml->createElement( 'name', esc_html( $product_name ) ) );
+		$offer->appendChild( $xml->createElement( 'name', esc_html( $product_name . ' в салоне Love Forever' ) ) );
 
 		// Collection ID (feed category slug)
 		$offer->appendChild( $xml->createElement( 'collectionId', esc_html( $category_id ) ) );
