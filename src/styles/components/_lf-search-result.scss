@@ -39,7 +39,7 @@
 		}
 
 		&-preview {
-			width: 225rem; // Фиксированная ширина
+			width: min(54vw, 225rem); // Фиксированная ширина
 			height: auto; // Автоматическая высота для сохранения пропорций
 			position: absolute;
 			visibility: hidden;
