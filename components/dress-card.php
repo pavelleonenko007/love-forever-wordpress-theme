@@ -72,13 +72,8 @@ $show_carousel = isset( $args['show_carousel'] ) ? (bool) $args['show_carousel']
 					'breakpoints'  => array(
 						991 => array(
 							'speed'             => 600,
-							'rewindSpeed'       => 600,
-							'waitForTransition' => true,
-							'easing'            => 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-							'flickPower'        => 400,
-							'flickMaxPages'     => 1,
-							'snap'              => true,
-							'slideFocus'        => false,
+							// 'waitForTransition' => true,
+							'easing'            => 'ease',
 						),
 					),
 				);
