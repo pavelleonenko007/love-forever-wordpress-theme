@@ -12,7 +12,7 @@ $infoline_data = loveforever_get_infoline_data( $infoline_id );
 $socials       = array_filter(
 	loveforever_get_socials(),
 	function ( $social ) {
-		return loveforever_get_telegram_link_2() !== $social['url'];
+		return loveforever_get_telegram_link() !== $social['url'];
 	}
 );
 ?>
