@@ -254,8 +254,8 @@ export default async function initMap() {
 
 	map.addChild(
 		new CustomMarkerWithPopup({
-			coordinates: [30.308443, 59.929435], 
-			title: 'Свадебный салон Love&nbsp;Forever',
+			coordinates: [30.308424, 59.929315],
+			title: 'Love&nbsp;Forever',
 			address: 'Санкт-Петербург, м. Садовая, Вознесенский проспект, 18',
 			phone: '8 812 425-67-82',
 			workingHours: '10:00 - 22:00',
@@ -296,7 +296,7 @@ export default async function initMap() {
 		[30.312114, 59.929223],
 		[30.312114, 59.929223],
 		[30.30836, 59.928272],
-		[30.308405, 59.929382],
+		[30.308405, 59.929315],
 	];
 
 	const admiralteyskayaRouteCoords = [
