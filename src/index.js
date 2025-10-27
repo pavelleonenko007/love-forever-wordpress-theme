@@ -101,6 +101,15 @@ document.addEventListener('phoneNumberRevealed', (event) => {
 	ym(43639474, 'reachGoal', 'PHONE_VIEW');
 });
 
+document.addEventListener('catalog:updated', (event) => {
+	const { prevUrl, currentUrl } = event.detail;
+
+	ym(43639474, 'hit', currentUrl, {
+		title: document.title,
+		referer: prevUrl,
+	});
+});
+
 document.querySelectorAll('[href^="tel:"]').forEach((phoneLink) => {
 	phoneLink.addEventListener('click', (event) => {
 		ym(43639474, 'reachGoal', 'MOBILE_PHONE_CALL');

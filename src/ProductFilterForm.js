@@ -253,7 +253,7 @@ class ProductFilterForm {
 
 			const body = await response.json();
 
-			console.log({ body });
+			// console.log({ body });
 
 			if (!body.success) {
 				throw new Error(body.data.message);
@@ -285,7 +285,7 @@ class ProductFilterForm {
 				this.scrollToCatalogIfNecessary(),
 			]);
 
-			console.log({ data });
+			// console.log({ data });
 
 			this.contentElement.innerHTML = data.feed;
 			this.paginationElement.innerHTML = data.pagination;
@@ -297,12 +297,21 @@ class ProductFilterForm {
 			document.documentElement.classList.remove(this.stateSelectors.isLoading);
 			this.filterForm.classList.remove(this.stateSelectors.isLoading);
 			this.contentElement.classList.remove(this.stateSelectors.isLoading);
+
+			const prevUrl = document.location.href;
+
 			this.updateQueryParams(formData);
 
+			const currentUrl = document.location.href;
+
 			document.dispatchEvent(
-				new Event('catalog:updated', {
+				new CustomEvent('catalog:updated', {
 					bubbles: true,
 					cancelable: true,
+					detail: {
+						prevUrl,
+						currentUrl,
+					},
 				})
 			);
 		}
