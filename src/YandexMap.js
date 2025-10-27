@@ -254,7 +254,7 @@ export default async function initMap() {
 
 	map.addChild(
 		new CustomMarkerWithPopup({
-			coordinates: [30.308628, 59.929353],
+			coordinates: [30.308443, 59.929435], 
 			title: 'Свадебный салон Love&nbsp;Forever',
 			address: 'Санкт-Петербург, м. Садовая, Вознесенский проспект, 18',
 			phone: '8 812 425-67-82',
