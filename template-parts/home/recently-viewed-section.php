@@ -11,11 +11,12 @@ $view_all_link   = isset( $args['view_all_link'] ) ? $args['view_all_link'] : tr
 $id              = ! empty( $args['id'] ) ? $args['id'] : 'recentlyViewed';
 $recently_viewed = loveforever_get_viewed_products();
 $show_all        = isset( $args['show_all'] ) ? $args['show_all'] : false;
+$display_type    = isset( $args['display_type'] ) ? $args['display_type'] : 'slider-mobile';
 
 if ( ! empty( $recently_viewed ) ) :
 	$query_args = array(
 		'post_type'      => 'dress',
-		'posts_per_page' => $show_all ? 24 : 4,
+		'posts_per_page' => $show_all ? 32 : 4,
 		'post__in'       => $recently_viewed,
 		'orderby'        => 'post__in',
 	);
@@ -40,30 +41,31 @@ if ( ! empty( $recently_viewed ) ) :
 			<?php endif; ?>
 		</header>
 		<?php
-		$splide_config = array(
-			'perMove'     => 1,
-			'perPage'     => 2,
-			'arrows'      => false,
-			'focus'       => 0,
-			'speed'       => 500,
-			'gap'         => '10rem',
-			'autoplay'    => false,
-			'interval'    => 2000,
-			'pagination'  => true,
-			'omitEnd'     => true,
-			'rewind'      => true,
-			'mediaQuery'  => 'min',
-			'breakpoints' => array(
-				993 => array(
-					'destroy' => true,
+		if ( 'slider-mobile' === $display_type ) :
+			$splide_config = array(
+				'perMove'     => 1,
+				'perPage'     => 2,
+				'arrows'      => false,
+				'focus'       => 0,
+				'speed'       => 500,
+				'gap'         => '10rem',
+				'autoplay'    => false,
+				'interval'    => 2000,
+				'pagination'  => true,
+				'omitEnd'     => true,
+				'rewind'      => true,
+				'mediaQuery'  => 'min',
+				'breakpoints' => array(
+					993 => array(
+						'destroy' => true,
+					),
 				),
-			),
-			'classes'     => array(
-				'pagination' => 'lf-products-section__pagination splide__pagination',
-				'page'       => 'lf-products-section__page splide__pagination__page',
-			),
-		);
-		?>
+				'classes'     => array(
+					'pagination' => 'lf-products-section__pagination splide__pagination',
+					'page'       => 'lf-products-section__page splide__pagination__page',
+				),
+			);
+			?>
 		<div 
 			class="lf-products-section__catalog recently-viewed-products splide" 
 			data-splide="<?php echo esc_attr( wp_json_encode( $splide_config ) ); ?>"
@@ -91,6 +93,21 @@ if ( ! empty( $recently_viewed ) ) :
 				</div>
 			</div>
 		</div>
+		<?php else : ?>
+		<div class="recently-viewed-products__grid">
+			<?php
+			while ( $query->have_posts() ) :
+				$query->the_post();
+				?>
+				<div class="recently-viewed-products__item">
+					<?php get_template_part( 'components/dress-card', null, array( 'show_carousel' => false ) ); ?>
+				</div>
+				<?php
+			endwhile;
+			wp_reset_postdata();
+			?>
+			</div>
+		<?php endif; ?>
 	</div>
 </section>
 <?php endif;

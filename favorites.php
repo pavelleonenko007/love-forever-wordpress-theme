@@ -161,6 +161,7 @@ $favorites_link = esc_attr( get_the_permalink() . '?favorites=' . $favorites );
 						array(
 							'view_all_link' => false,
 							'show_all'      => true,
+							'display_type'  => 'grid',
 						)
 					);
 				endif;
