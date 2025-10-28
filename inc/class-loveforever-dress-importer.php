@@ -122,7 +122,6 @@ class LoveForever_Dress_Importer {
 
 
 	private function clean_product_name( $product_name ) {
-		error_log( 'Start cleaning name for ' . $product_name );
 		$prefixes_to_remove = array(
 			'Свадебное платье ',
 			'Вечернее платье ',
@@ -142,7 +141,6 @@ class LoveForever_Dress_Importer {
 	}
 
 	private function extract_product_slug( $url ) {
-		error_log( 'Start extracting slug from ' . $url );
 		$url = rtrim( $url, '/' );
 
 		// Get the last part of the URL
@@ -153,7 +151,6 @@ class LoveForever_Dress_Importer {
 	}
 
 	private function prepare_product_data( $product ) {
-		error_log( 'Preparing data for ' . $product->name );
 		$title = $this->clean_product_name( (string) $product->name );
 		$slug  = $this->extract_product_slug( (string) $product->url );
 
@@ -172,7 +169,6 @@ class LoveForever_Dress_Importer {
 	}
 
 	private function apply_product_category( $post_id, $product ) {
-		error_log( 'Apply category for product with ID: ' . $post_id );
 		// Set category.
 		if ( ! empty( $product->collectionId ) ) {
 			$term = get_term_by( 'slug', (string) $product->collectionId, 'dress_category' );
@@ -184,7 +180,6 @@ class LoveForever_Dress_Importer {
 	}
 
 	private function apply_product_meta( $post_id, $product ) {
-		error_log( 'Start appling product meta' );
 		$price            = absint( $product->price );
 		$old_price        = isset( $product->oldprice ) ? absint( $product->oldprice ) : 0;
 		$discount_percent = 0;
@@ -220,22 +215,16 @@ class LoveForever_Dress_Importer {
 			foreach ( $pictures as $picture ) {
 				$image_id = $this->import_image( (string) esc_url( trim( $picture ) ), $post_id );
 
-				error_log( 'Image: ' . (string) $image_id );
-
 				if ( $image_id ) {
 					$image_ids[] = $image_id;
 				}
 			}
-
-			error_log( 'Image uploaded ' . count( $image_ids ) . ' ' . wp_json_encode( $image_ids ) );
 
 			if ( ! empty( $image_ids ) ) {
 				set_post_thumbnail( $post_id, $image_ids[0] );
 
 				$gallery_images = array_map( fn( $id ) => array( 'image' => $id ), array_slice( $image_ids, 1 ) );
 				update_field( 'images', $gallery_images, $post_id );
-
-				error_log( 'Successfully attached ' . count( $image_ids ) . ' images to post ' . $post_id );
 			}
 		} else {
 			$feature_image_id = $this->import_image( (string) esc_url( trim( $pictures ) ), $post_id );
@@ -246,11 +235,7 @@ class LoveForever_Dress_Importer {
 	public function import_product( $product ) {
 		$product_args = $this->prepare_product_data( $product );
 
-		error_log( 'Product arguments: ' . wp_json_encode( $product_args, JSON_UNESCAPED_UNICODE ) );
-
 		$post_id = wp_insert_post( $product_args );
-
-		error_log( 'Создан новый товар ' . $product_args['post_title'] . 'с ID: ' . $post_id );
 
 		if ( $post_id ) {
 			$this->apply_product_category( $post_id, $product );
@@ -273,9 +258,6 @@ class LoveForever_Dress_Importer {
 			wp_send_json_error( 'Недостаточно прав для выполнения операции.' );
 		}
 
-		// Enable error logging.
-		error_log( 'Starting dress import process' );
-
 		// Получаем или создаем временный файл для хранения прогресса.
 		$temp_file = get_temp_dir() . 'dress_import_' . get_current_user_id() . '.tmp';
 
@@ -287,7 +269,6 @@ class LoveForever_Dress_Importer {
 			}
 
 			$file = array_map( 'sanitize_text_field', wp_unslash( $_FILES['file'] ) );
-			error_log( 'File type: ' . $file['type'] );
 
 			if ( 'text/xml' !== $file['type'] && 'application/xml' !== $file['type'] ) {
 				error_log( 'Invalid file type: ' . $file['type'] );
@@ -307,7 +288,6 @@ class LoveForever_Dress_Importer {
 				$total_rows = count( $xml->shop->offers->offer );
 			}
 
-			error_log( 'Total dresses in file: ' . $total_rows );
 			$current_row = 0;
 			$imported    = 0;
 			$skipped     = 0;
@@ -317,7 +297,6 @@ class LoveForever_Dress_Importer {
 			$imported    = isset( $_POST['imported'] ) ? intval( $_POST['imported'] ) : 0;
 			$skipped     = isset( $_POST['skipped'] ) ? intval( $_POST['skipped'] ) : 0;
 			$total_rows  = isset( $_POST['total_rows'] ) ? intval( $_POST['total_rows'] ) : 0;
-			error_log( "Continuing import from row {$current_row}. Imported: {$imported}, Skipped: {$skipped}" );
 		}
 
 		$xml = simplexml_load_file( $temp_file );
@@ -328,7 +307,6 @@ class LoveForever_Dress_Importer {
 
 		$offers = $xml->shop->offers->offer;
 		if ( ! isset( $offers[ $current_row ] ) ) {
-			error_log( 'Import completed. Final stats - Imported: ' . $imported . ', Skipped: ' . $skipped );
 			// Импорт завершен.
 			unlink( $temp_file ); // Удаляем временный файл.
 			wp_send_json_success(
@@ -342,7 +320,6 @@ class LoveForever_Dress_Importer {
 		}
 
 		$offer = $offers[ $current_row ];
-		error_log( 'Processing dress ' . ( $current_row + 1 ) . ': ' . (string) $offer->name );
 
 		// Validate data.
 		if ( empty( $offer->name ) ) {
@@ -361,7 +338,6 @@ class LoveForever_Dress_Importer {
 			return;
 		}
 
-		error_log( 'Successfully imported dress - Name: ' . $offer->name );
 		++$imported;
 
 		$this->send_progress_update( $current_row + 1, $total_rows, $imported, $skipped );
@@ -405,8 +381,6 @@ class LoveForever_Dress_Importer {
 	 * @return int|false Attachment ID or false on failure.
 	 */
 	private function import_image( $url ) {
-		error_log( 'Downloading... ' . $url );
-
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';

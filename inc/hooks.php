@@ -251,7 +251,6 @@ function loveforever_create_new_fitting_record_via_ajax() {
 	}
 
 	if ( $is_new_fitting || $old_fitting_time !== $new_fitting_time ) {
-		error_log( 'Send SMS to client ' . $name );
 		do_action( 'acf/save_post', $fitting_post_id );
 	}
 
@@ -491,7 +490,6 @@ function loveforever_get_date_time_slots_via_ajax() {
 add_action( 'wp_ajax_get_fitting_time_slots', 'loveforever_get_date_fitting_time_slots_via_ajax' );
 add_action( 'wp_ajax_nopriv_get_fitting_time_slots', 'loveforever_get_date_fitting_time_slots_via_ajax' );
 function loveforever_get_date_fitting_time_slots_via_ajax() {
-	error_log( print_r( $_POST, true ) );
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'loveforever_nonce' ) ) {
 		wp_send_json_error(
 			array(
@@ -1593,8 +1591,6 @@ add_filter(
 	3
 );
 function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
-	error_log( '$ARGS_BEFORE: ' . wp_json_encode( $args ) );
-
 	if ( ! empty( $_POST['dress_id'] ) ) {
 		$include = array();
 
@@ -1602,16 +1598,11 @@ function loveforever_filter_dress_taxonomy_filters( $args, $field, $post_id ) {
 			$cat                = get_term( $dress_id, 'dress_category' );
 			$allowed_taxonomies = ! empty( get_field( $args['taxonomy'], $cat ) ) ? get_field( $args['taxonomy'], $cat ) : array();
 
-			error_log( 'ALLOWED_TAX: ' . wp_json_encode( $allowed_taxonomies ) . ' | DRESS_ID: ' . $dress_id );
 			$include = array_merge( $include, $allowed_taxonomies );
 		}
 
 		$args['include'] = array_unique( $include );
 	}
-
-	error_log( '$ARGS: ' . wp_json_encode( $args ) );
-	error_log( '$_REQUEST: ' . wp_json_encode( $_REQUEST ) );
-	error_log( '$_POST: ' . wp_json_encode( $_POST ) );
 
 	return $args;
 }
@@ -2683,7 +2674,6 @@ function loveforever_delete_review_attachments( $post_id ) {
 	$thumbnail_id = get_post_thumbnail_id( $post_id );
 	if ( $thumbnail_id ) {
 		wp_delete_attachment( $thumbnail_id, true );
-		error_log( "Deleted thumbnail attachment ID: $thumbnail_id for review ID: $post_id" );
 	}
 
 	// Получаем изображения из ACF поля image_carousel
@@ -2694,13 +2684,10 @@ function loveforever_delete_review_attachments( $post_id ) {
 				$image_id = is_array( $carousel_item['image'] ) ? $carousel_item['image']['ID'] : $carousel_item['image'];
 				if ( $image_id ) {
 					wp_delete_attachment( $image_id, true );
-					error_log( "Deleted carousel attachment ID: $image_id for review ID: $post_id" );
 				}
 			}
 		}
 	}
-
-	error_log( "Successfully deleted all attachments for review ID: $post_id" );
 }
 
 // Хук на удаление поста
