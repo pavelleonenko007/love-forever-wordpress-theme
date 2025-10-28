@@ -252,7 +252,7 @@ function loveforever_create_new_fitting_record_via_ajax() {
 
 	if ( $is_new_fitting || $old_fitting_time !== $new_fitting_time ) {
 		error_log( 'Send SMS to client ' . $name );
-		// do_action( 'acf/save_post', $fitting_post_id );
+		do_action( 'acf/save_post', $fitting_post_id );
 	}
 
 	$sended_email = false;
