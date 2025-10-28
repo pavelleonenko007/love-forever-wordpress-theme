@@ -170,10 +170,15 @@ class ProductFilterForm {
 			'value',
 			this.filterForm.elements['min-price'].min
 		);
+		this.filterForm.elements['min-price'].value =
+			this.filterForm.elements['min-price'].min;
 		this.filterForm.elements['max-price'].setAttribute(
 			'value',
 			this.filterForm.elements['max-price'].max
 		);
+		this.filterForm.elements['max-price'].value =
+			this.filterForm.elements['max-price'].max;
+		
 
 		$('#slider').slider('values', [
 			parseInt(this.filterForm.elements['min-price'].value),

@@ -226,9 +226,12 @@ if ( ! empty( $dresses_without_order ) ) {
 									<?php
 
 									if ( ! empty( $price_range ) ) :
+										$range_slider_config = array(
+											'values' => array( $current_min_price, $current_max_price ),
+										);
 										?>
-										<div class="code-embed-7 w-embed" data-js-range-slider>
-											<div data-js-range-slider-value-min><?php echo esc_html( loveforever_format_price( $min_price ) ); ?></div>
+										<div class="code-embed-7 w-embed" data-js-range-slider="<?php echo esc_attr( wp_json_encode( $range_slider_config ) ); ?>">
+											<div data-js-range-slider-value-min><?php echo esc_html( loveforever_format_price( $current_min_price ) ); ?></div>
 											<div id="slider" data-js-range-slider-custom-component></div>
 											<div id="slider-range">
 												<input 
@@ -250,7 +253,7 @@ if ( ! empty( $dresses_without_order ) ) {
 													data-js-range-slider-control-max
 												>
 											</div>
-											<div data-js-range-slider-value-max><?php echo esc_html( loveforever_format_price( $max_price ) ); ?></div>
+											<div data-js-range-slider-value-max><?php echo esc_html( loveforever_format_price( $current_max_price ) ); ?></div>
 										</div>
 									<?php endif; ?>
 								</div>

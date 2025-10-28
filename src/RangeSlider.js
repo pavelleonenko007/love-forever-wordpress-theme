@@ -66,7 +66,21 @@ class RangeSlider {
 				this.minValueElement.textContent = formatPrice(this.minValue);
 				this.maxValueElement.textContent = formatPrice(this.maxValue);
 			},
+			change: (event, ui) => {
+				this.minValue = ui.values[0];
+				this.maxValue = ui.values[1];
+				this.minValueElement.textContent = formatPrice(ui.values[0]);
+				this.maxValueElement.textContent = formatPrice(ui.values[1]);
+			},
 		});
+	}
+
+	parseConfig() {
+		try {
+			return JSON.parse(this.root.dataset.jsRangeSlider);
+		} catch {
+			return {};
+		}
 	}
 
 	destroy() {
