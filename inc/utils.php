@@ -658,7 +658,14 @@ function loveforever_remove_attributes_from_html( string $html, array $attribute
 	// Создаем DOMDocument и отключаем ошибки парсинга (HTML может быть невалидным)
 	$dom = new DOMDocument();
 	libxml_use_internal_errors( true );
-	$dom->loadHTML( mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8' ) );
+	$dom->loadHTML( mb_encode_numericentity(
+		htmlspecialchars_decode(
+			htmlentities( $html, ENT_NOQUOTES, 'UTF-8', false ),
+			ENT_NOQUOTES
+		),
+		array( 0x80, 0x10FFFF, 0, ~0 ),
+		'UTF-8'
+	) );
 	libxml_clear_errors();
 
 	$xpath = new DOMXPath( $dom );

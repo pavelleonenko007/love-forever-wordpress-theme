@@ -401,9 +401,9 @@
 											<div class="m-nav-cats">
 													<?php foreach ( $submenu_items as $submenu_item ) : ?>
 												<div class="m-nav-drops">
-													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
+													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="lf-mobile-menu-arrow-link w-inline-block">
 														<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
-														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
+														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="lf-mobile-menu-arrow-link__icon image-6-drop"
 															style="transform: rotate(-90deg) !important;">
 													</a>
 												</div>
@@ -1068,10 +1068,10 @@
 											<div class="m-nav-cats">
 													<?php foreach ( $submenu_items as $submenu_item ) : ?>
 												<div class="m-nav-drops">
-													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="m-nav-drop-btn w-inline-block">
+													<a href="<?php echo esc_url( $submenu_item['page_link']['url'] ); ?>" class="lf-mobile-menu-arrow-link w-inline-block">
 														<div><?php echo esc_html( $submenu_item['page_link']['title'] ); ?></div>
-														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="image-6-drop"
-															style="transform: rotate(-90deg);">
+														<img src="<?php echo esc_url( TEMPLATE_PATH . '/images/673dc9a4d3949ca7d7c90f76_Union.svg' ); ?>" loading="eager" alt="" class="lf-mobile-menu-arrow-link__icon image-6-drop"
+															style="transform: rotate(-90deg) !important;">
 													</a>
 												</div>
 												<?php endforeach; ?>
