@@ -65,6 +65,11 @@
 		&[aria-invalid='true'] {
 			border-color: red;
 		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
 	}
 
 	&__errors {

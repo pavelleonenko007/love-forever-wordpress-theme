@@ -56,7 +56,15 @@ class CustomDatepicker {
 				);
 			},
 			beforeShow: (input, inst) => {
-				var calendar = inst.dpDiv;
+				const calendar = inst.dpDiv;
+
+				setTimeout(() => {
+					const parsedDate = $.datepicker.parseDate(
+						'yy-mm-dd',
+						this.originalControl.value
+					);
+					$(this.customControl).datepicker('setDate', parsedDate);
+				}, 0);
 
 				// Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
 				setTimeout(() => {
