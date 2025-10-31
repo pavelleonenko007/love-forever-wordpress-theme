@@ -16,6 +16,7 @@ $container_array_of_data_attributes = array_diff_key( $args, array_flip( array( 
 	<head>
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
 		<meta content="width=device-width, initial-scale=1" name="viewport">
+		<meta name="yandex-verification" content="f4e18b34930b9a67" />
 		<style>
 			html {
 				font-size:calc(100vw / 1440);
