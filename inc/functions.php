@@ -476,6 +476,12 @@ function loveforever_get_dress_tags_by_category( $category_term_id ) {
 }
 
 function loveforever_get_product_title( $product_id ) {
+	$alt_name = get_field( 'alt_name', $product_id );
+
+	if ( ! empty( $alt_name ) ) {
+		return $alt_name;
+	}
+
 	$catalog_titles = array(
 		'wedding' => 'Свадебное платье',
 		'evening' => 'Вечернее платье',

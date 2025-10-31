@@ -3,6 +3,27 @@
     "title": "Платья",
     "fields": [
         {
+            "key": "field_69048bd8266f7",
+            "label": "Альтернативное название",
+            "name": "alt_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Текст в этом поле будет отображаться как название товара. Если поле пустое, заголовок сформируется автоматически. Используйте это поле, если нужно, чтобы название товара отличалось от того, что формирует система автоматически.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_676bbe27c8d0e",
             "label": "Наличие в магазине",
             "name": "availability",
@@ -460,5 +481,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1758810071
+    "modified": 1761905770
 }
