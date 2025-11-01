@@ -136,10 +136,23 @@ class Fitting_Slots_Manager {
 		$day_of_week   = wp_date( 'w', ( new DateTime( $date, $this->timezone ) )->getTimestamp() );
 		$default_slots = 2; // Значение по умолчанию
 
-		$forced_fittings_number_by_day = ! empty( get_field( 'forced_fittings_number_by_day', 'option' ) ) ? get_field( 'forced_fittings_number_by_day', 'option' ) : array();
+		$forced_fittings_number_by_day = get_field( 'forced_fittings_number_by_day', 'option' ) ?: array();
 
 		if ( ! empty( $forced_fittings_number_by_day ) ) {
 			foreach ( $forced_fittings_number_by_day as $forced_fitting ) {
+				$current_date_month_day        = ( new DateTime( $date, $this->timezone ) )->format( 'm-d' );
+				$forced_fitting_date_month_day = $forced_fitting['date'];
+
+				if ( $current_date_month_day === $forced_fitting_date_month_day ) {
+					return $forced_fitting['fittings_number'];
+				}
+			}
+		}
+
+		$forced_fittings_number_by_day_and_time = ! empty( get_field( 'forced_fittings_number_by_day_and_time', 'option' ) ) ? get_field( 'forced_fittings_number_by_day_and_time', 'option' ) : array();
+
+		if ( ! empty( $forced_fittings_number_by_day_and_time ) ) {
+			foreach ( $forced_fittings_number_by_day_and_time as $forced_fitting ) {
 				$current_date        = ( new DateTime( $date . ' ' . $time, $this->timezone ) )->getTimestamp();
 				$forced_fitting_date = ( new DateTime( $forced_fitting['date'], $this->timezone ) )->getTimestamp();
 

@@ -680,7 +680,7 @@
                     "label": "Дата",
                     "name": "date",
                     "aria-label": "",
-                    "type": "date_time_picker",
+                    "type": "date_picker",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -689,12 +689,12 @@
                         "class": "",
                         "id": ""
                     },
-                    "display_format": "d.m.Y H:i:s",
-                    "return_format": "Y-m-d H:i:s",
+                    "display_format": "F j",
+                    "return_format": "m-d",
                     "first_day": 1,
+                    "default_to_current_date": 0,
                     "allow_in_bindings": 0,
-                    "parent_repeater": "field_67b32579c7d6f",
-                    "default_to_current_date": 0
+                    "parent_repeater": "field_67b32579c7d6f"
                 },
                 {
                     "key": "field_67b325f4c7d71",
@@ -719,6 +719,75 @@
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_67b32579c7d6f"
+                }
+            ]
+        },
+        {
+            "key": "field_6904996b4975f",
+            "label": "Принудительное количество примерочных в определенную дату и время",
+            "name": "forced_fittings_number_by_day_and_time",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Добавить",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_6904996b49760",
+                    "label": "Дата",
+                    "name": "date",
+                    "aria-label": "",
+                    "type": "date_time_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "d.m.Y H:i:s",
+                    "return_format": "Y-m-d H:i:s",
+                    "first_day": 1,
+                    "default_to_current_date": 0,
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_6904996b4975f"
+                },
+                {
+                    "key": "field_6904996b49761",
+                    "label": "Количество примерочных",
+                    "name": "fittings_number",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": "",
+                    "max": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "step": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_6904996b4975f"
                 }
             ]
         },
@@ -892,5 +961,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1760605867
+    "modified": 1761914747
 }

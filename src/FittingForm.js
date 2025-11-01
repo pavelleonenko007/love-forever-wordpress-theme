@@ -1085,25 +1085,33 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 
 		timeSelectControl.innerHTML = '';
 
-		for (const time in data.slots) {
-			if (Object.prototype.hasOwnProperty.call(data.slots, time)) {
-				const slot = data.slots[time];
-				const option = document.createElement('option');
+		if (Object.keys(data.slots).length > 0) {
+			for (const time in data.slots) {
+				if (Object.prototype.hasOwnProperty.call(data.slots, time)) {
+					const slot = data.slots[time];
+					const option = document.createElement('option');
 
-				option.value = time;
-				// Слоты отключаются только если disableSlots = true и available_for_booking = 0
-				option.disabled = data.disableSlots && slot.available_for_booking === 0;
+					option.value = time;
+					// Слоты отключаются только если disableSlots = true и available_for_booking = 0
+					option.disabled =
+						data.disableSlots && slot.available_for_booking === 0;
 
-				let optionContent = time;
+					let optionContent = time;
 
-				if (!data.disableSlots) {
-					optionContent += ` (${slot.available_for_booking} из ${slot.max_fittings})`;
+					if (!data.disableSlots) {
+						optionContent += ` (${slot.available_for_booking} из ${slot.max_fittings})`;
+					}
+
+					option.textContent = optionContent;
+
+					timeSelectControl.append(option);
 				}
-
-				option.textContent = optionContent;
-
-				timeSelectControl.append(option);
 			}
+		} else {
+			const option = document.createElement('option');
+			option.value = '';
+			option.textContent = 'Нет слотов';
+			timeSelectControl.append(option);
 		}
 
 		// Восстанавливаем выбранное значение, если оно доступно
@@ -1196,6 +1204,9 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			this.updateTimeSlots();
 		}
 
+		this.form.elements.time.disabled =
+			this.state.isUpdatingSlots || !this.state.time;
+
 		if (this.state.date && this.state.time) {
 			this.dialogSelectedTime.textContent = formatDateToRussian(
 				`${this.state.date} ${this.state.time}`
@@ -1210,7 +1221,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 		) {
 			if ($(this.form.elements.time).data('ui-selectmenu')) {
 				$(this.form.elements.time).selectmenu('refresh');
-				$(this.form.elements.time).selectmenu('enable');
+				// $(this.form.elements.time).selectmenu('enable');
 			}
 			this.form.elements.time.dispatchEvent(
 				new Event('change', {
