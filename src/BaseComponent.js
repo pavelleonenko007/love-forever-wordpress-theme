@@ -10,6 +10,8 @@ class BaseComponent {
 				target[prop] = newValue;
 
 				if (currentValue !== newValue) {
+					console.log({ prop, currentValue, newValue });
+
 					this.updateUI();
 				}
 

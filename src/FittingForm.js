@@ -1215,10 +1215,7 @@ class GlobalFittingFormSimpler extends BaseFittingForm {
 			this.dialogSelectedTime.textContent = '';
 		}
 
-		if (
-			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
-			!this.state.isUpdatingSlots
-		) {
+		if (this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots) {
 			if ($(this.form.elements.time).data('ui-selectmenu')) {
 				$(this.form.elements.time).selectmenu('refresh');
 				// $(this.form.elements.time).selectmenu('enable');
@@ -1351,20 +1348,10 @@ class SingleFittingForm extends BaseFittingForm {
 		);
 		this.successCloseDialogButton = this.dialogFormWrapper.nextElementSibling;
 
-		// this.state = this._getProxyState({
-		// 	...this.state,
-		// 	target_dress: this.form.elements.target_dress.value,
-		// 	client_favorite_dresses:
-		// 		this.form.elements.client_favorite_dresses?.value,
-		// 	submit_fitting_form_nonce:
-		// 		this.form.elements.submit_fitting_form_nonce.value,
-		// 	dialogMessage: 'Запись на примерку',
-		// 	isUpdatingSlots: false,
-		// 	isSubmitted: false,
-		// });
-
 		this.fields = this.findFields();
 		this.state = this.setupFormState();
+
+		console.log({ ...this.state });
 
 		this.prevState = { ...this.state };
 
@@ -1387,6 +1374,7 @@ class SingleFittingForm extends BaseFittingForm {
 			dress_category: null,
 			isUpdatingSlots: false,
 			isSubmitting: false,
+			error: null,
 		};
 
 		for (const element of this.fields) {
@@ -1436,11 +1424,11 @@ class SingleFittingForm extends BaseFittingForm {
 		const formData = Object.fromEntries(new FormData(this.form));
 
 		for (const name in formData) {
-			if (Object.prototype.hasOwnProperty.call(formData, name)) {
-				const value = formData[name];
+			const value = formData[name];
 
-				this.state[name] = value;
-			}
+			console.log([name, value]);
+
+			this.state[name] = value;
 		}
 	};
 
@@ -1561,27 +1549,30 @@ class SingleFittingForm extends BaseFittingForm {
 			// let timeOptions = '';
 			let newSelectedOption = null;
 
-			for (const time in body.data.slots) {
-				const slot = body.data.slots[time];
-				const option = document.createElement('option');
+			if (Object.keys(body.data.slots).length > 0) {
+				for (const time in body.data.slots) {
+					const slot = body.data.slots[time];
+					const option = document.createElement('option');
 
-				option.value = time;
-				option.textContent = time;
-				option.disabled = slot.available === 0;
+					option.value = time;
+					option.textContent = time;
+					option.disabled = slot.available === 0;
 
-				if (newSelectedOption === null && slot.available > 0) {
-					option.selected = true;
-					newSelectedOption = option;
+					if (newSelectedOption === null && slot.available > 0) {
+						option.selected = true;
+						newSelectedOption = option;
+					}
+
+					timeSelectControl.append(option);
 				}
-
+			} else {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'Нет слотов';
 				timeSelectControl.append(option);
 			}
 
-			timeSelectControl.dispatchEvent(
-				new Event('change', {
-					bubbles: true,
-				})
-			);
+			this.state.time = newSelectedOption?.value || '';
 		} catch (error) {
 			console.error(error);
 			alert(error.message);
@@ -1591,20 +1582,19 @@ class SingleFittingForm extends BaseFittingForm {
 	}
 
 	updateUI() {
-		if (
-			this.prevState.date !== this.state.date ||
-			this.prevState.fitting_type !== this.state.fitting_type
-		) {
+		if (this.prevState.date !== this.state.date) {
 			this.updateTimeSlots();
 		}
 
-		if (
-			this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
-			!this.state.isUpdatingSlots
-		) {
+		this.form.elements.time.disabled =
+			this.state.isUpdatingSlots || !this.state.time;
+
+		if (this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots) {
+			console.log('dispatch change for time select');
+
 			if ($(this.form.elements.time).data('ui-selectmenu')) {
 				$(this.form.elements.time).selectmenu('refresh');
-				$(this.form.elements.time).selectmenu('enable');
+				// $(this.form.elements.time).selectmenu('enable');
 			}
 			this.form.elements.time.dispatchEvent(
 				new Event('change', {
@@ -1640,68 +1630,6 @@ class SingleFittingForm extends BaseFittingForm {
 		this.dialogFormWrapper.hidden = this.state.success;
 		this.successCloseDialogButton.hidden = !this.state.success;
 		this.successCloseDialogButton.disabled = !this.state.success;
-
-		// this.timeControlWrapper.classList.toggle(
-		// 	this.stateSelectors.isLoading,
-		// 	this.state.isUpdatingSlots
-		// );
-
-		// if ($(this.form.elements.time).selectmenu('instance') !== undefined) {
-		// 	if (this.state.isUpdatingSlots) {
-		// 		$(this.form.elements.time).selectmenu('disable');
-		// 	}
-
-		// 	if (
-		// 		this.prevState.isUpdatingSlots !== this.state.isUpdatingSlots &&
-		// 		!this.state.isUpdatingSlots
-		// 	) {
-		// 		$(this.form.elements.time).selectmenu('enable');
-		// 		$(this.form.elements.time).selectmenu('refresh');
-		// 		this.form.elements.time.dispatchEvent(
-		// 			new Event('change', {
-		// 				bubbles: true,
-		// 				cancelable: true,
-		// 			})
-		// 		);
-		// 	}
-		// }
-
-		// if (
-		// 	this.state.date !== this.prevState.date &&
-		// 	!this.state.isUpdatingSlots
-		// ) {
-		// 	this.state.isUpdatingSlots = true;
-		// 	this.loadTimeSlots();
-		// }
-
-		// if (this.state.date && this.state.time) {
-		// 	this.dialogSelectedTime.textContent = formatDateToRussian(
-		// 		`${this.state.date} ${this.state.time}`
-		// 	);
-		// } else {
-		// 	this.dialogSelectedTime.textContent = '';
-		// }
-
-		// const allFieldChecked =
-		// 	isValidRussianPhone(this.state.phone) &&
-		// 	this.state.name &&
-		// 	this.state.date &&
-		// 	this.state.time;
-
-		// this.submitButton.disabled = !allFieldChecked || this.state.isSubmitting;
-
-		// this.errorsElement.innerHTML = `<p>${this.state.error}</p>`;
-		// this.errorsElement.hidden = !Boolean(this.state.error);
-
-		// this.submitButton.disabled = this.state.isSubmitting;
-
-		// if (this.dialogTitle) {
-		// 	this.dialogTitle.textContent = this.state.dialogMessage;
-		// }
-
-		// this.dialogFormWrapper.hidden = this.state.success;
-		// this.successCloseDialogButton.hidden = !this.state.success;
-		// this.successCloseDialogButton.disabled = !this.state.success;
 
 		this.prevState = { ...this.state };
 	}
